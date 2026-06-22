@@ -454,22 +454,50 @@
     (RU/EN) обновлены (Governor+Timelock в таблице + раздел свойств + «следующие шаги»).
     ROADMAP (RU/EN) обновлён (часть 3b `[x]`, добавлена часть 3c, в «Сделано»). DECISIONS обновлён.
 
+- **2026-06-22 (сессия 23, ROADMAP P0 — Этап 5 Смарт-контракты, часть 3c ✅):**
+  - **Сборка всего он-чейн контура** `contracts/scripts/deploy.js` — `deployAll(opts)`
+    разворачивает пять контрактов и связывает их в единый механизм по
+    `docs/GOVERNANCE.md` §4–§7: `Treasury.executor` = `Disbursement.executor` =
+    `Timelock`; `Timelock.governor` = `Governor` (bootstrap-`setGovernor`);
+    `Timelock.admin` снят (`renounceAdmin`); `Reputation.governor` = `Timelock`. После
+    проводки деплойер привилегий не сохраняет — **никто не двигает средства единолично**,
+    исполняет только прошедшее+отложенное голосование (ст. 1–2, §6). Работает и как
+    Hardhat-скрипт (`npm run deploy:local`, печатает JSON-сводку + рельс-напоминание);
+    роли `guardian`/`verifier` на не-локальной сети из окружения
+    (`GUARDIAN_ADDRESS`/`VERIFIER_ADDRESS`), на локали — тестовые подписанты.
+  - **Интеграционный тест** `contracts/test/Integration.test.js` — главный сценарий
+    фонда через целевой escrow: «заявка-кейс → прямое голосование → задержка `Timelock`
+    → ЦЕЛЕВАЯ выплата напрямую поставщику через `Disbursement`». Проверяет инварианты
+    всего механизма (проводка верна; `deployer`/`guardian` не executor escrow; `execute`
+    раньше срока отклоняется; получатель не контролирует средства; guardian-вето
+    блокирует выплату). **+4 теста «до зелёного», суммарно 54/54**; CI на in-process
+    сети (TESTNET-ONLY). Сценарий идёт через `Disbursement` (а `Governance.test.js` —
+    через `Treasury`): вместе показаны оба пути расхода из одного контура.
+  - **Зарегистрировано: `PTD-0020`** (`records/0020-decision.json`, type=decision).
+    verify=зелёный, 21 запись. **IPFS-манифест пересобран**, verify=OK. README
+    контрактов (RU/EN), `package.json` (скрипт `deploy:local`), ROADMAP (RU/EN)
+    обновлены. DECISIONS обновлён. **Этап 5 (каркас) собран целиком.**
+
 ## СЛЕДУЮЩИЙ ШАГ
 
 **INBOX пуст — режим саморазвития.** Берём верхний открытый пункт `docs/ROADMAP.md`.
-Этап 5: часть 1 (`Treasury`, с.19), часть 2 (`Disbursement`, с.20), часть 3a
-(`Reputation`, с.21), часть 3b (`Governor`+`Timelock`, с.22) готовы — **весь он-чейн
-контур управления собран и покрыт тестами 50/50**. Следующий шаг — **Этап 5, часть 3c:
-сборка контура целиком**: Hardhat-скрипт деплоя/проводки всех контрактов вместе
-(`Reputation`→`Timelock`→`Treasury`/`Disbursement`→`Governor`: `Timelock` как
-`executor` казны/escrow, `Governor` как `governor` Timelock + `renounceAdmin`,
-`Reputation.governor`=`Timelock`) + интеграционный сценарий «заявка-кейс →
-голосование → Timelock → целевая выплата поставщику» одним прогоном
-(`contracts/scripts/deploy.js` + тест-сценарий). **Только testnet/локально** (рельс
-TESTNET-FIRST, ст. 4.4). Затем часть 4 (прогон на публичном testnet — сеть согласовать
-с оператором). Альтернатива из ROADMAP P0 — Этап 6 (каркас AI-агентов, начать с
-Audit-агента, гоняющего `registry.py verify` + `ipfs_manifest.py verify`). Не трогать
-пульс/секреты (loop.sh, report.sh, operator_bridge.py, .env, logs/).
+Этап 5 (каркас) **собран целиком**: части 1–3b (Treasury/Disbursement/Reputation/
+Governor/Timelock, с.19–22) + часть 3c (сборка контура `deploy.js` + интеграционный
+тест, с.23) готовы — весь он-чейн контур развёрнут единым скриптом, проводка ролей
+проверена, сквозной сценарий «заявка → голос → Timelock → выплата поставщику»
+зелёный (54/54). Следующий шаг — на выбор:
+- **Этап 5, часть 4:** прогон на публичном testnet (LAUNCH предлагает Polygon Amoy,
+  chainId 80002). **Нужно от оператора:** согласовать сеть/RPC и тестовые адреса
+  хранителей (`guardian`/`verifier`), ключи — через `contracts/.env` (НЕ в репо).
+  До ответа оператора деплой на публичную сеть НЕ делать (рельс TESTNET-FIRST + сеть
+  вовне = решение оператора). Можно подготовить: раскомментировать/выверить шаблон
+  сети в `hardhat.config.js`, добавить `.env.example`, инструкцию деплоя в README.
+- **Этап 6 (каркас AI-агентов):** начать с Audit-агента в `ai-agents/`, гоняющего
+  `registry.py verify` + `ipfs_manifest.py verify` (+ контрактные тесты) как
+  модуль-помощник соблюдения конституции. Это полностью автономно, без оператора —
+  **предпочтительный следующий шаг, пока оператор не задал сеть для testnet.**
+
+Не трогать пульс/секреты (loop.sh, report.sh, operator_bridge.py, .env, logs/).
 
 Контекст по **Этапу 4 (Governance)** — готов, для справки:
 - Snapshot (off-chain голос): `governance/snapshot/` — макет + валидатор + CI готовы

@@ -109,10 +109,14 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
       `guardian` = аварийное вето (`cancel`), `admin` = разовый bootstrap (`renounceAdmin`),
       параметры только голосованием; 15 тестов «до зелёного» (50/50 со всеми
       контрактами). `PTD-0019`.
-  - [ ] Часть 3c: скрипт деплоя/проводки контура целиком (Reputation→Timelock→
-    Treasury/Disbursement→Governor, проводка ролей, `renounceAdmin`) +
-    интеграционный сценарий «заявка → голос → выплата поставщику».
-  - [ ] Часть 4: прогон на публичном testnet (сеть согласовать с оператором).
+    - [x] Часть 3c (сессия 23): [`scripts/deploy.js`](../contracts/scripts/deploy.js)
+      разворачивает и связывает контур целиком (Reputation→Timelock→Treasury/Disbursement→Governor;
+      executor=Timelock, governor=Governor, `renounceAdmin`, Reputation.governor=Timelock)
+      + интеграционный тест [`Integration.test.js`](../contracts/test/Integration.test.js)
+      «заявка → голос → Timelock → целевая выплата поставщику через `Disbursement`»;
+      +4 теста «до зелёного» (54/54 со всеми контрактами). `PTD-0020`.
+  - [ ] Часть 4: прогон на публичном testnet (напр. Polygon Amoy) — сеть/RPC/тестовые
+    адреса хранителей согласовать с оператором (ключи через `contracts/.env`).
 - [ ] **Этап 6 — AI-агенты (каркас):** в `ai-agents/` описать и завести модули
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
   как скрипты-помощники соблюдения конституции (начать с одного — напр. Audit,
@@ -179,6 +183,19 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 
 ## Сделано
 
+- **PTD-0020 (сессия 23):** Этап 5 (Смарт-контракты), часть 3c — **сборка всего
+  он-чейн контура**. [`contracts/scripts/deploy.js`](../contracts/scripts/deploy.js)
+  разворачивает пять контрактов и связывает их в единый механизм
+  (Reputation→Timelock→Treasury/Disbursement→Governor): `executor` казны/escrow =
+  `Timelock`, `governor` Timelock = `Governor`, bootstrap-admin снят (`renounceAdmin`),
+  `Reputation.governor` = `Timelock`. После проводки никто не двигает средства
+  единолично (деплойер без привилегий, исполняет только прошедшее+отложенное
+  голосование). Интеграционный тест [`Integration.test.js`](../contracts/test/Integration.test.js)
+  прогоняет главный сценарий фонда «заявка-кейс → прямое голосование → задержка
+  `Timelock` → **целевая выплата напрямую поставщику** через `Disbursement`», а также
+  guardian-вето и проверку проводки; +4 теста «до зелёного» (54/54 со всеми
+  контрактами). `npm run deploy:local` для демо. TESTNET-ONLY. Этап 5 (каркас)
+  собран целиком; дальше — часть 4 (публичный testnet, сеть с оператором) либо Этап 6.
 - **PTD-0019 (сессия 22):** Этап 5 (Смарт-контракты), часть 3b — контракты
   [`Governor.sol`](../contracts/contracts/Governor.sol) + [`Timelock.sol`](../contracts/contracts/Timelock.sol)
   по [`GOVERNANCE.md`](GOVERNANCE.md) §4–§7. Прямое голосование верифицированных

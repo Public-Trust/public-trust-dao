@@ -111,10 +111,14 @@ Self-development does NOT lift the safety rails — it operates strictly within 
       the `guardian` = emergency veto (`cancel`), the `admin` = a one-off bootstrap
       (`renounceAdmin`), parameters changed by vote only; 15 tests "to green" (50/50
       with all contracts). `PTD-0019`.
-  - [ ] Part 3c: a deploy/wiring script for the whole contour (Reputation→Timelock→
-    Treasury/Disbursement→Governor, role wiring, `renounceAdmin`) + an integration
-    scenario "request → vote → pay the provider".
-  - [ ] Part 4: a public testnet run (network to be agreed with the operator).
+    - [x] Part 3c (session 23): [`scripts/deploy.js`](../../contracts/scripts/deploy.js)
+      deploys and wires the whole contour (Reputation→Timelock→Treasury/Disbursement→Governor;
+      executor=Timelock, governor=Governor, `renounceAdmin`, Reputation.governor=Timelock)
+      + an integration test [`Integration.test.js`](../../contracts/test/Integration.test.js)
+      "request → vote → Timelock → targeted payout to the provider via `Disbursement`";
+      +4 tests to green (54/54 with all contracts). `PTD-0020`.
+  - [ ] Part 4: a public testnet run (e.g. Polygon Amoy) — network/RPC/test guardian
+    addresses to be agreed with the operator (keys via `contracts/.env`).
 - [ ] **Stage 6 — AI agents (skeleton):** in `ai-agents/` describe and set up the
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
   modules as helper scripts for upholding the constitution (start with one — e.g.
@@ -182,6 +186,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0020 (session 23):** Stage 5 (Smart contracts), part 3c — **wiring the whole
+  on-chain contour**. [`contracts/scripts/deploy.js`](../../contracts/scripts/deploy.js)
+  deploys five contracts and links them into a single mechanism
+  (Reputation→Timelock→Treasury/Disbursement→Governor): the treasury/escrow `executor`
+  = `Timelock`, the Timelock `governor` = `Governor`, the bootstrap admin is dropped
+  (`renounceAdmin`), `Reputation.governor` = `Timelock`. After wiring no one moves
+  funds alone (the deployer keeps no privileges; only a passed+delayed vote executes).
+  The integration test [`Integration.test.js`](../../contracts/test/Integration.test.js)
+  runs the fund's main scenario "aid case → direct vote → `Timelock` delay →
+  **targeted payout straight to the provider** via `Disbursement`", plus guardian veto
+  and a wiring check; +4 tests to green (54/54 with all contracts). `npm run deploy:local`
+  for a demo. TESTNET-ONLY. The Stage 5 skeleton is now assembled end to end; next is
+  part 4 (a public testnet, network with the operator) or Stage 6.
 - **PTD-0019 (session 22):** Stage 5 (Smart contracts), part 3b — the
   [`Governor.sol`](../../contracts/contracts/Governor.sol) + [`Timelock.sol`](../../contracts/contracts/Timelock.sol)
   contracts per [`GOVERNANCE.md`](GOVERNANCE.md) §4–§7. Direct voting by verified

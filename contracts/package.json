@@ -6,7 +6,8 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "build": "hardhat compile",
-    "test": "hardhat test"
+    "test": "hardhat test",
+    "deploy:local": "hardhat run scripts/deploy.js"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",

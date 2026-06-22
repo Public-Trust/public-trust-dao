@@ -1,0 +1,36 @@
+{
+  "seq": 20,
+  "id": "PTD-0020",
+  "type": "decision",
+  "timestamp": "2026-06-22T08:45:00Z",
+  "actor": "builder-agent",
+  "summary": "Этап 5 (Смарт-контракты, часть 3c): сборка всего он-чейн контура — contracts/scripts/deploy.js разворачивает и связывает 5 контрактов (executor=Timelock, governor=Governor, renounceAdmin, Reputation.governor=Timelock) + интеграционный тест Integration.test.js «заявка → голос → Timelock → целевая выплата поставщику через Disbursement». Тесты «до зелёного» +4 (54/54). TESTNET-ONLY, без реальных средств/ключей.",
+  "refs": [
+    "contracts/scripts/deploy.js",
+    "contracts/test/Integration.test.js",
+    "docs/GOVERNANCE.md"
+  ],
+  "payload": {
+    "decision": "Этап 5 (Смарт-контракты), часть 3c: сборка ВСЕГО он-чейн контура в единый механизм. Скрипт contracts/scripts/deploy.js разворачивает пять контрактов (Reputation, Timelock, Treasury, Disbursement, Governor) и связывает их по docs/GOVERNANCE.md §4–§7: executor казны/escrow = Timelock; governor Timelock = Governor; bootstrap-admin Timelock снят через renounceAdmin; governor Reputation = Timelock. Добавлен интеграционный тест contracts/test/Integration.test.js — главный сквозной сценарий фонда «заявка-кейс (нужда) → прямое голосование верифицированных участников → обязательная задержка Timelock → ЦЕЛЕВАЯ выплата напрямую поставщику через escrow (Disbursement)». Тесты «до зелёного»: +4 интеграционных (54/54 со всеми контрактами). TESTNET-ONLY, без реальных средств/ключей.",
+    "rationale": "Часть 3c замыкает Этап 5: до этого пять контрактов существовали и тестировались по отдельности, но не было проверяемой сборки контура целиком и одного сквозного прогона «как в жизни». deploy.js делает проводку детерминированной и воспроизводимой, а интеграционный тест доказывает конституционные инварианты НА УРОВНЕ ВСЕГО МЕХАНИЗМА, а не отдельного контракта: (1) средства двигает только прошедшее+отложенное голосование — деплойер привилегий не сохраняет, admin снят, никто не двигает казну единолично (ст. 1–2, §6); (2) «не даём деньги — оплачиваем нужду»: сценарий идёт через Disbursement, release не задаёт адрес получателя — транш уходит строго поставщику, получатель помощи средства не контролирует (ст. 5); (3) задержка-вето реальна — execute раньше срока отклоняется, guardian может аварийно отменить запланированную выплату (вето ≠ власть); (4) проводка верна — тест ассертит executor=Timelock, governor=Governor, admin=0, Reputation.governor=Timelock. Сценарий намеренно прогнан через Disbursement (целевой escrow), тогда как Governance.test.js покрывает путь через Treasury — вместе показаны оба пути расхода из одного контура. Минимальная реализация без внешних зависимостей: deploy.js экспортирует deployAll() для тестов и работает как Hardhat-скрипт (npm run deploy:local); роли guardian/verifier на реальной сети берутся из окружения, на локали — тестовые подписанты.",
+    "deliverables": [
+      "contracts/scripts/deploy.js: deployAll(opts) разворачивает и связывает 5 контрактов (Reputation→Timelock→Treasury/Disbursement→Governor), проводит Timelock.setGovernor + renounceAdmin, возвращает адреса/конфиг; запускается и как Hardhat-скрипт (main) с печатью JSON-сводки и рельс-напоминанием; роли guardian/verifier из GUARDIAN_ADDRESS/VERIFIER_ADDRESS на не-локальной сети",
+      "contracts/test/Integration.test.js: 4 интеграционных теста (проводка контура верна; никто единолично не двигает escrow; сквозной путь заявка→голос→Timelock→целевая выплата поставщику через Disbursement; guardian-вето блокирует запланированную выплату) — все зелёные; суммарно 54/54",
+      "contracts/package.json: npm-скрипт deploy:local",
+      "contracts/README.md (+ EN README.en.md): scripts/deploy.js в списке, раздел «Сборка контура» со схемой и инвариантами проводки, обновлённые запуск и «следующие шаги» (часть 3c готова, часть 4 = публичный testnet)"
+    ],
+    "rails": [
+      "TESTNET-ONLY: и тесты, и deploy:local идут на встроенной in-process сети Hardhat — без внешних RPC, ключей, mainnet",
+      "реальных средств и приватных ключей в репо нет; deploy.js на не-локальной сети требует явные адреса ролей из окружения, не из репозитория",
+      "после проводки никто не двигает средства единолично: деплойер без привилегий, admin Timelock снят, исполняет только прошедшее+отложенное голосование",
+      "получатель помощи не контролирует средства — сквозной сценарий выплачивает строго поставщику через целевой escrow",
+      "реальное включение контура и приём реальных средств — только после независимого аудита + Safe 3-из-5 + отдельного одобрения оператора (CONSTITUTION ст. 4.4)",
+      "двуязычность RU↔EN в одном коммите"
+    ],
+    "status": "adopted",
+    "spec": "docs/GOVERNANCE.md",
+    "roadmap_item": "Этап 5 — Смарт-контракты, часть 3c: сборка контура (deploy.js + интеграционный тест)"
+  },
+  "prev_hash": "f79a41cee3f328773f74f31e38651d0431a3341c279bce93f491b3c5340f1cdc",
+  "hash": "e47dd172a4b3fb6846cde23d8338b48eef23b655d09b40d70347ea0fe11e3a4b"
+}

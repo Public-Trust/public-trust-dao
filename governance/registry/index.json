@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 20,
-  "head_hash": "f79a41cee3f328773f74f31e38651d0431a3341c279bce93f491b3c5340f1cdc",
+  "count": 21,
+  "head_hash": "e47dd172a4b3fb6846cde23d8338b48eef23b655d09b40d70347ea0fe11e3a4b",
   "entries": [
     {
       "seq": 0,
@@ -183,6 +183,15 @@
       "summary": "Этап 5 (Смарт-контракты, часть 3b): контракты Governor.sol + Timelock.sol — прямое голосование верифицированных участников (1 человек = 1 голос из Reputation) с обязательной задержкой исполнения и аварийным вето guardian; принятое решение исполняется только через Timelock (Governor средства не двигает); параметры меняются только голосованием. Тесты «до зелёного» 15 (50/50 со всеми контрактами). По docs/GOVERNANCE.md §4–§7. TESTNET-ONLY, без реальных средств/ключей.",
       "hash": "f79a41cee3f328773f74f31e38651d0431a3341c279bce93f491b3c5340f1cdc",
       "file": "records/0019-decision.json"
+    },
+    {
+      "seq": 20,
+      "id": "PTD-0020",
+      "type": "decision",
+      "timestamp": "2026-06-22T08:45:00Z",
+      "summary": "Этап 5 (Смарт-контракты, часть 3c): сборка всего он-чейн контура — contracts/scripts/deploy.js разворачивает и связывает 5 контрактов (executor=Timelock, governor=Governor, renounceAdmin, Reputation.governor=Timelock) + интеграционный тест Integration.test.js «заявка → голос → Timelock → целевая выплата поставщику через Disbursement». Тесты «до зелёного» +4 (54/54). TESTNET-ONLY, без реальных средств/ключей.",
+      "hash": "e47dd172a4b3fb6846cde23d8338b48eef23b655d09b40d70347ea0fe11e3a4b",
+      "file": "records/0020-decision.json"
     }
   ]
 }

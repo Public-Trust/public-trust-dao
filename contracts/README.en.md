@@ -23,6 +23,7 @@ Derived from the normative documents:
 | [`Reputation.sol`](contracts/Reputation.sol) | Non-transferable (soulbound) verified-member badge: one-person-one-vote, `votingUnits` = 1 + a capped multiplier. `verifier` mints/revokes the badge (uniqueness), `governor` sets parameters (power). No role moves funds. | skeleton + tests ✅ |
 | [`Governor.sol`](contracts/Governor.sol) | Direct voting by verified members: `propose`/`castVote`/`queue`/`execute`. Vote weight comes from `Reputation.votingUnits` (one-person-one-vote). Quorum, period, public tally. A passed decision is executed **only through the Timelock** — the Governor never moves funds itself. | skeleton + tests ✅ |
 | [`Timelock.sol`](contracts/Timelock.sol) | Mandatory delay between "decision passed" and "treasury executed" (an audit/appeal window). `schedule`/`execute` — only the `governor` (= Governor), `cancel` — only the `guardian` (emergency veto). Set as the `executor` of `Treasury`/`Disbursement`. | skeleton + tests ✅ |
+| [`scripts/deploy.js`](scripts/deploy.js) | **Wires the whole contour** in one pass: deploys all 5 contracts and links them (executor=Timelock, governor=Governor, `renounceAdmin`, Reputation.governor=Timelock). After wiring no single person can move funds alone. | script + integration test ✅ |
 
 ### Constitutional properties built into `Treasury` (and asserted by tests)
 
@@ -102,15 +103,41 @@ Treasury/Disbursement — direct voting executed with a mandatory delay):
   after renounce are changed **only through the mechanism itself** (`onlyTimelock`/
   `onlySelf`), never around it. Quorum and majority tallies are public and deterministic.
 
+### Wiring the contour: `scripts/deploy.js` (part 3c)
+
+The script deploys all five contracts and links them into a single mechanism per
+[`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §4–§7:
+
+```
+  Reputation ──(one-person-one-vote weight)──▶ Governor
+                                                  │ queue/execute
+                                                  ▼
+  guardian ──(emergency veto)──▶ Timelock ──(executor)──▶ Treasury
+                                    ▲                     Disbursement
+                                    └ governor = Governor
+```
+
+Wiring result (asserted by the integration test): `Treasury.executor` =
+`Disbursement.executor` = **Timelock**; `Timelock.governor` = **Governor**;
+`Timelock.admin` = **0** (bootstrap dropped via `renounceAdmin`);
+`Reputation.governor` = **Timelock** (vote parameters change only by voting). After
+wiring the deployer keeps no privileges — **no one moves funds alone** (art. 1–2).
+On a real deploy the `guardian`/`verifier` roles are supplied via the
+`GUARDIAN_ADDRESS`/`VERIFIER_ADDRESS` environment variables; locally test signers
+are used.
+
 ## Run (locally, no network, no money)
 
 ```bash
 cd contracts
-npm install        # once
-npm test           # compile + tests on the built-in Hardhat network
+npm install          # once
+npm test             # compile + all tests on the built-in Hardhat network
+npm run deploy:local # deploy and wire the whole contour on the in-process network (demo)
 ```
 
-CI runs the same on every push/PR ([`.github/workflows/contracts.yml`](../.github/workflows/contracts.yml)).
+CI runs the tests on every push/PR ([`.github/workflows/contracts.yml`](../.github/workflows/contracts.yml)).
+The integration scenario "request → vote → Timelock → targeted payout to the
+provider" is covered in [`test/Integration.test.js`](test/Integration.test.js) (via `Disbursement`).
 
 ## Stack
 
@@ -129,7 +156,9 @@ in [`hardhat.config.js`](hardhat.config.js); the operator supplies keys via
 - ✅ `Governor` + `Timelock` — direct voting with a mandatory execution delay
   ([`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §4–§7); vote weight from `Reputation.votingUnits`;
   the `Timelock` is set as the `executor` of `Treasury`/`Disbursement` — **done** (skeleton + tests).
-- **Wiring the whole contour (part 3c):** a deploy/wiring script for all contracts
-  together (Reputation→Timelock→Treasury/Disbursement→Governor, role wiring,
-  `renounceAdmin`) + an integration scenario "request → vote → pay the provider".
-- A public testnet run once the network is agreed with the operator.
+- ✅ **Wiring the whole contour (part 3c):** the [`scripts/deploy.js`](scripts/deploy.js)
+  script deploys and links all contracts (Reputation→Timelock→Treasury/Disbursement→Governor,
+  role wiring, `renounceAdmin`) + an integration scenario "request → vote → Timelock →
+  targeted payout to the provider" in [`test/Integration.test.js`](test/Integration.test.js) — **done**.
+- **Part 4:** a public testnet run (e.g. Polygon Amoy) — once the network, RPC and
+  test guardian addresses are agreed with the operator (keys via `contracts/.env`).
