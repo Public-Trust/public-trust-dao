@@ -1,0 +1,37 @@
+{
+  "seq": 60,
+  "id": "PTD-0060",
+  "type": "decision",
+  "timestamp": "2026-06-22T12:25:04Z",
+  "actor": "builder-agent",
+  "summary": "Страж структуры: шестая проверка trigger-paths-include-agents — триггеры CI-воркфлоу (on.push.paths/pull_request.paths) обязаны содержать ai-agents/**, иначе правка агента не запустит CI; замыкает защиту покрытия от обхода (после run-all-covers-all и ci-calls-run-all)",
+  "refs": [
+    "ai-agents/structure_guard.py",
+    "ai-agents/test_structure_guard.py",
+    "ai-agents/README.md"
+  ],
+  "payload": {
+    "decision": "Страж структуры (structure_guard.py) получил шестую проверку trigger-paths-include-agents: блоки триггеров CI-воркфлоу (.github/workflows/ai-agents.yml) on.push.paths и on.pull_request.paths обязаны содержать ai-agents/**. Иначе изменение любого файла каталога агентов не запустит сборку — и покрытие обходится ещё раньше, на уровне триггера, чем на уровне команды (ci-calls-run-all сторожит, что воркфлоу ЗОВЁТ run_all, но вызов бесполезен, если воркфлоу не СРАБАТЫВАЕТ на правку агента). Проверка читает сами блоки путей лёгким парсером YAML по отступам (без сторонних зависимостей).",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9). Контрактная часть Этапа 5 и верхний P3 (PersonhoodVerifier) недоступны: диск хоста заполнен (~0,9 ГБ свободно), contracts/node_modules отсутствует, hardhat/npm не прогнать. Взят верхний доступный pure-Python пункт ROADMAP «Страж структуры: триггер-пути воркфлоу включают ai-agents/**» (предложен сессией 60 как продолжение ci-calls-run-all/PTD-0057). Замыкает цепочку защиты покрытия от обхода: списки AGENTS/TESTS (run-all-covers-all, PTD-0049) → вызов мета-агента в CI (ci-calls-run-all, PTD-0057) → срабатывание самого воркфлоу на правку агента (trigger-paths-include-agents). Служит ст. 3 (открытость/проверяемость): нельзя завести агента/тест в обход общего прогона CI ни на одном уровне.",
+    "deliverables": [
+      "ai-agents/structure_guard.py — новая проверка check_trigger_paths_include_agents (требует ai-agents/** в on.push.paths и on.pull_request.paths) + лёгкий парсер YAML по отступам _yaml_list_under (без сторонних зависимостей, для блочного YAML воркфлоу) + константа AGENTS_GLOB; запись в CHECKS и в докстринг (пункт 5)",
+      "ai-agents/test_structure_guard.py — _write_workflow расширен параметрами push_paths/pull_request_paths (None = блок отсутствует); 4 новых сценария: push.paths без ai-agents/** → fail, pull_request.paths без ai-agents/** → fail, нет блока push.paths → fail, оба блока с ai-agents/** среди прочих путей → pass; счётчики 5→6; реальный репозиторий 6/6; всего 43/43",
+      "ai-agents/README.md (+EN README.en.md) — добавлены строки таблицы ci-calls-run-all (отставала с сессии 60) и trigger-paths-include-agents; обновлён абзац тест-инварианта (25/25 → 43/43) и список отравленных сценариев"
+    ],
+    "rails": [
+      "Только код стража/тест/доки; средства/ключи/контракты не затронуты",
+      "Read-only служебный модуль (ст. 9): находка = сигнал сообществу, ничего не правит",
+      "Двуязычность RU↔EN: README обновлён в обе стороны в одном коммите",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) и сам воркфлоу не тронуты"
+    ],
+    "status": "adopted",
+    "spec": "ai-agents/structure_guard.py",
+    "verification": "structure_guard на реальном репо: ЗЕЛЁНО 6/6 (включая trigger-paths-include-agents, реальный воркфлоу содержит ai-agents/** в обоих триггерах); test_structure_guard.py 43/43; run_all --with-tests: агенты 8/8, тесты 11/11",
+    "advances_roadmap": [
+      "Страж структуры: триггер-пути воркфлоу включают ai-agents/**"
+    ]
+  },
+  "prev_hash": "74a8d12e3e9baef0612925f4199d6bdd652b3a38d136a5329686404828877968",
+  "hash": "e9dda1f66027ddacfbac2c0da6c682f4abbc3e7a63189fc3ac96a17abdecac5e"
+}

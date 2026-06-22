@@ -426,6 +426,8 @@ that fixes nothing):
 | `no-orphan-tests` | Every `test_*.py` has a source module (`<name>_agent.py` or `<name>.py`) — a test file does not linger after a rename/removal. |
 | `sol-parsing-centralized` | No `*_agent.py` keeps a local copy of the Solidity-parsing helpers (`strip_solidity_comments`/`function_body`/…) — they are imported from the shared [`solidity_scan.py`](solidity_scan.py), not duplicated (or the copies silently drift). |
 | `run-all-covers-all` | Every `*_agent.py` is in the `AGENTS` list of the meta-agent [`run_all.py`](run_all.py), and every `test_*.py` is in the `TESTS` list (and vice versa: no dangling references) — a new agent or test cannot be added bypassing the shared CI run. |
+| `ci-calls-run-all` | The workflow [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) actually calls `run_all.py --with-tests` — coverage cannot be bypassed at the CI level either (separate agent commands or `run_all` without `--with-tests` would not run the test invariants). |
+| `trigger-paths-include-agents` | The workflow trigger paths (`on.push.paths` and `on.pull_request.paths`) contain `ai-agents/**` — otherwise editing an agent would not start CI, and coverage is bypassed even earlier, at the trigger level rather than the command. |
 
 ```bash
 python3 ai-agents/structure_guard.py          # human-readable report
@@ -435,10 +437,12 @@ python3 ai-agents/structure_guard.py --json    # machine-readable report
 The **test invariant** [`test_structure_guard.py`](test_structure_guard.py) proves
 on poisoned temporary directories (an agent without a test; an orphan test; an
 agent with a local copy of `.sol` parsing; an agent/test bypassing `run_all`; a
-dangling `run_all` reference) that the guard really turns red, while a clean
-directory stays green (25/25). It is included in `run_all --with-tests`, so adding
-an agent without a test, a copy of `.sol` parsing, or an agent/test that bypasses
-the shared CI run turns it red.
+dangling `run_all` reference; the workflow not calling `run_all`/without
+`--with-tests`; trigger paths missing `ai-agents/**`) that the guard really turns
+red, while a clean directory stays green (43/43). It is included in
+`run_all --with-tests`, so adding an agent without a test, a copy of `.sol`
+parsing, an agent/test that bypasses the shared CI run, or dropping `ai-agents/**`
+from the workflow triggers turns it red.
 
 ## Rails (for all agents in this directory)
 

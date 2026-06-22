@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 60,
-  "head_hash": "74a8d12e3e9baef0612925f4199d6bdd652b3a38d136a5329686404828877968",
+  "count": 61,
+  "head_hash": "e9dda1f66027ddacfbac2c0da6c682f4abbc3e7a63189fc3ac96a17abdecac5e",
   "entries": [
     {
       "seq": 0,
@@ -543,6 +543,15 @@
       "summary": "Documentation-агент: мягкая проверка «нет мёртвых статей глоссария» (glossary-no-dead) — у каждой статьи глоссария термин должен реально использоваться в документах; предупреждает, но не роняет вердикт; обратная к glossary-coverage",
       "hash": "74a8d12e3e9baef0612925f4199d6bdd652b3a38d136a5329686404828877968",
       "file": "records/0059-documentation-glossary-no-dead.json"
+    },
+    {
+      "seq": 60,
+      "id": "PTD-0060",
+      "type": "decision",
+      "timestamp": "2026-06-22T12:25:04Z",
+      "summary": "Страж структуры: шестая проверка trigger-paths-include-agents — триггеры CI-воркфлоу (on.push.paths/pull_request.paths) обязаны содержать ai-agents/**, иначе правка агента не запустит CI; замыкает защиту покрытия от обхода (после run-all-covers-all и ci-calls-run-all)",
+      "hash": "e9dda1f66027ddacfbac2c0da6c682f4abbc3e7a63189fc3ac96a17abdecac5e",
+      "file": "records/0060-structure-guard-trigger-paths.json"
     }
   ]
 }

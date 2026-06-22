@@ -426,11 +426,23 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   itself and goes red if it does not call `run_all.py` with `--with-tests` (agents
   bypassed, no test invariants, or no workflow at all). `test_structure_guard.py` 34/34,
   guard green 5/5, `PTD-0057`.
-- [ ] **Structure-guard: workflow trigger paths include `ai-agents/**`** — check that
+- [x] **Structure-guard: workflow trigger paths include `ai-agents/**`** — check that
   the `on.push.paths` (and `pull_request.paths`) block in
   `.github/workflows/ai-agents.yml` actually contains `ai-agents/**`, otherwise an agent
   change won't trigger CI at all and coverage is bypassed even earlier — at the trigger
   level, not the command (follow-up to `ci-calls-run-all`, session 60).
+  → Done (session 63) via the sixth `trigger-paths-include-agents` check of
+  [`structure_guard.py`](../../ai-agents/structure_guard.py) (a lightweight
+  indentation-based YAML parser, no dependencies): it requires `ai-agents/**` in both
+  triggers and goes red if a path or block is missing. `test_structure_guard.py` 43/43,
+  guard green 6/6, `PTD-0060`. Closed coverage-bypass protection at every level (lists →
+  CI call → trigger firing). Also caught up the agent README (RU/EN): the lagging
+  `ci-calls-run-all` row + the new row.
+- [ ] **Structure-guard: workflow `ai-agents.yml` also calls `test_run_all.py`** — add a
+  check that a separate workflow step runs the meta-agent's test invariant
+  `test_run_all.py` (not only `run_all.py --with-tests`) — it proves the "red → red"
+  reduction itself works; right now this relies on workflow discipline (proposed in
+  session 63; follow-up to `trigger-paths-include-agents`).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -522,6 +534,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 ---
 
 ## Done
+
+- **PTD-0060 (session 63):** P3 (Stage 6 quality) — **structure-guard: sixth
+  `trigger-paths-include-agents` check.** The CI workflow trigger blocks
+  `on.push.paths` and `on.pull_request.paths` must contain `ai-agents/**` — otherwise an
+  agent edit won't start CI and coverage is bypassed even earlier, at the trigger level
+  rather than the command (`ci-calls-run-all` guards that the workflow *calls* the
+  meta-agent, but the call is useless if the workflow does not *fire*). A lightweight
+  indentation-based YAML parser, no dependencies. Closed coverage-bypass protection at
+  every level: `AGENTS`/`TESTS` lists (PTD-0049) → `run_all` call in CI (PTD-0057) →
+  trigger firing (PTD-0060). `test_structure_guard.py` 43/43, guard 6/6, run_all 8/8 +
+  tests 11/11, IPFS verify=OK (19), registry 61. Also caught up the agent README (RU/EN):
+  the lagging `ci-calls-run-all` row + the new row, counter 25/25 → 43/43.
 
 - **PTD-0056 (session 59):** P3 (plain language) — **glossary pointer in the header of
   the remaining public docs.** A line "Unfamiliar technical words … are explained in
@@ -967,3 +991,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Glossary (done) / glossary link in doc headers / agent term check | agent | 36 |
 | Issue/PR templates (done) / GitHub labels in .github/labels / branch autosetup | agent | 37 |
 | Guard: CI calls run_all (done) / guard checks workflow trigger paths (on.push.paths includes ai-agents/**) / Documentation agent: soft "header pointer leads to glossary" check | agent | 60 |
+| Guard: trigger paths include ai-agents/** (done) / guard checks workflow also runs test_run_all.py | agent | 63 |
