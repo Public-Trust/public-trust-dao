@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 45,
-  "head_hash": "37906ade14c45abe3981d36d18e2ad88c16632e285fa6fcd428292087df1d190",
+  "count": 46,
+  "head_hash": "f0ec7d1eb20f48d73cabc9ff4a9a93efc2c67503a1a8ce70dee8c79a1521877a",
   "entries": [
     {
       "seq": 0,
@@ -408,6 +408,15 @@
       "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/ESCROW-TARGETED-DISBURSEMENT.md (+EN) переписан по образцу REWARDS-MODEL/GOVERNANCE/ANTI-ABUSE — ведущий раздел «Главное простыми словами» («не даём деньги — оплачиваем нужду» + три способа), жаргон (escrow, earmarked transfer, verified-receipt, state machine, circuit breaker, Solidity-эскиз) вынесен в «Технический раздел — для разработчиков». Смысл модели не изменён. INBOX #19 остаётся открытым.",
       "hash": "37906ade14c45abe3981d36d18e2ad88c16632e285fa6fcd428292087df1d190",
       "file": "records/0044-decision.json"
+    },
+    {
+      "seq": 45,
+      "id": "PTD-0045",
+      "type": "decision",
+      "timestamp": "2026-06-22T11:00:00Z",
+      "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/PROOF-OF-CONTRIBUTION.md (+EN) переписан по образцу REWARDS-MODEL/GOVERNANCE/ANTI-ABUSE/ESCROW — ведущий раздел «Главное простыми словами» («фонд создаёт честную работу вокруг помощи; за работу платят, но не на слово»), жаргон (bounty/milestone, escrow, проблема оракула, soulbound, анти-Сивилла, skin in the game, state machine, Solidity-эскиз) вынесен в «Технический раздел — для разработчиков». Смысл не изменён. INBOX #19 остаётся открытым.",
+      "hash": "f0ec7d1eb20f48d73cabc9ff4a9a93efc2c67503a1a8ce70dee8c79a1521877a",
+      "file": "records/0045-decision.json"
     }
   ]
 }
