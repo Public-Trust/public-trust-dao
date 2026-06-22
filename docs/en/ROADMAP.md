@@ -241,8 +241,10 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   bilingual and carry constitution-rails checklists; issue forms are YAML
   (structured, excluded from the .md scan); the PR template was added to the
   Documentation agent's SINGLE_LANG (a GitHub form, bilingual within itself).
-- [ ] **"Transparency" page on the site** — gather links: registry, IPFS manifest,
+- [x] **"Transparency" page on the site** — gather links: registry, IPFS manifest,
   CI statuses, how to verify integrity yourself (`registry.py verify`).
+  → Done (session 38), [`web/transparency.html`](../../web/transparency.html) (+EN),
+  `PTD-0035`. CI statuses are given as links, not badge images — zero outgoing requests.
 - [x] **Automated bilingual check in CI** — a linter that fails the build if an RU
   doc has no EN pair (or vice versa), a missing switcher, or a broken link.
   → Implemented by the Documentation agent (session 29):
@@ -385,6 +387,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0035 (session 38):** P2 (quality/transparency) — **"Transparency — verify it
+  yourself" page** on the site: [`web/transparency.html`](../../web/transparency.html)
+  (+EN mirror `transparency.en.html`). It gathers in one place the links to the
+  verifiable artifacts (public decision registry, IPFS manifest, CI statuses on GitHub
+  Actions, smart contracts and tests, AI agents) and gives step-by-step commands to
+  verify integrity yourself (`git clone`; `scripts/registry.py verify`;
+  `scripts/ipfs_manifest.py verify`; `ai-agents/audit_agent.py [--with-contracts]`;
+  cross-check with the public CI). The current registry `head_hash` is shown as the
+  final fingerprint of the whole chain. **The "zero outgoing requests" rail is kept:**
+  CI statuses are given as text links, not badge images from a third-party server. The
+  page is linked from the "Transparency" section and the footer of both `index` files.
+  Documentation agent and Audit are green. TESTNET-ONLY.
 - **PTD-0034 (session 37):** P2 (quality/transparency) — **issue/PR templates**.
   `.github/ISSUE_TEMPLATE/` (`config.yml` + 4 YAML forms: bug/inaccuracy, idea,
   governance proposal, abuse risk/safety-rail hole) + a bilingual

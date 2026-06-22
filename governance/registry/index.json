@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 35,
-  "head_hash": "61536229ac820a8ecb4506935526230ccfd46f7cd4a070d5b432660ec4e06f06",
+  "count": 36,
+  "head_hash": "46362f7d2faf0bc6ae8b99b6105761e50f35e7bde4b6214bd6cb35fc1911b2ec",
   "entries": [
     {
       "seq": 0,
@@ -318,6 +318,15 @@
       "summary": "P2 ROADMAP — шаблоны issue/PR в .github/: YAML-формы issue (config + ошибка/идея/governance/безопасность) + двуязычный pull_request_template.md, все с чек-листами конституционных рельс (общественное благо НЕ инвестиция, TESTNET-first, секреты не в репо, RU↔EN, тесты до зелёного). Documentation-агент и run_all зелёные (8/8). TESTNET-ONLY.",
       "hash": "61536229ac820a8ecb4506935526230ccfd46f7cd4a070d5b432660ec4e06f06",
       "file": "records/0034-issue-pr-templates.json"
+    },
+    {
+      "seq": 35,
+      "id": "PTD-0035",
+      "type": "decision",
+      "timestamp": "2026-06-22T17:30:00Z",
+      "summary": "P2 ROADMAP — отдельная страница «Прозрачность — проверь сам» на сайте: web/transparency.html (+EN). Собирает ссылки на проверяемые артефакты (реестр/IPFS/CI/контракты/агенты) + пошаговые команды самостоятельной проверки целостности (registry.py verify, ipfs_manifest.py verify, audit_agent.py) + текущий head_hash. Статусы CI даны ссылками, не картинками-бейджами — ноль исходящих запросов сохранён. Documentation/Audit зелёные. TESTNET-ONLY.",
+      "hash": "46362f7d2faf0bc6ae8b99b6105761e50f35e7bde4b6214bd6cb35fc1911b2ec",
+      "file": "records/0035-transparency-page.json"
     }
   ]
 }
