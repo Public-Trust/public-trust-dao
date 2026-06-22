@@ -28,7 +28,10 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`docs/en/GOVERNANCE.md`](docs/en/GOVERNANCE.md) — governance course: the voice of every verified human (Governor), the multisig as executor/emergency, Sybil resistance without power concentration.
 - [`docs/en/SUPPORT-MODEL.md`](docs/en/SUPPORT-MODEL.md) — how the project accepts support: through the system itself (transparent multisig treasury + registry), with no separate "Donate" button; a real-money address only after launch and an audit.
 - [`LAUNCH.md`](LAUNCH.md) — technical specification for building the infrastructure.
-- `contracts/` — smart contracts (TESTNET first).
+- [`contracts/`](contracts/) — smart contracts (TESTNET first). Stage 5, skeleton:
+  [`Treasury.sol`](contracts/contracts/Treasury.sol) — base treasury layer (release
+  only via executor=multisig/Timelock, per-release cap, emergency pause, events)
+  + tests "to green". No real funds/keys.
 - `web/` — public website (GitHub Pages).
 - `governance/` — governance (Safe multisig 3-of-5, Snapshot/Aragon).
   - [`governance/registry/`](governance/registry/) — a public, verifiable,

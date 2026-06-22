@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 16,
-  "head_hash": "904944dce84ee700ba2a2d3e1542ff30b1bfb2c75c1ffe159deeab480236dc70",
+  "count": 17,
+  "head_hash": "f29545d8c9809bde68b7aaea189acd4b8d1ca97fd197a45e884074632010ee61",
   "entries": [
     {
       "seq": 0,
@@ -147,6 +147,15 @@
       "summary": "Этап 4 (Governance, часть 1): макет off-chain Snapshot space — governance/snapshot/ (space.json '1 человек = 1 голос' ticket value=1 + JSON-схема + README RU/EN + валидатор рельс scripts/snapshot_config.py + CI). Snapshot = палата обсуждения/сигнала, средства не двигает. status=draft (ENS/создание space — за оператором).",
       "hash": "904944dce84ee700ba2a2d3e1542ff30b1bfb2c75c1ffe159deeab480236dc70",
       "file": "records/0015-decision.json"
+    },
+    {
+      "seq": 16,
+      "id": "PTD-0016",
+      "type": "decision",
+      "timestamp": "2026-06-22T06:20:00Z",
+      "summary": "Этап 5 (Смарт-контракты, часть 1): заведён проект contracts/ (Hardhat+ethers+chai, Solidity 0.8.24) + базовый контракт-скелет Treasury.sol (общественная казна: release только через executor=мультисиг/Timelock, лимит выплаты, аварийная пауза guardian, события + registryRef) с тестами «до зелёного» 10/10 + CI. TESTNET-ONLY, без реальных средств/ключей.",
+      "hash": "f29545d8c9809bde68b7aaea189acd4b8d1ca97fd197a45e884074632010ee61",
+      "file": "records/0016-decision.json"
     }
   ]
 }

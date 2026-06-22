@@ -87,6 +87,13 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   (Foundry/Hardhat config), skeletons for Treasury / Disbursement (per
   [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md)) /
   Governance / Reputation + first tests "to green". Testnet/local only.
+  - [x] Part 1 (session 19): the `contracts/` project (Hardhat + ethers v6 + chai,
+    Solidity 0.8.24) + the [`Treasury.sol`](../../contracts/contracts/Treasury.sol)
+    skeleton (release only via executor=multisig/Timelock, per-release cap, emergency
+    pause, events + registryRef) + 10 tests "to green" + CI. `PTD-0016`. TESTNET-ONLY.
+  - [ ] Part 2: `Disbursement` (targeted escrow `open/release/refund/pause`).
+  - [ ] Part 3: `Governance` (Governor → Timelock) + `Reputation` (soulbound badge).
+  - [ ] Part 4: a public testnet run (network to be agreed with the operator).
 - [ ] **Stage 6 — AI agents (skeleton):** in `ai-agents/` describe and set up the
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
   modules as helper scripts for upholding the constitution (start with one — e.g.
@@ -144,11 +151,24 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] One governance validator in CI: a single script runs `registry.py verify`
   + `ipfs_manifest.py verify` + `safe_config.py verify` + `snapshot_config.py verify`
   in one command (a convenient green/red for the whole governance layer).
+- [ ] Test invariant "no treasury money bypasses the registry": check that every
+  on-chain `Released(registryRef)` event has a record in `governance/registry/`
+  (and vice versa) — tie the contract to the decision registry (proposed session 19).
+- [ ] A deploy script `contracts/scripts/deploy.js` (Hardhat) wiring the Safe
+  multisig addresses as the `executor` — a "ready-to-press" testnet stub (proposed session 19).
 
 ---
 
 ## Done
 
+- **PTD-0016 (session 19):** Stage 5 (Smart contracts), part 1 — the
+  [`contracts/`](../../contracts/) project (Hardhat + ethers v6 + chai, Solidity
+  0.8.24) + the base [`Treasury.sol`](../../contracts/contracts/Treasury.sol)
+  skeleton: the treasury releases funds only via the `executor` (multisig/Timelock),
+  a per-release cap, an emergency `guardian` pause, an event on every movement +
+  `registryRef` (link to the registry). 10 tests of constitutional properties "to
+  green" + CI [`contracts.yml`](../../.github/workflows/contracts.yml). TESTNET-ONLY,
+  no real funds/keys. Opens Stage 5 (parts 2–4 — Disbursement/Governance/Reputation/deploy).
 - **PTD-0015 (session 18):** off-chain voting mock-up
   [`governance/snapshot/`](../../governance/snapshot/) — `space.json` (Snapshot
   settings: `ticket` value=1 strategy = "1 person = 1 vote", admission for verified

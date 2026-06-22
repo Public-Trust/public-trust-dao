@@ -28,7 +28,10 @@ Public Trust DAO обеспечивает людям базовую безопа
 - [`docs/GOVERNANCE.md`](docs/GOVERNANCE.md) — курс управления: голос каждого верифицированного человека (Governor), мультисиг как исполнитель/аварийка, защита от Сивиллы без концентрации власти.
 - [`docs/SUPPORT-MODEL.md`](docs/SUPPORT-MODEL.md) — как проект принимает поддержку: через саму систему (прозрачная казна-мультисиг + реестр), без отдельной кнопки «Поддержать»; адрес для реальных денег — только после запуска и аудита.
 - [`LAUNCH.md`](LAUNCH.md) — техническое задание на построение инфраструктуры.
-- `contracts/` — смарт-контракты (TESTNET first).
+- [`contracts/`](contracts/) — смарт-контракты (TESTNET first). Этап 5, каркас:
+  [`Treasury.sol`](contracts/contracts/Treasury.sol) — базовый слой казны (release
+  только через executor=мультисиг/Timelock, лимит выплаты, аварийная пауза, события)
+  + тесты «до зелёного». Реальных средств/ключей нет.
 - `web/` — публичный сайт (GitHub Pages).
 - `governance/` — управление (Safe multisig 3-из-5, Snapshot/Aragon).
   - [`governance/registry/`](governance/registry/) — публичный, проверяемый,

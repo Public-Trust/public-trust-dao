@@ -349,18 +349,44 @@
     `registry/index.json`), verify=OK. Линки новых доков 0 битых. Ссылки в обоих
     README, ROADMAP (RU/EN) обновлён (пункт `[x]`, в «Сделано», +2 идеи), DECISIONS.
 
+- **2026-06-22 (сессия 19, ROADMAP P0 — Этап 5 Смарт-контракты, часть 1 ✅):**
+  - Заведён проект `contracts/` (Hardhat + ethers v6 + chai, Solidity 0.8.24):
+    `package.json`/`package-lock.json` (воспроизводимый стек), `hardhat.config.js`
+    (optimizer + только встроенная in-process сеть; **закомментированный** шаблон
+    testnet-деплоя — ключи через `contracts/.env`, в `.gitignore`), `.gitignore`
+    (node_modules/artifacts/cache/.env не коммитятся).
+  - **Контракт-скелет** `contracts/contracts/Treasury.sol` (базовый слой казны).
+    Конституционные свойства заложены В КОД, не только в текст: средства двигает
+    ТОЛЬКО `executor` (мультисиг/Timelock; деплойер без привилегий — «никто не
+    владеет единолично», ст. 1–2); `guardian` только ставит аварийную паузу, НЕ
+    двигает средства («безопасность ≠ власть»); потолок одной выплаты `maxRelease`
+    (поэтапность/лимиты, ANTI-ABUSE §1); события на каждое движение + `registryRef`
+    (связь on-chain ↔ реестр PTD, прозрачность ст. 3); `setExecutor` — путь передачи
+    bootstrap-мультисига голосуемому Timelock (GOVERNANCE фазы A→D); reentrancy-guard.
+  - **Тесты «до зелёного»** `contracts/test/Treasury.test.js` — 10/10, проверяют
+    именно конституционные свойства (роли разделены, лимит, баланс, нулевые адреса,
+    паузы, передача ролей), не «фичи ради фич». CI `.github/workflows/contracts.yml`
+    компилирует + гоняет тесты на push/PR (только локальная сеть Hardhat).
+  - Двуязычный `contracts/README.md` (+ EN `README.en.md`): что есть, свойства,
+    запуск, стек, следующие шаги. **Рельс TESTNET-ONLY соблюдён машинно** — тесты
+    идут на in-process сети, без RPC/ключей/mainnet; реальных средств/ключей нет.
+  - **Зарегистрировано: `PTD-0016`** (`records/0016-decision.json`, type=decision).
+    verify=зелёный, 17 записей. **IPFS-манифест пересобран** (подхватил новый
+    `registry/index.json`), verify=OK. Ссылки в обоих README, ROADMAP (RU/EN)
+    обновлён (часть 1 `[x]`, в «Сделано», +2 идеи), DECISIONS обновлён.
+
 ## СЛЕДУЮЩИЙ ШАГ
 
 **INBOX пуст — режим саморазвития.** Берём верхний открытый пункт `docs/ROADMAP.md`.
-Этап 4 готов целиком: часть 1 (Snapshot, сессия 18) и часть 2 (Safe, сессия 16).
-Следующий открытый P0 — **Этап 5: Смарт-контракты (каркас)**: завести `contracts/`
-как проект (Foundry/Hardhat-конфиг), скелеты Treasury / Disbursement (по
-`docs/ESCROW-TARGETED-DISBURSEMENT.md`) / Governance / Reputation + первые тесты «до
-зелёного». **Только testnet/локально**, реальные средства не задействуются (рельс
-TESTNET-FIRST, ст. 4.4). Пункт крупный — разбить: первой сессией завести конфиг
-проекта + один контракт-скелет (напр. Treasury/казна) с минимальным тестом, остальное
-оставить следующим шагом. Не трогать пульс/секреты (loop.sh, report.sh,
-operator_bridge.py, .env, logs/).
+Этап 5 открыт: часть 1 (проект + `Treasury`, сессия 19) готова. Следующий шаг —
+**Этап 5, часть 2: контракт `Disbursement`** (целевой escrow по
+`docs/ESCROW-TARGETED-DISBURSEMENT.md` — интерфейс `ITargetedDisbursement`:
+`open`/`release`/`refund`/`pause`, выплата напрямую поставщику, state-machine
+REQUESTED→…→RELEASED/REFUNDED, привязка к `Treasury` через `executor`) + тесты «до
+зелёного». **Только testnet/локально** (рельс TESTNET-FIRST, ст. 4.4). Затем часть 3
+(`Governance` Governor→Timelock + `Reputation` soulbound-бейдж) и часть 4 (прогон на
+публичном testnet — сеть согласовать с оператором). Не трогать пульс/секреты
+(loop.sh, report.sh, operator_bridge.py, .env, logs/).
 
 Контекст по **Этапу 4 (Governance)** — готов, для справки:
 - Snapshot (off-chain голос): `governance/snapshot/` — макет + валидатор + CI готовы

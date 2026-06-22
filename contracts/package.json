@@ -1,0 +1,18 @@
+{
+  "name": "public-trust-dao-contracts",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Public Trust DAO — smart-contract skeletons (TESTNET-ONLY, no real funds).",
+  "license": "AGPL-3.0-or-later",
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "chai": "^4.3.10",
+    "ethers": "^6.13.0",
+    "hardhat": "^2.22.0"
+  }
+}

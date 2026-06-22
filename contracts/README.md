@@ -1,0 +1,63 @@
+[Русский] · [English](README.en.md)
+
+# Смарт-контракты — Public Trust DAO (Этап 5, КАРКАС)
+
+> **РЕЛЬС БЕЗОПАСНОСТИ — TESTNET-FIRST.** Это скелеты контрактов для локали и
+> тестовых сетей. **Реальных средств и приватных ключей здесь нет и не будет.**
+> Реальная казна — ТОЛЬКО после независимого аудита + Safe multisig 3-из-5 живых
+> хранителей + отдельного одобрения оператора (конституция, ст. 4.4).
+
+Производно от нормативных документов:
+[`CONSTITUTION`](../docs/CONSTITUTION.md) ·
+[`PRIORITIES`](../docs/PRIORITIES.md) ·
+[`ANTI-ABUSE`](../docs/ANTI-ABUSE.md) ·
+[`ESCROW-TARGETED-DISBURSEMENT`](../docs/ESCROW-TARGETED-DISBURSEMENT.md) ·
+[`GOVERNANCE`](../docs/GOVERNANCE.md).
+
+## Что уже есть
+
+| Контракт | Назначение | Статус |
+|---|---|---|
+| [`Treasury.sol`](contracts/Treasury.sol) | Базовый слой казны: хранит тестовые средства, отдаёт их **только** через `executor` (мультисиг/Timelock), лимит одной выплаты, аварийная пауза, события на каждое движение. | каркас + тесты ✅ |
+
+### Конституционные свойства, заложенные в `Treasury` (и проверенные тестами)
+
+- **Никто не владеет казной единолично** (ст. 1–2): двигать средства может только
+  `executor`, которым по конституции должен быть мультисиг 3-из-5 / Timelock, а не
+  один человек. Деплойер после конструктора **не имеет привилегий**.
+- **Безопасность ≠ власть:** `guardian` может только поставить аварийную паузу, но
+  **не может двигать средства**; `executor` не может ставить паузу (роли разделены).
+- **Лимит/поэтапность** ([`ANTI-ABUSE`](../docs/ANTI-ABUSE.md) §1): потолок одной
+  выплаты `maxRelease`; крупнее — дробить на транши.
+- **Прозрачность** (ст. 3): каждое движение (депозит/выплата/пауза/смена роли)
+  эмитит публичное событие; у выплаты есть `registryRef` — ссылка на запись
+  решения в публичном реестре [`governance/registry/`](../governance/registry/).
+- **Путь децентрализации** ([`GOVERNANCE`](../docs/GOVERNANCE.md), фазы A→D):
+  `setExecutor` позволяет передать исполнение от bootstrap-мультисига к
+  голосуемому Timelock — только текущим `executor`.
+
+## Запуск (локально, без сети и денег)
+
+```bash
+cd contracts
+npm install        # один раз
+npm test           # компиляция + тесты на встроенной сети Hardhat
+```
+
+CI прогоняет то же на каждый push/PR ([`.github/workflows/contracts.yml`](../.github/workflows/contracts.yml)).
+
+## Стек
+
+[Hardhat](https://hardhat.org) + ethers v6 + chai. Solidity `0.8.24`. Тесты идут
+на встроенной in-process сети Hardhat — **никаких внешних RPC, ключей, mainnet**.
+Конфиг деплоя на testnet (напр. Polygon Amoy, chainId 80002) — закомментированный
+шаблон в [`hardhat.config.js`](hardhat.config.js); ключи подставляет оператор
+через `contracts/.env` (в `.gitignore`), не в репозиторий.
+
+## Следующие шаги (каркас Этапа 5)
+
+- `Disbursement` — целевой escrow по [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/ESCROW-TARGETED-DISBURSEMENT.md)
+  (`open`/`release`/`refund`/`pause`, выплата напрямую поставщику, state-machine).
+- `Governance` — Governor → Timelock (модель «1 человек = 1 голос», [`GOVERNANCE.md`](../docs/GOVERNANCE.md)).
+- `Reputation` — непередаваемый (soulbound) бейдж верифицированного участника.
+- Прогон на публичном testnet после согласования сети с оператором.

@@ -1,0 +1,40 @@
+{
+  "seq": 16,
+  "id": "PTD-0016",
+  "type": "decision",
+  "timestamp": "2026-06-22T06:20:00Z",
+  "actor": "builder-agent",
+  "summary": "Этап 5 (Смарт-контракты, часть 1): заведён проект contracts/ (Hardhat+ethers+chai, Solidity 0.8.24) + базовый контракт-скелет Treasury.sol (общественная казна: release только через executor=мультисиг/Timelock, лимит выплаты, аварийная пауза guardian, события + registryRef) с тестами «до зелёного» 10/10 + CI. TESTNET-ONLY, без реальных средств/ключей.",
+  "refs": [
+    "contracts/contracts/Treasury.sol",
+    "contracts/test/Treasury.test.js",
+    "contracts/README.md",
+    ".github/workflows/contracts.yml",
+    "docs/ESCROW-TARGETED-DISBURSEMENT.md"
+  ],
+  "payload": {
+    "decision": "Этап 5 (Смарт-контракты), часть 1: заведён проект contracts/ (Hardhat + ethers v6 + chai, Solidity 0.8.24) и написан базовый контракт-скелет Treasury.sol (общественная казна) с полным покрытием тестами «до зелёного» (10/10). Treasury хранит ТЕСТОВЫЕ средства и отдаёт их только через executor (мультисиг/Timelock), с лимитом одной выплаты, аварийной паузой guardian и публичными событиями на каждое движение. CI .github/workflows/contracts.yml компилирует и гоняет тесты на push/PR. Реальных средств и приватных ключей нет (TESTNET-ONLY).",
+    "rationale": "Этап 5 переводит нормативные документы в исполняемый код. Контракт-скелет фиксирует ядро конституции прямо в логике, а не только в тексте: «никто не владеет казной единолично» (двигать средства может лишь executor = мультисиг 3-из-5/Timelock, деплойер без привилегий), «безопасность ≠ власть» (guardian только ставит паузу), лимит/поэтапность (maxRelease, ANTI-ABUSE §1), прозрачность (события + registryRef, связывающий on-chain движение с записью реестра PTD), путь децентрализации (setExecutor для передачи bootstrap-мультисига голосуемому Timelock). Тесты проверяют именно эти свойства, а не только «фичи». Hardhat выбран как стандартный самодостаточный стек: тесты идут на встроенной in-process сети без RPC/ключей/mainnet — рельс TESTNET-FIRST соблюдён машинно.",
+    "deliverables": [
+      "contracts/contracts/Treasury.sol: базовый контракт казны (executor-gated release, maxRelease, pause/unpause guardian, deposit/receive, setExecutor/setGuardian/setMaxRelease, события, reentrancy-guard)",
+      "contracts/test/Treasury.test.js: 10 тестов конституционных свойств (роли разделены, лимит, баланс, паузы, передача ролей) — все зелёные",
+      "contracts/hardhat.config.js: Solidity 0.8.24 + optimizer; только in-process сеть; закомментированный шаблон testnet-деплоя (ключи через .env, не в репо)",
+      "contracts/package.json + package-lock.json: воспроизводимый стек (Hardhat, ethers v6, chai)",
+      "contracts/.gitignore: node_modules/artifacts/cache/.env не коммитятся",
+      "contracts/README.md (+ EN README.en.md): что есть, конституционные свойства, запуск, стек, следующие шаги",
+      ".github/workflows/contracts.yml: CI compile+test на push/PR (только локальная сеть Hardhat)"
+    ],
+    "rails": [
+      "TESTNET-ONLY: тесты на встроенной in-process сети Hardhat — без внешних RPC, ключей, mainnet",
+      "реальных средств и приватных ключей в репо нет; testnet-деплой-конфиг закомментирован, ключи оператор подставляет через contracts/.env (в .gitignore)",
+      "реальная казна — только после независимого аудита + Safe 3-из-5 + отдельного одобрения оператора (CONSTITUTION ст. 4.4)",
+      "никто не владеет казной единолично: деплойер без привилегий, средства двигает только executor (мультисиг/Timelock)",
+      "двуязычность RU↔EN в одном коммите"
+    ],
+    "status": "adopted",
+    "spec": "docs/ESCROW-TARGETED-DISBURSEMENT.md",
+    "roadmap_item": "Этап 5 — Смарт-контракты (каркас), часть 1: проект + Treasury"
+  },
+  "prev_hash": "904944dce84ee700ba2a2d3e1542ff30b1bfb2c75c1ffe159deeab480236dc70",
+  "hash": "f29545d8c9809bde68b7aaea189acd4b8d1ca97fd197a45e884074632010ee61"
+}

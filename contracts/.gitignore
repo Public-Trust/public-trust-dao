@@ -1,0 +1,12 @@
+# Артефакты сборки и зависимости — не коммитим (воспроизводимы из исходников).
+node_modules/
+artifacts/
+cache/
+coverage/
+coverage.json
+typechain-types/
+
+# Секреты/ключи — НИКОГДА в репозитории (рельс безопасности).
+.env
+.env.*
+!.env.example

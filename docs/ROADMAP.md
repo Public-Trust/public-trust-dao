@@ -86,6 +86,13 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
   (Foundry/Hardhat-конфиг), скелеты Treasury / Disbursement (по
   [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md)) /
   Governance / Reputation + первые тесты «до зелёного». Только testnet/локально.
+  - [x] Часть 1 (сессия 19): проект `contracts/` (Hardhat + ethers v6 + chai,
+    Solidity 0.8.24) + контракт-скелет [`Treasury.sol`](../contracts/contracts/Treasury.sol)
+    (release только через executor=мультисиг/Timelock, лимит, аварийная пауза,
+    события + registryRef) + 10 тестов «до зелёного» + CI. `PTD-0016`. TESTNET-ONLY.
+  - [ ] Часть 2: `Disbursement` (целевой escrow `open/release/refund/pause`).
+  - [ ] Часть 3: `Governance` (Governor → Timelock) + `Reputation` (soulbound-бейдж).
+  - [ ] Часть 4: прогон на публичном testnet (сеть согласовать с оператором).
 - [ ] **Этап 6 — AI-агенты (каркас):** в `ai-agents/` описать и завести модули
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
   как скрипты-помощники соблюдения конституции (начать с одного — напр. Audit,
@@ -142,11 +149,24 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 - [ ] Единый governance-валидатор в CI: один скрипт прогоняет `registry.py verify`
   + `ipfs_manifest.py verify` + `safe_config.py verify` + `snapshot_config.py verify`
   одной командой (удобный «зелёный/красный» для всего governance-слоя).
+- [ ] Тест-инвариант «казна не уходит мимо реестра»: проверять, что у каждого
+  on-chain события `Released(registryRef)` есть запись в `governance/registry/`
+  (и наоборот) — связать контракт и реестр решений в единую проверку (предложено сессией 19).
+- [ ] Скрипт деплоя `contracts/scripts/deploy.js` (Hardhat) с подстановкой адресов
+  Safe-мультисига как `executor` — заготовка «до кнопки» для testnet (предложено сессией 19).
 
 ---
 
 ## Сделано
 
+- **PTD-0016 (сессия 19):** Этап 5 (Смарт-контракты), часть 1 — проект
+  [`contracts/`](../contracts/) (Hardhat + ethers v6 + chai, Solidity 0.8.24) +
+  базовый контракт-скелет [`Treasury.sol`](../contracts/contracts/Treasury.sol):
+  казна отдаёт средства только через `executor` (мультисиг/Timelock), лимит одной
+  выплаты, аварийная пауза `guardian`, события на каждое движение + `registryRef`
+  (связь с реестром). 10 тестов конституционных свойств «до зелёного» + CI
+  [`contracts.yml`](../.github/workflows/contracts.yml). TESTNET-ONLY, без реальных
+  средств/ключей. Открывает Этап 5 (части 2–4 — Disbursement/Governance/Reputation/деплой).
 - **PTD-0015 (сессия 18):** макет off-chain голосования
   [`governance/snapshot/`](../governance/snapshot/) — `space.json` (настройки
   Snapshot: стратегия `ticket` value=1 = «1 человек = 1 голос», допуск только
