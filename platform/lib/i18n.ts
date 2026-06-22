@@ -213,6 +213,14 @@ export type AboutDict = {
   siteLink: string;
 };
 
+export type NotFoundDict = {
+  code: string;
+  title: string;
+  lead: string;
+  home: string;
+  about: string;
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -241,6 +249,7 @@ export type Dict = {
   contact: string;
   builtNote: string;
   about: AboutDict;
+  notFound: NotFoundDict;
   wallet: WalletDict;
   apply: ApplyDict;
   journal: JournalDict;
@@ -377,6 +386,13 @@ export const DICT: Record<Lang, Dict> = {
       constitutionLink: "Конституция фонда (главный закон проекта)",
       registryLink: "Открытый журнал решений (репозиторий)",
       siteLink: "О фонде — главный сайт",
+    },
+    notFound: {
+      code: "Страница не найдена",
+      title: "Такой страницы здесь нет",
+      lead: "Похоже, ссылка устарела или в адресе опечатка. Платформу мы собираем шаг за шагом — возможно, этот экран ещё готовится. Ничего не потеряно: вернитесь на главную и выберите нужный раздел.",
+      home: "← На главную",
+      about: "О платформе",
     },
     wallet: {
       back: "← На главную",
@@ -823,6 +839,13 @@ export const DICT: Record<Lang, Dict> = {
       constitutionLink: "The fund's constitution (the project's main law)",
       registryLink: "Open record of decisions (repository)",
       siteLink: "About the fund — main site",
+    },
+    notFound: {
+      code: "Page not found",
+      title: "There's no such page here",
+      lead: "The link is probably out of date, or there's a typo in the address. We're building the platform step by step — this screen may still be on the way. Nothing is lost: go back to the home page and pick the section you need.",
+      home: "← Back to home",
+      about: "About the platform",
     },
     wallet: {
       back: "← Back to home",
