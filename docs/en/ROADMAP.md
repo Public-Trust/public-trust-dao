@@ -270,6 +270,21 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   agent (proposed session 35). **Done (session 39):** `SECURITY.md` (+EN), cross-links
   from CODE_OF_CONDUCT/README/REPO-STRUCTURE, safe harbor, coordinated disclosure,
   `PTD-0036`.
+- [ ] **Distribution contract per `REWARDS-MODEL.md`** — encode the §5.1 parameters
+  (`B_min`/`B_target`/`ρ_min`/`ρ_max`/`w_work`/`rep_cap`/`k`) into a contract over
+  [`Treasury.sol`](../../contracts/contracts/Treasury.sol)/[`Disbursement.sol`](../../contracts/contracts/Disbursement.sol):
+  `ρ_cap` and `referral=forbidden` immutable constants, the rest `onlyTimelock` (via
+  vote); invariant tests "aid always ≥ 1−ρ_cap", "reputation weight does not break the
+  band ceiling" (Stage 5, continuation of rewards-model; session 41).
+- [ ] **Fairness agent: a `rewards-model` check** — extend
+  [`fairness_agent.py`](../../ai-agents/fairness_agent.py): an accrual of any stream
+  (H/W/V) is recomputable by [`REWARDS-MODEL.md`](REWARDS-MODEL.md) and falls within the
+  §2–§3 corridors (aid share ≥ 1−ρ_cap; no referral stream; reputation is a multiplier,
+  not a right to a payout). Closes the model onto a machine check (session 41).
+- [ ] **A `reward` registry record template/schema** (W/V) — by analogy with
+  `disbursement`: a verifiable record of a work/volunteering reward (proof artifact, ≥2
+  reviewers, amount within the band) so that every W/V accrual is in the public registry
+  and recomputable (session 41).
 - [ ] Treasury dashboard (read-only) — public state of the test treasury from the registry.
 - [ ] Aid request templates (anonymous, no personal data) — form + schema.
 - [ ] "Explain like I'm five" — short explainers for each normative doc.
@@ -401,6 +416,22 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0038 (session 41):** INBOX #17 (operator) — **[`REWARDS-MODEL.md`](REWARDS-MODEL.md) (+RU)**,
+  the base **adaptive parametric** reward-and-distribution model. (1) Adaptivity:
+  distributable budget `D = balance − buffer B_min`; treasury health index `h∈[0,1]`;
+  reward share `ρ = ρ_min+(ρ_max−ρ_min)·h` grows with `h` but under a hard
+  constitutional ceiling `ρ_cap` (default 0.30 → aid always ≥70%, in scarcity nearly
+  all to need); coefficients governed by vote (`parameter-change`→Timelock),
+  `ρ_cap`/`referral=forbidden`/buffer are `governed:false`. (2) Three separate streams
+  (ranges, not sums): H aid to those in need (targeted spend to a provider by
+  [`PRIORITIES.md`](PRIORITIES.md)), W work/contribution (difficulty bands; reputation
+  is only a multiplier to position in a band), V volunteering (recognition/non-monetary
+  in scarcity); no referral stream (Art. 6.2). (3) Validation: ≥2 independent reviewers
+  (no self-approval), Sybil resistance via the soulbound badge, Fairness AI recomputes +
+  Audit AI checks against registry/on-chain, every accrual is a registry record + event,
+  every refusal has an appeal. The machine-readable parameters §5.1 are a spec for Stage
+  5 (a distribution contract over Treasury/Disbursement) and Fairness/Audit AI.
+  Documentation/Guardian/Audit green, IPFS rebuilt. `PTD-0038`. TESTNET-ONLY.
 - **PTD-0037 (session 40):** P3 (idea bank) — **refactor of the shared Solidity
   helpers of the AI agents** into a single module
   [`ai-agents/solidity_scan.py`](../../ai-agents/solidity_scan.py). The lightweight

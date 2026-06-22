@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 38,
-  "head_hash": "3e37169d962834b600fd4ad0e67a6d0233dd56854ce7ff8a69ed98d7feb5c522",
+  "count": 39,
+  "head_hash": "cfe0fc4b1c99e24cccec109c54f548a179ad9d94ac6f454c81d2c98b1c064b76",
   "entries": [
     {
       "seq": 0,
@@ -345,6 +345,15 @@
       "summary": "P3 ROADMAP — рефакторинг общих Solidity-помощников AI-агентов в единый модуль ai-agents/solidity_scan.py (без расходящихся копий парсинга в Reputation/Housing) + тест-инвариант test_solidity_scan.py (14/14), включён в run_all (тесты 9/9) и CI. Поведение агентов не изменилось. TESTNET-ONLY.",
       "hash": "3e37169d962834b600fd4ad0e67a6d0233dd56854ce7ff8a69ed98d7feb5c522",
       "file": "records/0037-decision.json"
+    },
+    {
+      "seq": 38,
+      "id": "PTD-0038",
+      "type": "decision",
+      "timestamp": "2026-06-22T20:30:00Z",
+      "summary": "INBOX #17 — docs/REWARDS-MODEL.md (+EN): базовая АДАПТИВНАЯ параметрическая модель вознаграждения и распределения. Три раздельных потока (помощь / работа / волонтёрство); доля на вознаграждение ρ растёт с индексом здоровья казны h под жёстким потолком ρ_cap (нужда всегда ≥70%, в дефиците почти всё на помощь); коэффициенты под голосованием; диапазоны вместо сумм; валидация (≥2 проверяющих, анти-Сивилла, Fairness/Audit AI, реестр, апелляции). Спецификация для Этапа 5 и Fairness/Audit AI. TESTNET-ONLY.",
+      "hash": "cfe0fc4b1c99e24cccec109c54f548a179ad9d94ac6f454c81d2c98b1c064b76",
+      "file": "records/0038-rewards-model.json"
     }
   ]
 }
