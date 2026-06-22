@@ -47,6 +47,7 @@ mirror this logic, plus the normative base and the autonomy loop.
 | `AUTHORS.md` / `AUTHORS.en.md` | Authors and stewards: author/initiator Fedor Grigoriev (authorship ≠ ownership). RU + EN. |
 | `CONTRIBUTING.md` / `CONTRIBUTING.en.md` | How to contribute: issues/PRs/governance proposals, contribution rails, code of conduct (contribution ≠ power over the treasury). RU + EN. |
 | `CODE_OF_CONDUCT.md` / `CODE_OF_CONDUCT.en.md` | Code of conduct (canonical file, GitHub Community): dignity, unacceptable behavior, breaking the rails = breaking the code. RU + EN. |
+| `SECURITY.md` / `SECURITY.en.md` | Security policy (canonical file, GitHub Security): private vulnerability reporting, what counts as a vulnerability, safe harbor, constitutional rails. RU + EN. |
 | `LAUNCH.md` | Manifesto-constitution and the full stage plan (1→6). The project's north star. |
 | `BUILDER.md` | Mandate of the autonomous builder agent (session protocol, safety rails). |
 | `PROGRESS.md` | Progress log + "next step" + "needed from operator". Memory across sessions. |

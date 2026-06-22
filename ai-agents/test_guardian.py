@@ -168,6 +168,16 @@ def main():
              lambda t: add_tracked(t, "NOTES.md", "пример строки `private_key: 0x...`\n"),
              expect_green=True)
 
+    # 11. head_hash, показанный в HTML-разметке (`<b>head_hash</b>...class="hash"`),
+    #     — это значение хэш-поля, а НЕ приватный ключ. Подсказка хэша лежит в разметке
+    #     без `:`/`=`, поэтому label-эвристики мало — нужен разбор словесных токенов
+    #     префикса. Регрессия на ложное срабатывание Guardian на странице прозрачности.
+    scenario("head_hash в HTML (class=\"hash\") — не утечка",
+             lambda t: add_tracked(t, "page.html",
+                                   '<span class="fact"><b>head_hash</b>'
+                                   '<span class="hash">' + "f" * 64 + "</span></span>\n"),
+             expect_green=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 

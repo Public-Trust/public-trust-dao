@@ -50,6 +50,7 @@ PRIVKEY_RE = re.compile(r"(?<![0-9a-fA-F])(?:0x)?([0-9a-fA-F]{64})(?![0-9a-fA-F]
 
 # Имя JSON-поля/метки перед токеном на той же строке (для отсева легитимных хэшей).
 LABEL_RE = re.compile(r'["\']?([A-Za-z0-9_]+)["\']?\s*[:=]')
+WORD_RE = re.compile(r"[A-Za-z0-9_]+")
 
 # Легитимные хэш-поля: их значение — это sha256/CID/отпечаток, а НЕ ключ.
 # Совпадение по подстроке покрывает head_hash, prev_hash, manifest_fingerprint_sha256 и т.п.
@@ -109,12 +110,22 @@ def tracked_files():
 
 
 def looks_like_hash_line(line, start):
-    """True, если 64-hex токен на этой строке — это значение хэш-поля (sha256/CID/…)."""
+    """True, если 64-hex токен на этой строке — это значение хэш-поля (sha256/CID/…).
+
+    Сначала пробуем точный признак — метка вида `head_hash:`/`sha256=`.
+    Затем — более широкий: любой словесный токен в префиксе содержит хэш-подсказку
+    (покрывает разметку без `:`/`=`, напр. HTML `<b>head_hash</b>`/`class="hash"`).
+    Настоящий приватный ключ так не подписывают, поэтому ложных пропусков это не даёт.
+    """
     prefix = line[:start]
     labels = LABEL_RE.findall(prefix)
     if labels:
         last = labels[-1].lower()
         if any(h in last for h in HASH_HINTS):
+            return True
+    for tok in WORD_RE.findall(prefix):
+        low = tok.lower()
+        if any(h in low for h in HASH_HINTS):
             return True
     return False
 

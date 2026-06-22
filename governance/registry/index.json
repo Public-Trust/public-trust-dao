@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 36,
-  "head_hash": "46362f7d2faf0bc6ae8b99b6105761e50f35e7bde4b6214bd6cb35fc1911b2ec",
+  "count": 37,
+  "head_hash": "aa18e1bd5a58feb3a9714933740b3042418308babfffddcb7d9acae4c58ba2ff",
   "entries": [
     {
       "seq": 0,
@@ -327,6 +327,15 @@
       "summary": "P2 ROADMAP — отдельная страница «Прозрачность — проверь сам» на сайте: web/transparency.html (+EN). Собирает ссылки на проверяемые артефакты (реестр/IPFS/CI/контракты/агенты) + пошаговые команды самостоятельной проверки целостности (registry.py verify, ipfs_manifest.py verify, audit_agent.py) + текущий head_hash. Статусы CI даны ссылками, не картинками-бейджами — ноль исходящих запросов сохранён. Documentation/Audit зелёные. TESTNET-ONLY.",
       "hash": "46362f7d2faf0bc6ae8b99b6105761e50f35e7bde4b6214bd6cb35fc1911b2ec",
       "file": "records/0035-transparency-page.json"
+    },
+    {
+      "seq": 36,
+      "id": "PTD-0036",
+      "type": "decision",
+      "timestamp": "2026-06-22T19:00:00Z",
+      "summary": "P3 ROADMAP — каноническая политика безопасности SECURITY.md (+EN): как приватно сообщить об уязвимости, что считается уязвимостью, safe harbor, coordinated disclosure, конституционные рельсы (TESTNET-first, никто не владеет единолично). Кросс-линки из CODE_OF_CONDUCT/README/REPO-STRUCTURE. Дополняет Guardian-агента. TESTNET-ONLY.",
+      "hash": "aa18e1bd5a58feb3a9714933740b3042418308babfffddcb7d9acae4c58ba2ff",
+      "file": "records/0036-security-policy.json"
     }
   ]
 }

@@ -83,6 +83,9 @@ You can report unacceptable behavior or a breach of the rails:
   [`docs/en/EMAIL-SETUP.md`](docs/en/EMAIL-SETUP.md)); until then, escalation is
   received by the project's human operators/guardians. Never post someone's
   personal data or secrets in an open issue.
+- **A security vulnerability** (a contract/rail bug, a secret leak, an attack on
+  verifiability) — see the separate [`SECURITY.en.md`](SECURITY.en.md) policy:
+  privately first, no working exploits in an open issue.
 
 All reports are handled in good faith and without publicizing the reporter's
 identity. Decisions are made by people (guardians/maintainers), not by an

@@ -262,12 +262,14 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   linter that, for a list of key terms (DAO/escrow/multisig/…), checks the project
   has an entry in `GLOSSARY.md`; non-blocking, just a warning, so the glossary does
   not fall behind the documents (proposed in session 36).
-- [ ] **SECURITY.md (+EN)** — canonical security policy file (GitHub recognizes it
+- [x] **SECURITY.md (+EN)** — canonical security policy file (GitHub recognizes it
   and shows a "Report a vulnerability" button): where and how to report a rails/contract
   flaw, what's in scope (testnet only), what we do NOT promise (no real-money bounty
   before audit), private channel = the same `security@` from [`EMAIL-SETUP.md`](EMAIL-SETUP.md).
   Complements CODE_OF_CONDUCT (breaking the rails = breaking conduct) and the Guardian
-  agent (proposed session 35).
+  agent (proposed session 35). **Done (session 39):** `SECURITY.md` (+EN), cross-links
+  from CODE_OF_CONDUCT/README/REPO-STRUCTURE, safe harbor, coordinated disclosure,
+  `PTD-0036`.
 - [ ] Treasury dashboard (read-only) — public state of the test treasury from the registry.
 - [ ] Aid request templates (anonymous, no personal data) — form + schema.
 - [ ] "Explain like I'm five" — short explainers for each normative doc.
@@ -387,6 +389,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0036 (session 39):** P3 (quality/transparency) — **`SECURITY.md` (+EN)**,
+  the canonical security policy (GitHub recognizes it, "Report a vulnerability"
+  button / Security tab). What counts as a vulnerability (contracts/rails/secret
+  leak/attack on verifiability/site/CI), what is not via this channel, private
+  reporting (Security Advisories / `security@` once mail is set up / the "rail"
+  form), what to expect (coordinated disclosure, no monetary reward — a public
+  good), a **safe harbor** for good-faith research, the constitutional rails and
+  scope. Cross-links: CODE_OF_CONDUCT (+EN), README (+EN), REPO-STRUCTURE (+EN).
+  Documentation agent green (52 public docs, RU↔EN pairs, 0 broken links).
+  TESTNET-ONLY, no real funds/keys.
 - **PTD-0035 (session 38):** P2 (quality/transparency) — **"Transparency — verify it
   yourself" page** on the site: [`web/transparency.html`](../../web/transparency.html)
   (+EN mirror `transparency.en.html`). It gathers in one place the links to the
