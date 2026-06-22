@@ -145,6 +145,44 @@ a {
   border-color: var(--accent);
 }
 
+/* Постоянное меню платформы */
+.primary-nav {
+  border-top: 1px solid var(--border);
+  overflow-x: auto;
+}
+.primary-nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+.nav-link {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  padding: 7px 12px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  min-height: 40px;
+  line-height: 1.6;
+}
+.nav-link:hover {
+  color: var(--text);
+  border-color: var(--border);
+}
+.nav-link--active {
+  color: var(--accent-contrast);
+  background: var(--accent);
+}
+.nav-link--active:hover {
+  color: var(--accent-contrast);
+  border-color: transparent;
+}
+
 /* Hero */
 .hero {
   padding: 48px 0 24px;

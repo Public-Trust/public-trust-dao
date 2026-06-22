@@ -164,6 +164,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     draft note in the browser with no personal data; the home card became a working
     link. `PTD-0081`. TESTNET-ONLY.
     **This completes the operator-planned series of value screens (INBOX #34).**
+  - [x] Persistent navigation menu in the header (session 85):
+    `platform/components/SiteHeader.tsx` — the brand links home from any screen, a
+    persistent menu under the header links to "Home" and all six ready screens, the
+    current section is highlighted (`aria-current`); short labels reuse the screen list
+    from `lib/i18n.ts` (RU↔EN), no new dependencies. Seven screens tied into one
+    coherent app. `PTD-0082`. TESTNET-ONLY.
   - [ ] Wire up platform publishing to GitHub Pages during migration from `web/`.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not

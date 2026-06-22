@@ -1,9 +1,28 @@
 "use client";
 
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useI18n } from "@/components/Providers";
+
+// Убираем хвостовой слэш, чтобы «/wallet/» и «/wallet» считались одним адресом.
+function normalizePath(path: string): string {
+  if (path.length > 1 && path.endsWith("/")) {
+    return path.slice(0, -1);
+  }
+  return path;
+}
 
 export function SiteHeader() {
   const { t, toggleLang, toggleTheme } = useI18n();
+  const pathname = normalizePath(usePathname());
+
+  // Постоянное меню платформы: главная + готовые экраны (у которых есть адрес).
+  const navItems = [
+    { label: t.navHome, href: "/" },
+    ...t.screens
+      .filter((s) => s.href)
+      .map((s) => ({ label: s.short ?? s.title, href: s.href as string })),
+  ];
 
   return (
     <header className="site-header">
@@ -11,10 +30,10 @@ export function SiteHeader() {
         {t.skipToContent}
       </a>
       <div className="container header-inner">
-        <a className="brand" href="#main">
+        <Link className="brand" href="/">
           <span className="brand-name">{t.brand}</span>
           <span className="brand-tagline">{t.tagline}</span>
-        </a>
+        </Link>
         <div className="nav-tools">
           <button
             type="button"
@@ -35,6 +54,24 @@ export function SiteHeader() {
           </button>
         </div>
       </div>
+      <nav className="primary-nav" aria-label={t.navLabel}>
+        <ul className="container primary-nav-list">
+          {navItems.map((item) => {
+            const active = normalizePath(item.href) === pathname;
+            return (
+              <li key={item.href}>
+                <Link
+                  className={active ? "nav-link nav-link--active" : "nav-link"}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </header>
   );
 }

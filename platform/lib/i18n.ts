@@ -206,12 +206,14 @@ export type Dict = {
   heroLead: string;
   ctaRegistry: string;
   ctaSite: string;
+  navLabel: string;
+  navHome: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
   ready: string;
   open: string;
-  screens: { title: string; text: string; href?: string }[];
+  screens: { title: string; text: string; href?: string; short?: string }[];
   transparencyTitle: string;
   transparencyText: string;
   footerNote: string;
@@ -241,6 +243,8 @@ export const DICT: Record<Lang, Dict> = {
       "Это рабочее приложение фонда. Через него люди смогут попросить помощь, видеть открытый журнал решений, голосовать наравне со всеми и проверять состояние общей казны. Мы собираем платформу шаг за шагом и показываем каждый готовый экран здесь.",
     ctaRegistry: "Открытый журнал решений",
     ctaSite: "О фонде (главный сайт)",
+    navLabel: "Экраны платформы",
+    navHome: "Главная",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -252,31 +256,37 @@ export const DICT: Record<Lang, Dict> = {
         title: "Подключить кошелёк",
         text: "Простое подключение кошелька с понятным объяснением, что это и зачем — без скрытых действий.",
         href: "/wallet/",
+        short: "Кошелёк",
       },
       {
         title: "Подать заявку на помощь",
         text: "Спокойная форма без лишних личных данных. Помощь идёт по честному порядку: сначала самые срочные нужды.",
         href: "/apply/",
+        short: "Заявка",
       },
       {
         title: "Открытый журнал",
         text: "Любое решение фонда можно посмотреть и проверить — ничего не спрятано.",
         href: "/journal/",
+        short: "Журнал",
       },
       {
         title: "Голосование",
         text: "Один человек — один голос. Голос не покупается и не продаётся.",
         href: "/voting/",
+        short: "Голосование",
       },
       {
         title: "Окно казны",
         text: "Видно состояние общей казны и куда уходят средства — только для просмотра.",
         href: "/treasury/",
+        short: "Казна",
       },
       {
         title: "Проверка личности",
         text: "Подтверждение «живой и один человек» без слежки и без сбора лиц в базу.",
         href: "/identity/",
+        short: "Личность",
       },
     ],
     transparencyTitle: "Честно и без слежки",
@@ -619,6 +629,8 @@ export const DICT: Record<Lang, Dict> = {
       "This is the fund's working application. Through it people will be able to ask for help, see the open record of decisions, vote as equals, and check the state of the shared treasury. We are building the platform step by step and show each finished screen here.",
     ctaRegistry: "Open record of decisions",
     ctaSite: "About the fund (main site)",
+    navLabel: "Platform screens",
+    navHome: "Home",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -630,31 +642,37 @@ export const DICT: Record<Lang, Dict> = {
         title: "Connect a wallet",
         text: "A simple wallet connection with a clear explanation of what it is and why — no hidden actions.",
         href: "/wallet/",
+        short: "Wallet",
       },
       {
         title: "Apply for help",
         text: "A calm form with no unnecessary personal data. Help follows a fair order: the most urgent needs first.",
         href: "/apply/",
+        short: "Apply",
       },
       {
         title: "Open record",
         text: "Every decision of the fund can be viewed and checked — nothing is hidden.",
         href: "/journal/",
+        short: "Record",
       },
       {
         title: "Voting",
         text: "One person, one vote. A vote cannot be bought or sold.",
         href: "/voting/",
+        short: "Voting",
       },
       {
         title: "Treasury window",
         text: "See the state of the shared treasury and where funds go — view only.",
         href: "/treasury/",
+        short: "Treasury",
       },
       {
         title: "Identity check",
         text: "Confirming 'a real, single person' without surveillance and without collecting faces into a database.",
         href: "/identity/",
+        short: "Identity",
       },
     ],
     transparencyTitle: "Honest and without surveillance",
