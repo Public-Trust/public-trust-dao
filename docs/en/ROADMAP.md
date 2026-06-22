@@ -487,10 +487,21 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   (`severity=soft`: `status=warn`, does not fail the verdict): collects the names of all
   `run:` steps, warns about repeated ones, skips unnamed steps. Checks 8→9 (2 soft).
   `test_structure_guard.py` 80/80, guard green 9/9 with no warnings, `PTD-0065`.
-- [ ] **Structure-guard: soft check "a step has both a `name:` and a `run:` body"** —
+- [x] **Structure-guard: soft check "a step has both a `name:` and a `run:` body"** —
   follow-up to `ci-step-name-unique`: warn if the workflow has a list item with `- name:`
   but no `run:`/`uses:` (an empty step — a common indentation typo), so the CI step map
-  stays honest (proposed in session 68).
+  stays honest (proposed in session 68). → Done (session 69), the guard's third SOFT check
+  `ci-step-has-body` (`severity=soft`: `status=warn`, does not fail the verdict): the new
+  helper `_workflow_step_items` collects each list item's keys at the "step column"; a step
+  with `name` but no `run`/`uses` warns as "empty step". Check count 9→10 (3 soft).
+  `test_structure_guard.py` 89/89 (empty step → warn with green verdict and exit 0; `uses:`
+  counts as a body; `paths:` items are not confused with steps), guard green 10/10 with no
+  warnings, `PTD-0066`.
+- [ ] **Structure-guard: soft check "every step has a `name:`" for ALL steps, not just
+  required commands** — `ci-step-has-name` currently inspects only the steps of required
+  commands (`REQUIRED_WORKFLOW_COMMANDS`); `uses:` steps (checkout, setup-python) without a
+  name are not warned. Extend the soft name check to all list steps (on top of
+  `_workflow_step_items`) so the whole CI map reads in plain words (proposed in session 69).
 - [ ] **`run_all`/meta-agent surfaces the guard's soft warnings** — the guard's `warnings`
   count is currently printed only in its own report; add it so the shared
   `run_all --with-tests` run also prints the total number of soft warnings (without failing
@@ -587,6 +598,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0066 (session 69):** P3 (Stage 6 quality) — **structure-guard: tenth (third SOFT)
+  `ci-step-has-body` check (a step with `- name:` has a `run:`/`uses:` body — it is not
+  empty).** Follow-up to `ci-step-name-unique` (PTD-0065) toward an honest CI step map: if a
+  list item carries `- name:` but NEITHER `run:` NOR `uses:`, it is almost always an
+  indentation typo — the step body "fell out" of it, so the step does nothing while still
+  looking real in the GitHub Actions UI. The new helper `_workflow_step_items` collects each
+  list item's keys at the "step column" (`-` indent + 2); keyless `paths:` items do not
+  interfere. Does not break coverage (an actual missing command is caught by the hard checks)
+  → only **warns** (`severity=soft`, `status=warn`), verdict stays green. Check count 9→10
+  (3 soft). `test_structure_guard.py` 80→89 (3 new blocks: empty step → warn with green
+  verdict and exit 0; `uses:` counts as a body; `paths:` items not confused with steps),
+  guard 10/10 with no warnings, run_all 8/8 + tests 11/11, IPFS verify=OK (19), registry 67.
+  Agent README (RU/EN): new table row marked "soft".
 - **PTD-0065 (session 68):** P3 (Stage 6 quality) — **structure-guard: ninth (second SOFT)
   `ci-step-name-unique` check (two CI `run:` steps do not share the same `- name:`).**
   Follow-up to `ci-step-has-name` (PTD-0064): a step already has a name, but if it repeats,

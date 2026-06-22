@@ -431,6 +431,7 @@ that fixes nothing):
 | `ci-required-cmd-own-step` | Every required command has its OWN dedicated `run:` step. The check above sees a command "anywhere" in the file — including a comment or a step name; this one inspects the `run:` step bodies themselves and requires each command to (a) actually run in at least one step and (b) not share a step with another. Otherwise a failure of one masks the other: in a single `run:` joined by `&&` the second command never runs after the first fails, and one left only in a comment never runs at all. Its own step — its own exit code, its own failure in plain sight. |
 | `ci-step-has-name` *(soft — warns, does not fail CI)* | The `run:` step of a required command has a human-readable `- name:`. An extension of the previous check toward readability: without a name a failed step is shown in the GitHub Actions logs as a bare command (`python3 ai-agents/run_all.py --with-tests`) rather than in plain words ("Run all agents"). This does not break coverage, so the check only **warns** (severity=soft) and does not turn the verdict red — a hint to improve readability for people (Art. 3 "clarity"). |
 | `ci-step-name-unique` *(soft — warns, does not fail CI)* | Two `run:` steps do not carry the SAME `- name:`. An extension of the previous check: a step does have a name, but if it repeats, a failed step reads ambiguously in the GitHub Actions logs ("which of the two same-named ones?"). It also only **warns** (severity=soft) and does not turn the verdict red. Unnamed steps are skipped — those are `ci-step-has-name`'s concern. |
+| `ci-step-has-body` *(soft — warns, does not fail CI)* | A step with `- name:` has a body `run:`/`uses:` (it is not empty). An extension of the previous check toward an honest step map: if a list item carries `- name:` but NEITHER `run:` NOR `uses:`, it is almost always an indentation typo — the step body "fell out" of it, so the step does nothing while still looking real in the GitHub Actions UI. It also only **warns** (severity=soft): an actual missing required command is caught by the hard checks above, while this one keeps the CI step map readable for people (Art. 3 "clarity"). |
 
 ```bash
 python3 ai-agents/structure_guard.py          # human-readable report
@@ -442,10 +443,11 @@ on poisoned temporary directories (an agent without a test; an orphan test; an
 agent with a local copy of `.sol` parsing; an agent/test bypassing `run_all`; a
 dangling `run_all` reference; the workflow missing `run_all --with-tests` or
 `test_run_all.py`; two commands sharing one `run:` step; a command only in a
-comment; trigger paths missing `ai-agents/**`; a `run:` step without `- name:`
-and two steps with the same `- name:` — softly warn, do not fail) that the guard
+comment; trigger paths missing `ai-agents/**`; a `run:` step without `- name:`,
+two steps with the same `- name:`, and a named step without a `run:`/`uses:`
+body — softly warn, do not fail) that the guard
 really turns red (and on the soft checks only warns), while a clean directory
-stays green (80/80). It is included in
+stays green (89/89). It is included in
 `run_all --with-tests`, so adding an agent without a test, a copy of `.sol`
 parsing, an agent/test that bypasses the shared CI run, dropping `ai-agents/**`
 from the workflow triggers, or removing any required workflow command turns it red.

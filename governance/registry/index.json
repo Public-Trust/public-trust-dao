@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 66,
-  "head_hash": "8141559482140e7fb6e26c07e4ace4051bc26a828cf916e87727b87e336b4368",
+  "count": 67,
+  "head_hash": "475bab2b6ac912861af521a2e756c68caa0568c60355ff12f9e22f90ed10664a",
   "entries": [
     {
       "seq": 0,
@@ -597,6 +597,15 @@
       "summary": "Страж структуры: девятая (вторая мягкая) проверка ci-step-name-unique — два шага run: CI не делят одинаковое name (иначе провал в логах CI читается двусмысленно); severity=soft: предупреждает, не валит сборку; число проверок 8→9",
       "hash": "8141559482140e7fb6e26c07e4ace4051bc26a828cf916e87727b87e336b4368",
       "file": "records/0065-decision.json"
+    },
+    {
+      "seq": 66,
+      "id": "PTD-0066",
+      "type": "decision",
+      "timestamp": "2026-06-22T13:24:39Z",
+      "summary": "Страж структуры: десятая (третья мягкая) проверка ci-step-has-body — у шага с '- name:' есть тело run:/uses: (не пустой шаг; иначе тело выпало по опечатке отступа, а шаг выглядит настоящим); severity=soft: предупреждает, не валит сборку; число проверок 9→10",
+      "hash": "475bab2b6ac912861af521a2e756c68caa0568c60355ff12f9e22f90ed10664a",
+      "file": "records/0066-decision.json"
     }
   ]
 }

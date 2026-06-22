@@ -112,12 +112,14 @@ with tempfile.TemporaryDirectory() as repo:
     _write_workflow(repo)
     rep = structure_guard.run(d)
     check("вердикт зелёный", rep["verdict"] == "green")
-    check("все 9 проверок прошли", rep["passed"] == rep["total"] == 9)
+    check("все 10 проверок прошли", rep["passed"] == rep["total"] == 10)
     check("предупреждений нет (у шагов есть имена)", rep["warnings"] == 0)
     check("у шагов run: есть имена → ci-step-has-name зелёная",
           _status(rep, "ci-step-has-name") == "pass")
     check("имена шагов различны → ci-step-name-unique зелёная",
           _status(rep, "ci-step-name-unique") == "pass")
+    check("именованные шаги имеют тело run: → ci-step-has-body зелёная",
+          _status(rep, "ci-step-has-body") == "pass")
     check("агент с импортом из solidity_scan НЕ краснит sol-проверку",
           _status(rep, "sol-parsing-centralized") == "pass")
     check("run_all покрывает агента и тесты → run-all-covers-all зелёная",
@@ -610,12 +612,85 @@ with tempfile.TemporaryDirectory() as repo:
     check("ci-step-name-unique зелёная (имён нет — нечему повторяться)",
           _status(rep, "ci-step-name-unique") == "pass")
 
+# --- Мягкая проверка ci-step-has-body: пустой именованный шаг предупреждает --
+# Шаг с `- name:`, но без `run:`/`uses:` (выпавшее тело) → warn, вердикт зелёный.
+print("именованный шаг без тела run:/uses: (мягкая проверка предупреждает, не валит):")
+EMPTY_STEP_WF = (
+    'on:\n  push:\n    paths:\n      - "ai-agents/**"\n'
+    '  pull_request:\n    paths:\n      - "ai-agents/**"\n'
+    'jobs:\n  agents:\n    steps:\n'
+    '      - name: тест мета-агента\n'
+    '        run: python3 ai-agents/test_run_all.py\n'
+    '      - name: прогон всех агентов\n'
+    '        run: python3 ai-agents/run_all.py --with-tests\n'
+    '      - name: забытый шаг\n'  # опечатка отступа: тело выпало, шаг пустой
+)
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, EMPTY_STEP_WF)
+    rep = structure_guard.run(d)
+    check("ci-step-has-body предупреждает (status=warn)",
+          _status(rep, "ci-step-has-body") == "warn")
+    check("вердикт ОСТАЁТСЯ зелёным (мягкая проверка не валит CI)",
+          rep["verdict"] == "green")
+    items = [v["item"] for c in rep["checks"] if c["key"] == "ci-step-has-body"
+             for v in c["violations"]]
+    check("предупреждение только о пустом шаге 'забытый шаг'", items == ["забытый шаг"])
+    # Рабочие шаги с телом run: НЕ попадают в нарушения.
+    check("шаги с телом run: не помечены пустыми", "прогон всех агентов" not in items)
+    # Согласованность: зелёный вердикт ⇒ код возврата 0.
+    check("код возврата 0 при зелёном вердикте с предупреждением о пустом шаге",
+          structure_guard.main(["structure_guard", "--dir", d, "--json"]) == 0)
+
+# Шаг с `- name:` и телом `uses:` (а не run:) — НЕ пустой → ci-step-has-body зелёная.
+print("именованный шаг с телом uses: не считается пустым:")
+USES_STEP_WF = (
+    'on:\n  push:\n    paths:\n      - "ai-agents/**"\n'
+    '  pull_request:\n    paths:\n      - "ai-agents/**"\n'
+    'jobs:\n  agents:\n    steps:\n'
+    '      - name: получить код\n'
+    '        uses: actions/checkout@v4\n'
+    '      - name: тест мета-агента\n'
+    '        run: python3 ai-agents/test_run_all.py\n'
+    '      - name: прогон всех агентов\n'
+    '        run: python3 ai-agents/run_all.py --with-tests\n'
+)
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, USES_STEP_WF)
+    rep = structure_guard.run(d)
+    check("ci-step-has-body зелёная (uses: — это тело шага)",
+          _status(rep, "ci-step-has-body") == "pass")
+    check("предупреждений нет", rep["warnings"] == 0)
+
+# Бесключевые элементы списка (пути в `on.*.paths`) не считаются пустыми шагами.
+print("элементы paths не путаются с пустыми шагами:")
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    # дефолтный воркфлоу: в paths по `- "ai-agents/**"`, оба шага run: с именами и телом
+    _write_workflow(repo)
+    rep = structure_guard.run(d)
+    check("ci-step-has-body зелёная (пути в paths — не пустые шаги)",
+          _status(rep, "ci-step-has-body") == "pass")
+
 # --- Сторож-регресс: настоящий каталог ai-agents/ сейчас зелёный ----------
 print("настоящий каталог ai-agents/:")
 real = structure_guard.run()
 check("реальный репозиторий: вердикт зелёный", real["verdict"] == "green")
-check("реальный репозиторий: 9/9 проверок прошли", real["passed"] == real["total"] == 9)
-check("реальный репозиторий: предупреждений нет (имена шагов CI есть и уникальны)",
+check("реальный репозиторий: 10/10 проверок прошли", real["passed"] == real["total"] == 10)
+check("реальный репозиторий: предупреждений нет (имена шагов CI есть, уникальны, шаги не пусты)",
       real["warnings"] == 0)
 
 # --- Итог ----------------------------------------------------------------
