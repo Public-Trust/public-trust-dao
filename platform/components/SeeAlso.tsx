@@ -14,7 +14,8 @@ import { useI18n } from "@/components/Providers";
 // главной — зеркало остаётся одним источником текста (RU↔EN). Чисто-фронтенд,
 // без новых зависимостей. Развитие приёма «экран-зеркало» (PTD-0102/0103).
 
-// Карта связей между экранами по адресу (язык-независимая структура).
+// Карта связей между экранами-объяснениями по адресу (язык-независимая
+// структура).
 const RELATED: Record<string, string[]> = {
   "/manifesto/": ["/constitution/", "/governance/", "/support/"],
   "/constitution/": ["/manifesto/", "/governance/", "/accountability/"],
@@ -29,7 +30,22 @@ const RELATED: Record<string, string[]> = {
   "/glossary/": ["/constitution/", "/manifesto/", "/priorities/"],
 };
 
+// Мягкие переходы «объяснение → действие»: с экрана-объяснения ведём на тот
+// рабочий экран, где прочитанное можно применить. Источник заголовков — тот же
+// t.screens, что и витрина шести рабочих экранов на главной (без задвоения).
+// Включаем только там, где переход естественен для человека.
+const RELATED_ACTIONS: Record<string, string[]> = {
+  "/governance/": ["/voting/"],
+  "/priorities/": ["/apply/"],
+  "/rewards/": ["/treasury/"],
+  "/direct-help/": ["/apply/", "/treasury/"],
+  "/safeguards/": ["/identity/"],
+  "/work/": ["/treasury/"],
+  "/accountability/": ["/journal/", "/treasury/"],
+};
+
 type LearnItem = { title: string; text: string; href: string };
+type ScreenItem = { title: string; text: string; href?: string; short?: string };
 
 export default function SeeAlso({ slug }: { slug: string }) {
   const { t } = useI18n();
@@ -38,21 +54,42 @@ export default function SeeAlso({ slug }: { slug: string }) {
     .map((href) => t.learn.find((l) => l.href === href))
     .filter((l): l is LearnItem => l !== undefined);
 
-  if (items.length === 0) return null;
+  const actions = (RELATED_ACTIONS[slug] ?? [])
+    .map((href) => t.screens.find((s) => s.href === href))
+    .filter((s): s is ScreenItem & { href: string } => s?.href !== undefined);
+
+  if (items.length === 0 && actions.length === 0) return null;
 
   return (
     <section className="see-also" aria-labelledby="see-also-title">
       <h2 id="see-also-title">{t.seeAlso}</h2>
-      <ul className="see-also-list">
-        {items.map((item) => (
-          <li key={item.href} className="see-also-item">
-            <Link className="see-also-link" href={item.href}>
-              {item.title}
-            </Link>
-            <span className="see-also-text">{item.text}</span>
-          </li>
-        ))}
-      </ul>
+      {items.length > 0 && (
+        <ul className="see-also-list">
+          {items.map((item) => (
+            <li key={item.href} className="see-also-item">
+              <Link className="see-also-link" href={item.href}>
+                {item.title}
+              </Link>
+              <span className="see-also-text">{item.text}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {actions.length > 0 && (
+        <>
+          <p className="see-also-do-label">{t.seeAlsoDo}</p>
+          <ul className="see-also-list see-also-do">
+            {actions.map((item) => (
+              <li key={item.href} className="see-also-item">
+                <Link className="see-also-link" href={item.href}>
+                  {item.title} →
+                </Link>
+                <span className="see-also-text">{item.text}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </section>
   );
 }
