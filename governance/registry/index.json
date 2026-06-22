@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 17,
-  "head_hash": "f29545d8c9809bde68b7aaea189acd4b8d1ca97fd197a45e884074632010ee61",
+  "count": 18,
+  "head_hash": "cd15042de9b8253b2f0250ec8c1032d008c0a361571382a4d5b1b73006dc00b9",
   "entries": [
     {
       "seq": 0,
@@ -156,6 +156,15 @@
       "summary": "Этап 5 (Смарт-контракты, часть 1): заведён проект contracts/ (Hardhat+ethers+chai, Solidity 0.8.24) + базовый контракт-скелет Treasury.sol (общественная казна: release только через executor=мультисиг/Timelock, лимит выплаты, аварийная пауза guardian, события + registryRef) с тестами «до зелёного» 10/10 + CI. TESTNET-ONLY, без реальных средств/ключей.",
       "hash": "f29545d8c9809bde68b7aaea189acd4b8d1ca97fd197a45e884074632010ee61",
       "file": "records/0016-decision.json"
+    },
+    {
+      "seq": 17,
+      "id": "PTD-0017",
+      "type": "decision",
+      "timestamp": "2026-06-22T06:40:00Z",
+      "summary": "Этап 5 (Смарт-контракты, часть 2): контракт целевого escrow Disbursement.sol (open/release/refund/pause; транш уходит СТРОГО поставщику из кейса — «не даём деньги, оплачиваем нужду»; refund в казну; лимит транша; только executor двигает, guardian только пауза; события + registryRef) с тестами «до зелёного» 14/14 (24/24 с Treasury). Реестровая схема disbursement расширена provider/category/escrow_id. TESTNET-ONLY, без реальных средств/ключей.",
+      "hash": "cd15042de9b8253b2f0250ec8c1032d008c0a361571382a4d5b1b73006dc00b9",
+      "file": "records/0017-decision.json"
     }
   ]
 }

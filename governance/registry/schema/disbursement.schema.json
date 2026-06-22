@@ -18,6 +18,21 @@
       "maximum": 10,
       "description": "Уровень приоритета нужды 1..10 (меньше = выше), см. docs/PRIORITIES.md."
     },
+    "provider": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Адрес поставщика услуги (арендодатель/аптека/поставщик) — единственный возможный получатель транша в целевом escrow. Совпадает с provider кейса контракта Disbursement (docs/ESCROW-TARGETED-DISBURSEMENT.md)."
+    },
+    "category": {
+      "type": "string",
+      "enum": ["housing", "medical", "food", "utilities", "education", "other"],
+      "description": "Категория целевого расхода (жильё/медицина/питание/ЖКХ/образование/иное)."
+    },
+    "escrow_id": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Идентификатор кейса в контракте Disbursement (целевой escrow) — связывает запись реестра с on-chain escrow."
+    },
     "amount": {
       "type": "string",
       "pattern": "^[0-9]+(\\.[0-9]+)?$",

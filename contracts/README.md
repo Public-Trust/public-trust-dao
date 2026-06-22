@@ -19,6 +19,7 @@
 | Контракт | Назначение | Статус |
 |---|---|---|
 | [`Treasury.sol`](contracts/Treasury.sol) | Базовый слой казны: хранит тестовые средства, отдаёт их **только** через `executor` (мультисиг/Timelock), лимит одной выплаты, аварийная пауза, события на каждое движение. | каркас + тесты ✅ |
+| [`Disbursement.sol`](contracts/Disbursement.sol) | Целевой escrow помощи: блокирует средства под кейс и выпускает их **строго на адрес поставщика** услуги (`open`/`release`/`refund`/`pause`). «Не даём деньги — оплачиваем нужду». `refund` возвращает остаток в казну. | каркас + тесты ✅ |
 
 ### Конституционные свойства, заложенные в `Treasury` (и проверенные тестами)
 
@@ -35,6 +36,25 @@
 - **Путь децентрализации** ([`GOVERNANCE`](../docs/GOVERNANCE.md), фазы A→D):
   `setExecutor` позволяет передать исполнение от bootstrap-мультисига к
   голосуемому Timelock — только текущим `executor`.
+
+### Конституционные свойства, заложенные в `Disbursement` (целевой escrow)
+
+Реализует [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/ESCROW-TARGETED-DISBURSEMENT.md)
+(интерфейс `ITargetedDisbursement`):
+
+- **«Не даём деньги — оплачиваем нужду» (целевой расход, ст. 5):** при `open` адрес
+  поставщика услуги фиксируется в кейсе; `release(id, amount)` **не принимает адрес
+  получателя вовсе** — транш уходит строго этому поставщику. Получатель помощи
+  физически не может перенаправить средства себе.
+- **Возврат — только в казну:** если услуга не оказана, `refund(id)` возвращает
+  остаток на адрес `treasury` (казна под коллективным контролем), **не** получателю.
+- **Поэтапность** ([`ANTI-ABUSE`](../docs/ANTI-ABUSE.md) §1–§2): помесячные транши
+  через накопление `released` + потолок одного транша `maxRelease`, а не аванс.
+- **Обеспеченность escrow:** нельзя открыть кейс без свободного баланса
+  (`escrowedTotal ≤ balance`) — учёт `available()`.
+- **Те же роли, что у казны:** двигать средства может только `executor`
+  (мультисиг/Timelock); `guardian` только ставит паузу; события на каждую ветвь
+  (`open`/`release`/`refund`/`pause`) + `registryRef` для сверки с реестром.
 
 ## Запуск (локально, без сети и денег)
 
@@ -56,8 +76,8 @@ CI прогоняет то же на каждый push/PR ([`.github/workflows/c
 
 ## Следующие шаги (каркас Этапа 5)
 
-- `Disbursement` — целевой escrow по [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/ESCROW-TARGETED-DISBURSEMENT.md)
-  (`open`/`release`/`refund`/`pause`, выплата напрямую поставщику, state-machine).
+- ✅ `Disbursement` — целевой escrow по [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/ESCROW-TARGETED-DISBURSEMENT.md)
+  (`open`/`release`/`refund`/`pause`, выплата напрямую поставщику) — **готов** (каркас + тесты).
 - `Governance` — Governor → Timelock (модель «1 человек = 1 голос», [`GOVERNANCE.md`](../docs/GOVERNANCE.md)).
 - `Reputation` — непередаваемый (soulbound) бейдж верифицированного участника.
 - Прогон на публичном testnet после согласования сети с оператором.

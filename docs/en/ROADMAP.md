@@ -91,7 +91,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     Solidity 0.8.24) + the [`Treasury.sol`](../../contracts/contracts/Treasury.sol)
     skeleton (release only via executor=multisig/Timelock, per-release cap, emergency
     pause, events + registryRef) + 10 tests "to green" + CI. `PTD-0016`. TESTNET-ONLY.
-  - [ ] Part 2: `Disbursement` (targeted escrow `open/release/refund/pause`).
+  - [x] Part 2 (session 20): [`Disbursement.sol`](../../contracts/contracts/Disbursement.sol)
+    — targeted escrow `open/release/refund/pause`; the tranche goes strictly to the
+    provider fixed in the case ("we don't hand out cash — we pay the need"), `refund`
+    to the treasury, per-tranche cap, only the executor moves funds, the guardian only
+    pauses; 14 tests "to green" (24/24 with Treasury); the registry schema gained
+    `provider/category/escrow_id`. `PTD-0017`.
   - [ ] Part 3: `Governance` (Governor → Timelock) + `Reputation` (soulbound badge).
   - [ ] Part 4: a public testnet run (network to be agreed with the operator).
 - [ ] **Stage 6 — AI agents (skeleton):** in `ai-agents/` describe and set up the
@@ -161,6 +166,17 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0017 (session 20):** Stage 5 (Smart contracts), part 2 — the targeted-escrow
+  contract [`Disbursement.sol`](../../contracts/contracts/Disbursement.sol) per
+  [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md): `open` fixes
+  the provider into the case, `release(id, amount)` **takes no recipient address** —
+  the tranche goes strictly to that provider ("we don't hand out cash — we pay the
+  need"); `refund` returns the remainder to the treasury (not the recipient); phasing
+  (accumulating `released` + per-tranche cap `maxRelease`); escrow backing
+  (`available()`); only the `executor` moves funds, the `guardian` only pauses; events
+  + `registryRef`. 14 tests "to green" (24/24 with Treasury). The `disbursement`
+  registry schema gained `provider/category/escrow_id`. TESTNET-ONLY. Next — part 3
+  (`Governance` + `Reputation`).
 - **PTD-0016 (session 19):** Stage 5 (Smart contracts), part 1 — the
   [`contracts/`](../../contracts/) project (Hardhat + ethers v6 + chai, Solidity
   0.8.24) + the base [`Treasury.sol`](../../contracts/contracts/Treasury.sol)

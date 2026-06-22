@@ -90,7 +90,11 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
     Solidity 0.8.24) + контракт-скелет [`Treasury.sol`](../contracts/contracts/Treasury.sol)
     (release только через executor=мультисиг/Timelock, лимит, аварийная пауза,
     события + registryRef) + 10 тестов «до зелёного» + CI. `PTD-0016`. TESTNET-ONLY.
-  - [ ] Часть 2: `Disbursement` (целевой escrow `open/release/refund/pause`).
+  - [x] Часть 2 (сессия 20): [`Disbursement.sol`](../contracts/contracts/Disbursement.sol)
+    — целевой escrow `open/release/refund/pause`; транш уходит строго поставщику
+    из кейса («не даём деньги — оплачиваем нужду»), `refund` в казну, лимит транша,
+    только executor двигает, guardian только пауза; 14 тестов «до зелёного» (24/24
+    с Treasury); реестровая схема расширена `provider/category/escrow_id`. `PTD-0017`.
   - [ ] Часть 3: `Governance` (Governor → Timelock) + `Reputation` (soulbound-бейдж).
   - [ ] Часть 4: прогон на публичном testnet (сеть согласовать с оператором).
 - [ ] **Этап 6 — AI-агенты (каркас):** в `ai-agents/` описать и завести модули
@@ -159,6 +163,16 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 
 ## Сделано
 
+- **PTD-0017 (сессия 20):** Этап 5 (Смарт-контракты), часть 2 — контракт целевого
+  escrow [`Disbursement.sol`](../contracts/contracts/Disbursement.sol) по
+  [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md): `open` фиксирует
+  поставщика в кейсе, `release(id, amount)` **не принимает адрес получателя** — транш
+  уходит строго поставщику («не даём деньги — оплачиваем нужду»); `refund` возвращает
+  остаток в казну (не получателю); поэтапность (накопление `released` + лимит транша
+  `maxRelease`); обеспеченность escrow (`available()`); только `executor` двигает,
+  `guardian` только пауза; события + `registryRef`. 14 тестов «до зелёного» (24/24 с
+  Treasury). Реестровая схема `disbursement` расширена `provider/category/escrow_id`.
+  TESTNET-ONLY. Дальше — часть 3 (`Governance` + `Reputation`).
 - **PTD-0016 (сессия 19):** Этап 5 (Смарт-контракты), часть 1 — проект
   [`contracts/`](../contracts/) (Hardhat + ethers v6 + chai, Solidity 0.8.24) +
   базовый контракт-скелет [`Treasury.sol`](../contracts/contracts/Treasury.sol):

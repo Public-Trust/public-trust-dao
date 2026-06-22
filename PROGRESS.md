@@ -375,18 +375,50 @@
     `registry/index.json`), verify=OK. Ссылки в обоих README, ROADMAP (RU/EN)
     обновлён (часть 1 `[x]`, в «Сделано», +2 идеи), DECISIONS обновлён.
 
+- **2026-06-22 (сессия 20, ROADMAP P0 — Этап 5 Смарт-контракты, часть 2 ✅):**
+  - **Контракт целевого escrow** `contracts/contracts/Disbursement.sol` —
+    реализация модели целевого расхода помощи по `docs/ESCROW-TARGETED-DISBURSEMENT.md`
+    (интерфейс `ITargetedDisbursement`). Главный принцип «**не даём деньги —
+    оплачиваем нужду напрямую поставщику**» заложен В КОД: `open(caseId, priority,
+    provider, amount, registryRef)` фиксирует адрес поставщика в кейсе; `release(id,
+    amount)` **не принимает адрес получателя вовсе** — транш уходит строго этому
+    поставщику (получатель помощи физически не может перенаправить средства себе);
+    `refund(id)` возвращает остаток В КАЗНУ (`treasury`), НЕ получателю. Поэтапность —
+    накопление `released` + потолок транша `maxRelease` (ANTI-ABUSE §1–§2).
+    Обеспеченность escrow балансом (`escrowedTotal`/`available()`). Те же роли, что у
+    `Treasury`: двигать средства может только `executor` (мультисиг/Timelock),
+    `guardian` только пауза; события на каждую ветвь (`open`/`release`/`refund`/
+    `pause`) + `registryRef`; reentrancy-guard; передача ролей (`setExecutor`/
+    `setGuardian`/`setTreasury`/`setMaxRelease`) — путь децентрализации.
+  - **Тесты «до зелёного»** `contracts/test/Disbursement.test.js` — 14/14, проверяют
+    именно конституционные свойства (целевой получатель неизменяем; только executor
+    двигает; guardian только пауза; поэтапность/лимит/остаток; refund в казну, не
+    получателю; обеспеченность escrow; мультикейс-учёт; нельзя открыть без
+    фондирования). **Суммарно 24/24** с Treasury, CI `contracts.yml` гоняет всё на
+    in-process сети Hardhat (TESTNET-ONLY, без RPC/ключей/mainnet).
+  - **Реестровая схема** `governance/registry/schema/disbursement.schema.json`
+    расширена полями `provider`, `category` (enum housing/medical/food/…),
+    `escrow_id` — связь записи реестра PTD с on-chain escrow (spec §7). `stage`
+    (index/of) уже служит механизмом транша. verify реестра=зелёный.
+  - **Зарегистрировано: `PTD-0017`** (`records/0017-decision.json`, type=decision).
+    verify=зелёный, 18 записей. **IPFS-манифест пересобран**, verify=OK. Контракты-README
+    (RU/EN) обновлены (Disbursement в таблице + свойства + «следующие шаги»). ROADMAP
+    (RU/EN) обновлён (часть 2 `[x]`, в «Сделано»). DECISIONS обновлён.
+
 ## СЛЕДУЮЩИЙ ШАГ
 
 **INBOX пуст — режим саморазвития.** Берём верхний открытый пункт `docs/ROADMAP.md`.
-Этап 5 открыт: часть 1 (проект + `Treasury`, сессия 19) готова. Следующий шаг —
-**Этап 5, часть 2: контракт `Disbursement`** (целевой escrow по
-`docs/ESCROW-TARGETED-DISBURSEMENT.md` — интерфейс `ITargetedDisbursement`:
-`open`/`release`/`refund`/`pause`, выплата напрямую поставщику, state-machine
-REQUESTED→…→RELEASED/REFUNDED, привязка к `Treasury` через `executor`) + тесты «до
-зелёного». **Только testnet/локально** (рельс TESTNET-FIRST, ст. 4.4). Затем часть 3
-(`Governance` Governor→Timelock + `Reputation` soulbound-бейдж) и часть 4 (прогон на
-публичном testnet — сеть согласовать с оператором). Не трогать пульс/секреты
-(loop.sh, report.sh, operator_bridge.py, .env, logs/).
+Этап 5 открыт: часть 1 (`Treasury`, сессия 19) и часть 2 (`Disbursement`, сессия 20)
+готовы. Следующий шаг — **Этап 5, часть 3: `Governance` (Governor → Timelock) +
+`Reputation`** (непередаваемый soulbound-бейдж верифицированного участника по
+`docs/GOVERNANCE.md`: «1 человек = 1 голос», голос не покупается/не продаётся;
+Governor исполняет прошедшие решения через Timelock, который и есть `executor`
+казны/escrow) + тесты «до зелёного». Крупный шаг — допускается разбить: например,
+сперва `Reputation` (soulbound-бейдж: mint/revoke только верификатором, non-transfer)
+с тестами, затем `Governor`+`Timelock`. **Только testnet/локально** (рельс
+TESTNET-FIRST, ст. 4.4). Затем часть 4 (прогон на публичном testnet — сеть согласовать
+с оператором). Не трогать пульс/секреты (loop.sh, report.sh, operator_bridge.py,
+.env, logs/).
 
 Контекст по **Этапу 4 (Governance)** — готов, для справки:
 - Snapshot (off-chain голос): `governance/snapshot/` — макет + валидатор + CI готовы

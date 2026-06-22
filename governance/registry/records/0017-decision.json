@@ -1,0 +1,37 @@
+{
+  "seq": 17,
+  "id": "PTD-0017",
+  "type": "decision",
+  "timestamp": "2026-06-22T06:40:00Z",
+  "actor": "builder-agent",
+  "summary": "Этап 5 (Смарт-контракты, часть 2): контракт целевого escrow Disbursement.sol (open/release/refund/pause; транш уходит СТРОГО поставщику из кейса — «не даём деньги, оплачиваем нужду»; refund в казну; лимит транша; только executor двигает, guardian только пауза; события + registryRef) с тестами «до зелёного» 14/14 (24/24 с Treasury). Реестровая схема disbursement расширена provider/category/escrow_id. TESTNET-ONLY, без реальных средств/ключей.",
+  "refs": [
+    "contracts/contracts/Disbursement.sol",
+    "contracts/test/Disbursement.test.js",
+    "governance/registry/schema/disbursement.schema.json",
+    "docs/ESCROW-TARGETED-DISBURSEMENT.md"
+  ],
+  "payload": {
+    "decision": "Этап 5 (Смарт-контракты), часть 2: контракт целевого escrow Disbursement.sol — реализация модели целевого расхода помощи (docs/ESCROW-TARGETED-DISBURSEMENT.md, интерфейс ITargetedDisbursement) с полным покрытием тестами «до зелёного» (14/14, суммарно 24/24 с Treasury). Главный принцип «не даём деньги — оплачиваем нужду напрямую поставщику» заложен В КОД: транш release(id, amount) уходит СТРОГО на адрес provider, зафиксированный в open(); получателя нельзя задать вызовом — получатель помощи физически не может перенаправить средства себе. refund(id) возвращает остаток в казну (treasury), НЕ получателю. Двигать средства может только executor (мультисиг/Timelock), guardian только ставит аварийную паузу. Лимит транша maxRelease (поэтапность). Реестровая схема disbursement.schema.json расширена полями provider/category/escrow_id (связь реестр ↔ on-chain escrow). TESTNET-ONLY, без реальных средств/ключей.",
+    "rationale": "Часть 2 Этапа 5 переводит escrow-спецификацию (ESCROW-TARGETED-DISBURSEMENT.md, §7) в исполняемый контракт. Целевой расход — ключевая точка доверия фонда: вопрос «как подтвердить, что помощь ушла на жильё, а не растворилась?» решается не сбором чеков постфактум, а самой механикой — escrow блокирует средства под конкретного поставщика и выпускает их ТОЛЬКО ему. Это зашито в код: provider фиксируется в open() и release() не принимает адрес получателя вовсе; refund идёт на treasury, а не на чьи-либо руки. Поэтапность (помесячные транши вместо аванса) реализована накоплением released и лимитом maxRelease на один транш (ANTI-ABUSE §1–§2). Все ветви (open/release/refund/pause) эмитят публичные события с registryRef — on-chain движение сверяется с записью PTD в реестре (прозрачность ст. 3). Контракт связан с Treasury через роль executor и адрес treasury для возвратов (один и тот же коллективный контроль). Тесты проверяют именно конституционные свойства (целевой получатель, разделение ролей, лимиты, возврат в казну, обеспеченность escrow балансом), а не «фичи ради фич».",
+    "deliverables": [
+      "contracts/contracts/Disbursement.sol: целевой escrow (open/release/refund/pause, release строго на provider кейса, refund в treasury, maxRelease на транш, escrowedTotal/available учёт обеспеченности, события + registryRef, передача ролей, reentrancy-guard)",
+      "contracts/test/Disbursement.test.js: 14 тестов конституционных свойств (целевой получатель неизменяем, только executor двигает, guardian только пауза, поэтапность/лимит, возврат в казну, мультикейс-учёт) — все зелёные; суммарно 24/24 с Treasury",
+      "governance/registry/schema/disbursement.schema.json: добавлены поля provider, category (enum), escrow_id — связь записи реестра с on-chain escrow (spec §7)",
+      "contracts/README.md (+ EN README.en.md): добавлен Disbursement в список контрактов и свойств"
+    ],
+    "rails": [
+      "TESTNET-ONLY: тесты на встроенной in-process сети Hardhat — без внешних RPC, ключей, mainnet",
+      "реальных средств и приватных ключей в репо нет",
+      "целевой расход в коде: release не принимает адрес получателя — средства уходят только зафиксированному provider; refund только в казну",
+      "никто не владеет единолично: деплойер без привилегий, средства двигает только executor (мультисиг/Timelock); guardian только пауза",
+      "реальная казна/escrow — только после независимого аудита + Safe 3-из-5 + одобрения оператора (CONSTITUTION ст. 4.4)",
+      "двуязычность RU↔EN в одном коммите"
+    ],
+    "status": "adopted",
+    "spec": "docs/ESCROW-TARGETED-DISBURSEMENT.md",
+    "roadmap_item": "Этап 5 — Смарт-контракты, часть 2: контракт Disbursement (целевой escrow)"
+  },
+  "prev_hash": "f29545d8c9809bde68b7aaea189acd4b8d1ca97fd197a45e884074632010ee61",
+  "hash": "cd15042de9b8253b2f0250ec8c1032d008c0a361571382a4d5b1b73006dc00b9"
+}
