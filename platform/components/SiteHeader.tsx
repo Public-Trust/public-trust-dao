@@ -22,6 +22,7 @@ export function SiteHeader() {
     { label: t.navAbout, href: "/about/" },
     { label: t.navPriorities, href: "/priorities/" },
     { label: t.navRewards, href: "/rewards/" },
+    { label: t.navSafeguards, href: "/safeguards/" },
     ...t.screens
       .filter((s) => s.href)
       .map((s) => ({ label: s.short ?? s.title, href: s.href as string })),

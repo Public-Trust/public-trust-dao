@@ -259,6 +259,28 @@ export type RewardsDict = {
   sourceLink: string;
 };
 
+export type SafeguardsDict = {
+  back: string;
+  title: string;
+  lead: string;
+  mainIdeaTitle: string;
+  mainIdea: string; // главная мысль одной строкой
+  keyTitle: string; // «Главное — простыми словами»
+  key: string[];
+  pillarsTitle: string;
+  pillarsHint: string;
+  // Девять опор защиты кошелька — простыми словами.
+  pillars: { name: string; text: string }[];
+  repTitle: string;
+  repNote: string;
+  repBounds: string[]; // жёсткие границы репутации
+  limitTitle: string;
+  limitNote: string;
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -331,6 +353,7 @@ export type Dict = {
   navMyData: string;
   navPriorities: string;
   navRewards: string;
+  navSafeguards: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -346,6 +369,7 @@ export type Dict = {
   glossary: GlossaryDict;
   priorities: PrioritiesDict;
   rewards: RewardsDict;
+  safeguards: SafeguardsDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -379,6 +403,7 @@ export const DICT: Record<Lang, Dict> = {
     navMyData: "Мои данные",
     navPriorities: "Порядок помощи",
     navRewards: "Помощь и награда",
+    navSafeguards: "Защита от обмана",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -801,6 +826,48 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд делит деньги: помощь и вознаграждение». Правила вытекают из конституции (статья 5 «справедливое распределение», статья 6 «вознаграждение») и одинаковы для всех. Всё пока на тестовой сети, без реальных денег.",
       sourceLink: "Открыть документ «Помощь и вознаграждение» →",
     },
+    safeguards: {
+      back: "← На главную",
+      title: "Как фонд защищён от обмана и воровства",
+      lead: "Деньги в общем кошельке — чужие, пожертвованные на помощь людям. Этот экран простыми словами объясняет, что мешает их украсть, выманить обманом или потратить не на того, кому нужнее.",
+      mainIdeaTitle: "Главная мысль одной строкой",
+      mainIdea: "Систему строим так, чтобы быть честным было выгоднее, чем обманывать.",
+      keyTitle: "Главное — простыми словами",
+      key: [
+        "Деньги выдаём не сразу всей суммой, а по частям — по мере того как подтверждается, что помощь реально доходит до человека. Если что-то пошло не так, остановиться можно на любом шаге.",
+        "На крупные суммы стоит ограничитель. Большую выплату нельзя провести по-тихому: чем больше сумма, тем строже проверка.",
+        "Один человек ничего не решает в одиночку. Значимую выплату подтверждают несколько независимых людей, и никто не может одобрить выплату самому себе.",
+        "Всё видно. Каждое движение денег записывается в открытый журнал — любой может проверить, куда и зачем ушли средства.",
+        "Есть стоп-кран. При подозрительной активности выплаты можно временно заморозить до выяснения — но даже стоп-краном ни один человек не может вывести деньги себе.",
+        "Заслуги помогают, но не дают власти над деньгами и не отменяют, кому нужнее. Репутацию нельзя купить и нельзя получить за «приведи друга».",
+        "У каждого есть право оспорить. Если отказали или применили санкцию — есть понятный путь обжалования, а не «решили и всё».",
+      ],
+      pillarsTitle: "Чем именно защищён кошелёк",
+      pillarsHint: "Девять опор защиты — простыми словами. Они работают сами, а не на доверии «он хороший человек».",
+      pillars: [
+        { name: "Выплата по частям", text: "Крупная помощь идёт частями, привязанными к подтверждённым шагам, а не одной суммой вперёд." },
+        { name: "Лимиты", text: "Есть потолок суммы на один адрес за период; чтобы его превысить, нужна усиленная проверка." },
+        { name: "Проверка несколькими людьми", text: "Значимые решения подтверждает не один человек, а несколько независимых (или общий кошелёк с несколькими подписями)." },
+        { name: "Открытые отчёты", text: "Все операции кошелька публикуются и доступны для чтения." },
+        { name: "Проверка со стороны (аудит)", text: "Регулярная внутренняя проверка и независимая внешняя; перед заходом настоящих денег — обязательная проверка кода безопасности." },
+        { name: "Право обжалования", text: "У участника есть прозрачный путь оспорить отказ или санкцию." },
+        { name: "Санкции через репутацию", text: "Нарушения снижают репутацию участника." },
+        { name: "Временная заморозка", text: "Подозрительная активность ведёт к временной приостановке выплат до проверки." },
+        { name: "Исключение", text: "Повторные или грубые нарушения ведут к исключению участника через прозрачную процедуру." },
+      ],
+      repTitle: "Про репутацию (заслуги участника)",
+      repNote: "Репутация — это только подспорье. Она помогает быстрее доверять проверенным людям, но никогда не отменяет правило «сначала тот, кому нужнее». Складывается из того, как давно человек участвует, какие задачи выполнил, кому помог, отсутствия нарушений и рекомендаций других.",
+      repBounds: [
+        "Репутацию нельзя купить и нельзя передать за деньги.",
+        "Репутация никак не зависит от того, скольких людей ты привёл, — за «приглашения» здесь не платят вообще (защита от схем-пирамид).",
+        "Репутация не даёт власти над деньгами — это вес доверия к работе, а не право распоряжаться кошельком.",
+      ],
+      limitTitle: "Коротко",
+      limitNote: "Красть невыгодно (поймают, и видно всем), обманом много не выманить (по частям, с проверкой нескольких людей), а захватить кошелёк нельзя — ни у кого нет единоличной власти над деньгами.",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд защищён от обмана и воровства». Правила опираются на конституцию (статья 7 «защита от злоупотреблений»). Всё пока на тестовой сети, без реальных денег: настоящие средства фонд начнёт распределять только после независимой проверки кода и под общим кошельком (минимум 3 подписи из 5 хранителей).",
+      sourceLink: "Открыть документ «Защита от обмана и воровства» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -1192,6 +1259,7 @@ export const DICT: Record<Lang, Dict> = {
     navMyData: "My data",
     navPriorities: "Order of help",
     navRewards: "Help & reward",
+    navSafeguards: "Anti-fraud",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -1613,6 +1681,48 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Where this is written down",
       sourceNote: "This screen mirrors the fund's normative document “How the fund divides money: help and reward”. The rules follow from the constitution (article 5 “fair distribution”, article 6 “reward”) and are the same for everyone. Everything is still on a test network, with no real money.",
       sourceLink: "Open the “Help and reward” document →",
+    },
+    safeguards: {
+      back: "← Home",
+      title: "How the fund is protected from fraud and theft",
+      lead: "The money in the shared wallet belongs to others — donated to help people. This screen explains, in plain words, what stops it from being stolen, swindled, or spent on the wrong person.",
+      mainIdeaTitle: "The main idea in one line",
+      mainIdea: "We build the system so that being honest pays off more than cheating.",
+      keyTitle: "The main points — in plain words",
+      key: [
+        "Money is paid out in parts, not all at once — as it's confirmed that help actually reaches the person. If something goes wrong, you can stop at any step.",
+        "Large amounts have a limiter. A big payout can't be slipped through quietly: the larger the sum, the stricter the check.",
+        "No single person decides alone. A meaningful payout is confirmed by several independent people, and no one can approve a payout to themselves.",
+        "Everything is visible. Every movement of money is recorded in an open journal — anyone can check where and why funds went.",
+        "There's an emergency stop. On suspicious activity, payouts can be temporarily frozen until it's cleared up — but even with the stop, no one can pull money out to themselves.",
+        "Merit helps, but it grants no power over money and never overrides who needs it more. Reputation can't be bought and can't be earned by “bring a friend”.",
+        "Everyone has the right to appeal. If you're refused or sanctioned, there's a clear path to contest it — not “decided, and that's that”.",
+      ],
+      pillarsTitle: "Exactly how the wallet is protected",
+      pillarsHint: "Nine pillars of protection — in plain words. They work on their own, not on trusting that “he's a good person”.",
+      pillars: [
+        { name: "Payout in parts", text: "Large help goes in instalments tied to confirmed steps, not as one sum upfront." },
+        { name: "Limits", text: "There's a cap per address over a period; exceeding it requires an enhanced check." },
+        { name: "Review by several people", text: "Meaningful decisions are confirmed by several independent people (or a shared wallet with several signatures), not by one." },
+        { name: "Open reports", text: "All wallet operations are published and available to read." },
+        { name: "Outside review (audit)", text: "Regular internal review and an independent external one; before real money enters — a mandatory security code review." },
+        { name: "Right to appeal", text: "A participant has a transparent path to contest a refusal or sanction." },
+        { name: "Sanctions through reputation", text: "Violations lower a participant's reputation." },
+        { name: "Temporary freeze", text: "Suspicious activity leads to a temporary pause on payouts until checked." },
+        { name: "Exclusion", text: "Repeated or gross violations lead to exclusion through a transparent procedure." },
+      ],
+      repTitle: "About reputation (a participant's merit)",
+      repNote: "Reputation is only a support. It helps trust verified people faster, but never overrides the rule “those who need it most go first”. It builds up from how long someone has taken part, what tasks they did, who they helped, the absence of violations, and recommendations from others.",
+      repBounds: [
+        "Reputation can't be bought and can't be transferred for money.",
+        "Reputation does not depend in any way on how many people you brought in — there's no pay for “invites” here at all (protection against pyramid schemes).",
+        "Reputation grants no power over money — it's a weight of trust in the work, not a right to dispose of the wallet.",
+      ],
+      limitTitle: "In short",
+      limitNote: "Stealing doesn't pay (you get caught, and it's visible to all), you can't swindle much (in parts, with several people checking), and you can't seize the wallet — no one has sole power over the money.",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund's normative document “How the fund is protected from fraud and theft”. The rules rest on the constitution (article 7, “protection from abuse”). Everything is still on a test network, without real money: the fund will only start distributing real funds after an independent code review and under a shared wallet (at least 3 signatures out of 5 guardians).",
+      sourceLink: "Open the “Protection from fraud and theft” document →",
     },
     notFound: {
       code: "Page not found",

@@ -213,6 +213,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     payout is checked by ≥2 independent people + the "Fairness"/"Audit" AI; hard limits
     (help matters more than reward, no referrals/pyramid). RU↔EN text in `lib/i18n.ts`
     (`RewardsDict`), added to the menu, no new dependencies. `PTD-0090`. TESTNET-ONLY.
+  - [x] Explainer screen "How the fund is protected from fraud and theft" (session 94):
+    `platform/app/safeguards/` — an in-app mirror of the normative `docs/ANTI-ABUSE.md`
+    (the "mirror screen" pattern, like priorities↔PRIORITIES, rewards↔REWARDS-MODEL and
+    glossary↔GLOSSARY): in plain words — the main idea "being honest pays off more than
+    cheating"; 7 "main points" (paid in parts / cap on large amounts / confirmed by
+    several independent people / open journal / emergency stop with no self-payout / merit
+    grants no power over money / right to appeal); nine pillars of wallet protection;
+    about reputation (only a support, can't be bought, doesn't depend on "bring a friend",
+    no power over money). RU↔EN text in `lib/i18n.ts` (`SafeguardsDict`), added to the
+    menu, no new dependencies. Rests on constitution art. 7. `PTD-0091`. TESTNET-ONLY.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,
