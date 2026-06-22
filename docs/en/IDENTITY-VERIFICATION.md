@@ -21,6 +21,10 @@
 > the "Guardian"/"Audit" AI helpers (Stage 6). The document itself verifies nothing
 > and controls no data.
 >
+> Unfamiliar technical words (proof-of-personhood, liveness, zero-knowledge,
+> nullifier, vouching) are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Personhood verification" group.
+>
 > Registered as a decision in the public registry:
 > [`governance/registry/`](../../governance/registry/) (record `PTD-0041`).
 >
@@ -35,7 +39,7 @@
 The fund has an honest task: **one real human — one account**. Otherwise one clever
 person opens a hundred "identities", grabs a hundred votes, and receives a hundred
 times the aid meant for a hundred different people. That is "inflation" (in technical
-terms — a "Sybil attack"): many fake accounts in one person's hands.
+terms — a ["Sybil attack"](GLOSSARY.md)): many fake accounts in one person's hands.
 
 But there is a second, equally important task: **not to offend or scare living
 people**. Among those the fund wants to help are refugees, people without documents,
@@ -221,10 +225,10 @@ stated in plain words above; here are the precise terms.
 
 ### T.1. Trust model and roles
 
-- Proof-of-personhood is performed by an **external provider**; the fund receives
-  only a boolean `verified: true|false` (+ method and timestamp). Images, liveness
-  video, raw biometrics **never reach the fund's infrastructure** (data
-  minimization, GDPR art. 5(1)(c)).
+- [Proof-of-personhood](GLOSSARY.md) is performed by an **external provider**; the
+  fund receives only a boolean `verified: true|false` (+ method and timestamp).
+  Images, [liveness](GLOSSARY.md) video, raw biometrics **never reach the fund's
+  infrastructure** (data minimization, GDPR art. 5(1)(c)).
 - A biometric template (if a method uses one) is stored **client-side** (the user's
   device/wallet). Only a membership attribute is written on-chain.
 - **Uniqueness ≠ funds authority.** `Reputation.sol` already implements a soulbound
@@ -250,7 +254,7 @@ The list is a governed parameter (`parameter-change` → `Timelock`, audit windo
 | Social graph (e.g. BrightID) | no | uniqueness confirmation | inclusive, no camera |
 | Signal passport (e.g. Gitcoin Passport) | no (by default) | threshold "not-a-bot" score | configurable threshold |
 | Liveness+uniqueness at an external service (e.g. World ID) | yes, provider-side | nullifier/uniqueness proof | fund sees only yes/no |
-| Vouching (web-of-trust, in person) | no | confirmation via ≥N verified participants | mandatory fallback |
+| Vouching ([web-of-trust](GLOSSARY.md), in person) | no | confirmation via ≥N verified participants | mandatory fallback |
 
 The method registry and thresholds are `governed:true`. The requirement that **at
 least one non-biometric and one offline path** always exist is `governed:false` (the
@@ -259,9 +263,10 @@ inclusivity core, not removable by ordinary vote).
 ### T.4. Privacy of the proof (zero-knowledge)
 
 - Goal: the participant proves a predicate (`is_unique`, `age ≥ 18`, `eligible`)
-  **without revealing identity**. On-chain — only the predicate result and, where
-  applicable, a **nullifier** (a one-time "this person already registered here" mark
-  that does not reveal who it is).
+  **without revealing identity** (this is [zero-knowledge / proof without
+  disclosure](GLOSSARY.md)). On-chain — only the predicate result and, where
+  applicable, a **[nullifier](GLOSSARY.md)** (a one-time "this person already
+  registered here" mark that does not reveal who it is).
 - The nullifier enforces "one human = one account" without an "account ↔ identity"
   link.
 - No source attributes (document, date of birth, biometrics) are published on-chain

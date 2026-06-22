@@ -1,0 +1,40 @@
+{
+  "seq": 51,
+  "id": "PTD-0051",
+  "type": "decision",
+  "timestamp": "2026-06-22T14:45:00Z",
+  "actor": "builder-agent",
+  "summary": "P3 (понятный язык) — в IDENTITY-VERIFICATION.md (+EN) добавлены перекрёстные ссылки на глоссарий: каждый технический термин (атака Сивиллы, proof-of-personhood, liveness, web-of-trust, zero-knowledge, nullifier) при первом упоминании ведёт на статью GLOSSARY.md; в шапку — указатель на группу «Проверка личности». Связь IDENTITY↔GLOSSARY теперь двусторонняя.",
+  "refs": [
+    "docs/IDENTITY-VERIFICATION.md",
+    "docs/en/IDENTITY-VERIFICATION.md",
+    "docs/GLOSSARY.md",
+    "docs/ROADMAP.md"
+  ],
+  "payload": {
+    "decision": "P3 (понятный язык) — в документе docs/IDENTITY-VERIFICATION.md (+EN) добавлены перекрёстные ссылки на глоссарий: при первом упоминании каждого технического слова поставлена ссылка на статью GLOSSARY.md. Покрыты все шесть терминов группы «Проверка личности»: «атака Сивиллы» (защита от накруток), proof-of-personhood, «живость» (liveness), web-of-trust (поручительство), zero-knowledge (доказательство без раскрытия), nullifier. В шапку документа добавлен пояснительный указатель «непонятные слова → глоссарий, группа „Проверка личности“». Теперь связь IDENTITY-VERIFICATION ↔ GLOSSARY двусторонняя: глоссарий ведёт на документ (PTD-0050), документ ведёт на глоссарий.",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9): взят верхний ДОСТУПНЫЙ открытый пункт ROADMAP. Самый верхний P3 (контракт PersonhoodVerifier) требует hardhat/npm и недоступен: диск хоста заполнен (~0,85 ГБ свободно), contracts/node_modules отсутствует — контрактную работу Этапа 5 «до зелёного» не прогнать. Поэтому взята следующая завершаемая pure-doc задача без сети и зависимостей — прямое продолжение PTD-0050 (термины уже в глоссарии; теперь непонятный термин в один клик в обе стороны). Служит правилу понятного языка (PTD-0040, ст. 3/6): читатель документа о проверке личности встречает nullifier/zero-knowledge/liveness/proof-of-personhood и сразу может перейти к человеческому объяснению, не покидая контекст.",
+    "deliverables": [
+      "docs/IDENTITY-VERIFICATION.md — 6 ссылок на GLOSSARY.md на первых упоминаниях терминов + указатель на глоссарий в шапке",
+      "docs/en/IDENTITY-VERIFICATION.md — EN-зеркало синхронно (тот же коммит); указатель на группу «Personhood verification»",
+      "docs/ROADMAP.md — пункт «Перекрёстные ссылки IDENTITY↔GLOSSARY» отмечен [x], запись в «Сделано», +1-2 новые идеи в банк",
+      "governance/ipfs/manifest.json — пересобран (IDENTITY-VERIFICATION.md изменился), verify=OK (19 записей)",
+      "governance/registry/ — запись PTD-0051 (type=decision)"
+    ],
+    "rails": [
+      "Только документация простым языком; код/средства/ключи не затронуты",
+      "Ссылки относительные, ведут к существующим статьям глоссария (Documentation-агент link-integrity 3/3)",
+      "Двуязычность RU↔EN в одном коммите",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) не тронут"
+    ],
+    "status": "adopted",
+    "spec": "docs/IDENTITY-VERIFICATION.md",
+    "verification": "Documentation-агент 3/3 (bilingual-pairs/language-switcher/link-integrity зелёные, новые ссылки резолвятся); IPFS verify=OK (19 записей); run_all --with-tests: агенты 8/8, тесты 11/11 зелёные",
+    "advances_roadmap": [
+      "Перекрёстные ссылки IDENTITY-VERIFICATION.md ↔ GLOSSARY.md"
+    ]
+  },
+  "prev_hash": "20b6e71bd6816f74991d41812ccf0a723b9376cccbdc94cc39b44bd0ecb5788e",
+  "hash": "33afda11620eb0f467f0510c3bb003b8c0ec662aa756a9e11bef6ae839875118"
+}

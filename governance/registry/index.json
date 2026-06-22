@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 51,
-  "head_hash": "20b6e71bd6816f74991d41812ccf0a723b9376cccbdc94cc39b44bd0ecb5788e",
+  "count": 52,
+  "head_hash": "33afda11620eb0f467f0510c3bb003b8c0ec662aa756a9e11bef6ae839875118",
   "entries": [
     {
       "seq": 0,
@@ -462,6 +462,15 @@
       "summary": "P3 (понятный язык) — в глоссарий добавлена группа «Проверка личности»: 6 терминов из IDENTITY-VERIFICATION.md (защита от накруток/Сивиллы, proof-of-personhood, liveness, zero-knowledge, nullifier, поручительство) простым языком, RU↔EN, со ссылками на документ. Закрывает идею сессии 44.",
       "hash": "20b6e71bd6816f74991d41812ccf0a723b9376cccbdc94cc39b44bd0ecb5788e",
       "file": "records/0050-glossary-personhood-terms.json"
+    },
+    {
+      "seq": 51,
+      "id": "PTD-0051",
+      "type": "decision",
+      "timestamp": "2026-06-22T14:45:00Z",
+      "summary": "P3 (понятный язык) — в IDENTITY-VERIFICATION.md (+EN) добавлены перекрёстные ссылки на глоссарий: каждый технический термин (атака Сивиллы, proof-of-personhood, liveness, web-of-trust, zero-knowledge, nullifier) при первом упоминании ведёт на статью GLOSSARY.md; в шапку — указатель на группу «Проверка личности». Связь IDENTITY↔GLOSSARY теперь двусторонняя.",
+      "hash": "33afda11620eb0f467f0510c3bb003b8c0ec662aa756a9e11bef6ae839875118",
+      "file": "records/0051-cross-links-identity-glossary.json"
     }
   ]
 }

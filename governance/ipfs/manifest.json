@@ -57,11 +57,11 @@
       "single_block": true
     },
     {
-      "bytes": 26518,
-      "cid": "bafkreic6jk4hp6umbmkxkiq7czscgh4cz2rozq7ynbeit63lj4ekmuljme",
+      "bytes": 27004,
+      "cid": "bafkreighnhds43k55lsynkcwpcimbfu2ftzxcqts7aiuta7rlxbz6nyody",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/IDENTITY-VERIFICATION.md",
-      "sha256": "5e4ab877fa8c0b1575221f1664231f82cea2ecc3f8684889fb6b4f08a6516961",
+      "sha256": "c769c72e6d5deae586a8567890c0969a2cf3714272f8114983f15dc39f370e1e",
       "single_block": true
     },
     {
@@ -129,11 +129,11 @@
       "single_block": true
     },
     {
-      "bytes": 97932,
-      "cid": "bafkreiaedgecklcqd26q6nu5v6ucl54z35ovmuvsbi5znl6pjzpx3znhu4",
+      "bytes": 101004,
+      "cid": "bafkreifurhaqseeo6hi77soml3ejaxh6evwiowwtboazsdy3fahexfynpm",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ROADMAP.md",
-      "sha256": "041988252c501ebd0f369dafa825f799df5d5652b20a3b96afcf4e5f7de5a7a7",
+      "sha256": "b489c109108ef1d1ffc9cc5ec8905cfe256c875ad30b81990f1b280e4b970d7b",
       "single_block": true
     },
     {
@@ -145,16 +145,16 @@
       "single_block": true
     },
     {
-      "bytes": 42601,
-      "cid": "bafkreibzfaghqmhdk2yfm6pqt6npaiii44246vwf6ldmigew7cnu6mt3h4",
+      "bytes": 43437,
+      "cid": "bafkreiaxatookodeqy6hhmmvpqwql4t4rsvtxxzcr4o7mhjg62jg5etayi",
       "cid_kind": "raw-leaf-v1",
       "path": "governance/registry/index.json",
-      "sha256": "39280c7830e356b05679f09f9af02108e735cf56c5f2c6c41896f89b4f327b3f",
+      "sha256": "1704dce53864863c73b1957c2d05f27c8cab3bdf228f1df61d26f6926e9260c2",
       "single_block": true
     }
   ],
   "kind": "ipfs-content-manifest",
-  "manifest_fingerprint_sha256": "66098ac33864cb4cec75225bd2883ee1da37ab04c0ecf9665184a925ea9a4e42",
+  "manifest_fingerprint_sha256": "149b975cfaa31084ae8d13ebd21d59e5c69ad446efef4fca3409042e1981c2e1",
   "project": "Public Trust DAO",
   "spec": "CIDv1, codec=raw(0x55), multihash=sha2-256, multibase=base32. Эквивалент `ipfs add --cid-version=1 --raw-leaves=true` для одноблочных файлов (<=256 KiB). Вычисляется и проверяется из содержимого, без аккаунта пиннера.",
   "verify": "python3 scripts/ipfs_manifest.py verify",
