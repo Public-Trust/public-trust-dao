@@ -548,10 +548,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   indicator (green/red dot + "checks are fine") that the same `assets/status.js` reads from
   `./status.json` and that links to the Transparency section for details, so the status is
   visible from any page, not only the Transparency page. → Done (session 74), `PTD-0071`.
-- [ ] **Status-light chip in the topbar too, not only the footer** — add the same compact
+- [x] **Status-light chip in the topbar too, not only the footer** — add the same compact
   `#statusbadge` to the header `.nav-tools` of the landing pages (next to the language/theme
   toggles), so the status is visible immediately without scrolling to the footer; on narrow
   screens hide it gracefully together with the navigation (continuation of `PTD-0071`, session 74).
+  → Done (session 75), `PTD-0072`: compact `#statusbadge-top`
+  (`statusbadge statusbadge--compact`) in the header of `index.html` (+EN); the shared
+  [`status.js`](../../web/assets/status.js) now renders all `.statusbadge` chips
+  (`querySelectorAll`), a single request serves both header and footer; on narrow screens
+  (`<=640px`) the header chip is hidden (status stays visible in the footer).
+- [ ] **Status-light chip in the header/footer of `docs`-site pages outside `web/`** — the
+  light currently lives only on the landing pages and the Transparency page (`web/`); extend the
+  same compact chip to other public HTML pages if/when they appear, so the status is consistent
+  across the whole site (continuation of `PTD-0072`, session 75).
 - [ ] **Guard/CI: status artifact not stale vs the current verdict** — a soft check that the
   committed `governance/status/run_all_status.json` matches a fresh `run_all --status-out`
   (otherwise the in-repo light is stale); or a CI step regenerates the artifact (determinism
@@ -650,6 +659,15 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0072 (session 75):** P2 (transparency) — **status-light chip in the topbar too, not only
+  the footer.** The header of the landing pages ([`web/index.html`](../../web/index.html) + EN),
+  inside `.nav-tools` next to the language/theme toggles, gained a compact `#statusbadge-top` chip
+  (`statusbadge statusbadge--compact`) — the status is visible at once on load, without scrolling
+  to the footer. The shared [`web/assets/status.js`](../../web/assets/status.js) was refactored to
+  render ALL `.statusbadge` chips on the page (`querySelectorAll` instead of a single
+  `getElementById`); one `./status.json` request serves both the header and footer chips. On narrow
+  screens (`<=640px`) the header chip is hidden together with the navigation — the status stays
+  visible in the footer there. The "zero third-party requests" policy is preserved. Continuation of `PTD-0071`.
 - **PTD-0071 (session 74):** P2 (transparency) — **compact status-light chip on the other site
   pages.** The footer of the landing pages ([`web/index.html`](../../web/index.html) + EN) gained
   a compact `#statusbadge` chip: a small dot + word ("checks are green" / "out of sync") that reads

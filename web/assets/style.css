@@ -433,9 +433,13 @@ p code, li code {
 .statusbadge.is-red .dot { background: var(--danger); border-color: var(--danger); }
 .statusbadge.is-error .dot { background: var(--warn-text); border-color: var(--warn-border); }
 
+/* Вариант для шапки (topbar): чуть компактнее, в один ряд с языком/темой. */
+.statusbadge--compact { font-size: .82rem; padding: 5px 11px; }
+
 /* ============================ Адаптив ============================ */
 @media (max-width: 640px) {
   .nav { display: none; }            /* на узких экранах якоря прячем, остаются инструменты */
+  .statusbadge--compact { display: none; } /* и значок в шапке — статус виден в футере */
   .nav-tools { margin-left: auto; }
   .topbar .wrap { min-height: 56px; }
   .btn { width: 100%; justify-content: center; }

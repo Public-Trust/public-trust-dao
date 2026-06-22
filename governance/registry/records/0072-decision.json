@@ -1,0 +1,40 @@
+{
+  "seq": 72,
+  "id": "PTD-0072",
+  "type": "decision",
+  "timestamp": "2026-06-22T16:10:00Z",
+  "actor": "builder-agent",
+  "summary": "Компактный значок-светофор состояния также в шапке (topbar) стартовых страниц сайта (web/index.html +EN), не только в футере; общий assets/status.js теперь рисует все значки .statusbadge (querySelectorAll); на узких экранах значок шапки прячется, состояние видно в футере",
+  "refs": [
+    "web/index.html",
+    "web/index.en.html",
+    "web/assets/status.js",
+    "web/assets/style.css"
+  ],
+  "payload": {
+    "decision": "Компактный значок-светофор состояния проекта добавлен также в шапку (topbar) стартовых страниц сайта (web/index.html + EN) — в .nav-tools рядом с переключателем языка/темы, не только в футере. Тот же общий двуязычный assets/status.js теперь рисует ВСЕ значки .statusbadge на странице (refactor: querySelectorAll вместо getElementById), поэтому один и тот же значок может стоять и в шапке, и в футере. Состояние видно сразу, без прокрутки до футера. На узких экранах (<=640px) компактный значок шапки прячется вместе с навигацией — состояние там остаётся видно в футере.",
+    "rationale": "INBOX оператора пуст -> режим саморазвития (INBOX #9). Контрактная часть Этапа 5 и верхний P3 (PersonhoodVerifier) недоступны: диск хоста заполнен (845 МБ свободно, df 100%, занят чужими проектами), contracts/node_modules отсутствует, npm рискует добить диск. Взят верхний открытый пункт ROADMAP «Значок-светофор также в шапке (topbar), не только в футере» (прямое продолжение PTD-0071): он делает состояние видимым сразу при загрузке любой страницы. Служит ст. 3 (понятность — состояние одним взглядом, без прокрутки) и ст. 9 (ИИ — служебный сигнал, не власть). Сохранена политика прозрачности сайта: ни одного стороннего запроса/бейджа/трекера.",
+    "deliverables": [
+      "web/index.html (+EN index.en.html) — в шапку (.nav-tools, перед переключателем языка) добавлен компактный значок #statusbadge-top с классами statusbadge statusbadge--compact (точка .dot + data-role badgetext), role=status aria-live=polite, ведёт на transparency.html#livestatus (EN — transparency.en.html#livestatus)",
+      "web/assets/status.js — рефакторинг: рендер значков по классу .statusbadge через querySelectorAll (а не одиночный getElementById), renderBadge/failBadge принимают элемент, dispatcher eachBadge рисует все значки одним fetch ./status.json; полный виджет #statuslight по-прежнему одиночный",
+      "web/assets/style.css — вариант .statusbadge--compact (чуть компактнее для шапки) + скрытие .statusbadge--compact на узких экранах (<=640px) вместе с навигацией",
+      "docs/ROADMAP.md (+EN) — пункт [x], запись в «Сделано»/«Done», новые открытые идеи; DECISIONS.md и PROGRESS.md обновлены"
+    ],
+    "rails": [
+      "Только статический сайт/скрипт/стиль/доки; средства/ключи/контракты не затронуты",
+      "Read-only служебный сигнал (ст. 9): значок показывает состояние, ничего не правит и не двигает",
+      "Политика прозрачности сайта сохранена: запрос только same-origin (./status.json), без сторонних сервисов/бейджей/трекеров",
+      "Единый источник истины: артефакт в governance/status/, копия в web/ делается на лету и не коммитится (.gitignore)",
+      "Двуязычность RU<->EN: обе стартовые страницы и стили синхронны в одном коммите",
+      "TESTNET-first; пульс (loop.sh/report.sh/сервис/.env/logs) не тронут"
+    ],
+    "status": "adopted",
+    "spec": "web/index.html",
+    "verification": "run_all --with-tests: агенты 8/8, тесты 11/11, страж 10/10, мягких предупреждений 0; node --check web/assets/status.js OK; значок #statusbadge-top подключён в шапке index.html и index.en.html, ведёт на секцию #livestatus соответствующего языка; один скрипт рисует и шапочный, и футерный значок одним запросом. Заодно пересобран отставший IPFS-манифест (docs/ROADMAP.md).",
+    "advances_roadmap": [
+      "Значок-светофор также в шапке (topbar), не только в футере"
+    ]
+  },
+  "prev_hash": "a98e304de613ed8f3a6a21dfd000ea6f68261f846609f68b6c641a1ac1366b97",
+  "hash": "4d8c07f9410dad2330c5ba618865a55ce193bac70103ec107e98e4b229c67beb"
+}

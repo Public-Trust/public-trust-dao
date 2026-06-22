@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 72,
-  "head_hash": "a98e304de613ed8f3a6a21dfd000ea6f68261f846609f68b6c641a1ac1366b97",
+  "count": 73,
+  "head_hash": "4d8c07f9410dad2330c5ba618865a55ce193bac70103ec107e98e4b229c67beb",
   "entries": [
     {
       "seq": 0,
@@ -651,6 +651,15 @@
       "summary": "Компактный значок-светофор состояния проекта в футере стартовых страниц сайта (web/index.html +EN): маленькая точка + слово, тем же origin читает status.json и ведёт на секцию «Прозрачность» с подробностями; общий assets/status.js теперь одним запросом рисует и полный виджет, и компактный значок; политика без сторонних запросов сохранена",
       "hash": "a98e304de613ed8f3a6a21dfd000ea6f68261f846609f68b6c641a1ac1366b97",
       "file": "records/0071-decision.json"
+    },
+    {
+      "seq": 72,
+      "id": "PTD-0072",
+      "type": "decision",
+      "timestamp": "2026-06-22T16:10:00Z",
+      "summary": "Компактный значок-светофор состояния также в шапке (topbar) стартовых страниц сайта (web/index.html +EN), не только в футере; общий assets/status.js теперь рисует все значки .statusbadge (querySelectorAll); на узких экранах значок шапки прячется, состояние видно в футере",
+      "hash": "4d8c07f9410dad2330c5ba618865a55ce193bac70103ec107e98e4b229c67beb",
+      "file": "records/0072-decision.json"
     }
   ]
 }

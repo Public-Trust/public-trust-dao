@@ -8,8 +8,9 @@
  *
  * Один и тот же скрипт обслуживает два вида:
  *   - полный виджет #statuslight (страница «Прозрачность») — лампа, метрики, подсказки;
- *   - компактный значок #statusbadge (шапка/футер остальных страниц) — точка + слово,
- *     ведёт на секцию «Прозрачность» с подробностями.
+ *   - компактный значок .statusbadge (шапка и/или футер остальных страниц) — точка +
+ *     слово, ведёт на секцию «Прозрачность» с подробностями. Значков на странице может
+ *     быть несколько (напр. один в шапке, один в футере) — рисуются все.
  * Делается один запрос; рисуется тот вид, который есть на странице (или оба).
  *
  * Язык берётся из <html lang>. DOM строится через textContent — никаких innerHTML
@@ -17,8 +18,8 @@
  */
 (function () {
   var full = document.getElementById('statuslight');
-  var badge = document.getElementById('statusbadge');
-  if (!full && !badge) return;
+  var badges = document.querySelectorAll('.statusbadge');
+  if (!full && !badges.length) return;
 
   var en = document.documentElement.lang === 'en';
   var T = en ? {
@@ -110,7 +111,7 @@
     }
   }
 
-  function renderBadge(s) {
+  function renderBadge(badge, s) {
     var green = s && s.verdict === 'green';
     badge.setAttribute('data-state', green ? 'green' : 'red');
     badge.classList.remove('is-green', 'is-red', 'is-error');
@@ -126,7 +127,7 @@
     if (label) label.textContent = T.err;
   }
 
-  function failBadge() {
+  function failBadge(badge) {
     badge.setAttribute('data-state', 'error');
     badge.classList.remove('is-green', 'is-red');
     badge.classList.add('is-error');
@@ -135,8 +136,9 @@
     if (text) text.textContent = T.bErr;
   }
 
-  function render(s) { if (full) renderFull(s); if (badge) renderBadge(s); }
-  function fail() { if (full) failFull(); if (badge) failBadge(); }
+  function eachBadge(fn) { Array.prototype.forEach.call(badges, fn); }
+  function render(s) { if (full) renderFull(s); eachBadge(function (b) { renderBadge(b, s); }); }
+  function fail() { if (full) failFull(); eachBadge(failBadge); }
 
   if (!('fetch' in window)) { fail(); return; }
   fetch('status.json', { cache: 'no-store' })
