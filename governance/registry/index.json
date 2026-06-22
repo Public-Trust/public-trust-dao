@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 4,
-  "head_hash": "46d8754aac099f2e0ae37a07fb7d59b2daa1b72090d178d0f2a9663401d48bb9",
+  "count": 5,
+  "head_hash": "482092d1236c6fdab96bfe035b49db0f18ab697db9ddee8e1bf5718f2cff1e89",
   "entries": [
     {
       "seq": 0,
@@ -39,6 +39,15 @@
       "summary": "Продуктовый вид и очередь интерфейсов: web-dApp → Telegram-бот → мобильное приложение",
       "hash": "46d8754aac099f2e0ae37a07fb7d59b2daa1b72090d178d0f2a9663401d48bb9",
       "file": "records/0003-product-interfaces.json"
+    },
+    {
+      "seq": 4,
+      "id": "PTD-0004",
+      "type": "decision",
+      "timestamp": "2026-06-22T05:30:00Z",
+      "summary": "Структура репозитория: один каталог = один слой; карта REPO-STRUCTURE.md (RU/EN) + чистка сборочного артефакта",
+      "hash": "482092d1236c6fdab96bfe035b49db0f18ab697db9ddee8e1bf5718f2cff1e89",
+      "file": "records/0004-repo-structure.json"
     }
   ]
 }

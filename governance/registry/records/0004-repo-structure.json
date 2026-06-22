@@ -1,0 +1,39 @@
+{
+  "seq": 4,
+  "id": "PTD-0004",
+  "type": "decision",
+  "timestamp": "2026-06-22T05:30:00Z",
+  "actor": "builder-agent",
+  "summary": "Структура репозитория: один каталог = один слой; карта REPO-STRUCTURE.md (RU/EN) + чистка сборочного артефакта",
+  "refs": [
+    "REPO-STRUCTURE.md",
+    "REPO-STRUCTURE.en.md",
+    "docs/PRODUCT-INTERFACES.md"
+  ],
+  "payload": {
+    "decision": "Зафиксировать структуру репозитория: один каталог = один слой ответственности (docs/, docs/en/, contracts/, ai-agents/, web/, governance/, scripts/, comms/, .github/workflows/) + карта REPO-STRUCTURE.md (RU/EN) как живой навигационный документ. Из индекса убран ошибочно закоммиченный сборочный артефакт scripts/__pycache__/*.pyc (покрыт .gitignore).",
+    "rationale": "Чтобы репозиторий оставался прозрачным и без хаоса по мере роста (контракты, агенты, governance). Карта закрепляет, что куда класть, правило двуязычности RU↔EN в одном коммите, логирование решений в реестр и неприкосновенность пульса. Слои каталогов повторяют продуктовые слои казна→контракты→AI-агенты→интерфейс.",
+    "directories": {
+      "docs/": "нормативная/проектная документация (RU)",
+      "docs/en/": "английское зеркало docs/",
+      "contracts/": "смарт-контракты + тесты (Этап 5)",
+      "ai-agents/": "AI-агенты-модули (Этап 6)",
+      "web/": "публичный сайт и web-dApp",
+      "governance/": "реестр, IPFS, Snapshot/Safe (Этапы 3-4)",
+      "scripts/": "тулы + контур пульса (loop/report/operator_bridge не трогать)",
+      "comms/": "канал оператор↔агент",
+      ".github/workflows/": "CI: registry/ipfs/pages"
+    },
+    "rails": [
+      "двуязычность RU↔EN в одном коммите",
+      "решения в реестр",
+      "секреты не в репо",
+      "пульс неприкосновенен",
+      "карту держать живой"
+    ],
+    "status": "adopted",
+    "spec": "REPO-STRUCTURE.md"
+  },
+  "prev_hash": "46d8754aac099f2e0ae37a07fb7d59b2daa1b72090d178d0f2a9663401d48bb9",
+  "hash": "482092d1236c6fdab96bfe035b49db0f18ab697db9ddee8e1bf5718f2cff1e89"
+}
