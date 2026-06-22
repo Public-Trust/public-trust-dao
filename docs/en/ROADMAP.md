@@ -100,8 +100,9 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] **Testnet wallet + Safe (INBOX #10):** describe/create a test wallet and a
   Safe for the test treasury (no real money or private keys in the repo), document
   addresses openly.
-- [ ] **Outreach templates (INBOX #8):** a contact list + letter templates RU/EN
+- [x] **Outreach templates (INBOX #8):** a contact list + letter templates RU/EN
   for the "public good" mission. Sent by the operator personally.
+  → Done (session 15), [`OUTREACH.md`](OUTREACH.md), `PTD-0012`.
 
 ### P2 — quality and transparency
 
@@ -133,6 +134,11 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0012 (session 15):** outreach [`OUTREACH.md`](OUTREACH.md) (+EN) —
+  recipient categories (with P0–P3 priorities) + where to find an official public
+  contact, personalization rules and a "ladder of asks", 5 letter templates RU +
+  5 EN, an after-reply protocol, an "agent vs operator" table. Ready-to-send draft:
+  the operator sends personally, the agent does not mail. Closes INBOX #8.
 - **PTD-0011 (session 14):** project email [`EMAIL-SETUP.md`](EMAIL-SETUP.md)
   (+EN) — option comparison (own domain / ProtonMail / Gmail) with a recommendation,
   addresses/aliases, step-by-step operator guide (Proton quick start + own domain

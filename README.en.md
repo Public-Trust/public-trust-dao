@@ -24,6 +24,7 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`docs/en/ROADMAP.md`](docs/en/ROADMAP.md) — roadmap and self-development mechanism (living, prioritized list of ideas/tasks).
 - [`docs/en/PROMOTION.md`](docs/en/PROMOTION.md) — promotion materials: landing copy, pitch (RU/EN), announcement post, FAQ "public good, NOT an investment".
 - [`docs/en/EMAIL-SETUP.md`](docs/en/EMAIL-SETUP.md) — project email: options, operator guide, signature and reply templates (RU/EN).
+- [`docs/en/OUTREACH.md`](docs/en/OUTREACH.md) — outreach: recipient categories and letter templates (RU/EN) for reaching people with an audience as a public good (the operator sends).
 - [`docs/en/GOVERNANCE.md`](docs/en/GOVERNANCE.md) — governance course: the voice of every verified human (Governor), the multisig as executor/emergency, Sybil resistance without power concentration.
 - [`LAUNCH.md`](LAUNCH.md) — technical specification for building the infrastructure.
 - `contracts/` — smart contracts (TESTNET first).
