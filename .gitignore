@@ -1,0 +1,9 @@
+# СЕКРЕТЫ — никогда в репо
+.env
+*.env
+.env.*
+**/secrets*
+*.key
+*_private*
+wallet*.json
+keystore/
