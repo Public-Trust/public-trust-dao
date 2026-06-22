@@ -19,7 +19,7 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`docs/en/ANTI-ABUSE.md`](docs/en/ANTI-ABUSE.md) — anti-abuse protection mechanisms (specification).
 - [`docs/en/ESCROW-TARGETED-DISBURSEMENT.md`](docs/en/ESCROW-TARGETED-DISBURSEMENT.md) — the targeted-use / escrow model (how aid reaches its purpose instead of going cash-in-hand).
 - [`docs/en/PRODUCT-INTERFACES.md`](docs/en/PRODUCT-INTERFACES.md) — product form and interface roadmap (web dApp → Telegram bot → mobile app).
-- [`AUTHORS.en.md`](AUTHORS.en.md) — authors and stewards: project author/initiator **Fyodor Grigoriev** (authorship ≠ ownership).
+- [`AUTHORS.en.md`](AUTHORS.en.md) — authors and stewards: project author/initiator **Fedor Grigoriev** (authorship ≠ ownership).
 - [`REPO-STRUCTURE.en.md`](REPO-STRUCTURE.en.md) — repository map: what lives where and where to put new things.
 - [`docs/en/ROADMAP.md`](docs/en/ROADMAP.md) — roadmap and self-development mechanism (living, prioritized list of ideas/tasks).
 - [`docs/en/PROMOTION.md`](docs/en/PROMOTION.md) — promotion materials: landing copy, pitch (RU/EN), announcement post, FAQ "public good, NOT an investment".
@@ -49,10 +49,10 @@ IPFS pinning. All development is public and verifiable.
   attribution and preservation of the same license.
 
 ## Author
-The author of the idea and initiator of the project is **Fyodor Grigoriev**
-(Фёдор Григорьев; see [`AUTHORS.en.md`](AUTHORS.en.md)). Authorship ≠ ownership:
+The author of the idea and initiator of the project is **Fedor Grigoriev**
+(Федор Григорьев; see [`AUTHORS.en.md`](AUTHORS.en.md)). Authorship ≠ ownership:
 under the constitution no one owns the project, and the founder is an ordinary
 participant/steward (one vote). The project belongs to its mission, constitution,
 and community.
 
-© Fyodor Grigoriev and Public Trust DAO contributors. Code — AGPL-3.0, docs — CC-BY-SA-4.0.
+© Fedor Grigoriev and Public Trust DAO contributors. Code — AGPL-3.0, docs — CC-BY-SA-4.0.

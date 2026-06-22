@@ -4,7 +4,7 @@
 
 ## Project author and initiator
 
-**Fyodor Grigoriev** (Фёдор Григорьев) — author of the idea and initiator of Public Trust DAO.
+**Fedor Grigoriev** (Федор Григорьев) — author of the idea and initiator of Public Trust DAO.
 
 > **Authorship ≠ ownership.** Under the project's constitution (see
 > [`docs/en/CONSTITUTION.md`](docs/en/CONSTITUTION.md), articles 1–3 and §6.2),
@@ -22,7 +22,7 @@ steward-operators will appear after Stage 4 (Governance) and will be published
 openly — addresses are created and confirmed by the community/operator, not by
 the agent.
 
-- **Author/initiator:** Fyodor Grigoriev — participant-steward (1 vote).
+- **Author/initiator:** Fedor Grigoriev — participant-steward (1 vote).
 - **AI builder agent:** an autonomous module that runs the public build inside
   the constitution's guardrails. It **holds no funds and has no power**
   (see [`BUILDER.md`](BUILDER.md), [`docs/en/PRINCIPLES.md`](docs/en/PRINCIPLES.md)).
@@ -37,4 +37,4 @@ the treasury — distribution is governed by community voting and the constituti
 
 ---
 
-© Fyodor Grigoriev and Public Trust DAO contributors. Docs — CC-BY-SA-4.0, code — AGPL-3.0.
+© Fedor Grigoriev and Public Trust DAO contributors. Docs — CC-BY-SA-4.0, code — AGPL-3.0.

@@ -1,0 +1,38 @@
+{
+  "seq": 10,
+  "id": "PTD-0010",
+  "type": "note",
+  "timestamp": "2026-06-22T05:30:00Z",
+  "actor": "builder-agent",
+  "summary": "Errata к PTD-0009: написание имени автора исправлено «Фёдор»→«Федор» (через «е»), «Fyodor»→«Fedor» — по указанию оператора. Реестр append-only: PTD-0009 не переписан, исправление отдельной записью. Документы приведены к «Федор Григорьев / Fedor Grigoriev».",
+  "refs": [
+    "AUTHORS.md",
+    "README.md",
+    "LICENSE",
+    "governance/registry/records/0009-set-author.json"
+  ],
+  "payload": {
+    "correction": "Исправлено написание имени автора/инициатора: «Фёдор» (через «ё») → «Федор» (через «е»), английская транслитерация «Fyodor» → «Fedor». Так указал оператор (comms/operator-thread.md, 2026-06-22T05:10:14Z: «Через букву е»). В записи PTD-0009 (сессия 12) написание было ошибочным.",
+    "rationale": "Реестр append-only и неизменяем: прежняя запись PTD-0009 не переписывается, а исправляется этой отдельной errata-записью (как и положено hash-chain журналу). Все человеко-читаемые документы приведены к «Федор Григорьев / Fedor Grigoriev».",
+    "corrects_record": "PTD-0009",
+    "applied_to": [
+      "AUTHORS.md",
+      "AUTHORS.en.md",
+      "README.md",
+      "README.en.md",
+      "REPO-STRUCTURE.md",
+      "REPO-STRUCTURE.en.md",
+      "LICENSE",
+      "LICENSE-DOCS"
+    ],
+    "rails": [
+      "реестр не переписывается задним числом — исправление оформлено отдельной записью",
+      "формулировка остаётся «автор/инициатор», не «владелец»",
+      "двуязычность RU↔EN сохранена в одном коммите"
+    ],
+    "status": "adopted",
+    "initiator": "Федор Григорьев (Fedor Grigoriev)"
+  },
+  "prev_hash": "ff4eed026572f614124490b64bed8955ccd1ff29d9e68139c4afc4aef95165f0",
+  "hash": "53854852b2f1d21b9a741f2f5f1584327817628aef94fd745394b8ccc0fca0ea"
+}

@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 10,
-  "head_hash": "ff4eed026572f614124490b64bed8955ccd1ff29d9e68139c4afc4aef95165f0",
+  "count": 11,
+  "head_hash": "53854852b2f1d21b9a741f2f5f1584327817628aef94fd745394b8ccc0fca0ea",
   "entries": [
     {
       "seq": 0,
@@ -93,6 +93,15 @@
       "summary": "Зафиксирован автор/инициатор проекта — Фёдор Григорьев (Fyodor Grigoriev) — единообразно: AUTHORS.md (+EN), копирайт в README RU/EN, LICENSE и LICENSE-DOCS, реестр (INBOX #15). Авторство ≠ владение.",
       "hash": "ff4eed026572f614124490b64bed8955ccd1ff29d9e68139c4afc4aef95165f0",
       "file": "records/0009-set-author.json"
+    },
+    {
+      "seq": 10,
+      "id": "PTD-0010",
+      "type": "note",
+      "timestamp": "2026-06-22T05:30:00Z",
+      "summary": "Errata к PTD-0009: написание имени автора исправлено «Фёдор»→«Федор» (через «е»), «Fyodor»→«Fedor» — по указанию оператора. Реестр append-only: PTD-0009 не переписан, исправление отдельной записью. Документы приведены к «Федор Григорьев / Fedor Grigoriev».",
+      "hash": "53854852b2f1d21b9a741f2f5f1584327817628aef94fd745394b8ccc0fca0ea",
+      "file": "records/0010-correct-author-spelling.json"
     }
   ]
 }
