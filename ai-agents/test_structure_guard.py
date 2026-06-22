@@ -112,10 +112,12 @@ with tempfile.TemporaryDirectory() as repo:
     _write_workflow(repo)
     rep = structure_guard.run(d)
     check("вердикт зелёный", rep["verdict"] == "green")
-    check("все 8 проверок прошли", rep["passed"] == rep["total"] == 8)
+    check("все 9 проверок прошли", rep["passed"] == rep["total"] == 9)
     check("предупреждений нет (у шагов есть имена)", rep["warnings"] == 0)
     check("у шагов run: есть имена → ci-step-has-name зелёная",
           _status(rep, "ci-step-has-name") == "pass")
+    check("имена шагов различны → ci-step-name-unique зелёная",
+          _status(rep, "ci-step-name-unique") == "pass")
     check("агент с импортом из solidity_scan НЕ краснит sol-проверку",
           _status(rep, "sol-parsing-centralized") == "pass")
     check("run_all покрывает агента и тесты → run-all-covers-all зелёная",
@@ -556,14 +558,64 @@ with tempfile.TemporaryDirectory() as repo:
     rep = structure_guard.run(d)
     check("ci-step-has-name зелёная (у блочных шагов есть имена)",
           _status(rep, "ci-step-has-name") == "pass")
+    check("разные имена → ci-step-name-unique зелёная",
+          _status(rep, "ci-step-name-unique") == "pass")
     check("предупреждений нет", rep["warnings"] == 0)
+
+# --- Мягкая проверка ci-step-name-unique: повтор имени лишь предупреждает --
+# Два шага run: носят ОДНО имя → warn, но вердикт остаётся зелёным.
+print("два шага run: делят одинаковое имя (мягкая проверка предупреждает, не валит):")
+DUP_NAME_WF = (
+    'on:\n  push:\n    paths:\n      - "ai-agents/**"\n'
+    '  pull_request:\n    paths:\n      - "ai-agents/**"\n'
+    'jobs:\n  agents:\n    steps:\n'
+    '      - name: Прогон\n'
+    '        run: python3 ai-agents/test_run_all.py\n'
+    '      - name: Прогон\n'
+    '        run: python3 ai-agents/run_all.py --with-tests\n'
+)
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, DUP_NAME_WF)
+    rep = structure_guard.run(d)
+    check("ci-step-name-unique предупреждает (status=warn)",
+          _status(rep, "ci-step-name-unique") == "warn")
+    check("вердикт ОСТАЁТСЯ зелёным (мягкая проверка не валит CI)",
+          rep["verdict"] == "green")
+    items = [v["item"] for c in rep["checks"] if c["key"] == "ci-step-name-unique"
+             for v in c["violations"]]
+    check("предупреждение названо повторяющимся именем 'Прогон' (один раз)",
+          items == ["Прогон"])
+    # У обоих шагов есть имя → ci-step-has-name зелёная (повтор — забота новой проверки).
+    check("ci-step-has-name зелёная (имена у шагов есть)",
+          _status(rep, "ci-step-has-name") == "pass")
+    # Согласованность: зелёный вердикт ⇒ код возврата 0.
+    check("код возврата 0 при зелёном вердикте с предупреждением о повторе имени",
+          structure_guard.main(["structure_guard", "--dir", d, "--json"]) == 0)
+
+# Безымянные шаги не считаются «повторяющими» друг друга (это забота ci-step-has-name).
+print("безымянные шаги не краснят ci-step-name-unique:")
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, NO_NAME_WF)  # оба шага без `- name:`
+    rep = structure_guard.run(d)
+    check("ci-step-name-unique зелёная (имён нет — нечему повторяться)",
+          _status(rep, "ci-step-name-unique") == "pass")
 
 # --- Сторож-регресс: настоящий каталог ai-agents/ сейчас зелёный ----------
 print("настоящий каталог ai-agents/:")
 real = structure_guard.run()
 check("реальный репозиторий: вердикт зелёный", real["verdict"] == "green")
-check("реальный репозиторий: 8/8 проверок прошли", real["passed"] == real["total"] == 8)
-check("реальный репозиторий: предупреждений нет (у шагов CI есть имена)",
+check("реальный репозиторий: 9/9 проверок прошли", real["passed"] == real["total"] == 9)
+check("реальный репозиторий: предупреждений нет (имена шагов CI есть и уникальны)",
       real["warnings"] == 0)
 
 # --- Итог ----------------------------------------------------------------

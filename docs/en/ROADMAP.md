@@ -479,10 +479,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   infrastructure (`_workflow_run_steps_named`, a `severity` field, a `warnings` counter).
   Checks 7→8 (1 soft). `test_structure_guard.py` 72/72, guard green 8/8 with no warnings,
   `PTD-0064`.
-- [ ] **Structure-guard: soft check `ci-step-name-unique`** — follow-up to
+- [x] **Structure-guard: soft check `ci-step-name-unique`** — follow-up to
   `ci-step-has-name` (PTD-0064): warn (do not block) if two CI `run:` steps share the same
   `- name:` — then they are indistinguishable in the GitHub Actions log and a failure reads
   ambiguously. Builds on the same `_workflow_run_steps_named` (proposed in session 67).
+  → Done (session 68), the guard's second SOFT check `ci-step-name-unique`
+  (`severity=soft`: `status=warn`, does not fail the verdict): collects the names of all
+  `run:` steps, warns about repeated ones, skips unnamed steps. Checks 8→9 (2 soft).
+  `test_structure_guard.py` 80/80, guard green 9/9 with no warnings, `PTD-0065`.
+- [ ] **Structure-guard: soft check "a step has both a `name:` and a `run:` body"** —
+  follow-up to `ci-step-name-unique`: warn if the workflow has a list item with `- name:`
+  but no `run:`/`uses:` (an empty step — a common indentation typo), so the CI step map
+  stays honest (proposed in session 68).
 - [ ] **`run_all`/meta-agent surfaces the guard's soft warnings** — the guard's `warnings`
   count is currently printed only in its own report; add it so the shared
   `run_all --with-tests` run also prints the total number of soft warnings (without failing
@@ -579,6 +587,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0065 (session 68):** P3 (Stage 6 quality) — **structure-guard: ninth (second SOFT)
+  `ci-step-name-unique` check (two CI `run:` steps do not share the same `- name:`).**
+  Follow-up to `ci-step-has-name` (PTD-0064): a step already has a name, but if it repeats,
+  a failed step reads ambiguously in the GitHub Actions log ("which of the two same-named
+  ones?"). The check collects the names of all `run:` steps (the ready helper
+  `_workflow_run_steps_named`) and warns about repeated ones; it skips unnamed steps (those
+  are `ci-step-has-name`'s concern). Does not break coverage → only **warns**
+  (`severity=soft`, `status=warn`), the verdict stays green. Checks 8→9 (2 soft).
+  `test_structure_guard.py` 72→80 (3 new scenarios: two steps with one name → warn with a
+  green verdict and exit 0; unnamed steps do not turn it red; distinct names in separate
+  blocks → green), guard 9/9 with no warnings, run_all 8/8 + tests 11/11, IPFS verify=OK (19),
+  registry 66. Agent README (RU/EN): a new table row marked "soft".
 - **PTD-0064 (session 67):** P3 (Stage 6 quality) — **structure-guard: eighth (first SOFT)
   `ci-step-has-name` check (a `run:` step of a required CI command has a human `- name:`).**
   Follow-up to `ci-required-cmd-own-step` (PTD-0063) toward readability: without a name a
