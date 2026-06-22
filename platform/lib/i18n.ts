@@ -431,6 +431,37 @@ export type ManifestoDict = {
   sourceLink: string;
 };
 
+export type SupportDict = {
+  back: string;
+  title: string;
+  lead: string;
+  topTitle: string; // главная мысль одной фразой
+  topNote: string;
+  whyTitle: string;
+  whyNote: string;
+  howTitle: string;
+  howHint: string;
+  // как именно идут донаты, когда система запущена (зеркало docs/SUPPORT-MODEL.md §1).
+  how: string[];
+  constitutionTitle: string;
+  constitutionHint: string;
+  // привязка модели поддержки к принципам конституции (зеркало таблицы §2).
+  constitution: { name: string; text: string }[];
+  nowTitle: string;
+  nowHint: string;
+  now: string[];
+  notDoingTitle: string;
+  notDoingHint: string;
+  notDoing: string[];
+  plainTitle: string;
+  plainNote: string;
+  safetyTitle: string;
+  safetyNote: string;
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -510,6 +541,7 @@ export type Dict = {
   navConstitution: string;
   navGovernance: string;
   navManifesto: string;
+  navSupport: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -532,6 +564,7 @@ export type Dict = {
   constitution: ConstitutionDict;
   governance: GovernanceDict;
   manifesto: ManifestoDict;
+  support: SupportDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -572,6 +605,7 @@ export const DICT: Record<Lang, Dict> = {
     navConstitution: "Конституция",
     navGovernance: "Как решаем",
     navManifesto: "Манифест",
+    navSupport: "Поддержать проект",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -1365,6 +1399,70 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "Этот экран — зеркало нормативного документа фонда «Манифест». Здесь — пересказ простыми словами; полный текст с миссией, направлениями, ролями и архитектурой живёт в самом документе. Манифест и конституция — главные ориентиры проекта.",
       sourceLink: "Открыть полный документ «Манифест» →",
     },
+    support: {
+      back: "← На главную",
+      title: "Как поддержать проект — простыми словами",
+      lead: "Многие проекты вешают сбоку кнопку «Поддержать» с одним кошельком, которым распоряжается один человек или маленькая команда. Для фонда про общественное доверие это было бы противоречием. Здесь простыми словами объяснено, как фонд принимает поддержку честно и открыто — и почему пока самая ценная поддержка не деньги, а участие.",
+      topTitle: "Главное одной мыслью",
+      topNote: "Поддержка приходит из самой работающей системы фонда, а не отдельной кнопкой или кошельком сбоку. «Поддержать проект» и «поддержать тех, кому проект помогает» — это один и тот же открытый поток, который видят все.",
+      whyTitle: "Почему нет кнопки «Поддержать» сбоку",
+      whyNote: "Отдельная кнопка с одним кошельком означала бы «доверьте деньги тем, кого никто не проверяет». Для фонда про доверие и прозрачность это недопустимо. Поэтому приём поддержки — это встроенная часть запущенного фонда, а не личная касса у команды.",
+      howTitle: "Как пойдут донаты, когда система заработает",
+      howHint: "Каждое поступление и каждый расход видны всем — в открытом журнале и в блокчейне.",
+      how: [
+        "Поддержка идёт через прозрачную общую казну под общей подписью пяти хранителей (нужны минимум трое из пяти живых людей), а не на чей-то личный кошелёк.",
+        "Каждое поступление и каждый расход видны в открытом журнале решений и в блокчейне — ничего нельзя скрыть.",
+        "Никто не распоряжается деньгами в одиночку: расход исполняется только после голосования сообщества, а хранители лишь исполняют общую волю и могут нажать аварийную паузу.",
+      ],
+      constitutionTitle: "Почему именно так (опора на конституцию)",
+      constitutionHint: "Слева — правило конституции, справа — как оно работает в модели поддержки.",
+      constitution: [
+        {
+          name: "Ни у кого нет власти над фондом",
+          text: "Нет личного кошелька «команды»: средства лежат на общей казне под общей подписью, а расход решает голосование.",
+        },
+        {
+          name: "Ничего не скрывать",
+          text: "Каждое поступление и расход — в блокчейне и в открытом журнале, с понятным объяснением.",
+        },
+        {
+          name: "Не обещать доход, не строить пирамиду",
+          text: "Поддержка — это дар на общественное благо, а не вложение: жертвователь не получает доли, дохода, токена-актива или права на возврат.",
+        },
+        {
+          name: "Не платить за привлечение людей",
+          text: "Нет бонусов за «приведи донора»: поддержка не превращается во власть и не оплачивает привлечение участников.",
+        },
+        {
+          name: "Реальные деньги — только после проверок",
+          text: "Адрес для реальных денег появляется лишь после независимого аудита и под общей подписью живых хранителей.",
+        },
+      ],
+      nowTitle: "Что это значит сейчас",
+      nowHint: "Система ещё строится в тестовом режиме — реальных денег нет.",
+      now: [
+        "Адрес для реальных денег пока не публикуется. Опубликовать кошелёк раньше времени — значит создать ту самую «кнопку сбоку», от которой мы отказались, и риск единоличного контроля до защит.",
+        "Лучшая поддержка сейчас — не деньги, а вклад в дело: код, документация, проверка и аудит, идеи, общественно полезная работа. Это прямо двигает фонд к запуску.",
+        "Когда система заработает (контракты в тестовой сети → независимый аудит → общая казна под подписью трёх из пяти хранителей → одобрение сообщества), поддержку деньгами можно будет направлять в открытую казну — и она будет видна в журнале, как любой другой поток. Тогда — и только тогда — публичные адреса появятся отдельной записью в журнале.",
+      ],
+      notDoingTitle: "Чего фонд не делает (рельсы)",
+      notDoingHint: "Эти запреты обязательны буквально.",
+      notDoing: [
+        "Не вешает кнопку «Поддержать» с одним кошельком сбоку.",
+        "Не публикует адрес для реальных денег до запуска системы и аудита.",
+        "Не обещает жертвователям доход, долю, токен-актив, возврат или какую-либо выгоду.",
+        "Не даёт бонусов за привлечение жертвователей.",
+        "Не принимает средства туда, где их контролирует один человек или команда.",
+        "Не скрывает ни одно поступление или расход — всё в журнале и в блокчейне.",
+      ],
+      plainTitle: "Совсем простыми словами",
+      plainNote: "«Поддержать проект» здесь — не значит «скинуть денег на кошелёк команды». Это значит положить вклад (участием или, когда система заработает, средствами) в общий открытый фонд, где каждый рубль и токен виден всем, расход решает сообщество голосованием, а не один человек, и где помощь доходит до нуждающегося напрямую. Пока фонд строится — самая ценная поддержка это участие.",
+      safetyTitle: "Рельс безопасности",
+      safetyNote: "До запуска работающей системы (контракты плюс общая казна под подписью трёх из пяти хранителей после аудита) фонд не публикует адрес для реальных денег и не открывает отдельный сбор. Сначала тестовая сеть; реальные средства — только после независимого аудита и под общей подписью живых хранителей. Никто не распоряжается средствами в одиночку.",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Поддержка проекта». Здесь пересказ простыми словами; полный текст с привязкой к конституции и этапам плана живёт в самом документе.",
+      sourceLink: "Открыть полный документ «Поддержка проекта» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -1764,6 +1862,7 @@ export const DICT: Record<Lang, Dict> = {
     navConstitution: "Constitution",
     navGovernance: "How we decide",
     navManifesto: "Manifesto",
+    navSupport: "Support the project",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -2556,6 +2655,70 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Where this is written",
       sourceNote: "This screen mirrors the fund’s normative document “Manifesto.” Here is the plain-words retelling; the full text with the mission, areas, roles and architecture lives in the document itself. The manifesto and the constitution are the project’s main guides.",
       sourceLink: "Open the full “Manifesto” document →",
+    },
+    support: {
+      back: "← Back to home",
+      title: "How to support the project — in plain words",
+      lead: "Many projects put a “Support us” button on the side with a single wallet controlled by one person or a small team. For a fund about public trust that would be a contradiction. This screen explains in plain words how the fund accepts support honestly and openly — and why, for now, the most valuable support is not money but participation.",
+      topTitle: "The main idea in one thought",
+      topNote: "Support comes from the fund’s own working system, not from a separate button or wallet on the side. “Support the project” and “support those the project helps” are one and the same open flow that everyone can see.",
+      whyTitle: "Why there is no “Support us” button on the side",
+      whyNote: "A separate button with a single wallet would mean “entrust money to people no one checks.” For a fund about trust and transparency that is unacceptable. So accepting support is a built-in part of the running fund, not a private till for the team.",
+      howTitle: "How donations will flow once the system runs",
+      howHint: "Every contribution and every payout is visible to all — in the open registry and on-chain.",
+      how: [
+        "Support flows through a transparent shared treasury under the joint signature of five keepers (at least three of five living people are required), not into anyone’s personal wallet.",
+        "Every contribution and every payout is visible in the open registry of decisions and on-chain — nothing can be hidden.",
+        "No one controls the money alone: a payout happens only after a community vote, and the keepers merely carry out the shared will and can hit an emergency pause.",
+      ],
+      constitutionTitle: "Why exactly this way (grounded in the constitution)",
+      constitutionHint: "On the left — a constitutional rule; on the right — how it works in the support model.",
+      constitution: [
+        {
+          name: "No one has power over the fund",
+          text: "There is no personal “team” wallet: funds sit in a shared treasury under a joint signature, and a vote decides any spending.",
+        },
+        {
+          name: "Hide nothing",
+          text: "Every contribution and payout is on-chain and in the open registry, with a plain explanation.",
+        },
+        {
+          name: "No promised returns, no pyramid",
+          text: "Support is a gift to a public good, not an investment: a donor gets no share, income, asset-token or right to a refund.",
+        },
+        {
+          name: "No payment for bringing people in",
+          text: "There are no “bring a donor” bonuses: support never turns into power and never pays for recruiting participants.",
+        },
+        {
+          name: "Real money only after checks",
+          text: "An address for real money appears only after an independent audit and under the joint signature of living keepers.",
+        },
+      ],
+      nowTitle: "What this means right now",
+      nowHint: "The system is still being built in test mode — there is no real money.",
+      now: [
+        "An address for real money is not published yet. Publishing a wallet too early would create the very “button on the side” we rejected, and a risk of sole control before the safeguards are in place.",
+        "The best support right now is not money but a contribution to the work: code, documentation, review and audit, ideas, publicly useful work. That moves the fund straight toward launch.",
+        "Once the system runs (contracts on a testnet → independent audit → a shared treasury under the signature of three of five keepers → community approval), money support can be directed into the open treasury — and it will be visible in the registry like any other flow. Then, and only then, public addresses appear as a separate registry entry.",
+      ],
+      notDoingTitle: "What the fund does not do (the rails)",
+      notDoingHint: "These prohibitions are binding literally.",
+      notDoing: [
+        "Does not put a “Donate/Support” button with a single wallet on the side.",
+        "Does not publish an address for real money before the system launches and is audited.",
+        "Does not promise donors income, a share, an asset-token, a refund or any benefit.",
+        "Does not give bonuses for bringing in donors.",
+        "Does not accept funds where one person or team controls them.",
+        "Does not hide a single contribution or payout — everything is in the registry and on-chain.",
+      ],
+      plainTitle: "In the simplest words",
+      plainNote: "“Support the project” here does not mean “throw money at the team’s wallet.” It means putting a contribution (through participation or, once the system runs, through funds) into a shared open fund, where every coin and token is visible to all, where the community decides spending by vote rather than one person, and where help reaches the person in need directly. While the fund is being built, the most valuable support is participation.",
+      safetyTitle: "Safety rail",
+      safetyNote: "Until the working system is in place (contracts plus a shared treasury under the signature of three of five keepers after an audit), the fund does not publish an address for real money and does not open a separate collection. Testnet first; real funds only after an independent audit and under the joint signature of living keepers. No one controls the funds alone.",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund’s normative document “Supporting the project”. This is a retelling in plain words; the full text, with its grounding in the constitution and the plan’s phases, lives in the document itself.",
+      sourceLink: "Open the full “Supporting the project” document →",
     },
     notFound: {
       code: "Page not found",
