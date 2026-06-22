@@ -376,6 +376,33 @@ export type ConstitutionDict = {
   sourceLink: string;
 };
 
+export type GovernanceDict = {
+  back: string;
+  title: string;
+  lead: string;
+  topTitle: string; // главная мысль одной фразой
+  topNote: string;
+  rulesTitle: string;
+  rulesHint: string;
+  // 6 правил управления, пересказанных простым языком (зеркало docs/GOVERNANCE.md).
+  rules: { name: string; text: string }[];
+  keepersTitle: string;
+  keepersNote: string;
+  sybilTitle: string;
+  sybilHint: string;
+  sybil: string[];
+  pathTitle: string;
+  pathNote: string;
+  limitTitle: string;
+  limitNote: string;
+  voteTitle: string;
+  voteNote: string;
+  voteLink: string; // ведёт на экран «Голосование»
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -453,6 +480,7 @@ export type Dict = {
   navAccountability: string;
   navDirectHelp: string;
   navConstitution: string;
+  navGovernance: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -473,6 +501,7 @@ export type Dict = {
   accountability: AccountabilityDict;
   escrow: EscrowDict;
   constitution: ConstitutionDict;
+  governance: GovernanceDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -511,6 +540,7 @@ export const DICT: Record<Lang, Dict> = {
     navAccountability: "Всё под подписью",
     navDirectHelp: "Оплата напрямую",
     navConstitution: "Конституция",
+    navGovernance: "Как решаем",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -1172,6 +1202,60 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "Этот экран — зеркало нормативного документа фонда «Конституция». Здесь — пересказ простыми словами; точные формулировки и нумерация статей живут в самом документе. Конституция — главный ориентир проекта: ей подчиняются программы-контракты, ИИ-помощники, управление и публичные тексты.",
       sourceLink: "Открыть полный документ «Конституция» →",
     },
+    governance: {
+      back: "← На главную",
+      title: "Как фонд принимает решения: голос каждого человека",
+      lead: "У фонда есть общий кошелёк, и им не владеет никто лично. Тогда кто решает, кому помочь и на что потратить? Решают сами люди — голосованием. Здесь простыми словами: кто голосует, как проходит решение, почему деньгами не распоряжается ни один человек и почему чем шире право решать, тем безопаснее общий кошелёк.",
+      topTitle: "Главное одной мыслью",
+      topNote: "Чем шире распределено право решать, тем труднее кому-либо захватить фонд. Прямой голос каждого человека — это не риск для общего кошелька, а его лучшая защита.",
+      rulesTitle: "Шесть простых правил",
+      rulesHint: "Слева — правило, справа — что оно означает.",
+      rules: [
+        {
+          name: "1. Один человек — один голос",
+          text: "Право голоса есть у каждого участника, чья реальность и уникальность подтверждена. Голос нельзя купить за деньги и нельзя продать: голос уборщицы равен голосу крупного жертвователя.",
+        },
+        {
+          name: "2. Предложить решение может любой",
+          text: "Любой участник может предложить решение, а сообщество — проголосовать «за» или «против». Чтобы решение прошло, нужно, чтобы проголосовало достаточно людей и большинство было «за».",
+        },
+        {
+          name: "3. Казна исполняет сама, но с задержкой",
+          text: "Прошедшее голосование казна исполняет сама — не мгновенно, а с задержкой на проверку. В это окно можно заметить и остановить явно вредное или «угнанное» решение, пока деньги ещё не ушли.",
+        },
+        {
+          name: "4. Деньгами не распоряжается ни один человек",
+          text: "Группа доверенных хранителей (общий ключ-сейф, где для действия нужны подписи минимум 3 из 5) — это не власть, а исполнитель и аварийный тормоз: она лишь технически проводит уже принятое решение и может нажать «паузу» при явной поломке. Направить деньги куда-то по своему желанию она не может.",
+        },
+        {
+          name: "5. Защита от накруток не даёт власти",
+          text: "Чтобы никто не накрутил голоса фейковыми аккаунтами, при входе подтверждается, что за участником стоит один живой уникальный человек. Но это подтверждение не даёт никому власти над деньгами — только право голоса.",
+        },
+        {
+          name: "6. Со временем фонд всё самостоятельнее",
+          text: "Роль хранителей — временные «строительные леса»: по мере того как сообщество растёт и код проходит проверку, их полномочия передаются механизмам самого сообщества.",
+        },
+      ],
+      keepersTitle: "Хранители — исполнитель, а не начальник",
+      keepersNote: "Хранители — это не начальники фонда. Их роль строго служебная: технически провести решение, которое уже приняло сообщество, и в случае явной поломки нажать «паузу». Они не могут направить деньги куда захотят, не могут принять решение за людей и не могут отменить голосование. Для любого действия нужны подписи минимум трёх хранителей из пяти — ни один человек, включая основателя, не может сделать это в одиночку.",
+      sybilTitle: "Защита от накруток и фейковых аккаунтов",
+      sybilHint: "У прямого голосования есть слабое место: один человек может попытаться завести сотни «участников» и решать за всех. Поэтому при входе подтверждается, что за участником — один реальный уникальный человек. Делается это так, чтобы не появилось органа, который этой проверкой владеет и через неё правит фондом:",
+      sybil: [
+        "Подтверждается только факт «живой и один человек» — без сбора лиц в базу и без слежки за человеком.",
+        "Способов подтверждения несколько, человек выбирает удобный; есть обязательный запасной путь без камеры — поручительство живых людей.",
+        "Эта проверка даёт право голоса, но не власть над деньгами: уникальность — это не власть.",
+      ],
+      pathTitle: "Путь к самостоятельности фонда",
+      pathNote: "Сейчас, на старте, у хранителей больше технической ответственности — это нужно, чтобы безопасно запуститься. Но это временно. По мере того как сообщество растёт, а код проходит независимую проверку, всё больше полномочий переходит к прямому голосованию людей. Цель — фонд, который держится на сообществе, а не на нескольких доверенных людях.",
+      limitTitle: "Уникальность — это не власть",
+      limitNote: "Подтверждение «живой и один человек» даёт только право голоса — и ничего больше. Оно не даёт власти над деньгами, не делает кого-то главнее и не превращается в способ управлять фондом. Пока всё на тестовой сети, без реальных денег: реальные средства двигаются только по голосованию и только через общий кошелёк (минимум 3 подписи из 5).",
+      voteTitle: "А где сам бюллетень",
+      voteNote: "Это экран-объяснение: как устроены решения в фонде. Чтобы проголосовать по конкретному предложению, откройте экран «Голосование».",
+      voteLink: "Перейти к голосованию →",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд принимает решения». Здесь — пересказ простыми словами; точные формулировки, фазы децентрализации и технические детали живут в самом документе.",
+      sourceLink: "Открыть полный документ «Управление» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -1569,6 +1653,7 @@ export const DICT: Record<Lang, Dict> = {
     navAccountability: "Signed & traceable",
     navDirectHelp: "Direct payment",
     navConstitution: "Constitution",
+    navGovernance: "How we decide",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -2229,6 +2314,60 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Where this is written down",
       sourceNote: "This screen mirrors the fund's normative document “Constitution”. This is a retelling in plain words; the exact wording and article numbering live in the document itself. The constitution is the project's north star: smart contracts, AI helpers, governance, and public texts all obey it.",
       sourceLink: "Open the full “Constitution” document →",
+    },
+    governance: {
+      back: "← Back to home",
+      title: "How the fund makes decisions: everyone's voice",
+      lead: "The fund has a shared wallet, and no one owns it personally. So who decides whom to help and what to spend on? The people themselves decide — by voting. Here, in plain words: who votes, how a decision passes, why no single person controls the money, and why the wider the right to decide, the safer the shared wallet.",
+      topTitle: "The main point in one thought",
+      topNote: "The more widely the right to decide is spread, the harder it is for anyone to capture the fund. Every person's direct voice is not a risk to the shared wallet — it is its best protection.",
+      rulesTitle: "Six simple rules",
+      rulesHint: "On the left — the rule; on the right — what it means.",
+      rules: [
+        {
+          name: "1. One person — one vote",
+          text: "Every participant whose reality and uniqueness is confirmed has the right to vote. A vote cannot be bought with money and cannot be sold: a cleaner's vote equals a major donor's vote.",
+        },
+        {
+          name: "2. Anyone can propose a decision",
+          text: "Any participant may propose a decision, and the community votes “for” or “against”. For a decision to pass, enough people must vote and the majority must be “for”.",
+        },
+        {
+          name: "3. The treasury executes itself, but with a delay",
+          text: "A passed vote is executed by the treasury itself — not instantly, but with a delay for review. In that window a clearly harmful or “hijacked” decision can be noticed and stopped before the money leaves.",
+        },
+        {
+          name: "4. No single person controls the money",
+          text: "The group of trusted keepers (a shared key-vault where an action needs at least 3 of 5 signatures) is not power, but an executor and an emergency brake: it only technically carries out an already-passed decision and can hit “pause” on an obvious breakdown. It cannot send money wherever it wants.",
+        },
+        {
+          name: "5. Anti-fake protection grants no power",
+          text: "So that no one inflates votes with fake accounts, on entry it is confirmed that one living, unique person stands behind a participant. But this confirmation gives no one power over the money — only the right to vote.",
+        },
+        {
+          name: "6. Over time the fund grows more self-reliant",
+          text: "The keepers' role is temporary “scaffolding”: as the community grows and the code passes review, their powers pass to the community's own mechanisms.",
+        },
+      ],
+      keepersTitle: "Keepers are an executor, not a boss",
+      keepersNote: "Keepers are not the fund's bosses. Their role is strictly functional: to technically carry out a decision the community has already made, and to hit “pause” in case of an obvious breakdown. They cannot send money wherever they want, cannot decide for people, and cannot cancel a vote. Any action needs the signatures of at least three keepers out of five — no single person, including the founder, can do it alone.",
+      sybilTitle: "Protection from vote-stuffing and fake accounts",
+      sybilHint: "Direct voting has a weak spot: one person might try to set up hundreds of “participants” and decide for everyone. So on entry it is confirmed that one real, unique person stands behind a participant. This is done so that no organ emerges that owns this check and rules the fund through it:",
+      sybil: [
+        "Only the fact “alive and one person” is confirmed — with no collecting of faces into a database and no tracking of the person.",
+        "There are several ways to confirm; the person picks a convenient one, and there is a mandatory fallback without a camera — vouching by living people.",
+        "This check grants the right to vote, but not power over the money: uniqueness is not power.",
+      ],
+      pathTitle: "The path to the fund's self-reliance",
+      pathNote: "Right now, at the start, the keepers carry more technical responsibility — this is needed to launch safely. But it is temporary. As the community grows and the code passes independent review, more and more powers pass to people's direct vote. The goal is a fund that rests on the community, not on a few trusted people.",
+      limitTitle: "Uniqueness is not power",
+      limitNote: "Confirming “alive and one person” grants only the right to vote — and nothing more. It gives no power over the money, makes no one senior, and does not become a way to govern the fund. Everything is still on a test network, with no real money: real funds move only by vote and only through the shared wallet (at least 3 signatures out of 5).",
+      voteTitle: "Where is the ballot itself",
+      voteNote: "This is an explainer screen: how decisions work in the fund. To vote on a specific proposal, open the “Voting” screen.",
+      voteLink: "Go to voting →",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund's normative document “How the fund makes decisions”. This is a retelling in plain words; the exact wording, the phases of decentralization, and the technical details live in the document itself.",
+      sourceLink: "Open the full “Governance” document →",
     },
     notFound: {
       code: "Page not found",
