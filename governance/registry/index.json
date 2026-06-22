@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 8,
-  "head_hash": "819528e1f460a2fab5f2ce058edb6051030875257bfc1573b5d473aa6d955c88",
+  "count": 9,
+  "head_hash": "a88545ba0075c11ad3898eca07b32978b0bc9a06cad5923cf1df90478f61c2ca",
   "entries": [
     {
       "seq": 0,
@@ -75,6 +75,15 @@
       "summary": "Курс управления (INBOX): голос каждого верифицированного человека (Governor→Timelock→Treasury), мультисиг сведён к исполнителю/аварийке, анти-Сивилла без концентрации власти — docs/GOVERNANCE.md (+EN)",
       "hash": "819528e1f460a2fab5f2ce058edb6051030875257bfc1573b5d473aa6d955c88",
       "file": "records/0007-governance-course.json"
+    },
+    {
+      "seq": 8,
+      "id": "PTD-0008",
+      "type": "decision",
+      "timestamp": "2026-06-22T05:08:00Z",
+      "summary": "Доработан публичный сайт (INBOX #14, ui-ux-pro-max): новый дизайн web/index.html (Accessible & Ethical, светлая+тёмная тема, доступность, анимация за reduced-motion) + EN-зеркало web/index.en.html; ноль исходящих запросов, дисклеймер «НЕ инвестиция» сохранён",
+      "hash": "a88545ba0075c11ad3898eca07b32978b0bc9a06cad5923cf1df90478f61c2ca",
+      "file": "records/0008-site-redesign.json"
     }
   ]
 }

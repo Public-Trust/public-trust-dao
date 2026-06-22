@@ -6,19 +6,37 @@
   <title>Public Trust DAO — открытая система взаимопомощи</title>
   <meta name="description" content="Public Trust DAO — открытая, децентрализованная система взаимопомощи и общественных благ. Не инвестиция, не пирамида: общественное благо под управлением конституции, открытого кода и сообщества.">
   <meta name="robots" content="index, follow">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0e1217">
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Public Trust DAO">
   <meta property="og:description" content="Открытая, децентрализованная система взаимопомощи и общественных благ. Общественное благо, НЕ инвестиция.">
   <meta property="og:locale" content="ru_RU">
+  <link rel="alternate" hreflang="en" href="index.en.html">
+  <link rel="alternate" hreflang="ru" href="index.html">
   <link rel="stylesheet" href="assets/style.css">
+  <!-- Тема выбирается до отрисовки, чтобы не было вспышки. Никаких внешних запросов. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('ptd-theme');
+        if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body>
 
+<a class="skip" href="#main">Перейти к содержимому</a>
+
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="#top">Public Trust <span class="dot">DAO</span></a>
-    <nav class="nav">
+    <a class="brand" href="#top">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-3z"/><path d="M9 12l2 2 4-4"/></svg>
+      Public Trust <span class="dot">DAO</span>
+    </a>
+    <nav class="nav" aria-label="Основная навигация">
       <a href="#mission">Миссия</a>
       <a href="#directions">Направления</a>
       <a href="#principles">Принципы</a>
@@ -26,35 +44,52 @@
       <a href="#transparency">Прозрачность</a>
       <a href="#participate">Участие</a>
     </nav>
+    <div class="nav-tools">
+      <div class="lang" role="group" aria-label="Язык / Language">
+        <a href="index.html" aria-current="true">RU</a>
+        <a href="index.en.html">EN</a>
+      </div>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Переключить тему" title="Светлая / тёмная тема">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
   </div>
 </header>
 
 <a id="top"></a>
-<section class="hero" style="border-bottom:none">
+<main id="main">
+
+<section class="hero">
   <div class="wrap">
-    <h1>Открытая система взаимопомощи<br>и общественных благ</h1>
+    <span class="eyebrow"><span class="blip"></span> Общественное благо · открытая разработка</span>
+    <h1>Открытая система взаимопомощи и общественных благ</h1>
     <p class="lede">Public Trust DAO обеспечивает людям базовую безопасность, человеческое
       достоинство, жильё, питание, медицинскую помощь, образование и восстановление
       самостоятельности — и возможность, получив помощь, со временем помогать другим.</p>
 
     <div class="pills">
-      <span class="pill">открытый код</span>
-      <span class="pill">прозрачная казна</span>
-      <span class="pill">нет владельца</span>
-      <span class="pill">управление сообществом</span>
-      <span class="pill">защита от злоупотреблений</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>открытый код</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>прозрачная казна</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>нет владельца</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>управление сообществом</span>
+      <span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>защита от злоупотреблений</span>
     </div>
 
     <div class="cta">
-      <a class="btn btn-primary" href="#participate">Как участвовать</a>
-      <a class="btn btn-ghost" href="https://github.com/Public-Trust/public-trust-dao">Код и документы на GitHub</a>
+      <a class="btn btn-primary" href="#participate">Как участвовать
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost" href="https://github.com/Public-Trust/public-trust-dao">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg>
+        Код и документы</a>
     </div>
 
     <div class="disclaimer" role="note">
-      ⚠️ <strong>Это НЕ инвестиция, НЕ финансовая пирамида, НЕ инструмент извлечения
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.3L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.3a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+      <span><strong>Это НЕ инвестиция, НЕ финансовая пирамида, НЕ инструмент извлечения
       прибыли.</strong> Проект не обещает доходность и не гарантирует прибыль. Это
       открытая инфраструктура взаимопомощи — общественное благо, управляемое
-      конституцией, прозрачной блокчейн-казной, открытым кодом и сообществом.
+      конституцией, прозрачной блокчейн-казной, открытым кодом и сообществом.</span>
     </div>
   </div>
 </section>
@@ -62,23 +97,27 @@
 <!-- Миссия -->
 <section id="mission">
   <div class="wrap">
-    <h2>Миссия</h2>
-    <p class="sub">Создать открытую, децентрализованную систему взаимной поддержки,
-      обеспечивающую людям достойную жизнь и возможность помогать другим.</p>
+    <div class="section-head"><span class="kicker">Зачем мы существуем</span>
+      <h2>Миссия</h2>
+      <p class="sub">Создать открытую, децентрализованную систему взаимной поддержки,
+        обеспечивающую людям достойную жизнь и возможность помогать другим.</p></div>
     <div class="grid">
-      <div class="card">
+      <div class="card reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></span>
         <h3>Никто не владелец</h3>
         <p>Ни человек, ни организация, ни государство, ни ИИ не контролируют средства
            единолично. Основатель — обычный участник. Проект принадлежит миссии,
            конституции и сообществу.</p>
       </div>
-      <div class="card">
+      <div class="card reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></span>
         <h3>Всё открыто</h3>
         <p>Все документы открыты, все решения объясняются, все операции публикуются,
            все изменения фиксируются — настолько неизменяемо, насколько это технически
            возможно.</p>
       </div>
-      <div class="card">
+      <div class="card reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M9 9V6a3 3 0 0 1 6 0v3M12 13v3"/></svg></span>
         <h3>ИИ служит, а не правит</h3>
         <p>AI-агенты — служебные модули, помогающие соблюдать конституцию. ИИ не
            обладает властью и не владеет средствами.</p>
@@ -90,25 +129,26 @@
 <!-- Направления помощи -->
 <section id="directions">
   <div class="wrap">
-    <h2>Направления помощи</h2>
-    <p class="sub">Помощь должна увеличивать самостоятельность человека, а не зависимость.</p>
+    <div class="section-head"><span class="kicker">Кому и в чём помогаем</span>
+      <h2>Направления помощи</h2>
+      <p class="sub">Помощь должна увеличивать самостоятельность человека, а не зависимость.</p></div>
     <div class="grid">
-      <div class="card"><span class="tag">жильё</span><h3>Крыша над головой</h3>
+      <div class="card reveal"><span class="tag">жильё</span><h3>Крыша над головой</h3>
         <p>Предотвращение бездомности, помощь с арендой и коммунальными платежами,
            экстренное и временное жильё, кооперативное и общественное жильё.</p></div>
-      <div class="card"><span class="tag">питание</span><h3>Еда</h3>
+      <div class="card reveal"><span class="tag">питание</span><h3>Еда</h3>
         <p>Продуктовая помощь, горячее питание, доставка продуктов, поддержка детей,
            семей и пожилых людей.</p></div>
-      <div class="card"><span class="tag">здоровье</span><h3>Медицинская помощь</h3>
+      <div class="card reveal"><span class="tag">здоровье</span><h3>Медицинская помощь</h3>
         <p>Лечение, лекарства, диагностика, реабилитация, психологическая помощь,
            поддержка людей с инвалидностью, экстренная медицина.</p></div>
-      <div class="card"><span class="tag">люди</span><h3>Дети и пожилые</h3>
+      <div class="card reveal"><span class="tag">люди</span><h3>Дети и пожилые</h3>
         <p>Поддержка семей с детьми; уход, сопровождение и бытовая помощь пожилым
            людям.</p></div>
-      <div class="card"><span class="tag">образование</span><h3>Знания и навыки</h3>
+      <div class="card reveal"><span class="tag">образование</span><h3>Знания и навыки</h3>
         <p>Переквалификация, профессиональное обучение, языки, цифровая грамотность,
            открытые знания.</p></div>
-      <div class="card"><span class="tag">кризис</span><h3>Экстренная помощь</h3>
+      <div class="card reveal"><span class="tag">кризис</span><h3>Экстренная помощь</h3>
         <p>Потеря жилья или работы, гуманитарные кризисы, стихийные бедствия,
            чрезвычайные ситуации.</p></div>
     </div>
@@ -118,22 +158,23 @@
 <!-- Принципы и запреты -->
 <section id="principles">
   <div class="wrap">
-    <h2>Принципы и запреты</h2>
-    <p class="sub">Запреты ниже обязательны к буквальному соблюдению в коде, в
-      AI-агентах, в управлении и в любом публичном тексте.</p>
+    <div class="section-head"><span class="kicker">Закон проекта</span>
+      <h2>Принципы и запреты</h2>
+      <p class="sub">Запреты ниже обязательны к буквальному соблюдению в коде, в
+        AI-агентах, в управлении и в любом публичном тексте.</p></div>
     <ul class="bans">
-      <li>Не обещать доходность</li>
-      <li>Не гарантировать прибыль</li>
-      <li>Не создавать финансовые пирамиды</li>
-      <li>Не платить за привлечение людей</li>
-      <li>Не концентрировать власть</li>
-      <li>Не скрывать операции</li>
-      <li>Не использовать фонд в личных интересах</li>
-      <li>Никакой коррупции</li>
-      <li>Никакого фаворитизма</li>
-      <li>Никакой дискриминации</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Не обещать доходность</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Не гарантировать прибыль</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Не создавать финансовые пирамиды</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Не платить за привлечение людей</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Не концентрировать власть</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Не скрывать операции</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Не использовать фонд в личных интересах</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Никакой коррупции</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Никакого фаворитизма</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M4.9 4.9l14.2 14.2"/></svg>Никакой дискриминации</li>
     </ul>
-    <p class="sub" style="margin-top:18px">Каждый человек обладает достоинством
+    <p class="sub" style="margin-top:20px">Каждый человек обладает достоинством
       независимо от дохода, происхождения, образования, возраста, национальности,
       состояния здоровья и социального положения.</p>
   </div>
@@ -142,13 +183,14 @@
 <!-- Приоритет распределения -->
 <section id="priorities">
   <div class="wrap">
-    <h2>Приоритет справедливого распределения</h2>
-    <p class="sub">При ограниченных средствах запросы с более высоким приоритетом
-      рассматриваются раньше. Приоритет не отменяет проверок против злоупотреблений и
-      не зависит от происхождения или статуса человека — только от характера нужды.</p>
+    <div class="section-head"><span class="kicker">Справедливость при ограниченных средствах</span>
+      <h2>Приоритет справедливого распределения</h2>
+      <p class="sub">При ограниченных средствах запросы с более высоким приоритетом
+        рассматриваются раньше. Приоритет не отменяет проверок против злоупотреблений и
+        не зависит от происхождения или статуса человека — только от характера нужды.</p></div>
     <div class="table-wrap">
       <table>
-        <thead><tr><th>Уровень</th><th>Приоритет</th><th>Что включает</th></tr></thead>
+        <thead><tr><th scope="col">Уровень</th><th scope="col">Приоритет</th><th scope="col">Что включает</th></tr></thead>
         <tbody>
           <tr><td><span class="lvl">1</span></td><td>Угроза жизни</td><td>непосредственная опасность для жизни</td></tr>
           <tr><td><span class="lvl">2</span></td><td>Угроза потери жилья</td><td>предотвращение бездомности, экстренное жильё</td></tr>
@@ -169,25 +211,28 @@
 <!-- Прозрачность -->
 <section id="transparency">
   <div class="wrap">
-    <h2>Прозрачность</h2>
-    <p class="sub">Проверяемость — не лозунг, а архитектура. Всё, что делает проект,
-      можно прочитать и проверить.</p>
+    <div class="section-head"><span class="kicker">Проверяемость — это архитектура</span>
+      <h2>Прозрачность</h2>
+      <p class="sub">Проверяемость — не лозунг, а архитектура. Всё, что делает проект,
+        можно прочитать и проверить.</p></div>
     <div class="grid">
-      <div class="card">
+      <div class="card reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg></span>
         <h3>Открытый код</h3>
         <p>Весь код публичен на GitHub под копилефт-лицензией AGPL-3.0: даже сетевые
            развёртывания обязаны оставаться открытыми.</p>
-        <p style="margin-top:8px"><a href="https://github.com/Public-Trust/public-trust-dao">Репозиторий →</a></p>
+        <p><a href="https://github.com/Public-Trust/public-trust-dao">Репозиторий →</a></p>
       </div>
-      <div class="card">
+      <div class="card reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>
         <h3>Публичный журнал решений</h3>
         <p>Каждое значимое решение зафиксировано и объяснено в открытом журнале
            проекта — что сделано и почему.</p>
-        <p style="margin-top:8px">
-          <a href="https://github.com/Public-Trust/public-trust-dao/blob/main/PROGRESS.md">Прогресс</a> ·
+        <p><a href="https://github.com/Public-Trust/public-trust-dao/blob/main/PROGRESS.md">Прогресс</a> ·
           <a href="https://github.com/Public-Trust/public-trust-dao/blob/main/DECISIONS.md">Решения</a></p>
       </div>
-      <div class="card">
+      <div class="card reveal">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
         <h3>Защёлка реальных средств</h3>
         <p>Реальные деньги заходят в контракты только после независимого аудита,
            отдельного одобрения сообщества и перевода казны под Safe multisig
@@ -200,23 +245,24 @@
 <!-- Как участвовать -->
 <section id="participate">
   <div class="wrap">
-    <h2>Как участвовать</h2>
-    <p class="sub">Проект на этапе открытого построения. Участие сейчас — это вклад в
-      инфраструктуру, а не финансовое вложение.</p>
+    <div class="section-head"><span class="kicker">Присоединиться к построению</span>
+      <h2>Как участвовать</h2>
+      <p class="sub">Проект на этапе открытого построения. Участие сейчас — это вклад в
+        инфраструктуру, а не финансовое вложение.</p></div>
     <div class="steps">
-      <div class="step"><div class="n">1</div><div class="b">
+      <div class="step reveal"><div class="n">1</div><div class="b">
         <h3>Прочитайте конституцию</h3>
         <p>Поймите миссию, принципы и запреты — это закон проекта, которому подчинены
            код, агенты и управление.
            <a href="https://github.com/Public-Trust/public-trust-dao/blob/main/docs/CONSTITUTION.md">Конституция →</a></p>
       </div></div>
-      <div class="step"><div class="n">2</div><div class="b">
+      <div class="step reveal"><div class="n">2</div><div class="b">
         <h3>Следите за разработкой</h3>
         <p>Весь прогресс публичен и проверяем. Смотрите коммиты, журнал решений и план
            этапов.
            <a href="https://github.com/Public-Trust/public-trust-dao/commits/main">История изменений →</a></p>
       </div></div>
-      <div class="step"><div class="n">3</div><div class="b">
+      <div class="step reveal"><div class="n">3</div><div class="b">
         <h3>Вносите вклад</h3>
         <p>Код, документация, проверка, идеи, общественно полезная деятельность.
            Вознаграждение за полезный вклад <strong>никогда</strong> не зависит от
@@ -226,6 +272,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <div class="wrap">
@@ -237,6 +285,7 @@
           <li><a href="https://github.com/Public-Trust/public-trust-dao/blob/main/docs/CONSTITUTION.md">Конституция</a></li>
           <li><a href="https://github.com/Public-Trust/public-trust-dao/blob/main/docs/PRINCIPLES.md">Принципы и запреты</a></li>
           <li><a href="https://github.com/Public-Trust/public-trust-dao/blob/main/docs/PRIORITIES.md">Приоритет распределения</a></li>
+          <li><a href="https://github.com/Public-Trust/public-trust-dao/blob/main/docs/GOVERNANCE.md">Управление</a></li>
           <li><a href="https://github.com/Public-Trust/public-trust-dao/blob/main/docs/ANTI-ABUSE.md">Защита от злоупотреблений</a></li>
         </ul>
       </div>
@@ -246,6 +295,7 @@
           <li><a href="https://github.com/Public-Trust/public-trust-dao">Репозиторий на GitHub</a></li>
           <li><a href="https://github.com/Public-Trust/public-trust-dao/blob/main/PROGRESS.md">Журнал прогресса</a></li>
           <li><a href="https://github.com/Public-Trust/public-trust-dao/blob/main/DECISIONS.md">Журнал решений</a></li>
+          <li><a href="index.en.html">English version</a></li>
         </ul>
       </div>
       <div>
@@ -257,15 +307,47 @@
       </div>
     </div>
     <div class="fine">
-      <p class="status-line">🚧 Bootstrap. Разработка ведётся публично и проверяемо.</p>
+      <p class="status-line"><span class="blip"></span> Bootstrap. Разработка ведётся публично и проверяемо.</p>
       <p>Public Trust DAO — общественное благо, не инвестиция. Проект не обещает
          доходности и не гарантирует прибыль. Никто не является владельцем; средства
          и решения не контролируются единолично.</p>
       <p>Этот сайт не использует трекеры, внешние шрифты и не отправляет данные о
-         посетителях.</p>
+         посетителях. Выбор темы хранится только в вашем браузере.</p>
     </div>
   </div>
 </footer>
+
+<!-- Переключатель темы и мягкое появление секций. Без внешних запросов и фреймворков. -->
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById('theme-toggle');
+    if (btn) {
+      btn.addEventListener('click', function () {
+        var current = root.getAttribute('data-theme');
+        if (!current) {
+          current = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        }
+        var next = current === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('ptd-theme', next); } catch (e) {}
+      });
+    }
+
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var items = document.querySelectorAll('.reveal');
+    if (reduce || !('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
 
 </body>
 </html>
