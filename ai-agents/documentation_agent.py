@@ -39,6 +39,9 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • see-also-present  → экран-источник карты реально рисует <SeeAlso/> .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран есть в карте «См. также», но его page.tsx
      не отрисовывает компонент — блок ссылок молча не появится; PTD-0104)
+  • mirror-doc-link   → экран-зеркало платформы ссылается на свой док в docs/ .... ст. 3/6
+    (МЯГКАЯ: предупреждает, если экран-пересказ нормативного документа не ставит
+     ссылку на первоисточник — зеркало нельзя сверить с нормой; PTD-0040)
 
 Правило пар (выводится из пути, а не зашито пофайлово):
   docs/NAME.md            ↔ docs/en/NAME.md
@@ -115,6 +118,27 @@ GLOSSARY_EN = "docs/en/GLOSSARY.md"
 SEEALSO_TSX = "platform/components/SeeAlso.tsx"
 I18N_TS = "platform/lib/i18n.ts"
 PLATFORM_APP = "platform/app"
+
+# Экраны-зеркала платформы: каждый пересказывает простыми словами свой нормативный
+# документ из docs/ (приём «экран-зеркало», PTD-0040 и далее). Мягкая проверка
+# mirror-doc-link следит, чтобы экран ссылался на ПЕРВОИСТОЧНИК — чтобы человек мог
+# сверить пересказ с нормой, а зеркало не «уехало» от документа молча при правках
+# (ст. 3 — проверяемость; ст. 6 — понятность). Слаг экрана → нормативный док в docs/.
+# Адрес дока ищем как подстроку (покрывает и относительную ссылку `docs/X.md`, и
+# абсолютную `…/blob/main/docs/X.md` на репозиторий).
+MIRROR_DOCS = {
+    "manifesto": "docs/MANIFESTO.md",
+    "constitution": "docs/CONSTITUTION.md",
+    "governance": "docs/GOVERNANCE.md",
+    "priorities": "docs/PRIORITIES.md",
+    "rewards": "docs/REWARDS-MODEL.md",
+    "safeguards": "docs/ANTI-ABUSE.md",
+    "work": "docs/PROOF-OF-CONTRIBUTION.md",
+    "accountability": "docs/ACCOUNTABILITY.md",
+    "direct-help": "docs/ESCROW-TARGETED-DISBURSEMENT.md",
+    "support": "docs/SUPPORT-MODEL.md",
+    "glossary": "docs/GLOSSARY.md",
+}
 
 # Адрес-слаг экрана платформы в кавычках: "/manifesto/", "/voting/" и т.п.
 TS_HREF_RE = re.compile(r'"(/[^"]*/)"')
@@ -847,6 +871,35 @@ def check_see_also_present(root):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_mirror_doc_link(root):
+    """МЯГКАЯ: каждый экран-зеркало платформы ссылается на свой нормативный док.
+
+    Часть экранов платформы — это «зеркала»: они пересказывают простыми словами
+    нормативный документ из `docs/` (Манифест, Конституция, Как решаем, …). Чтобы
+    пересказ можно было сверить с первоисточником и он не «уехал» от нормы при
+    правках, на экране должна стоять ссылка на свой документ. Проверка сверяет: у
+    каждого экрана-зеркала из карты `MIRROR_DOCS`, если его страница заведена, в
+    `page.tsx` встречается путь к нормативному документу (warn, не блок — ст. 3/6,
+    PTD-0040). Если каталог платформы отсутствует (мини-репозиторий в тесте) —
+    проверять нечего → pass. Экран, которого ещё нет, молча пропускаем (его
+    отсутствие — забота других сигналов), чтобы не кричать ложно.
+    """
+    if not os.path.isdir(os.path.join(root, PLATFORM_APP)):
+        return "pass", []
+    violations = []
+    for slug, doc in sorted(MIRROR_DOCS.items()):
+        page = f"{PLATFORM_APP}/{slug}/page.tsx"
+        if not os.path.exists(os.path.join(root, page)):
+            continue
+        if doc not in read_text(root, page):
+            violations.append({
+                "record": page,
+                "problem": (f"экран-зеркало «{slug}» не ссылается на свой нормативный "
+                            f"документ {doc} — пересказ нельзя сверить с первоисточником"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 CHECKS = [
     {
         "key": "bilingual-pairs",
@@ -915,6 +968,13 @@ CHECKS = [
         "fn": "seealso_present",
         "soft": True,
     },
+    {
+        "key": "mirror-doc-link",
+        "title": "Каждый экран-зеркало платформы ссылается на свой нормативный документ в docs/",
+        "guards": "ст. 3/6 — пересказ простыми словами можно сверить с первоисточником, зеркало не «уезжает» от нормы (PTD-0040); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_link",
+        "soft": True,
+    },
 ]
 
 
@@ -939,6 +999,7 @@ def run(root):
     prohib_status, prohib_v = check_constitutional_prohibitions(root, public_texts)
     seealso_t_status, seealso_t_v = check_see_also_targets(root)
     seealso_p_status, seealso_p_v = check_see_also_present(root)
+    mirror_status, mirror_v = check_mirror_doc_link(root)
 
     results = {
         "pairs": (pairs_status, pairs_v),
@@ -951,6 +1012,7 @@ def run(root):
         "prohibitions": (prohib_status, prohib_v),
         "seealso_targets": (seealso_t_status, seealso_t_v),
         "seealso_present": (seealso_p_status, seealso_p_v),
+        "mirror_doc_link": (mirror_status, mirror_v),
     }
 
     checks = []

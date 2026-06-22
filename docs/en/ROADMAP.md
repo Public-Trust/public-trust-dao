@@ -496,15 +496,35 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   RU↔EN) by the heading, and its cards got a neutral **dashed** border instead of the green
   accent (which on the home page means "a ready working screen"). Pure CSS + one text key,
   no new dependencies. `PTD-0103`.
-- [ ] **Documentation agent: every platform mirror screen links to its normative doc** —
+- [x] **Documentation agent: every platform mirror screen links to its normative doc** —
   a soft check that each explainer screen `platform/app/<slug>/` has a link to its source
   in `docs/` (the mirror has not drifted from the normative document). An extension of the
   "mirror screen" device; a warning, not a block (proposed in session 105).
+  **Done (session 110):** the `mirror-doc-link` check in `documentation_agent.py` — a
+  `MIRROR_DOCS` map (11 mirror screens → their normative doc: manifesto→MANIFESTO.md,
+  constitution→CONSTITUTION.md, governance→GOVERNANCE.md, priorities→PRIORITIES.md,
+  rewards→REWARDS-MODEL.md, safeguards→ANTI-ABUSE.md, work→PROOF-OF-CONTRIBUTION.md,
+  accountability→ACCOUNTABILITY.md, direct-help→ESCROW-TARGETED-DISBURSEMENT.md,
+  support→SUPPORT-MODEL.md, glossary→GLOSSARY.md); if a screen's `page.tsx` exists it must
+  contain a link to its doc path, otherwise a soft warning (verdict stays green). No
+  platform dir / screen not yet created → silent (pass). +3 test scenarios (81/81), green
+  on the real repo (all 11 mirrors link to their source). README tables (+RU) updated.
+  `PTD-0107`. TESTNET-ONLY.
 - [ ] **A personhood-verification adapter contract (`PersonhoodVerifier`)** — based on
   `docs/IDENTITY-VERIFICATION.md`: a thin contract that accepts a proof from one of the
   allowed proof-of-personhood methods and calls `Reputation.mint` only when
   `verified ∧ unique (nullifier unused)`; the method allow-list is under `Timelock`.
   Grounds "uniqueness ≠ power" in code (proposed session 44).
+- [ ] **Documentation agent: the `MIRROR_DOCS` map misses nothing** — the reverse of
+  `mirror-doc-link`: a soft check that if `platform/app/<slug>/page.tsx` links to a normative
+  doc in `docs/` but `<slug>` is absent from the `MIRROR_DOCS` map, warn — so the map does not
+  fall behind when a new mirror screen is added (extension of `PTD-0107`, proposed session 110).
+  A warning, not a block.
+- [ ] **Documentation agent: a mirror screen and its doc link both ways** — a soft check of
+  the two-way link: a normative doc `docs/X.md` that has a mirror screen carries a back-link to
+  its platform screen (so a reader of the document can reach its plain-language retelling, not
+  only the other way around). Extension of the "mirror screen" device; a warning, not a block
+  (proposed session 110).
 - [x] **Identity-verification terms in `GLOSSARY.md`** (+RU) — add in plain words:
   "proof-of-personhood", "zero-knowledge / proof without disclosure", "nullifier",
   "liveness", "vouching (web-of-trust)" — each linking to `IDENTITY-VERIFICATION.md`

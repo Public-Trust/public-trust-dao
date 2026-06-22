@@ -520,9 +520,11 @@ def main():
             "export default function SeeAlso() { return null; }\n"
         ),
         "platform/app/manifesto/page.tsx": (
+            "// зеркало docs/MANIFESTO.md\n"
             'export default function P() { return <SeeAlso slug="/manifesto/" />; }\n'
         ),
         "platform/app/governance/page.tsx": (
+            "// зеркало docs/GOVERNANCE.md\n"
             'export default function P() { return <SeeAlso slug="/governance/" />; }\n'
         ),
     }
@@ -640,7 +642,60 @@ def main():
               status_of(report, "see-also-targets") == "pass")
         check("see-also-present == pass без платформы",
               status_of(report, "see-also-present") == "pass")
+        check("mirror-doc-link == pass без платформы",
+              status_of(report, "mirror-doc-link") == "pass")
         check("предупреждений нет", report.get("warnings", 0) == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # --- Мягкая проверка mirror-doc-link: экран-зеркало ссылается на свой док ----
+    # Логика: экраны-зеркала (manifesto/governance/…) пересказывают нормативный
+    # документ из docs/. Если экран есть, но ссылки на первоисточник нет —
+    # ПРЕДУПРЕЖДЕНИЕ (warn), вердикт не роняем (soft).
+
+    # 30. Корректная платформа (страницы ссылаются на docs/) → mirror pass, soft.
+    print("\n[мягкая проверка: экраны-зеркала ссылаются на docs/ → mirror-doc-link pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        code, report = run_agent(tmp)
+        check("mirror-doc-link == pass", status_of(report, "mirror-doc-link") == "pass")
+        check("mirror-doc-link помечена soft", _is_soft(report, "mirror-doc-link"))
+        check("вердикт green / exit=0", report.get("verdict") == "green" and code == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 31. У экрана-зеркала пропала ссылка на свой нормативный док → mirror warn.
+    print("\n[мягкая проверка: зеркало без ссылки на docs/ → mirror-doc-link warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        broken = with_platform({
+            "platform/app/governance/page.tsx": (
+                "// пересказ есть, а ссылки на первоисточник нет\n"
+                'export default function P() { return <SeeAlso slug="/governance/" />; }\n'
+            ),
+        })
+        make_repo(tmp, broken)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-link == warn для зеркала без ссылки на docs/",
+              status_of(report, "mirror-doc-link") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 32. Экрана-зеркала из карты вообще нет (страница не заведена) → mirror молчит.
+    print("\n[мягкая проверка: отсутствующий экран-зеркало не вызывает ложную тревогу]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        partial = dict(GOOD_FILES)
+        partial.update(PLATFORM_GOOD)
+        partial.pop("platform/app/governance/page.tsx")  # экран ещё не заведён
+        make_repo(tmp, partial)
+        code, report = run_agent(tmp)
+        check("mirror-doc-link == pass (нет файла → нечего сверять)",
+              status_of(report, "mirror-doc-link") == "pass")
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

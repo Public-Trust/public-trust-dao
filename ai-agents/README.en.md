@@ -255,6 +255,7 @@ git-tracked `.md` files (over what is actually published):
 | `constitutional-prohibitions` *(soft)* | public texts (`.md` + the `web/*.html` storefront) make no forbidden promises: yield/profit, investment/pyramid, pay-to-recruit (referrals) — our own "this is NOT an investment" disclaimers and prohibition lists do not count as violations | Art. 3/6 + `PRINCIPLES.md` "Constitutional prohibitions" for public texts |
 | `see-also-targets` *(soft)* | every address in the platform's "See also" maps (`RELATED`/`RELATED_ACTIONS` in `SeeAlso.tsx`) exists in the `i18n` texts (`t.learn`/`t.screens`) — a cross-link won't silently break when a screen is renamed | Art. 3/6 — verifiability/clarity (`PTD-0105`) |
 | `see-also-present` *(soft)* | every screen that is a source in a "See also" map actually renders the `<SeeAlso/>` component in its `page.tsx` (the cross-link block won't silently disappear) | Art. 3/6 — verifiability/clarity (`PTD-0104`) |
+| `mirror-doc-link` *(soft)* | every platform "mirror" screen (a plain-language retelling of a normative doc) links to its source in `docs/` — the retelling can be checked against the norm, the mirror won't drift away from the document | Art. 3/6 — verifiability/clarity (`PTD-0040`) |
 
 > The `glossary-coverage` and `glossary-no-dead` checks are **soft**: they only warn
 > (so the glossary neither falls behind the documents nor grows stale) and **never
