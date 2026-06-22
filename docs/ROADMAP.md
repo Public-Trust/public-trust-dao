@@ -96,6 +96,14 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
     только executor двигает, guardian только пауза; 14 тестов «до зелёного» (24/24
     с Treasury); реестровая схема расширена `provider/category/escrow_id`. `PTD-0017`.
   - [ ] Часть 3: `Governance` (Governor → Timelock) + `Reputation` (soulbound-бейдж).
+    - [x] Часть 3a (сессия 21): [`Reputation.sol`](../contracts/contracts/Reputation.sol)
+      — непередаваемый (soulbound) бейдж участника по [`GOVERNANCE.md`](GOVERNANCE.md)
+      §2–§3: «1 человек = 1 голос» (`votingUnits` = 1 + min(points, cap), вес в
+      коридоре [1..1+cap]), нет функций перевода (непередаваем by design), `verifier`
+      выдаёт/отзывает бейдж, `governor` правит параметры, ни одна роль не двигает
+      средства; 11 тестов «до зелёного» (35/35 с Treasury+Disbursement). `PTD-0018`.
+    - [ ] Часть 3b: `Governor` (предложения/кворум/подсчёт по `Reputation.votingUnits`)
+      + `Timelock` (задержка исполнения; Timelock = `executor` казны/escrow).
   - [ ] Часть 4: прогон на публичном testnet (сеть согласовать с оператором).
 - [ ] **Этап 6 — AI-агенты (каркас):** в `ai-agents/` описать и завести модули
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
@@ -163,6 +171,16 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 
 ## Сделано
 
+- **PTD-0018 (сессия 21):** Этап 5 (Смарт-контракты), часть 3a — контракт
+  [`Reputation.sol`](../contracts/contracts/Reputation.sol): непередаваемый
+  (soulbound) бейдж верифицированного участника по [`GOVERNANCE.md`](GOVERNANCE.md)
+  §2–§3. «1 человек = 1 голос» в коде: `votingUnits(addr)` = 0 для не-участника и
+  1 + min(`reputationPoints`, `reputationCap`) для участника — вес всегда в коридоре
+  [1..1+cap], власть денег невозможна. Soulbound: у контракта **нет функций перевода**
+  (transfer/approve/transferFrom) by design. «Уникальность ≠ власть»: `verifier`
+  выдаёт/отзывает бейдж, `governor` правит параметры, ни одна роль не двигает
+  средства. Отзыв сбрасывает вес в 0 и репутацию. 11 тестов «до зелёного» (35/35 с
+  Treasury+Disbursement). TESTNET-ONLY. Дальше — часть 3b (`Governor`+`Timelock`).
 - **PTD-0017 (сессия 20):** Этап 5 (Смарт-контракты), часть 2 — контракт целевого
   escrow [`Disbursement.sol`](../contracts/contracts/Disbursement.sol) по
   [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md): `open` фиксирует

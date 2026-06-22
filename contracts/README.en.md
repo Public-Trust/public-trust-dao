@@ -20,6 +20,7 @@ Derived from the normative documents:
 |---|---|---|
 | [`Treasury.sol`](contracts/Treasury.sol) | Base treasury layer: holds test funds, releases them **only** through the `executor` (multisig/Timelock), per-release cap, emergency pause, an event on every movement. | skeleton + tests ✅ |
 | [`Disbursement.sol`](contracts/Disbursement.sol) | Targeted aid escrow: locks funds per case and releases them **strictly to the service provider's address** (`open`/`release`/`refund`/`pause`). "We don't hand out cash — we pay the need." `refund` returns the remainder to the treasury. | skeleton + tests ✅ |
+| [`Reputation.sol`](contracts/Reputation.sol) | Non-transferable (soulbound) verified-member badge: one-person-one-vote, `votingUnits` = 1 + a capped multiplier. `verifier` mints/revokes the badge (uniqueness), `governor` sets parameters (power). No role moves funds. | skeleton + tests ✅ |
 
 ### Constitutional properties built into `Treasury` (and asserted by tests)
 
@@ -57,6 +58,26 @@ Implements [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBUR
   funds; the `guardian` only pauses; an event on every branch
   (`open`/`release`/`refund`/`pause`) + a `registryRef` to reconcile with the registry.
 
+### Constitutional properties built into `Reputation` (member badge)
+
+Implements [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3 ("one person — one
+vote", "uniqueness ≠ power"):
+
+- **One-person-one-vote, not plutocracy (art. 2, prohibition #5):** `votingUnits(addr)`
+  returns `0` for a non-member and `1 + min(reputationPoints, reputationCap)` for a
+  member. The weight always stays within `[1 .. 1+cap]` — **money cannot buy power**.
+- **Soulbound (non-transferable):** the contract has **no transfer function at all**
+  (`transfer`/`approve`/`transferFrom`) — by design. A vote cannot be sold, gifted,
+  or concentrated by buying up (GOVERNANCE.md §2, "a non-sellable right").
+- **Uniqueness ≠ power:** the `verifier` only confirms a person's uniqueness
+  (`mint`/`revoke` the badge), the `governor` sets parameters (reputation/cap/roles).
+  **No role moves funds** — there are none in this contract; voting decides.
+- **Hard multiplier cap:** the contribution bonus is clamped by `reputationCap` so no
+  new elite emerges; the cap and reputation are changed only by the `governor` (by vote).
+- **Transparency** (art. 3): every change (mint/revoke/reputation/role change) emits
+  an event with a `registryRef`; role handover (`setVerifier`/`setGovernor`) is the
+  path to decentralization (phases A→D).
+
 ## Run (locally, no network, no money)
 
 ```bash
@@ -79,6 +100,8 @@ in [`hardhat.config.js`](hardhat.config.js); the operator supplies keys via
 
 - ✅ `Disbursement` — targeted escrow per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)
   (`open`/`release`/`refund`/`pause`, pay the provider directly) — **done** (skeleton + tests).
-- `Governance` — Governor → Timelock (one-person-one-vote, [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md)).
-- `Reputation` — a non-transferable (soulbound) verified-member badge.
+- ✅ `Reputation` — a non-transferable (soulbound) verified-member badge
+  (one-person-one-vote, `votingUnits` with a capped multiplier) — **done** (skeleton + tests).
+- `Governance` — Governor → Timelock (one-person-one-vote, [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md));
+  vote weight sourced from `Reputation.votingUnits`; the Timelock is the `executor` of treasury/escrow.
 - A public testnet run once the network is agreed with the operator.

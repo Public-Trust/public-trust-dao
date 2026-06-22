@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 18,
-  "head_hash": "cd15042de9b8253b2f0250ec8c1032d008c0a361571382a4d5b1b73006dc00b9",
+  "count": 19,
+  "head_hash": "158d7667ed34794a67648bf1e3fe79c44cd8ec558109ea5b9fb2506f697f7555",
   "entries": [
     {
       "seq": 0,
@@ -165,6 +165,15 @@
       "summary": "Этап 5 (Смарт-контракты, часть 2): контракт целевого escrow Disbursement.sol (open/release/refund/pause; транш уходит СТРОГО поставщику из кейса — «не даём деньги, оплачиваем нужду»; refund в казну; лимит транша; только executor двигает, guardian только пауза; события + registryRef) с тестами «до зелёного» 14/14 (24/24 с Treasury). Реестровая схема disbursement расширена provider/category/escrow_id. TESTNET-ONLY, без реальных средств/ключей.",
       "hash": "cd15042de9b8253b2f0250ec8c1032d008c0a361571382a4d5b1b73006dc00b9",
       "file": "records/0017-decision.json"
+    },
+    {
+      "seq": 18,
+      "id": "PTD-0018",
+      "type": "decision",
+      "timestamp": "2026-06-22T07:10:00Z",
+      "summary": "Этап 5 (Смарт-контракты, часть 3a): контракт Reputation.sol — непередаваемый (soulbound) бейдж верифицированного участника (1 человек = 1 голос; votingUnits = 1 + min(points, cap), вес в коридоре [1..1+cap]; нет функций перевода — непередаваем by design; verifier выдаёт/отзывает бейдж, governor правит параметры, ни одна роль не двигает средства) с тестами «до зелёного» 11/11 (35/35 с Treasury и Disbursement). По docs/GOVERNANCE.md §2–§3. TESTNET-ONLY, без реальных средств/ключей.",
+      "hash": "158d7667ed34794a67648bf1e3fe79c44cd8ec558109ea5b9fb2506f697f7555",
+      "file": "records/0018-decision.json"
     }
   ]
 }

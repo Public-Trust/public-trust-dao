@@ -98,6 +98,14 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     pauses; 14 tests "to green" (24/24 with Treasury); the registry schema gained
     `provider/category/escrow_id`. `PTD-0017`.
   - [ ] Part 3: `Governance` (Governor → Timelock) + `Reputation` (soulbound badge).
+    - [x] Part 3a (session 21): [`Reputation.sol`](../../contracts/contracts/Reputation.sol)
+      — a non-transferable (soulbound) member badge per [`GOVERNANCE.md`](GOVERNANCE.md)
+      §2–§3: one-person-one-vote (`votingUnits` = 1 + min(points, cap), weight within
+      [1..1+cap]), no transfer functions (non-transferable by design), the `verifier`
+      mints/revokes the badge, the `governor` sets parameters, no role moves funds;
+      11 tests "to green" (35/35 with Treasury+Disbursement). `PTD-0018`.
+    - [ ] Part 3b: `Governor` (proposals/quorum/tally over `Reputation.votingUnits`)
+      + `Timelock` (execution delay; the Timelock is the `executor` of treasury/escrow).
   - [ ] Part 4: a public testnet run (network to be agreed with the operator).
 - [ ] **Stage 6 — AI agents (skeleton):** in `ai-agents/` describe and set up the
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
@@ -166,6 +174,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0018 (session 21):** Stage 5 (Smart contracts), part 3a — the
+  [`Reputation.sol`](../../contracts/contracts/Reputation.sol) contract: a
+  non-transferable (soulbound) verified-member badge per [`GOVERNANCE.md`](GOVERNANCE.md)
+  §2–§3. One-person-one-vote in code: `votingUnits(addr)` = 0 for a non-member and
+  1 + min(`reputationPoints`, `reputationCap`) for a member — the weight always stays
+  within [1..1+cap], money cannot buy power. Soulbound: the contract has **no transfer
+  functions** (transfer/approve/transferFrom) by design. "Uniqueness ≠ power": the
+  `verifier` mints/revokes the badge, the `governor` sets parameters, no role moves
+  funds. Revoking resets weight to 0 and reputation. 11 tests "to green" (35/35 with
+  Treasury+Disbursement). TESTNET-ONLY. Next — part 3b (`Governor`+`Timelock`).
 - **PTD-0017 (session 20):** Stage 5 (Smart contracts), part 2 — the targeted-escrow
   contract [`Disbursement.sol`](../../contracts/contracts/Disbursement.sol) per
   [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md): `open` fixes
