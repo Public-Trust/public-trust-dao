@@ -89,24 +89,32 @@
       "single_block": true
     },
     {
-      "bytes": 14754,
-      "cid": "bafkreicxlypbwfvpcmyf6ib2fjz5d7qvahoaou5zjsluz5ua5dhpbleeu4",
+      "bytes": 15984,
+      "cid": "bafkreicll7ec7bz3le5w3ymvmrig5eizdjbjml6wfdr55edc2vmmyewia4",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ROADMAP.md",
-      "sha256": "575e1e1b16af13305f203a2a73d1fe1501dc0753b94c974cf680e8cef0ac84a7",
+      "sha256": "4b5fc82f873b593b6de19564506e91191a42962fd628e3de9062d558cc12c807",
       "single_block": true
     },
     {
-      "bytes": 7296,
-      "cid": "bafkreihedlmif5shyxmx7wbou3f3armg2ulf65gtcyvyk5i4kfbrd36wiq",
+      "bytes": 9142,
+      "cid": "bafkreieiog2srtv73g2v74o25rffkr5rtibdytcd3x3lrabfb5pejpts5a",
+      "cid_kind": "raw-leaf-v1",
+      "path": "docs/SUPPORT-MODEL.md",
+      "sha256": "8871b528cebfd9b55ff1daec4a5547b19a023c4c43ddf6b880250f5e44be72e8",
+      "single_block": true
+    },
+    {
+      "bytes": 8093,
+      "cid": "bafkreibpob7qmieuq4x4ftkttxdqxfb62wppfeticftm34wx26u7w4l7pq",
       "cid_kind": "raw-leaf-v1",
       "path": "governance/registry/index.json",
-      "sha256": "e41ad882f647c5d97fd82ea6cbb04586d5165f74d3162b85751c514311efd644",
+      "sha256": "2f707f062094872fc2cd539dc70b943ed59ef292681166cdf2d7d7a9fb717f7c",
       "single_block": true
     }
   ],
   "kind": "ipfs-content-manifest",
-  "manifest_fingerprint_sha256": "6ebb13d33a682667fbfe54370aff457059646155ba57c878ac5e1e9c95570372",
+  "manifest_fingerprint_sha256": "80f85429e07d23ceaed23621b3dd2cd7c2ad395e459976e7270049b7ab36ea5d",
   "project": "Public Trust DAO",
   "spec": "CIDv1, codec=raw(0x55), multihash=sha2-256, multibase=base32. Эквивалент `ipfs add --cid-version=1 --raw-leaves=true` для одноблочных файлов (<=256 KiB). Вычисляется и проверяется из содержимого, без аккаунта пиннера.",
   "verify": "python3 scripts/ipfs_manifest.py verify",

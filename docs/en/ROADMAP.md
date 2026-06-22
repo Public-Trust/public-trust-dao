@@ -106,6 +106,10 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [x] **Outreach templates (INBOX #8):** a contact list + letter templates RU/EN
   for the "public good" mission. Sent by the operator personally.
   → Done (session 15), [`OUTREACH.md`](OUTREACH.md), `PTD-0012`.
+- [x] **Support/donations model (INBOX):** support comes through the working
+  system itself (transparent multisig treasury + contracts, visible in the
+  registry), with no separate "Donate" button; a real-money address only after
+  launch and an audit. → Done (session 17), [`SUPPORT-MODEL.md`](SUPPORT-MODEL.md), `PTD-0014`.
 
 ### P2 — quality and transparency
 
@@ -137,6 +141,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0014 (session 17):** support model [`SUPPORT-MODEL.md`](SUPPORT-MODEL.md)
+  (+EN) — support comes from the working system itself (transparent multisig
+  treasury 3-of-5 + contracts, every flow in the registry and on-chain, spending by
+  vote), not a separate button/address on the side. Until launch and audit, no
+  real-money address is published. On the site — an honest explanation with no donate
+  button. Closes the INBOX donations item.
 - **PTD-0012 (session 15):** outreach [`OUTREACH.md`](OUTREACH.md) (+EN) —
   recipient categories (with P0–P3 priorities) + where to find an official public
   contact, personalization rules and a "ladder of asks", 5 letter templates RU +

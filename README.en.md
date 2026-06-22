@@ -26,6 +26,7 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`docs/en/EMAIL-SETUP.md`](docs/en/EMAIL-SETUP.md) — project email: options, operator guide, signature and reply templates (RU/EN).
 - [`docs/en/OUTREACH.md`](docs/en/OUTREACH.md) — outreach: recipient categories and letter templates (RU/EN) for reaching people with an audience as a public good (the operator sends).
 - [`docs/en/GOVERNANCE.md`](docs/en/GOVERNANCE.md) — governance course: the voice of every verified human (Governor), the multisig as executor/emergency, Sybil resistance without power concentration.
+- [`docs/en/SUPPORT-MODEL.md`](docs/en/SUPPORT-MODEL.md) — how the project accepts support: through the system itself (transparent multisig treasury + registry), with no separate "Donate" button; a real-money address only after launch and an audit.
 - [`LAUNCH.md`](LAUNCH.md) — technical specification for building the infrastructure.
 - `contracts/` — smart contracts (TESTNET first).
 - `web/` — public website (GitHub Pages).
