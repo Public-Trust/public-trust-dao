@@ -1,0 +1,43 @@
+name: "🐞 Ошибка или неточность · Bug or inaccuracy"
+description: "Ошибка в коде/тестах, неточность в документе, битая ссылка. · A bug in code/tests, an inaccuracy in a document, a broken link."
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо, что помогаете держать проект честным и проверяемым.
+        **Не публикуйте** чужие персональные данные и **никогда** — приватные ключи,
+        токены или пароли (см. [рельсы вклада](https://github.com/Public-Trust/public-trust-dao/blob/main/CONTRIBUTING.md)).
+
+        Thanks for helping keep the project honest and verifiable.
+        **Do not** post anyone's personal data and **never** private keys, tokens or passwords.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: "Что не так · What is wrong"
+      description: "Что вы наблюдали. · What you observed."
+      placeholder: "Напр.: в docs/GOVERNANCE.md §4 ссылка ведёт в никуда… · E.g. a link in docs/GOVERNANCE.md §4 is broken…"
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: "Что ожидалось · What you expected"
+      description: "Как, по-вашему, должно быть. · What you think the correct behaviour/text is."
+    validations:
+      required: false
+  - type: input
+    id: location
+    attributes:
+      label: "Файл / строка · File / line"
+      description: "Ссылка на файл или строку, если применимо. · Link to the file or line, if applicable."
+      placeholder: "docs/PRINCIPLES.md:42"
+    validations:
+      required: false
+  - type: checkboxes
+    id: rails
+    attributes:
+      label: "Рельсы · Rails"
+      options:
+        - label: "В описании нет персональных данных, приватных ключей и секретов. · No personal data, private keys or secrets in this report."
+          required: true

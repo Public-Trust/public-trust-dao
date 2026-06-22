@@ -1,0 +1,37 @@
+name: "💡 Идея · Idea"
+description: "Предложить идею или улучшение (может попасть в банк идей роадмапа). · Propose an idea or improvement (may land in the roadmap idea bank)."
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Идея, противоречащая конституции, в работу не берётся (нет доходности,
+        нет пирамиды, нет рефералов, нет концентрации власти, нет скрытых
+        операций — см. [`docs/PRINCIPLES.md`](https://github.com/Public-Trust/public-trust-dao/blob/main/docs/PRINCIPLES.md)).
+
+        An idea that contradicts the constitution will not be picked up (no yield
+        promises, no pyramid, no referral payments, no power concentration, no
+        hidden operations).
+  - type: textarea
+    id: idea
+    attributes:
+      label: "Идея · The idea"
+      description: "Что предлагаете и какую проблему это решает. · What you propose and which problem it solves."
+    validations:
+      required: true
+  - type: textarea
+    id: mission-fit
+    attributes:
+      label: "Как это служит миссии · How it serves the mission"
+      description: "Связь с общественным благом / прозрачностью / взаимопомощью. · Link to the public good / transparency / mutual aid."
+    validations:
+      required: false
+  - type: checkboxes
+    id: rails
+    attributes:
+      label: "Рельсы · Rails"
+      options:
+        - label: "Идея не обещает доходность, не строит пирамиду/рефералы и не концентрирует власть. · The idea makes no yield promises, no pyramid/referrals, no power concentration."
+          required: true
+        - label: "Идея остаётся в рамках TESTNET-first (реальные деньги — только после аудита и голосования). · The idea stays within TESTNET-first (real money only after audit and a community vote)."
+          required: true

@@ -1,0 +1,40 @@
+name: "🛡 Риск злоупотребления / дыра в рельсах · Abuse risk / safety-rail hole"
+description: "Сообщить о риске злоупотребления или слабом месте в рельсах безопасности. · Report an abuse risk or a weakness in the safety rails."
+labels: ["safety"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ⚠️ **Сенситивное — без боевых деталей.** Если речь о реально эксплуатируемой
+        уязвимости (контракты/рельсы), **не публикуйте** шаги воспроизведения здесь:
+        опишите проблему в общих словах, а сопровождающие-люди переведут обсуждение
+        в приватный канал (приватный канал `security@` появится после настройки почты,
+        см. [`docs/EMAIL-SETUP.md`](https://github.com/Public-Trust/public-trust-dao/blob/main/docs/EMAIL-SETUP.md)).
+        Проект — **TESTNET-first**, реальных средств нет; программы вознаграждений за
+        реальные деньги до аудита нет.
+
+        ⚠️ **Sensitive — no live exploit details.** For an actually exploitable
+        vulnerability, **do not** post reproduction steps here: describe it in general
+        terms and the human maintainers will move it to a private channel. The project is
+        **TESTNET-first** with no real funds; there is no paid bug bounty before audit.
+  - type: textarea
+    id: risk
+    attributes:
+      label: "Риск · The risk"
+      description: "Что может пойти не так и кого/что это затрагивает (в общих словах). · What can go wrong and who/what it affects (in general terms)."
+    validations:
+      required: true
+  - type: textarea
+    id: rail
+    attributes:
+      label: "Какой рельс/инвариант под угрозой · Which rail/invariant is at risk"
+      description: "Напр.: «никто не двигает средства единолично», TESTNET-first, секреты не в репо, «1 человек = 1 голос». · E.g. no single mover of funds, TESTNET-first, no secrets in repo, one-person-one-vote."
+    validations:
+      required: false
+  - type: checkboxes
+    id: rails
+    attributes:
+      label: "Рельсы · Rails"
+      options:
+        - label: "Я не приложил приватные ключи/секреты и не раскрыл боевые шаги эксплуатации публично. · I did not attach private keys/secrets and did not publicly disclose live exploit steps."
+          required: true

@@ -1,0 +1,50 @@
+name: "🗳 Предложение в governance · Governance proposal (draft)"
+description: "Черновик предложения о направлении помощи, параметрах или изменении правил. · Draft proposal on aid direction, parameters, or rule changes."
+labels: ["governance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Решения принимает не отдельный человек, а сообщество — голосованием
+        **«1 человек = 1 голос»** (см. [`docs/GOVERNANCE.md`](https://github.com/Public-Trust/public-trust-dao/blob/main/docs/GOVERNANCE.md)).
+        Этот issue — **черновик для обсуждения**, а не само голосование. Off-chain
+        макет голосования — в [`governance/snapshot/`](https://github.com/Public-Trust/public-trust-dao/tree/main/governance/snapshot).
+
+        Decisions are made by the community via **one person = one vote**, not by
+        any single person. This issue is a **draft for discussion**, not the vote itself.
+  - type: dropdown
+    id: proposal-type
+    attributes:
+      label: "Тип предложения · Proposal type"
+      description: "По типам из governance/snapshot/space.json. · Per the types in governance/snapshot/space.json."
+      options:
+        - "signal — сигнал/обсуждение · signal/discussion"
+        - "disbursement-direction — направление помощи · aid direction"
+        - "parameter-change — изменение параметра · parameter change"
+        - "constitution-amendment — поправка к конституции · constitution amendment"
+        - "phase-transition — переход фазы децентрализации · decentralization phase transition"
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: "Что предлагается · What is proposed"
+      description: "Контекст, конкретное предложение, варианты голоса. · Context, the concrete proposal, voting options."
+    validations:
+      required: true
+  - type: textarea
+    id: constitution-link
+    attributes:
+      label: "Привязка к конституции · Link to the constitution"
+      description: "Какие статьи/приоритеты/анти-злоупотребление это затрагивает (CONSTITUTION/PRIORITIES/ANTI-ABUSE). · Which articles/priorities/anti-abuse this touches."
+    validations:
+      required: true
+  - type: checkboxes
+    id: rails
+    attributes:
+      label: "Рельсы · Rails"
+      options:
+        - label: "Предложение не передаёт власть над казной узкой группе и не нарушает «1 человек = 1 голос». · The proposal does not hand treasury power to a narrow group and does not break one-person-one-vote."
+          required: true
+        - label: "Поправка к конституции (если это она) требует супербольшинства и ратификации по ст. 10. · A constitution amendment (if this is one) requires a supermajority and Art. 10 ratification."
+          required: false

@@ -1,0 +1,17 @@
+# Конфигурация шаблонов issue — Public Trust DAO
+# Issue template chooser configuration — Public Trust DAO
+#
+# Пустые issue выключены: выбор формы помогает направить вклад по форматам из
+# CONTRIBUTING и сразу собрать нужный контекст. Blank issues are disabled so the
+# form steers contributions into the CONTRIBUTING formats and gathers context.
+blank_issues_enabled: false
+contact_links:
+  - name: "Как участвовать (CONTRIBUTING) · How to contribute"
+    url: https://github.com/Public-Trust/public-trust-dao/blob/main/CONTRIBUTING.md
+    about: "С чего начать и какие форматы вклада есть. · Where to start and the contribution formats."
+  - name: "Кодекс поведения · Code of Conduct"
+    url: https://github.com/Public-Trust/public-trust-dao/blob/main/CODE_OF_CONDUCT.md
+    about: "Правила общения; нарушение рельс безопасности = нарушение кодекса. · Conduct rules; breaking the safety rails breaks the code."
+  - name: "Дорожная карта и банк идей · Roadmap & idea bank"
+    url: https://github.com/Public-Trust/public-trust-dao/blob/main/docs/ROADMAP.md
+    about: "Над чем идёт работа и какие идеи уже открыты. · What is in progress and which ideas are already open."

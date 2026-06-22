@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 34,
-  "head_hash": "c601fd56eb65828c576911798a13f43d76af688853f54fb0b3a073404796e49e",
+  "count": 35,
+  "head_hash": "61536229ac820a8ecb4506935526230ccfd46f7cd4a070d5b432660ec4e06f06",
   "entries": [
     {
       "seq": 0,
@@ -309,6 +309,15 @@
       "summary": "P2 ROADMAP — docs/GLOSSARY.md (+ EN): глоссарий ~40 ключевых терминов простым языком (DAO, escrow, мультисиг, реестр, приоритет распределения, soulbound, Timelock, IPFS/CID и др.) в 5 группах, каждый со ссылкой на нормативный док — чтобы документы были понятны не только техническим людям (ст. 3/6). Documentation-агент зелёный. TESTNET-ONLY.",
       "hash": "c601fd56eb65828c576911798a13f43d76af688853f54fb0b3a073404796e49e",
       "file": "records/0033-decision.json"
+    },
+    {
+      "seq": 34,
+      "id": "PTD-0034",
+      "type": "decision",
+      "timestamp": "2026-06-22T16:30:00Z",
+      "summary": "P2 ROADMAP — шаблоны issue/PR в .github/: YAML-формы issue (config + ошибка/идея/governance/безопасность) + двуязычный pull_request_template.md, все с чек-листами конституционных рельс (общественное благо НЕ инвестиция, TESTNET-first, секреты не в репо, RU↔EN, тесты до зелёного). Documentation-агент и run_all зелёные (8/8). TESTNET-ONLY.",
+      "hash": "61536229ac820a8ecb4506935526230ccfd46f7cd4a070d5b432660ec4e06f06",
+      "file": "records/0034-issue-pr-templates.json"
     }
   ]
 }

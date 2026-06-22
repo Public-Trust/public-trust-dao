@@ -809,6 +809,28 @@
     «Сделано», +2 идеи (ссылка на глоссарий в шапке доков; агент-проверка «термин
     определён»), лог идей обновлён. DECISIONS обновлён. TESTNET-ONLY.
 
+- **2026-06-22 (сессия 37, ROADMAP P2 — шаблоны issue/PR ✅):**
+  - `.github/ISSUE_TEMPLATE/` — формы issue как **YAML** (`config.yml` +
+    `01-bug-or-inaccuracy`, `02-idea`, `03-governance-proposal`, `04-safety-rail`):
+    структурированы, валидируют поля, двуязычны (RU+EN в подписях), с чек-листами
+    конституционных рельс. `config.yml` выключает пустые issue и даёт contact-ссылки
+    на CONTRIBUTING/CODE_OF_CONDUCT/ROADMAP. Форма безопасности просит не публиковать
+    боевые шаги эксплуатации (приватный канал `security@` — после настройки почты).
+  - `.github/pull_request_template.md` — **двуязычный** шаблон PR (что меняется / тип /
+    обязательный чек-лист рельс: общественное благо НЕ инвестиция, TESTNET-first,
+    секреты не в репо, двуязычность RU↔EN, тесты до зелёного, прозрачность через
+    реестр / команды самопроверки). Markdown — требование GitHub; PR-шаблон один,
+    поэтому он двуязычен ВНУТРИ себя и добавлен в `SINGLE_LANG` Documentation-агента
+    (как служебные `comms/`-файлы). link-integrity по-прежнему его проверяет.
+  - Упомянуто в `CONTRIBUTING.md`/`CONTRIBUTING.en.md` (формы issue + чек-лист PR).
+  - **Зарегистрировано: `PTD-0034`** (`records/0034-issue-pr-templates.json`,
+    type=decision). verify=зелёный, 35 записей. **IPFS-манифест пересобран**
+    (подхватил `docs/ROADMAP.md` + новый `registry/index.json`), verify=OK (15 записей).
+    **Documentation-агент зелёный** (формы — YAML, в .md-скан не входят; PR-шаблон в
+    SINGLE_LANG), `run_all --with-tests`: агенты 8/8, тесты 8/8. ROADMAP (RU/EN)
+    обновлён (пункт `[x]`, в «Сделано», +идея `labels.yml`, лог идей), DECISIONS
+    обновлён. TESTNET-ONLY, без реальных средств/ключей.
+
 ## СЛЕДУЮЩИЙ ШАГ
 
 **INBOX пуст — режим саморазвития.** Берём верхний открытый пункт `docs/ROADMAP.md`.
@@ -819,11 +841,13 @@
 Run-All** (с.32). **Каркас всех восьми агентов закрыт; план LAUNCH этапы 1→6 пройдены
 по каркасу. Все 8 агентов теперь покрыты тест-инвариантами (сессия 33).**
 Сессия 34 закрыла P2 «CONTRIBUTING.md (+EN)»; сессия 35 — P2 «CODE_OF_CONDUCT.md (+EN)»,
-канонический файл GitHub Community; сессия 36 — P2 «Глоссарий (+EN)» (`docs/GLOSSARY.md`).
+канонический файл GitHub Community; сессия 36 — P2 «Глоссарий (+EN)» (`docs/GLOSSARY.md`);
+сессия 37 — P2 «Шаблоны issue/PR» (`.github/ISSUE_TEMPLATE/` + `pull_request_template.md`).
 Следующий шаг — на выбор (всё автономно):
-- **P2 ROADMAP** ещё открыто: **шаблоны issue/PR** (`.github/ISSUE_TEMPLATE`,
-  `PULL_REQUEST_TEMPLATE`) — направить вклад по форматам CONTRIBUTING; **страница
-  «Прозрачность» на сайте** (собрать ссылки: реестр/IPFS/CI/как проверить целостность).
+- **P2 ROADMAP** ещё открыто: **страница «Прозрачность» на сайте** (собрать ссылки:
+  реестр/IPFS/CI/как проверить целостность `registry.py verify`).
+- Новая P3-идея сессии 37: **`.github/labels.yml`** — единый каталог GitHub-меток
+  (`bug`/`idea`/`governance`/`safety`), на которые ссылаются формы issue.
 - Новая P3-идея сессии 35: **`SECURITY.md` (+EN)** — канонический файл политики
   безопасности (GitHub «Report a vulnerability»), дополняет CODE_OF_CONDUCT и Guardian.
 - **Рефакторинг** общих solidity-помощников в `ai-agents/solidity_scan.py` (три копии

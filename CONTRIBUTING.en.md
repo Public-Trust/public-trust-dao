@@ -39,7 +39,10 @@ constitution is not taken into work.
 ## Ways to contribute
 
 ### 1. Issue (question, bug, proposal)
-The simplest entry point. Open an issue if you:
+The simplest entry point. When opening an issue, pick a ready-made form
+(`.github/ISSUE_TEMPLATE/`: bug/inaccuracy, idea, governance proposal, abuse
+risk) — it asks for the right context and walks you through the rails. Open an
+issue if you:
 - found a bug, inaccuracy, or broken link in the docs or code;
 - see an abuse risk or a hole in the safety rails;
 - want to propose an idea (it may land in the [roadmap "Idea bank"](docs/en/ROADMAP.md));
@@ -60,6 +63,8 @@ publish anyone's personal data, and never publish private keys or secrets.
   match the surrounding code; dependencies stay minimal and justified.
 - Make small, meaningful commits with a clear description. Every step is public
   and verifiable.
+- When opening a PR, fill in the rails checklist from the template
+  (`.github/pull_request_template.md`) — it is inserted automatically.
 
 ### 3. Governance proposal (how funds move / how rules change)
 Decisions about the direction of aid, parameters, and rule changes are made not

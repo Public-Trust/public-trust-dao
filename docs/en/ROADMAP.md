@@ -232,10 +232,15 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   → Done (session 35), [`CODE_OF_CONDUCT.en.md`](../../CODE_OF_CONDUCT.en.md), `PTD-0032`.
   Key: breaking the safety rails = breaking the code; decisions are made by people
   (not an agent, Art. 9); privacy of reporters/recipients; Contributor Covenant 2.1 attribution.
-- [ ] **Issue/PR templates (.github/ISSUE_TEMPLATE, PULL_REQUEST_TEMPLATE)** — channel
+- [x] **Issue/PR templates (.github/ISSUE_TEMPLATE, PULL_REQUEST_TEMPLATE)** — channel
   contributions into the CONTRIBUTING formats (bug/idea/governance proposal; rails
   checklist: bilingual, no secrets, TESTNET) — a "ready to click" stub for outsiders
   (proposed session 34).
+  → Done (session 37), `.github/ISSUE_TEMPLATE/` (config + 4 YAML forms) +
+  `.github/pull_request_template.md` (bilingual), `PTD-0034`. All forms are
+  bilingual and carry constitution-rails checklists; issue forms are YAML
+  (structured, excluded from the .md scan); the PR template was added to the
+  Documentation agent's SINGLE_LANG (a GitHub form, bilingual within itself).
 - [ ] **"Transparency" page on the site** — gather links: registry, IPFS manifest,
   CI statuses, how to verify integrity yourself (`registry.py verify`).
 - [x] **Automated bilingual check in CI** — a linter that fails the build if an RU
@@ -245,6 +250,9 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
+- [ ] **GitHub label catalog `.github/labels.yml`** — a single set of labels
+  (`bug`, `idea`, `governance`, `safety`, …) referenced by the issue forms, so
+  label colors/descriptions are reproducible and not set up by hand (proposed session 37).
 - [ ] **Glossary link in the header of normative docs** — add a link to
   [`GLOSSARY.md`](GLOSSARY.md) to each doc's "Derived from …" line, so an unfamiliar
   term is one click away from any document (proposed in session 36).
@@ -377,6 +385,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0034 (session 37):** P2 (quality/transparency) — **issue/PR templates**.
+  `.github/ISSUE_TEMPLATE/` (`config.yml` + 4 YAML forms: bug/inaccuracy, idea,
+  governance proposal, abuse risk/safety-rail hole) + a bilingual
+  `.github/pull_request_template.md`. All forms are bilingual (RU+EN in one body)
+  and carry constitution-rails checklists (public good NOT an investment;
+  TESTNET-first; no secrets in the repo; RU↔EN bilingual; tests green; transparency
+  via the registry). Issue forms are YAML (structured, validate fields, excluded
+  from the .md bilingual scan); the PR template is markdown (GitHub requirement),
+  bilingual within itself, added to the Documentation agent's `SINGLE_LANG`.
+  `config.yml` disables blank issues and links to CONTRIBUTING/CODE_OF_CONDUCT/ROADMAP;
+  the safety form asks not to post live exploit steps (private channel — once the
+  email is set up). Mentioned in CONTRIBUTING (RU/EN). Documentation agent green,
+  `run_all --with-tests`: agents 8/8, tests 8/8. `PTD-0034`. TESTNET-ONLY.
 - **PTD-0033 (session 36):** P2 (quality/transparency) — **glossary**.
   [`GLOSSARY.md`](GLOSSARY.md) (+ RU [`../GLOSSARY.md`](../GLOSSARY.md)) — ~40 key
   project terms in **plain language** for non-technical readers, in 5 meaning
@@ -646,3 +667,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Disk cleanup (node_modules) / "all agents have invariants" standard / sol-helpers refactor | agent | 33 |
 | CONTRIBUTING (done) / CODE_OF_CONDUCT as separate file / issue+PR templates | agent | 34 |
 | Glossary (done) / glossary link in doc headers / agent term check | agent | 36 |
+| Issue/PR templates (done) / GitHub labels in .github/labels / branch autosetup | agent | 37 |

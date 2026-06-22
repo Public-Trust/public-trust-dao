@@ -1,0 +1,42 @@
+{
+  "seq": 34,
+  "id": "PTD-0034",
+  "type": "decision",
+  "timestamp": "2026-06-22T16:30:00Z",
+  "actor": "builder-agent",
+  "summary": "P2 ROADMAP — шаблоны issue/PR в .github/: YAML-формы issue (config + ошибка/идея/governance/безопасность) + двуязычный pull_request_template.md, все с чек-листами конституционных рельс (общественное благо НЕ инвестиция, TESTNET-first, секреты не в репо, RU↔EN, тесты до зелёного). Documentation-агент и run_all зелёные (8/8). TESTNET-ONLY.",
+  "refs": [
+    ".github/ISSUE_TEMPLATE/config.yml",
+    ".github/pull_request_template.md",
+    "CONTRIBUTING.md",
+    "docs/ROADMAP.md"
+  ],
+  "payload": {
+    "decision": "P2 ROADMAP (качество/прозрачность) — добавлены шаблоны issue/PR в .github/: формы issue как YAML (config.yml + 4 формы: ошибка/неточность, идея, governance-предложение, риск злоупотребления/дыра в рельсах) и двуязычный шаблон pull request (.github/pull_request_template.md). Все формы двуязычны (RU+EN в одном теле) и содержат чек-листы конституционных рельс: общественное благо НЕ инвестиция, TESTNET-first, секреты не в репо, двуязычность RU↔EN, тесты до зелёного, прозрачность через реестр. config.yml выключает пустые issue и даёт contact-ссылки на CONTRIBUTING/CODE_OF_CONDUCT/ROADMAP. Форма про безопасность просит не публиковать боевые шаги эксплуатации (приватный канал — после настройки почты). Документация-агент и run_all зелёные (8/8, 8/8). TESTNET-ONLY.",
+    "rationale": "INBOX оператора пуст → режим саморазвития: взят верхний выполнимый открытый пункт ROADMAP (P2 «Шаблоны issue/PR»). Открытый P0 (Этап 5, часть 4 — публичный testnet) заблокирован оператором (сеть/RPC/адреса хранителей). Шаблоны направляют вклад стороннего человека по форматам из CONTRIBUTING и заранее проводят его через рельсы безопасности — заготовка «до кнопки» для участия. Формы issue сделаны как YAML (структурированы, валидируют обязательные поля, не попадают в .md-скан двуязычности), шаблон PR — markdown (требование GitHub) и двуязычен внутри себя.",
+    "deliverables": [
+      ".github/ISSUE_TEMPLATE/config.yml — выключены пустые issue + contact-ссылки (CONTRIBUTING/CODE_OF_CONDUCT/ROADMAP)",
+      ".github/ISSUE_TEMPLATE/01-bug-or-inaccuracy.yml — ошибка/неточность/битая ссылка (RU+EN, чек-лист «нет секретов/перс.данных»)",
+      ".github/ISSUE_TEMPLATE/02-idea.yml — идея в банк идей (чек-лист «не доходность/пирамида/власть», TESTNET-first)",
+      ".github/ISSUE_TEMPLATE/03-governance-proposal.yml — черновик предложения (тип, привязка к конституции, чек-лист «1 человек = 1 голос»)",
+      ".github/ISSUE_TEMPLATE/04-safety-rail.yml — риск злоупотребления/дыра в рельсах (без боевых деталей, приватный канал после почты)",
+      ".github/pull_request_template.md — двуязычный шаблон PR: что меняется / тип / чек-лист рельс / команды самопроверки",
+      "ai-agents/documentation_agent.py — .github/pull_request_template.md добавлен в SINGLE_LANG (GitHub-форма, двуязычная внутри себя, не пара RU↔EN); комментарий обновлён",
+      "CONTRIBUTING.md / CONTRIBUTING.en.md — упоминание готовых форм issue/PR",
+      "docs/ROADMAP.md / docs/en/ROADMAP.md — пункт P2 «Шаблоны issue/PR» отмечен [x], перенесён в «Сделано», +идеи, лог идей обновлён"
+    ],
+    "rails": [
+      "общественное благо, НЕ инвестиция: чек-листы форм прямо запрещают обещания доходности/пирамиду/рефералы/концентрацию власти",
+      "TESTNET-first: формы и шаблон PR требуют подтверждения отсутствия mainnet/реальных средств/ключей",
+      "секреты не в репо: чек-листы issue/PR требуют отсутствия персональных данных/ключей; форма безопасности просит не раскрывать боевые шаги",
+      "двуязычность RU↔EN: формы двуязычны внутри себя; Documentation-агент зелёный; run_all 8/8 агенты, 8/8 тесты",
+      "AI служит, не правит: шаблоны лишь направляют людей, ничего не решают и ничем не распоряжаются (ст. 9)",
+      "пульс неприкосновенен: loop.sh/report.sh/.env/logs не тронуты; реальных средств/ключей нет"
+    ],
+    "status": "adopted",
+    "spec": "CONTRIBUTING.md",
+    "roadmap_item": "P2 — качество и прозрачность: Шаблоны issue/PR (.github/ISSUE_TEMPLATE, PULL_REQUEST_TEMPLATE)"
+  },
+  "prev_hash": "c601fd56eb65828c576911798a13f43d76af688853f54fb0b3a073404796e49e",
+  "hash": "61536229ac820a8ecb4506935526230ccfd46f7cd4a070d5b432660ec4e06f06"
+}
