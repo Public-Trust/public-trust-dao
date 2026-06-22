@@ -1,0 +1,30 @@
+name: Проверка конфига Safe multisig
+
+# Рельсы безопасности: на каждый push/PR проверяем конфиг тестового Safe —
+# только testnet (без mainnet), схема 3-из-5, валидные адреса и ОТСУТСТВИЕ
+# приватных ключей/сид-фраз в репозитории. Нарушение рельс валит сборку.
+on:
+  push:
+    paths:
+      - "governance/safe/**"
+      - "scripts/safe_config.py"
+      - ".github/workflows/safe.yml"
+  pull_request:
+    paths:
+      - "governance/safe/**"
+      - "scripts/safe_config.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Проверить конфиг Safe (verify)
+        run: python3 scripts/safe_config.py verify

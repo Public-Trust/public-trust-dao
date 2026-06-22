@@ -32,6 +32,8 @@ Public Trust DAO обеспечивает людям базовую безопа
 - `governance/` — управление (Safe multisig 3-из-5, Snapshot/Aragon).
   - [`governance/registry/`](governance/registry/) — публичный, проверяемый,
     защищённый от подмены реестр решений (append-only hash-chain).
+  - [`governance/safe/`](governance/safe/) — макет тестовой казны Safe multisig
+    3-из-5 (testnet, без реальных денег/ключей) + валидатор рельс.
 - `ai-agents/` — AI-модули, служащие миссии (не владеют средствами, не имеют власти).
 
 ## Принципы

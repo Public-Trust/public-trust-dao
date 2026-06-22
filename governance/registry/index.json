@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 13,
-  "head_hash": "ae2319773c51b67359e8624eb824e1372d6a516b29f64e17d7bd15794a5b61c4",
+  "count": 14,
+  "head_hash": "4d3559f1073e546ea68df65447fdf22bfdf59ee536344b1793f79320fc2aa68d",
   "entries": [
     {
       "seq": 0,
@@ -120,6 +120,15 @@
       "summary": "Аутрич (INBOX #8): категории адресатов + шаблоны писем RU/EN для обращения к людям с аудиторией как к общественному благу — docs/OUTREACH.md (+EN)",
       "hash": "ae2319773c51b67359e8624eb824e1372d6a516b29f64e17d7bd15794a5b61c4",
       "file": "records/0012-outreach-materials.json"
+    },
+    {
+      "seq": 13,
+      "id": "PTD-0013",
+      "type": "decision",
+      "timestamp": "2026-06-22T05:35:00Z",
+      "summary": "Тестовая казна сообщества (INBOX #10): макет Safe multisig 3-из-5 на testnet — governance/safe/ (README +EN, safe.config.json +схема, валидатор рельс, CI). Без реальных денег и приватных ключей.",
+      "hash": "4d3559f1073e546ea68df65447fdf22bfdf59ee536344b1793f79320fc2aa68d",
+      "file": "records/0013-decision.json"
     }
   ]
 }

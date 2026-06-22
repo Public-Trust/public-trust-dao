@@ -1,0 +1,45 @@
+{
+  "schema": "governance/safe/schema/safe-config.schema.json",
+  "name": "Public Trust DAO — Testnet Treasury Safe (3-of-5)",
+  "purpose": "Тестовая (testnet) казна сообщества для Этапа 4 — governance. Демонстрирует механизм «никто не контролирует средства единолично» в открытую, БЕЗ реальных денег. Реальная казна — отдельный Safe, только после аудита контрактов и явного одобрения (CONSTITUTION ст. 4.4).",
+  "status": "draft-awaiting-operator",
+  "network": {
+    "name": "Polygon Amoy testnet",
+    "chain_id": 80002,
+    "is_testnet": true,
+    "explorer": "https://amoy.polygonscan.com",
+    "rpc_hint": "Публичный RPC Amoy или собственный ключ провайдера в .env (НЕ в репо). LAUNCH.md предлагает Polygon Amoy как тестовую сеть."
+  },
+  "safe": {
+    "version": "1.4.1",
+    "threshold": 3,
+    "owners_required": 5,
+    "address": null,
+    "owners": []
+  },
+  "owners_template": [
+    { "role": "guardian-1", "label": "Хранитель 1", "address": null },
+    { "role": "guardian-2", "label": "Хранитель 2", "address": null },
+    { "role": "guardian-3", "label": "Хранитель 3", "address": null },
+    { "role": "guardian-4", "label": "Хранитель 4", "address": null },
+    { "role": "guardian-5", "label": "Хранитель 5", "address": null }
+  ],
+  "policy": {
+    "scheme": "3 подписи из 5 (3-of-5) для любой исходящей операции тестовой казны",
+    "role": "По docs/GOVERNANCE.md §5: мультисиг — исполнитель/аварийная пауза, НЕ правитель. Не тратит без прошедшего голосования; не решает кому/сколько помочь.",
+    "guardian_equality": "Хранитель = обычный участник, 1 голос (CONSTITUTION ст. 2.2). Роль — техническая страховка, не привилегия в распределении.",
+    "key_hygiene": [
+      "Каждый хранитель держит СВОЙ приватный ключ только у себя (аппаратный кошелёк рекомендован даже для testnet — выработать привычку).",
+      "Приватные ключи и сид-фразы НИКОГДА не попадают в репозиторий и не пересылаются.",
+      "Публичны только адреса (0x...) — они и должны быть видны всем."
+    ],
+    "recovery": "Порог 3-из-5 переживает потерю до 2 ключей: оставшиеся 3 хранителя могут управлять Safe и заменить владельца.",
+    "emergency_pause": "Аварийная пауза только ОСТАНАВЛИВАЕТ, не направляет средства; каждое применение логируется в публичный реестр (governance/registry)."
+  },
+  "links": {
+    "governance_spec": "docs/GOVERNANCE.md",
+    "constitution": "docs/CONSTITUTION.md",
+    "anti_abuse": "docs/ANTI-ABUSE.md",
+    "readme": "governance/safe/README.md"
+  }
+}

@@ -76,9 +76,11 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   "1 human = 1 vote" strategy (not plutocracy), quorum, proposal types, link to the
   constitution (distribution priority, appeals).
   Actually creating the space (ENS/domain/controller wallet) — operator request.
-- [ ] **Stage 4 — Governance, part 2:** Safe multisig mock-up, 5 guardians (3-of-5)
+- [x] **Stage 4 — Governance, part 2:** Safe multisig mock-up, 5 guardians (3-of-5)
   in `governance/safe/` — scheme, roles (executor/emergency pause per
   [`GOVERNANCE.md`](GOVERNANCE.md)), signing policy, no real addresses.
+  → Done (session 16), [`governance/safe/`](../../governance/safe/), `PTD-0013`
+  (with INBOX #10: config + rail validator + CI).
 - [ ] **Stage 5 — Smart contracts (skeleton):** set up `contracts/` as a project
   (Foundry/Hardhat config), skeletons for Treasury / Disbursement (per
   [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md)) /
@@ -97,9 +99,10 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [x] **Project email (INBOX #7):** instructions for the operator — domain+mail
   options (ProtonMail/own domain), texts. Registration done by the operator.
   → Done (session 14), [`EMAIL-SETUP.md`](EMAIL-SETUP.md), `PTD-0011`.
-- [ ] **Testnet wallet + Safe (INBOX #10):** describe/create a test wallet and a
+- [x] **Testnet wallet + Safe (INBOX #10):** describe/create a test wallet and a
   Safe for the test treasury (no real money or private keys in the repo), document
-  addresses openly.
+  addresses openly. → Done (session 16), [`governance/safe/`](../../governance/safe/),
+  `safe.config.json` + `scripts/safe_config.py` (rail validator) + CI, `PTD-0013`.
 - [x] **Outreach templates (INBOX #8):** a contact list + letter templates RU/EN
   for the "public good" mission. Sent by the operator personally.
   → Done (session 15), [`OUTREACH.md`](OUTREACH.md), `PTD-0012`.

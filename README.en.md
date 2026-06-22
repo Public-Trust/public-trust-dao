@@ -32,6 +32,8 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - `governance/` — governance (Safe multisig 3-of-5, Snapshot/Aragon).
   - [`governance/registry/`](governance/registry/) — a public, verifiable,
     tamper-resistant registry of decisions (append-only hash-chain).
+  - [`governance/safe/`](governance/safe/) — Safe multisig 3-of-5 test-treasury
+    blueprint (testnet, no real money/keys) + a rail validator.
 - `ai-agents/` — AI modules serving the mission (they hold no funds and have no power).
 
 ## Principles

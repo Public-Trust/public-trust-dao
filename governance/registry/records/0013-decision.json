@@ -1,0 +1,43 @@
+{
+  "seq": 13,
+  "id": "PTD-0013",
+  "type": "decision",
+  "timestamp": "2026-06-22T05:35:00Z",
+  "actor": "builder-agent",
+  "summary": "Тестовая казна сообщества (INBOX #10): макет Safe multisig 3-из-5 на testnet — governance/safe/ (README +EN, safe.config.json +схема, валидатор рельс, CI). Без реальных денег и приватных ключей.",
+  "refs": [
+    "governance/safe/README.md",
+    "governance/safe/README.en.md",
+    "governance/safe/safe.config.json",
+    "docs/GOVERNANCE.md"
+  ],
+  "payload": {
+    "decision": "Создан макет тестовой казны сообщества — Safe multisig 3-из-5 на testnet (INBOX #10). Каталог governance/safe/: README.md (+EN) со схемой, ролями хранителей, гигиеной ключей и пошаговой инструкцией оператору; машиночитаемый safe.config.json (сеть Polygon Amoy testnet chain_id=80002, threshold=3, owners_required=5, адреса — null до оператора) и его JSON-схема; валидатор scripts/safe_config.py (verify) и CI .github/workflows/safe.yml. Реальных средств и приватных ключей нет.",
+    "rationale": "Реализовать конституционный принцип «никто не контролирует средства единолично» (ст. 2.4, запрет №5) проверяемо и в открытую ещё до реальных средств. Роль мультисига сведена к исполнителю/аварийной паузе по docs/GOVERNANCE.md §5 — он не тратит без голосования и не решает кому помочь. Заготовка «до кнопки»: сам Safe на app.safe.global и адреса 5 хранителей даёт оператор (нужен браузер-кошелёк/подпись/кран — агент внешние кошельки не создаёт). Валидатор программно держит рельсы: только testnet (отказ на mainnet), схема 3-из-5 со строгим большинством, и отсутствие приватных ключей/сид-фраз в репо.",
+    "deliverables": [
+      "governance/safe/README.md (+ EN README.en.md): схема 3-из-5, роли хранителей, гигиена ключей, инструкция оператору, связь с планом",
+      "governance/safe/safe.config.json: машиночитаемый конфиг (testnet, 3-из-5, адреса-плейсхолдеры) + schema/safe-config.schema.json",
+      "scripts/safe_config.py: валидатор рельс (verify) без сторонних зависимостей",
+      ".github/workflows/safe.yml: CI verify на каждый push/PR"
+    ],
+    "rails": [
+      "TESTNET-FIRST: только testnet (валидатор отклоняет mainnet chain_id и is_testnet=false)",
+      "никаких приватных ключей/сид-фраз/секретов в репо (валидатор ловит 64-hex и слова private key/mnemonic/seed)",
+      "схема 3-из-5 со строгим большинством — никакого единоличного контроля",
+      "адреса хранителей и создание Safe — за оператором; агент не создаёт внешние кошельки",
+      "реальная казна — отдельный Safe и только после аудита + одобрения (ст. 4.4)",
+      "двуязычность RU↔EN в одном коммите"
+    ],
+    "status": "adopted",
+    "spec": "governance/safe/README.md",
+    "needs_operator": [
+      "адреса 5 хранителей (0x…, публичные) и выбор тестовой сети (Amoy по умолчанию)",
+      "создание Safe на app.safe.global (браузер-кошелёк + подпись)"
+    ],
+    "closes_inbox": [
+      10
+    ]
+  },
+  "prev_hash": "ae2319773c51b67359e8624eb824e1372d6a516b29f64e17d7bd15794a5b61c4",
+  "hash": "4d3559f1073e546ea68df65447fdf22bfdf59ee536344b1793f79320fc2aa68d"
+}
