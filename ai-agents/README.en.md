@@ -40,7 +40,7 @@ This sets hard boundaries for EVERY agent in this directory:
 | **Fairness** | Checks fairness of distribution per [`PRIORITIES.md`](../docs/en/PRIORITIES.md): priority respected, limits/collective review/staging/privacy. | ✅ scaffold (`fairness_agent.py`) |
 | **Reputation** | Computes/validates voting weights per [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3: "1 person = 1 vote", soulbound, "uniqueness ≠ power". | ✅ scaffold (`reputation_agent.py`) |
 | **Housing** | Domain helper for housing cases (escrow paying the provider directly per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)). | ✅ scaffold (`housing_agent.py`) |
-| **Governance** | Helps with the proposal lifecycle (format, quorum, timing, ties to the constitution); does not vote itself. | ⏳ planned |
+| **Governance** | Helps with the proposal lifecycle (format, quorum, timing, ties to the constitution); does not vote itself. | ✅ framework (`governance_agent.py`) |
 | **Mediator** | Assists with disputes/appeals per [`ANTI-ABUSE.md`](../docs/en/ANTI-ABUSE.md) — structures, does not decide. | ⏳ planned |
 | **Documentation** | Watches RU↔EN bilinguality (a pair + a language switcher for every public doc) and the integrity of relative links across all `.md`. | ✅ scaffold (`documentation_agent.py`) |
 
@@ -178,7 +178,7 @@ mentions inside comments).
 
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
 Guardian (+test) + Fairness (+test) + Reputation (+test) + Housing (+test) +
-Documentation (+test) on every push/PR.
+Documentation (+test) + Governance (+test) on every push/PR.
 
 ## Housing agent — what it does and how to run it
 
@@ -266,6 +266,49 @@ immediately caught a real gap — `governance/ipfs/README.md` and
 `governance/registry/README.md` had no EN mirrors; they were added (now 8/8).
 
 CI runs Documentation (+test) in the same workflow.
+
+## Governance agent — what it does and how to run it
+
+`governance_agent.py` turns the **proposal lifecycle** from
+[`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) into a machine check: so the governance
+configuration cannot drift away from the constitution silently. Read-only over two
+governance JSON configs
+([`governance/snapshot/space.json`](../governance/snapshot/space.json) and
+[`governance/safe/safe.config.json`](../governance/safe/safe.config.json)), no
+network. It **does NOT vote, submit, or move anything.**
+
+| Check | What it requires | What it guards |
+|-------|------------------|----------------|
+| `one-person-one-vote` | vote strategy = `ticket` value=1; not a single plutocratic (balance-weighted) one | Art. 2 + ban #5 — the vote comes from a person's uniqueness, not money |
+| `timed-vote` | the vote has a positive duration (`delay` and `period` > 0) | GOVERNANCE §7 — "quorum + term", a time-bounded window |
+| `off-chain-signal` | `off_chain_signaling=true` and every proposal type `binding=false` | Art. 4 + §5 — Snapshot discusses; Safe/Timelock executes after the vote |
+| `proposal-binding` | money/constitution proposal types are tied to the right docs and flags | Art. 5 + §7–§8 — disbursement and amendments stay strictly within the norms |
+| `multisig-not-sole` | Safe threshold ≥2 and strictly below the number of owners | Art. 5 + §5 — no one moves funds single-handedly (3-of-5) |
+| `lifecycle-links` | every `docs/`-/`governance/` link in the configs resolves to an existing file | Art. 3 — verifiability: the lifecycle is tied to real docs |
+
+**Type binding** (`proposal-binding`): the `disbursement-direction` type must link
+[`PRIORITIES.md`](../docs/en/PRIORITIES.md) **and** [`ANTI-ABUSE.md`](../docs/en/ANTI-ABUSE.md);
+the `constitution-amendment` type must link [`CONSTITUTION.md`](../docs/en/CONSTITUTION.md)
+**and** carry `requires_supermajority=true` (a constitutional amendment requires a
+supermajority, Art. 10).
+
+```bash
+python3 ai-agents/governance_agent.py          # human-readable report
+python3 ai-agents/governance_agent.py --json    # machine-readable (for CI/other agents)
+```
+
+Exit code `0` — the governance configuration is consistent with the constitution;
+`1` — a discrepancy was found (a **signal** to the community, not an action: the
+agent does not edit the config or vote).
+
+The **invariant test** [`test_governance.py`](test_governance.py) proves that
+Governance works rather than being "green by default": for every deviation
+(balance-weighted vote, `ticket` value≠1, plutocracy hidden in `validation`, a
+zero duration, a `binding=true` type, disbursement/amendment without ties to the
+norms, a multisig threshold `=1` or `=owner count`, a broken link, a missing
+`space.json` altogether) the agent must return "red", and on correct configs —
+"green" with no false positives (26/26). CI runs Governance (+test) in the same
+workflow.
 
 ## Rails (for all agents in this directory)
 

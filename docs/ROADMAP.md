@@ -176,7 +176,18 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
     прогоне вскрыл и закрыл реальный пробел — добавлены EN-зеркала
     `governance/ipfs/README.md` и `governance/registry/README.md`. Закрывает и P2
     «авто-проверка двуязычности в CI». `PTD-0026`.
-  - [ ] Модули 7–8: Governance / Mediator — по одному «до зелёного».
+  - [x] Модуль 7/8 (сессия 30): **Governance** [`governance_agent.py`](../ai-agents/governance_agent.py)
+    — read-only проверка ЖИЗНЕННОГО ЦИКЛА ПРЕДЛОЖЕНИЯ из `GOVERNANCE.md` над конфигами
+    управления `governance/snapshot/space.json` и `governance/safe/safe.config.json`
+    (сам НЕ голосует): `one-person-one-vote` (стратегия `ticket` value=1, не плутократия),
+    `timed-vote` (`delay`/`period` > 0), `off-chain-signal` (`off_chain_signaling=true` и
+    типы `binding=false`), `proposal-binding` (`disbursement-direction`→PRIORITIES+ANTI-ABUSE;
+    `constitution-amendment`→CONSTITUTION+`requires_supermajority`), `multisig-not-sole`
+    (порог ≥2 и < числа владельцев, 3-из-5), `lifecycle-links` (ссылки конфигов резолвятся).
+    Тест-инвариант [`test_governance.py`](../ai-agents/test_governance.py) (26/26). CI
+    расширен. На реальных конфигах: 6/6. `PTD-0027`.
+  - [ ] Модуль 8/8 — последний: **Mediator** (структурирует споры/апелляции по
+    `ANTI-ABUSE.md`, не решает) — «до зелёного». Закроет каркас всех восьми агентов.
 
 ### P1 — материалы и инфраструктура (часть — из INBOX)
 
@@ -306,6 +317,21 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 
 ## Сделано
 
+- **PTD-0027 (сессия 30):** Этап 6 (AI-агенты), модуль 7/8 — **Governance-агент**.
+  [`governance_agent.py`](../ai-agents/governance_agent.py) — служебный read-only агент
+  (ст. 9; **сам НЕ голосует**, ничего не вносит и ничем не распоряжается): превращает в
+  машинную проверку жизненный цикл предложения из `GOVERNANCE.md` над конфигами управления
+  `governance/snapshot/space.json` и `governance/safe/safe.config.json`. Шесть проверок:
+  `one-person-one-vote` (стратегия голоса = `ticket` value=1, любая плутократия по балансу
+  краснит — ст. 2/запрет №5), `timed-vote` (срок голосования `delay`/`period` > 0 — §7),
+  `off-chain-signal` (`off_chain_signaling=true` и все типы `binding=false` — Snapshot
+  обсуждает, исполняет Safe/Timelock — ст. 4/§5), `proposal-binding` (типы про деньги/
+  конституцию привязаны к PRIORITIES/ANTI-ABUSE/CONSTITUTION + супербольшинство для поправок
+  — ст. 5/§7–§8/ст. 10), `multisig-not-sole` (порог Safe ≥2 и < числа владельцев, 3-из-5,
+  никто единолично — ст. 5/§5), `lifecycle-links` (все ссылки конфигов резолвятся — ст. 3).
+  Тест-инвариант [`test_governance.py`](../ai-agents/test_governance.py) (26/26). CI
+  `ai-agents.yml` расширен (+ тест Governance + Governance). На реальных конфигах: 6/6.
+  `PTD-0027`. TESTNET-ONLY. Дальше — последний модуль 8/8 (Mediator).
 - **PTD-0026 (сессия 29):** Этап 6 (AI-агенты), модуль 6/8 — **Documentation-агент**.
   [`documentation_agent.py`](../ai-agents/documentation_agent.py) — служебный
   read-only агент: превращает в машинную проверку правило проекта «вся документация

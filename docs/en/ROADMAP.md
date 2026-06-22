@@ -181,7 +181,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     first run it caught and closed a real gap — EN mirrors were added for
     `governance/ipfs/README.md` and `governance/registry/README.md`. Also closes the
     P2 "automatic bilingual check in CI". `PTD-0026`.
-  - [ ] Modules 7–8: Governance / Mediator — one at a time, "to green".
+  - [x] Module 7/8 (session 30): **Governance** [`governance_agent.py`](../../ai-agents/governance_agent.py)
+    — read-only check of the PROPOSAL LIFECYCLE from `GOVERNANCE.md` over the governance
+    configs `governance/snapshot/space.json` and `governance/safe/safe.config.json` (it
+    does NOT vote itself): `one-person-one-vote` (vote strategy `ticket` value=1, not
+    plutocracy), `timed-vote` (`delay`/`period` > 0), `off-chain-signal`
+    (`off_chain_signaling=true` and all types `binding=false`), `proposal-binding`
+    (`disbursement-direction`→PRIORITIES+ANTI-ABUSE; `constitution-amendment`→CONSTITUTION+`requires_supermajority`),
+    `multisig-not-sole` (threshold ≥2 and below the owner count, 3-of-5), `lifecycle-links`
+    (config links resolve). Invariant test [`test_governance.py`](../../ai-agents/test_governance.py)
+    (26/26). CI extended. On the real configs: 6/6. `PTD-0027`.
+  - [ ] Module 8/8 — last: **Mediator** (structures disputes/appeals per `ANTI-ABUSE.md`,
+    does not decide) — "to green". Closes the framework for all eight agents.
 
 ### P1 — materials and infrastructure (partly from INBOX)
 
@@ -312,6 +323,21 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0027 (session 30):** Stage 6 (AI agents), module 7/8 — **the Governance agent**.
+  [`governance_agent.py`](../../ai-agents/governance_agent.py) — a read-only service agent
+  (Art. 9; it **does NOT vote**, submit, or move anything): turns the proposal lifecycle
+  from `GOVERNANCE.md` into a machine check over the governance configs
+  `governance/snapshot/space.json` and `governance/safe/safe.config.json`. Six checks:
+  `one-person-one-vote` (vote strategy = `ticket` value=1; any balance-weighted plutocracy
+  goes red — Art. 2/ban #5), `timed-vote` (vote duration `delay`/`period` > 0 — §7),
+  `off-chain-signal` (`off_chain_signaling=true` and every type `binding=false` — Snapshot
+  discusses, Safe/Timelock executes — Art. 4/§5), `proposal-binding` (money/constitution
+  types tied to PRIORITIES/ANTI-ABUSE/CONSTITUTION + supermajority for amendments —
+  Art. 5/§7–§8/Art. 10), `multisig-not-sole` (Safe threshold ≥2 and below the owner count,
+  3-of-5, no one single-handed — Art. 5/§5), `lifecycle-links` (all config links resolve —
+  Art. 3). Invariant test [`test_governance.py`](../../ai-agents/test_governance.py) (26/26).
+  CI `ai-agents.yml` extended (+ Governance test + Governance). On the real configs: 6/6.
+  `PTD-0027`. TESTNET-ONLY. Next — the last module 8/8 (Mediator).
 - **PTD-0026 (session 29):** Stage 6 (AI agents), module 6/8 — **the Documentation
   agent**. [`documentation_agent.py`](../../ai-agents/documentation_agent.py) — a
   service read-only agent: it turns the project rule "all documentation is bilingual

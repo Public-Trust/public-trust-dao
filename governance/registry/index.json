@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 27,
-  "head_hash": "85b8950ae0f2bebfa220c34124bf09966932d7ea4aa9f49a1b2166f4538ea8d3",
+  "count": 28,
+  "head_hash": "43c27e02e3def694cf547cffe6d35459c89a30c92457c8c10db4943959b6aa1c",
   "entries": [
     {
       "seq": 0,
@@ -246,6 +246,15 @@
       "summary": "Этап 6 (AI-агенты), модуль 6/8: Documentation-агент. documentation_agent.py — read-only проверка двуязычности RU↔EN (пара + переключатель языка у каждого публичного дока) и целостности относительных ссылок во всех .md, по правилу пар из пути. Тест-инвариант test_documentation.py (17/17). При первом прогоне вскрыл и закрыл пробел: добавлены EN-зеркала governance/ipfs/README.md и governance/registry/README.md. Закрывает P2 «авто-проверка двуязычности в CI». CI расширен. TESTNET-ONLY.",
       "hash": "85b8950ae0f2bebfa220c34124bf09966932d7ea4aa9f49a1b2166f4538ea8d3",
       "file": "records/0026-documentation-agent.json"
+    },
+    {
+      "seq": 27,
+      "id": "PTD-0027",
+      "type": "decision",
+      "timestamp": "2026-06-22T11:30:00Z",
+      "summary": "Этап 6 (AI-агенты), модуль 7/8: Governance-агент. governance_agent.py — read-only проверка жизненного цикла предложения в конфигах управления (Snapshot space.json + Safe safe.config.json): 1ч=1голос/срок/off-chain-сигнал/привязка к конституции/мультисиг 3-из-5; НЕ голосует. Тест-инвариант test_governance.py (26/26). CI расширен. TESTNET-ONLY.",
+      "hash": "43c27e02e3def694cf547cffe6d35459c89a30c92457c8c10db4943959b6aa1c",
+      "file": "records/0027-governance-agent.json"
     }
   ]
 }
