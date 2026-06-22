@@ -20,6 +20,7 @@ export function SiteHeader() {
   const navItems = [
     { label: t.navHome, href: "/" },
     { label: t.navAbout, href: "/about/" },
+    { label: t.navManifesto, href: "/manifesto/" },
     { label: t.navConstitution, href: "/constitution/" },
     { label: t.navGovernance, href: "/governance/" },
     { label: t.navPriorities, href: "/priorities/" },

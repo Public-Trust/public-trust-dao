@@ -403,6 +403,34 @@ export type GovernanceDict = {
   sourceLink: string;
 };
 
+export type ManifestoDict = {
+  back: string;
+  title: string;
+  lead: string;
+  topTitle: string; // миссия одной мыслью
+  topNote: string;
+  missionTitle: string;
+  missionNote: string;
+  directionsTitle: string;
+  directionsHint: string;
+  // основные направления помощи, пересказанные простыми словами (зеркало docs/MANIFESTO.md).
+  directions: { name: string; text: string }[];
+  rewardTitle: string;
+  rewardNote: string;
+  prohibitionsTitle: string;
+  prohibitionsHint: string;
+  prohibitions: string[];
+  ownerTitle: string;
+  ownerNote: string;
+  aiTitle: string;
+  aiNote: string;
+  goalTitle: string;
+  goalNote: string;
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -481,6 +509,7 @@ export type Dict = {
   navDirectHelp: string;
   navConstitution: string;
   navGovernance: string;
+  navManifesto: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -502,6 +531,7 @@ export type Dict = {
   escrow: EscrowDict;
   constitution: ConstitutionDict;
   governance: GovernanceDict;
+  manifesto: ManifestoDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -541,6 +571,7 @@ export const DICT: Record<Lang, Dict> = {
     navDirectHelp: "Оплата напрямую",
     navConstitution: "Конституция",
     navGovernance: "Как решаем",
+    navManifesto: "Манифест",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -1256,6 +1287,84 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд принимает решения». Здесь — пересказ простыми словами; точные формулировки, фазы децентрализации и технические детали живут в самом документе.",
       sourceLink: "Открыть полный документ «Управление» →",
     },
+    manifesto: {
+      back: "← На главную",
+      title: "Манифест фонда — простыми словами",
+      lead: "Манифест — это короткий рассказ о том, ради чего вообще существует фонд: какая у него цель, кому он помогает, чего не делает никогда и кому он принадлежит. Здесь всё пересказано обычными человеческими словами. Точные формулировки — в самом документе, а этот экран помогает понять суть без юридического и технического языка.",
+      topTitle: "Главное одной мыслью",
+      topNote: "Фонд — это открытая система взаимопомощи. Люди и фонд вместе дают тем, кто в беде, базовую опору: крышу над головой, еду, лечение, образование и силы снова встать на ноги. Это общественное благо, а не вложение денег: здесь не обещают доход, нет пирамиды и нет платы за привлечение людей.",
+      missionTitle: "Зачем существует фонд",
+      missionNote: "Цель фонда — чтобы у каждого человека была базовая безопасность и достоинство, а тот, кому помогли, со временем сам получил возможность помогать другим. Так растёт устойчивая сеть взаимопомощи: помощь возвращается в общий круг, а не «с прибылью» отдельным людям.",
+      directionsTitle: "Кому и в чём помогает фонд",
+      directionsHint: "Слева — направление помощи, справа — что это значит простыми словами.",
+      directions: [
+        {
+          name: "Жильё",
+          text: "Не дать человеку оказаться на улице: помощь с арендой и коммунальными платежами, временное и экстренное жильё, поддержка при переезде, общественное жильё.",
+        },
+        {
+          name: "Еда",
+          text: "Продукты и горячее питание, доставка тем, кто не может выйти, особая забота о детях, семьях и пожилых людях.",
+        },
+        {
+          name: "Здоровье",
+          text: "Лечение, лекарства, стоматология, психологическая помощь, диагностика, реабилитация, поддержка людей с инвалидностью и экстренная медицинская помощь.",
+        },
+        {
+          name: "Семьи и дети",
+          text: "Помощь детям, беременным, одиноким родителям, многодетным семьям и тем, кто потерял кормильца.",
+        },
+        {
+          name: "Пожилые люди",
+          text: "Уход, сопровождение, доставка продуктов, бытовая помощь и помощь с необходимыми расходами.",
+        },
+        {
+          name: "Образование и работа",
+          text: "Переобучение, профессии, языки, цифровая грамотность; помощь в поиске работы и с документами, поддержка самозанятости и создание рабочих мест.",
+        },
+        {
+          name: "Экстренная помощь",
+          text: "Потеря жилья или работы, стихийные бедствия, гуманитарные кризисы и другие чрезвычайные ситуации.",
+        },
+        {
+          name: "Социальная опора",
+          text: "Помощь одиноким людям и мигрантам, восстановление связей с близкими, поддержка после тяжёлых жизненных ситуаций.",
+        },
+        {
+          name: "Животные",
+          text: "Лечение и кормление животных, помощь приютам, спасение животных в беде.",
+        },
+        {
+          name: "Общественные блага",
+          text: "Открытые программы, наука, образование, забота о природе и свободный доступ к знаниям — на пользу всем.",
+        },
+        {
+          name: "Сами участники",
+          text: "Организаторы, основатель и участники фонда могут получать помощь на равных с остальными — здесь нет особых людей «выше других».",
+        },
+      ],
+      rewardTitle: "За полезный труд — благодарят",
+      rewardNote: "Фонд может благодарить за общественно полезную работу: помощь людям, волонтёрство, развитие проекта, обучение, медицинскую и юридическую помощь. Но награда НИКОГДА не зависит от того, привёл ли человек новых участников, — за «приведённых» людей не платят ничего.",
+      prohibitionsTitle: "Чего фонд не делает никогда",
+      prohibitionsHint: "Эти запреты обязательны буквально — во всём коде, во всех ИИ-помощниках и во всех публичных текстах.",
+      prohibitions: [
+        "Не обещает доход и не гарантирует прибыль.",
+        "Не строит финансовую пирамиду.",
+        "Не платит за привлечение новых людей.",
+        "Не концентрирует власть в одних руках.",
+        "Не скрывает операции — всё открыто.",
+        "Не используется в чьих-то личных интересах; без коррупции, фаворитизма и дискриминации.",
+      ],
+      ownerTitle: "У фонда нет владельца",
+      ownerNote: "Никто не владеет фондом и никто не получает выгоду навсегда. Основатель — обычный участник наравне со всеми. Фонд принадлежит своей миссии, конституции и сообществу; люди и ИИ — лишь временные хранители этой миссии.",
+      aiTitle: "Роль искусственного интеллекта",
+      aiNote: "ИИ-помощники служат миссии и помогают соблюдать правила, но не имеют власти и не владеют деньгами. ИИ проверяет и советует — он не распоряжается казной и не решает за людей.",
+      goalTitle: "Высшая цель",
+      goalNote: "Создать устойчивую мировую сеть взаимопомощи, в которой человек, получивший поддержку, со временем сам становится источником помощи для других. Главные ценности — человеческое достоинство, взаимопомощь, справедливость и способность общества заботиться о своих.",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Манифест». Здесь — пересказ простыми словами; полный текст с миссией, направлениями, ролями и архитектурой живёт в самом документе. Манифест и конституция — главные ориентиры проекта.",
+      sourceLink: "Открыть полный документ «Манифест» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -1654,6 +1763,7 @@ export const DICT: Record<Lang, Dict> = {
     navDirectHelp: "Direct payment",
     navConstitution: "Constitution",
     navGovernance: "How we decide",
+    navManifesto: "Manifesto",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -2368,6 +2478,84 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Where this is written down",
       sourceNote: "This screen mirrors the fund's normative document “How the fund makes decisions”. This is a retelling in plain words; the exact wording, the phases of decentralization, and the technical details live in the document itself.",
       sourceLink: "Open the full “Governance” document →",
+    },
+    manifesto: {
+      back: "← Back to home",
+      title: "The fund’s manifesto — in plain words",
+      lead: "The manifesto is a short story of why the fund exists at all: what its goal is, who it helps, what it never does, and who it belongs to. Everything here is retold in ordinary human words. The exact wording lives in the document itself; this screen helps you grasp the essence without legal or technical language.",
+      topTitle: "The main idea in one thought",
+      topNote: "The fund is an open system of mutual aid. People and the fund together give those in trouble a basic footing: a roof, food, treatment, education and the strength to get back on their feet. It is a public good, not an investment: no promised returns, no pyramid, and no payment for bringing people in.",
+      missionTitle: "Why the fund exists",
+      missionNote: "The fund’s goal is for every person to have basic safety and dignity, and for someone who was helped to be able, in time, to help others. That is how a durable network of mutual aid grows: help returns to the shared circle rather than coming back “with profit” to a few.",
+      directionsTitle: "Who the fund helps, and with what",
+      directionsHint: "On the left — an area of help; on the right — what it means in plain words.",
+      directions: [
+        {
+          name: "Housing",
+          text: "Keeping people off the street: help with rent and utilities, temporary and emergency housing, support with moving, community housing.",
+        },
+        {
+          name: "Food",
+          text: "Groceries and hot meals, delivery for those who can’t go out, special care for children, families and older people.",
+        },
+        {
+          name: "Health",
+          text: "Treatment, medicines, dental and psychological care, diagnostics, rehabilitation, support for people with disabilities, and emergency medical help.",
+        },
+        {
+          name: "Families and children",
+          text: "Help for children, pregnant women, single parents, large families, and those who have lost a breadwinner.",
+        },
+        {
+          name: "Older people",
+          text: "Care, companionship, grocery delivery, household help, and help with essential expenses.",
+        },
+        {
+          name: "Education and work",
+          text: "Retraining, professions, languages, digital literacy; help finding work and with documents, support for self-employment and creating jobs.",
+        },
+        {
+          name: "Emergency help",
+          text: "Loss of housing or work, natural disasters, humanitarian crises and other emergencies.",
+        },
+        {
+          name: "Social support",
+          text: "Help for lonely people and migrants, restoring ties with loved ones, support after hard life situations.",
+        },
+        {
+          name: "Animals",
+          text: "Treating and feeding animals, helping shelters, rescuing animals in trouble.",
+        },
+        {
+          name: "Public goods",
+          text: "Open software, science, education, care for nature and free access to knowledge — for everyone’s benefit.",
+        },
+        {
+          name: "Members themselves",
+          text: "Organisers, the founder and members can receive help on equal terms with everyone else — there are no special people “above the rest.”",
+        },
+      ],
+      rewardTitle: "Useful work is thanked",
+      rewardNote: "The fund may thank people for socially useful work: helping others, volunteering, developing the project, teaching, medical and legal help. But a reward NEVER depends on whether someone brought in new members — bringing people in pays nothing.",
+      prohibitionsTitle: "What the fund never does",
+      prohibitionsHint: "These prohibitions are binding literally — in all code, in every AI helper, and in every public text.",
+      prohibitions: [
+        "Does not promise returns or guarantee profit.",
+        "Does not build a financial pyramid.",
+        "Does not pay for bringing in new people.",
+        "Does not concentrate power in one pair of hands.",
+        "Does not hide operations — everything is open.",
+        "Is not used for anyone’s private gain; no corruption, favouritism or discrimination.",
+      ],
+      ownerTitle: "The fund has no owner",
+      ownerNote: "No one owns the fund and no one benefits forever. The founder is an ordinary member, equal to everyone else. The fund belongs to its mission, its constitution and its community; people and AI are only temporary keepers of that mission.",
+      aiTitle: "The role of artificial intelligence",
+      aiNote: "AI helpers serve the mission and help keep the rules, but they hold no power and own no money. AI checks and advises — it does not control the treasury or decide for people.",
+      goalTitle: "The highest goal",
+      goalNote: "To build a durable worldwide network of mutual aid in which a person who received support, in time, becomes a source of help for others. The core values are human dignity, mutual aid, fairness, and a society’s ability to care for its own.",
+      sourceTitle: "Where this is written",
+      sourceNote: "This screen mirrors the fund’s normative document “Manifesto.” Here is the plain-words retelling; the full text with the mission, areas, roles and architecture lives in the document itself. The manifesto and the constitution are the project’s main guides.",
+      sourceLink: "Open the full “Manifesto” document →",
     },
     notFound: {
       code: "Page not found",

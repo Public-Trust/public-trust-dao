@@ -274,6 +274,26 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     repealed even by a vote); the boundary "already in force, all on a test network with no
     real money". RU↔EN text in `lib/i18n.ts` (`ConstitutionDict`), added to the menu after
     "About", no new dependencies. Rests on constitution art. 1–10. `PTD-0098`. TESTNET-ONLY.
+  - [x] Screen "How the fund decides: everyone's voice" (session 102):
+    `platform/app/governance/` — an in-app mirror of the normative `docs/GOVERNANCE.md`
+    (the same "mirror screen" pattern). In plain words: the main point ("the wider the
+    right to decide is spread, the harder the fund is to capture"); 6 simple governance
+    rules; "keepers are an executor, not a boss" (3-of-5, emergency brake); protection
+    against fakes without collecting faces/surveillance + a fallback vouching path; the
+    path to self-reliance; the boundary "uniqueness is not power"; an EXPLANATION screen
+    linking to the ballot at `/voting/`. RU↔EN text in `lib/i18n.ts` (`GovernanceDict`),
+    added to the menu after "Constitution", no new dependencies. Rests on CONSTITUTION
+    art. 2/3/4. `PTD-0099`. TESTNET-ONLY.
+  - [x] Screen "The fund's manifesto — in plain words" (session 103):
+    `platform/app/manifesto/` — an in-app mirror of the normative `docs/MANIFESTO.md`
+    (the same "mirror screen" pattern). In plain words: why the fund exists (mutual aid,
+    a public good, not an investment); 11 areas of help in human words; "useful work is
+    thanked, but NEVER for bringing people in"; 6 constitutional prohibitions; "the fund
+    has no owner"; the role of AI (serves, without power and without money); the highest
+    goal (someone helped, in time, helps others). RU↔EN text in `lib/i18n.ts`
+    (`ManifestoDict`), added to the menu before "Constitution", no new dependencies. Rests
+    on MANIFESTO/CONSTITUTION. `PTD-0100`. TESTNET-ONLY.
+    **The series of mirror screens for normative docs is almost closed — `SUPPORT-MODEL.md` remains.**
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,
