@@ -267,9 +267,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   CI" (session 24). → Implemented (session 29):
   [`documentation_agent.py`](../../ai-agents/documentation_agent.py) +
   [`test_documentation.py`](../../ai-agents/test_documentation.py), `PTD-0026`.
-- [ ] Meta-agent "run all": a single `ai-agents/run_all.py` entry point that runs every
+- [x] Meta-agent "run all": a single `ai-agents/run_all.py` entry point that runs every
   ready agent (Audit + Guardian + …) in sequence and folds their reports into one
   "green/red" for the whole project (session 25).
+  → Implemented (session 32): [`run_all.py`](../../ai-agents/run_all.py) +
+  [`test_run_all.py`](../../ai-agents/test_run_all.py) (13/13); CI collapsed from
+  ~15 steps to 2, `PTD-0029`.
 - [ ] Guardian: a `pre-commit` hook/instruction — a local hook that runs Guardian
   before a commit so a secret never reaches the index in the first place (session 25).
 - [ ] Extend Guardian with URL-rail checks: no "yield promises"/"investment"/"guarantee"
@@ -318,11 +321,33 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   (README/web/PROMOTION): no "guaranteed returns"/"investment"/"pyramid"/"referrals"
   (the literal prohibitions of `PRINCIPLES.md`) — could become part of Documentation or
   a separate mini-agent (session 29; previously proposed as a Guardian extension).
+- [ ] Run-All: a machine-readable status badge in `governance/` (the last
+  `run_all --json` verdict saved to an artifact file) — a basis for a future public
+  "status traffic light" with no external services (session 32).
+- [ ] Test invariant for Audit (`test_audit.py`) — the only agent without its own
+  invariant; feed a "broken" governance artifact and check Audit goes red (close the
+  Stage-6 quality-standard gap; session 32).
+- [ ] A shared module `ai-agents/agent_report.py` — a single report helper
+  (`{agent, verdict, passed, total, checks}` + human-readable renderer) so the eight
+  agents don't duplicate the same print code and don't drift in the format `run_all`
+  relies on (session 32; akin to the `solidity_scan.py` idea).
 
 ---
 
 ## Done
 
+- **PTD-0029 (session 32):** Stage 6 (AI agents), consolidation of the 8/8 scaffold —
+  **the Run-All meta-agent**. [`run_all.py`](../../ai-agents/run_all.py) — a read-only
+  service meta-module (Art. 9): runs all eight agents with `--json` and folds their
+  reports into one "green/red" verdict. A single entry point: a local self-check in
+  one command instead of eight; CI collapsed from ~15 steps to two (`--with-tests`
+  runs both the agents and their seven test invariants); `--with-contracts` is passed
+  through to Audit; `--json` is a machine-readable summary. It treats an agent as "red"
+  not only by its verdict but on any anomaly (invalid JSON = the agent crashed;
+  `verdict=green` with exit code ≠ 0). The **test invariant**
+  [`test_run_all.py`](../../ai-agents/test_run_all.py) (13/13) on fake agents/tests
+  proves "red folds into red, green does not fail falsely". On the real repo: agents
+  8/8, tests 7/7. `PTD-0029`. TESTNET-ONLY.
 - **PTD-0027 (session 30):** Stage 6 (AI agents), module 7/8 — **the Governance agent**.
   [`governance_agent.py`](../../ai-agents/governance_agent.py) — a read-only service agent
   (Art. 9; it **does NOT vote**, submit, or move anything): turns the proposal lifecycle
@@ -542,3 +567,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Reputation on Governor.sol / deploy cap check / shared solidity_scan.py | agent | 27 |
 | Refactor shared solidity helpers (3 copies) / Housing provider-whitelist / end-to-end "record ↔ on-chain escrow" test | agent | 28 |
 | Meta-agent run_all / lexical prohibition linter for public texts / changelog from the registry | agent | 29 |
+| run_all status badge / Audit test invariant / shared agent_report.py | agent | 32 |

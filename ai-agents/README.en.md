@@ -46,6 +46,9 @@ This sets hard boundaries for EVERY agent in this directory:
 
 We build them one by one, "to green", with no token stubs. The scaffold opens with
 **Audit** — useful right away: one command checks the whole governance layer.
+The 8/8 scaffold is complete; on top of it sits the service **Run-All meta-agent**
+(`run_all.py`), a single entry point that runs all eight and folds them into one
+verdict (see the "Run-All meta-agent" section below).
 
 ## Audit agent — what it does and how to run it
 
@@ -351,6 +354,47 @@ terminal/two start stages, a zero deadline, a broken link, a missing
 `dispute-process.json` altogether) the agent must return "red", and on a correct
 process — "green" with no false positives (26/26). CI runs Mediator (+test) in the
 same workflow. **This closes the scaffold of all eight AI agents (8/8).**
+
+## Run-All meta-agent — a single entry point
+
+Once the scaffold of all eight agents is complete, you want one command that runs
+them all and folds them into a single verdict. That is `run_all.py` — a **service
+meta-module** (Art. 9): it checks nothing on the merits itself and certainly
+disposes of nothing; it only launches the eight and collects their `--json` reports
+into an overall "green/red".
+
+Why:
+
+- **a local self-check in one command** instead of eight manual runs;
+- **CI collapses from ~15 steps to two** (`--with-tests` runs both the agents and
+  their test invariants);
+- **a machine-readable summary** (`--json`) for dashboards and other agents.
+
+```bash
+# Run all eight agents and fold into one verdict (standard library only):
+python3 ai-agents/run_all.py
+
+# Also run the agents' test invariants (test_*.py — "red is really caught"):
+python3 ai-agents/run_all.py --with-tests
+
+# Pass smart-contract tests through to Audit (requires Node/npm):
+python3 ai-agents/run_all.py --with-contracts
+
+# Machine-readable report:
+python3 ai-agents/run_all.py --json
+```
+
+Exit code `0` — all green; `1` — at least one agent (or a test invariant under
+`--with-tests`) is red. The meta-agent treats an agent as "red" not only by its
+verdict but on any anomaly too — invalid JSON (the agent crashed) or a mismatch
+"verdict=green but exit code ≠ 0". "Red" is a **signal**, not an action: the
+meta-agent fixes nothing.
+
+The **test invariant** [`test_run_all.py`](test_run_all.py) proves the folding
+works rather than being "green by default": on fake agents (green/red/crashed/
+anomalous) and fake tests it checks that red really folds into red and green does
+not fail falsely (13/13). CI runs `test_run_all.py` + `run_all.py --with-tests` —
+two steps instead of fifteen.
 
 ## Rails (for all agents in this directory)
 

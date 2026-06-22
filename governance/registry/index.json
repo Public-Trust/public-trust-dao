@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 29,
-  "head_hash": "9c11fe28202602487eaaa2f55361c11702f938ade1e1c93154382f99e2b19887",
+  "count": 30,
+  "head_hash": "64075b63fd02d408c43954024bd78dffa39f503124e6dd0eced5a14664e9c118",
   "entries": [
     {
       "seq": 0,
@@ -264,6 +264,15 @@
       "summary": "Этап 6 (AI-агенты), модуль 8/8 — последний: Mediator-агент. mediator_agent.py — read-only проверка процесса споров/апелляций (governance/mediation/dispute-process.json): обжалуемость каждой санкции, спор решают люди (≥2) не ИИ/один, независимость (не автор санкции), корректный жизненный цикл, конечные сроки; СТРУКТУРИРУЕТ, НЕ решает. Тест-инвариант test_mediator.py (26/26). CI расширен. Этим закрыт каркас всех 8 AI-агентов (8/8). TESTNET-ONLY.",
       "hash": "9c11fe28202602487eaaa2f55361c11702f938ade1e1c93154382f99e2b19887",
       "file": "records/0028-mediator-agent.json"
+    },
+    {
+      "seq": 29,
+      "id": "PTD-0029",
+      "type": "decision",
+      "timestamp": "2026-06-22T12:45:00Z",
+      "summary": "Этап 6 (AI-агенты), консолидация каркаса 8/8 — мета-агент Run-All. ai-agents/run_all.py — служебный read-only мета-модуль (стандартная библиотека Python, без сети, ст. 9): запускает всех 8 агентов и сводит их --json-отчёты в один вердикт «зелёно/красно»; флаги --with-contracts/--with-tests/--json; ловит аномалии (невалидный JSON, verdict=green при exit!=0). Единая точка входа: локальный self-check одной командой, CI сжат с ~15 шагов до 2. Тест-инвариант test_run_all.py (13/13). На реальном репо: агенты 8/8, тесты 7/7. TESTNET-ONLY.",
+      "hash": "64075b63fd02d408c43954024bd78dffa39f503124e6dd0eced5a14664e9c118",
+      "file": "records/0029-meta-agent-run-all.json"
     }
   ]
 }

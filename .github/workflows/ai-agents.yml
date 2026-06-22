@@ -69,33 +69,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - name: Прогнать Audit-агента (governance-целостность)
-        run: python3 ai-agents/audit_agent.py
-      - name: Тест-инвариант Guardian (доказать, что красное ловится)
-        run: python3 ai-agents/test_guardian.py
-      - name: Прогнать Guardian-агента (рельсы безопасности по всему репо)
-        run: python3 ai-agents/guardian_agent.py
-      - name: Тест-инвариант Fairness (доказать, что красное ловится)
-        run: python3 ai-agents/test_fairness.py
-      - name: Прогнать Fairness-агента (справедливость распределения)
-        run: python3 ai-agents/fairness_agent.py
-      - name: Тест-инвариант Reputation (доказать, что красное ловится)
-        run: python3 ai-agents/test_reputation.py
-      - name: Прогнать Reputation-агента (модель «1 человек = 1 голос»)
-        run: python3 ai-agents/reputation_agent.py
-      - name: Тест-инвариант Housing (доказать, что красное ловится)
-        run: python3 ai-agents/test_housing.py
-      - name: Прогнать Housing-агента (целевой escrow жилищной помощи)
-        run: python3 ai-agents/housing_agent.py
-      - name: Тест-инвариант Documentation (доказать, что красное ловится)
-        run: python3 ai-agents/test_documentation.py
-      - name: Прогнать Documentation-агента (двуязычность RU↔EN + ссылки)
-        run: python3 ai-agents/documentation_agent.py
-      - name: Тест-инвариант Governance (доказать, что красное ловится)
-        run: python3 ai-agents/test_governance.py
-      - name: Прогнать Governance-агента (жизненный цикл предложения, не голосует)
-        run: python3 ai-agents/governance_agent.py
-      - name: Тест-инвариант Mediator (доказать, что красное ловится)
-        run: python3 ai-agents/test_mediator.py
-      - name: Прогнать Mediator-агента (процесс споров/апелляций, не решает)
-        run: python3 ai-agents/mediator_agent.py
+      # Консолидировано мета-агентом run_all.py: вместо ~15 отдельных шагов —
+      # два. Сначала доказываем, что сам мета-агент исправен (красное реально
+      # сводится в красное, а не «зелёно по умолчанию»), затем одним прогоном
+      # гоняем все восемь агентов И их тест-инварианты (--with-tests) и сводим в
+      # один вердикт. Любое нарушение валит сборку. (Раскладку по агентам/тестам
+      # видно в выводе run_all; для отладки одного агента — python3 ai-agents/<agent>.py.)
+      - name: Тест-инвариант мета-агента run_all (доказать, что красное сводится в красное)
+        run: python3 ai-agents/test_run_all.py
+      - name: Прогнать всех агентов через run_all (8 агентов + 7 тест-инвариантов)
+        run: python3 ai-agents/run_all.py --with-tests
