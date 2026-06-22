@@ -1,0 +1,47 @@
+{
+  "seq": 55,
+  "id": "PTD-0055",
+  "type": "decision",
+  "timestamp": "2026-06-22T11:42:21Z",
+  "actor": "builder-agent",
+  "summary": "INBOX #23 — официальный публичный контакт проекта fedorgrigorev@proton.me проставлен везде (RU+EN): README, сайт, AUTHORS, EMAIL-SETUP (действующий адрес), OUTREACH (обратный адрес). Временный стартовый адрес до доменной почты.",
+  "refs": [
+    "README.md",
+    "README.en.md",
+    "web/index.html",
+    "web/index.en.html",
+    "AUTHORS.md",
+    "AUTHORS.en.md",
+    "docs/EMAIL-SETUP.md",
+    "docs/en/EMAIL-SETUP.md",
+    "docs/OUTREACH.md",
+    "docs/en/OUTREACH.md",
+    "comms/INBOX.md"
+  ],
+  "payload": {
+    "decision": "INBOX #23 (оператор подтвердил адрес) — официальный публичный контакт проекта проставлен ВЕЗДЕ (RU+EN): fedorgrigorev@proton.me. Это временный стартовый адрес (ProtonMail, вариант B по EMAIL-SETUP) до подключения почты на своём домене (план — founder@publictrustdao.org). Контакт добавлен в README.md/README.en.md (раздел «Контакт»/«Contact»), на сайте web/index.html + web/index.en.html (новая колонка футера «Контакт»/«Contact», mailto-ссылка), в AUTHORS.md/AUTHORS.en.md рядом с автором Федор Григорьев, в docs/EMAIL-SETUP.md (+EN) помечен как действующий стартовый адрес (статус «выполнено»), в docs/OUTREACH.md (+EN) — как обратный адрес для ответов в аутриче.",
+    "rationale": "Прямой запрос оператора (INBOX #23): оператор подтвердил конкретный адрес и его публикацию. До этого контакт в публичных материалах был помечен «готовится» (EMAIL-SETUP §8). Единая, видимая точка контакта поддерживает миссию (общественное благо, прозрачность, проект не прячется) и закрывает заготовку «до кнопки» из PTD-0011. Адрес временный (личный ProtonMail) — при покупке домена будет заменён на доменный без потери истории.",
+    "deliverables": [
+      "README.md / README.en.md — раздел «Контакт»/«Contact» с адресом и ссылкой на EMAIL-SETUP",
+      "web/index.html / web/index.en.html — колонка футера «Контакт»/«Contact» с mailto-ссылкой",
+      "AUTHORS.md / AUTHORS.en.md — строка «Контакт проекта»/«Project contact» рядом с автором",
+      "docs/EMAIL-SETUP.md (+EN) — баннер «Действующий адрес» вверху + статус «выполнено» вместо «готовится»",
+      "docs/OUTREACH.md (+EN) — адрес как обратный для ответов в блоке «Кто и как отправляет»",
+      "governance/registry/ — запись PTD-0055 (type=decision)",
+      "comms/INBOX.md — пункт #23 отмечен [x]; DECISIONS обновлён"
+    ],
+    "rails": [
+      "Только публичный контактный адрес — пароли/секреты/токены в репозиторий НЕ попадают (рельс EMAIL-SETUP §1)",
+      "Двуязычность RU↔EN в одном коммите",
+      "Публикация контакта вовне подтверждена оператором (рельс: выход вовне от лица проекта — за человеком)",
+      "TESTNET-first: средств/ключей/контрактов не касается; пульс не тронут"
+    ],
+    "status": "adopted",
+    "verification": "registry verify зелёный; адрес присутствует во всех 8 целевых файлах (grep); Documentation-агент 3/3",
+    "closes_inbox": [
+      23
+    ]
+  },
+  "prev_hash": "3613b048f3d4bd563219c5c6aaa4e46faa1db044deec7e54be06937e18a41fb3",
+  "hash": "8adb0c22db57d572a9fb0b8a55e684ddfa55d7f02ed06d4b4e4b81e9a5b01ebe"
+}

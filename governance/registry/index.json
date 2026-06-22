@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 55,
-  "head_hash": "3613b048f3d4bd563219c5c6aaa4e46faa1db044deec7e54be06937e18a41fb3",
+  "count": 56,
+  "head_hash": "8adb0c22db57d572a9fb0b8a55e684ddfa55d7f02ed06d4b4e4b81e9a5b01ebe",
   "entries": [
     {
       "seq": 0,
@@ -498,6 +498,15 @@
       "summary": "P3 (понятный язык) — в шапку шести нормативных доков (GOVERNANCE/ANTI-ABUSE/REWARDS-MODEL/PROOF-OF-CONTRIBUTION/ESCROW/PRIORITIES, RU+EN) добавлен указатель на глоссарий с конкретной группой; непонятный термин теперь в один клик от человеческого объяснения (PTD-0040, ст. 3/6). Смысл доков не изменён.",
       "hash": "3613b048f3d4bd563219c5c6aaa4e46faa1db044deec7e54be06937e18a41fb3",
       "file": "records/0054-glossary-pointer-in-headers.json"
+    },
+    {
+      "seq": 55,
+      "id": "PTD-0055",
+      "type": "decision",
+      "timestamp": "2026-06-22T11:42:21Z",
+      "summary": "INBOX #23 — официальный публичный контакт проекта fedorgrigorev@proton.me проставлен везде (RU+EN): README, сайт, AUTHORS, EMAIL-SETUP (действующий адрес), OUTREACH (обратный адрес). Временный стартовый адрес до доменной почты.",
+      "hash": "8adb0c22db57d572a9fb0b8a55e684ddfa55d7f02ed06d4b4e4b81e9a5b01ebe",
+      "file": "records/0055-set-project-email.json"
     }
   ]
 }

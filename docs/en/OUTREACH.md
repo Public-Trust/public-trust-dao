@@ -48,9 +48,9 @@ a link to the open code and the disclaimer.
 > violates the constitution and is not sent.
 
 **Who sends and how.** Only the **operator** sends — from their own mail or the
-project's official mail (see [`EMAIL-SETUP.md`](EMAIL-SETUP.md)), manually, one by
-one, personally. The agent prepares and updates the texts here; the final "go" is
-a human's.
+project's official mail — **fedorgrigorev@proton.me** (the reply address; see
+[`EMAIL-SETUP.md`](EMAIL-SETUP.md)) — manually, one by one, personally. The agent
+prepares and updates the texts here; the final "go" is a human's.
 
 ---
 

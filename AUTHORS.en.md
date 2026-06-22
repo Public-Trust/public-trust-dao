@@ -6,6 +6,9 @@
 
 **Fedor Grigoriev** (Федор Григорьев) — author of the idea and initiator of Public Trust DAO.
 
+**Project contact:** fedorgrigorev@proton.me (official public address, temporary —
+until mail on the project's own domain is set up).
+
 > **Authorship ≠ ownership.** Under the project's constitution (see
 > [`docs/en/CONSTITUTION.md`](docs/en/CONSTITUTION.md), articles 1–3 and §6.2),
 > **no one owns the project**. "Author and initiator" recognizes the origin of

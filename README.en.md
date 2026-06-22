@@ -69,6 +69,12 @@ IPFS pinning. All development is public and verifiable.
   [CC-BY-SA-4.0](LICENSE-DOCS). Free to use and distribute with
   attribution and preservation of the same license.
 
+## Contact
+The project's official public contact is **fedorgrigorev@proton.me** (a temporary
+starter address, until mail on the project's own domain is set up). Write about
+anything: participation, press, partnerships, reports of problems. More on project
+email in [`docs/en/EMAIL-SETUP.md`](docs/en/EMAIL-SETUP.md).
+
 ## Author
 The author of the idea and initiator of the project is **Fedor Grigoriev**
 (Федор Григорьев; see [`AUTHORS.en.md`](AUTHORS.en.md)). Authorship ≠ ownership:

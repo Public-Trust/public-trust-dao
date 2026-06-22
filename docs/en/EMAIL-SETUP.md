@@ -2,6 +2,13 @@
 
 # PROJECT EMAIL — PUBLIC TRUST DAO
 
+> ✅ **Active address (updated).** The project's official public contact is
+> **fedorgrigorev@proton.me** (option B, ProtonMail). This is a **temporary starter
+> address** until mail on the project's own domain is set up (planned —
+> `founder@publictrustdao.org`, see §5). Confirmed by the operator for publication;
+> placed in `README` (RU/EN), on the website (`web/`), in `AUTHORS`, and as the
+> reply address for outreach.
+
 > Instructions and ready-made copy for the project's official email: what the
 > options are, what to choose, how to set it up, and how to reply. Derived from
 > [`PRINCIPLES.md`](PRINCIPLES.md) and [`PROMOTION.md`](PROMOTION.md).
@@ -242,7 +249,11 @@ password), the agent:
 3. Registers the fact "contact activated" as a separate registry record.
 4. Keeps the reply copy in sync with the principles.
 
-Until then, the contact is marked "in preparation" in public materials.
+**Status (done):** the operator confirmed the address **fedorgrigorev@proton.me** —
+the contact is placed in `README` (RU/EN), on the website, in `AUTHORS`, and in
+outreach; registered as a registry entry. This is a temporary starter address; once
+a domain is purchased it will be replaced by a domain address (see §5) without losing
+history.
 
 ---
 
