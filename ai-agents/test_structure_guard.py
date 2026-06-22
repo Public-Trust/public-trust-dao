@@ -112,7 +112,7 @@ with tempfile.TemporaryDirectory() as repo:
     _write_workflow(repo)
     rep = structure_guard.run(d)
     check("вердикт зелёный", rep["verdict"] == "green")
-    check("все 10 проверок прошли", rep["passed"] == rep["total"] == 10)
+    check("все 11 проверок прошли", rep["passed"] == rep["total"] == 11)
     check("предупреждений нет (у шагов есть имена)", rep["warnings"] == 0)
     check("у шагов run: есть имена → ci-step-has-name зелёная",
           _status(rep, "ci-step-has-name") == "pass")
@@ -685,13 +685,91 @@ with tempfile.TemporaryDirectory() as repo:
     check("ci-step-has-body зелёная (пути в paths — не пустые шаги)",
           _status(rep, "ci-step-has-body") == "pass")
 
+# --- issue-form-labels-defined: метки форм описаны в каталоге ----------------
+def _write_form(repo_root, fname, labels_line):
+    """Кладёт .github/ISSUE_TEMPLATE/<fname> с заданной строкой labels:."""
+    forms_dir = os.path.join(repo_root, ".github", "ISSUE_TEMPLATE")
+    os.makedirs(forms_dir, exist_ok=True)
+    with open(os.path.join(forms_dir, fname), "w", encoding="utf-8") as fh:
+        fh.write('name: "форма"\n{}\nbody: []\n'.format(labels_line))
+
+
+def _write_labels(repo_root, names):
+    """Кладёт .github/labels.yml с заданными именами меток."""
+    path = os.path.join(repo_root, ".github", "labels.yml")
+    body = "".join('- name: "{}"\n  color: "ededed"\n  description: "x"\n'.format(n) for n in names)
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(body)
+
+
+def _base_repo(repo):
+    """Минимальный зелёный по остальным проверкам репозиторий."""
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py", "from solidity_scan import strip_solidity_comments\n")
+    _write(d, "test_foo.py")
+    _write(d, "solidity_scan.py", "def strip_solidity_comments(s):\n    return s\n")
+    _write(d, "test_solidity_scan.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py", "test_solidity_scan.py"]))
+    _write_workflow(repo)
+    return d
+
+print("метки форм обращений (issue-form-labels-defined):")
+with tempfile.TemporaryDirectory() as repo:
+    d = _base_repo(repo)
+    _write_form(repo, "01-bug.yml", 'labels: ["bug"]')
+    _write_form(repo, "02-idea.yml", 'labels: ["idea"]')
+    _write_labels(repo, ["bug", "idea", "governance"])
+    rep = structure_guard.run(d)
+    check("все метки форм описаны → зелёная", _status(rep, "issue-form-labels-defined") == "pass")
+    check("вердикт зелёный", rep["verdict"] == "green")
+
+with tempfile.TemporaryDirectory() as repo:
+    d = _base_repo(repo)
+    _write_form(repo, "01-bug.yml", 'labels: ["bug", "safety"]')
+    _write_labels(repo, ["bug"])  # safety пропущена
+    rep = structure_guard.run(d)
+    check("метка формы не в каталоге → красная (hard)",
+          _status(rep, "issue-form-labels-defined") == "fail")
+    check("нарушение валит общий вердикт", rep["verdict"] == "red")
+    viol = next(c for c in rep["checks"] if c["key"] == "issue-form-labels-defined")["violations"]
+    check("нарушение называет ровно пропавшую метку 'safety'",
+          any("safety" in v["item"] for v in viol) and not any("'bug'" in v["item"] for v in viol))
+
+with tempfile.TemporaryDirectory() as repo:
+    d = _base_repo(repo)
+    _write_form(repo, "01-bug.yml", 'labels: ["bug"]')
+    # каталога меток нет вовсе
+    rep = structure_guard.run(d)
+    check("формы вешают метки, но каталога нет → красная",
+          _status(rep, "issue-form-labels-defined") == "fail")
+
+with tempfile.TemporaryDirectory() as repo:
+    d = _base_repo(repo)
+    # формы без поля labels (как config.yml) — проверять нечего
+    _write_form(repo, "config.yml", "# нет labels")
+    rep = structure_guard.run(d)
+    check("формы без меток → проверка зелёная (нечего проверять)",
+          _status(rep, "issue-form-labels-defined") == "pass")
+
+with tempfile.TemporaryDirectory() as repo:
+    d = _base_repo(repo)
+    # блочная форма записи labels: и кавычки/без кавычек
+    _write_form(repo, "01-bug.yml", "labels:\n  - bug\n  - \"idea\"")
+    _write_labels(repo, ["bug", "idea"])
+    rep = structure_guard.run(d)
+    check("блочный список labels: разобран → зелёная",
+          _status(rep, "issue-form-labels-defined") == "pass")
+
 # --- Сторож-регресс: настоящий каталог ai-agents/ сейчас зелёный ----------
 print("настоящий каталог ai-agents/:")
 real = structure_guard.run()
 check("реальный репозиторий: вердикт зелёный", real["verdict"] == "green")
-check("реальный репозиторий: 10/10 проверок прошли", real["passed"] == real["total"] == 10)
+check("реальный репозиторий: 11/11 проверок прошли", real["passed"] == real["total"] == 11)
 check("реальный репозиторий: предупреждений нет (имена шагов CI есть, уникальны, шаги не пусты)",
       real["warnings"] == 0)
+check("реальный репозиторий: метки форм описаны в labels.yml → issue-form-labels-defined зелёная",
+      _status(real, "issue-form-labels-defined") == "pass")
 
 # --- Итог ----------------------------------------------------------------
 print()

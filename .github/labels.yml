@@ -1,0 +1,100 @@
+# Каталог меток issue/PR — Public Trust DAO  ·  Issue/PR label catalogue
+#
+# ЧТО ЭТО (простыми словами). Это единый список «ярлычков», которыми помечают
+# обращения и предложения на GitHub (например «ошибка», «идея», «безопасность»).
+# Раньше цвета и описания меток жили только в настройках GitHub и заводились
+# руками — их нельзя было восстановить или проверить. Теперь они описаны здесь,
+# в открытом файле: один источник правды, который видно в истории и можно
+# воспроизвести. Формы обращений (`.github/ISSUE_TEMPLATE/*.yml`) ссылаются на
+# метки `bug` / `idea` / `governance` / `safety` — все они обязаны быть в этом
+# списке (за этим следит страж структуры, проверка `issue-form-labels-defined`).
+#
+# WHAT THIS IS (plain words). A single list of the GitHub "tags" used on issues
+# and pull requests (e.g. "bug", "idea", "safety"). Colours and descriptions used
+# to live only in GitHub settings, set by hand — impossible to reproduce or audit.
+# Now they live here, in an open file: one source of truth, visible in history and
+# reproducible. The issue forms (`.github/ISSUE_TEMPLATE/*.yml`) reference the
+# `bug` / `idea` / `governance` / `safety` labels — all of which MUST appear in
+# this list (enforced by the structure guard check `issue-form-labels-defined`).
+#
+# КАК ПРИМЕНИТЬ (для разработчиков / оператора). Файл — список объектов
+# `{name, color, description}`, совместимый с обычными синхронизаторами меток
+# (например GitHub Action `EndBug/label-sync` со ссылкой на этот файл, или
+# `github-label-sync`). Цвет — шестизначный hex без `#`.
+#   • Разово вручную через gh CLI (по одной метке):
+#       gh label create "idea" --color "0e8a16" --description "…" --force
+#   • Воспроизводимо: включить синхронизатор меток с источником `.github/labels.yml`.
+# Применение меток к РЕАЛЬНОМУ репозиторию (внешнее действие от лица проекта) —
+# за оператором; агент только ведёт каталог как источник правды (рельсы BUILDER.md).
+
+# --- Тип обращения · Issue type (на эти метки ссылаются формы issue) -----------
+
+- name: "bug"
+  color: "d73a4a"
+  description: "Ошибка в коде/тестах, неточность в документе, битая ссылка. · Bug in code/tests, doc inaccuracy, broken link."
+
+- name: "idea"
+  color: "0e8a16"
+  description: "Идея или улучшение (может попасть в банк идей роадмапа). · Idea or improvement (may land in the roadmap idea bank)."
+
+- name: "governance"
+  color: "5319e7"
+  description: "Предложение по управлению: направление помощи, параметры, правила. · Governance proposal: aid direction, parameters, rules."
+
+- name: "safety"
+  color: "b60205"
+  description: "Риск злоупотребления или слабое место в рельсах безопасности. · Abuse risk or a weakness in the safety rails."
+
+# --- Прочие типы · Other types -------------------------------------------------
+
+- name: "documentation"
+  color: "0075ca"
+  description: "Документы, переводы RU↔EN, понятность языка. · Docs, RU↔EN translations, plain-language clarity."
+
+- name: "question"
+  color: "d876e3"
+  description: "Вопрос о проекте, без конкретной задачи. · A question about the project, no concrete task yet."
+
+# --- Слой проекта · Project layer (по карте REPO-STRUCTURE) ---------------------
+
+- name: "area: contracts"
+  color: "1d76db"
+  description: "Смарт-контракты (`contracts/`): казна, голосование, выплаты, репутация. · Smart contracts: treasury, voting, disbursement, reputation."
+
+- name: "area: ai-agents"
+  color: "1d76db"
+  description: "AI-агенты (`ai-agents/`): Guardian/Audit/Fairness/… и страж структуры. · AI agents: Guardian/Audit/Fairness/… and the structure guard."
+
+- name: "area: web"
+  color: "1d76db"
+  description: "Публичный сайт (`web/`): сайт, прозрачность, доступность. · Public site: pages, transparency, accessibility."
+
+- name: "area: governance"
+  color: "1d76db"
+  description: "Управление и реестр (`governance/`): решения, Safe, статус. · Governance & registry: decisions, Safe, status."
+
+- name: "area: docs"
+  color: "1d76db"
+  description: "Документы (`docs/`, `docs/en/`): манифест, конституция, модели. · Documents: manifesto, constitution, models."
+
+# --- Состояние и помощь · Status & triage --------------------------------------
+
+- name: "good first issue"
+  color: "7057ff"
+  description: "Хорошая задача для первого вклада — небольшая и понятная. · A good task for a first contribution — small and clear."
+
+- name: "help wanted"
+  color: "008672"
+  description: "Нужны руки: задача открыта для любого участника. · Extra attention is welcome: open for any contributor."
+
+- name: "blocked"
+  color: "e99695"
+  description: "Заблокировано (ждёт оператора, аудита, внешней зависимости). · Blocked (waiting on operator, audit, or an external dependency)."
+
+- name: "duplicate"
+  color: "cfd3d7"
+  description: "Повтор существующего обращения. · Duplicate of an existing issue."
+
+- name: "wontfix"
+  color: "ffffff"
+  description: "Не берём в работу (например, противоречит конституции/рельсам). · Will not be worked on (e.g. contradicts the constitution/rails)."

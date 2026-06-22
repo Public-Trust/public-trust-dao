@@ -287,9 +287,24 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   inverse of `glossary-coverage`: warn if an entry exists in `GLOSSARY.md` but the
   term itself appears nowhere in the normative documents (the glossary has grown
   stale extras). Also soft, non-blocking (proposed session 61, extends `PTD-0058`).
-- [ ] **GitHub label catalog `.github/labels.yml`** — a single set of labels
+- [x] **GitHub label catalog `.github/labels.yml`** — a single set of labels
   (`bug`, `idea`, `governance`, `safety`, …) referenced by the issue forms, so
   label colors/descriptions are reproducible and not set up by hand (proposed session 37).
+  **Done (session 76):** `.github/labels.yml` — a single catalogue (RU/EN
+  descriptions, hex colors): the 4 form labels (`bug`/`idea`/`governance`/`safety`)
+  + `documentation`/`question` + `area:*` layers + statuses (`good first issue`/
+  `help wanted`/`blocked`/`duplicate`/`wontfix`); format compatible with common
+  label-sync tools; applying it to the real repo is the operator's call (an outward
+  action). The structure guard's tenth check `issue-form-labels-defined` (hard) goes
+  red if a form references a label missing from the catalogue; `test_structure_guard.py`
+  98/98. `PTD-0073`.
+- [ ] **Optional label sync** — a ready-to-use workflow/instruction that brings the
+  real repo's labels in line with `.github/labels.yml` (e.g. `EndBug/label-sync`).
+  Enabling and applying it to the real repo is the operator's call (an outward action);
+  the agent prepares it "ready to push" (session 76).
+- [ ] **Guard: label catalog has no duplicates and valid hex colors** — a soft check
+  of `.github/labels.yml`: label names are unique, `color` is exactly 6 hex chars
+  without `#`, each label has a description (proposed session 76, extends `issue-form-labels-defined`).
 - [x] **Glossary link in the header of normative docs** — add a link to
   [`GLOSSARY.md`](GLOSSARY.md) to each doc's header, so an unfamiliar term is one
   click away from any document (proposed in session 36). → Done (session 57): a
@@ -1243,3 +1258,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Guard: trigger paths include ai-agents/** (done) / guard checks workflow also runs test_run_all.py | agent | 63 |
 | Machine-readable run_all status light (done) / public status light on the site from the artifact / guard: status artifact not stale vs verdict | agent | 72 |
 | Public status light on the site (done) / compact status chip on the other pages / chip in the topbar too, not only the footer | agent | 73 |
+| Label catalog .github/labels.yml (done) / optional label sync / guard: label catalog has no duplicates and valid hex colors | agent | 76 |

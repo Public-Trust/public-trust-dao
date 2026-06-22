@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 73,
-  "head_hash": "4d8c07f9410dad2330c5ba618865a55ce193bac70103ec107e98e4b229c67beb",
+  "count": 74,
+  "head_hash": "101cf800e2e7c3eefbe7bbb80046ef90ace589b07ed1775d2fb46c6c1856ffd0",
   "entries": [
     {
       "seq": 0,
@@ -660,6 +660,15 @@
       "summary": "Компактный значок-светофор состояния также в шапке (topbar) стартовых страниц сайта (web/index.html +EN), не только в футере; общий assets/status.js теперь рисует все значки .statusbadge (querySelectorAll); на узких экранах значок шапки прячется, состояние видно в футере",
       "hash": "4d8c07f9410dad2330c5ba618865a55ce193bac70103ec107e98e4b229c67beb",
       "file": "records/0072-decision.json"
+    },
+    {
+      "seq": 73,
+      "id": "PTD-0073",
+      "type": "decision",
+      "timestamp": "2026-06-22T16:30:00Z",
+      "summary": "Единый каталог меток issue/PR .github/labels.yml + проверка стража issue-form-labels-defined: метки форм обращений (bug/idea/governance/safety) описаны в открытом источнике правды, цвета/описания воспроизводимы, не заводятся вручную",
+      "hash": "101cf800e2e7c3eefbe7bbb80046ef90ace589b07ed1775d2fb46c6c1856ffd0",
+      "file": "records/0073-decision.json"
     }
   ]
 }
