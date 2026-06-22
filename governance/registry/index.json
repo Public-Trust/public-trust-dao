@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 9,
-  "head_hash": "a88545ba0075c11ad3898eca07b32978b0bc9a06cad5923cf1df90478f61c2ca",
+  "count": 10,
+  "head_hash": "ff4eed026572f614124490b64bed8955ccd1ff29d9e68139c4afc4aef95165f0",
   "entries": [
     {
       "seq": 0,
@@ -84,6 +84,15 @@
       "summary": "Доработан публичный сайт (INBOX #14, ui-ux-pro-max): новый дизайн web/index.html (Accessible & Ethical, светлая+тёмная тема, доступность, анимация за reduced-motion) + EN-зеркало web/index.en.html; ноль исходящих запросов, дисклеймер «НЕ инвестиция» сохранён",
       "hash": "a88545ba0075c11ad3898eca07b32978b0bc9a06cad5923cf1df90478f61c2ca",
       "file": "records/0008-site-redesign.json"
+    },
+    {
+      "seq": 9,
+      "id": "PTD-0009",
+      "type": "decision",
+      "timestamp": "2026-06-22T05:20:00Z",
+      "summary": "Зафиксирован автор/инициатор проекта — Фёдор Григорьев (Fyodor Grigoriev) — единообразно: AUTHORS.md (+EN), копирайт в README RU/EN, LICENSE и LICENSE-DOCS, реестр (INBOX #15). Авторство ≠ владение.",
+      "hash": "ff4eed026572f614124490b64bed8955ccd1ff29d9e68139c4afc4aef95165f0",
+      "file": "records/0009-set-author.json"
     }
   ]
 }
