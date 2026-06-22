@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 5,
-  "head_hash": "482092d1236c6fdab96bfe035b49db0f18ab697db9ddee8e1bf5718f2cff1e89",
+  "count": 6,
+  "head_hash": "579076d4b44d2e8a865130a4a3c3cbcbf89ee1df723ce15a21e0226055f377f3",
   "entries": [
     {
       "seq": 0,
@@ -48,6 +48,15 @@
       "summary": "Структура репозитория: один каталог = один слой; карта REPO-STRUCTURE.md (RU/EN) + чистка сборочного артефакта",
       "hash": "482092d1236c6fdab96bfe035b49db0f18ab697db9ddee8e1bf5718f2cff1e89",
       "file": "records/0004-repo-structure.json"
+    },
+    {
+      "seq": 5,
+      "id": "PTD-0005",
+      "type": "decision",
+      "timestamp": "2026-06-22T06:00:00Z",
+      "summary": "Механизм саморазвития: ROADMAP.md (RU/EN) + правило в BUILDER.md (INBOX пуст → ROADMAP) + режим автономии по умолчанию",
+      "hash": "579076d4b44d2e8a865130a4a3c3cbcbf89ee1df723ce15a21e0226055f377f3",
+      "file": "records/0005-self-development-roadmap.json"
     }
   ]
 }

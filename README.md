@@ -20,6 +20,7 @@ Public Trust DAO обеспечивает людям базовую безопа
 - [`docs/ESCROW-TARGETED-DISBURSEMENT.md`](docs/ESCROW-TARGETED-DISBURSEMENT.md) — модель целевого расхода помощи и escrow (как помощь доходит до цели, а не на руки).
 - [`docs/PRODUCT-INTERFACES.md`](docs/PRODUCT-INTERFACES.md) — продуктовый вид и очередь интерфейсов (web-dApp → Telegram-бот → мобильное приложение).
 - [`REPO-STRUCTURE.md`](REPO-STRUCTURE.md) — карта репозитория: что где лежит и куда класть новое.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — дорожная карта и механизм саморазвития (живой список идей/задач с приоритетами).
 - [`LAUNCH.md`](LAUNCH.md) — техническое задание на построение инфраструктуры.
 - `contracts/` — смарт-контракты (TESTNET first).
 - `web/` — публичный сайт (GitHub Pages).
