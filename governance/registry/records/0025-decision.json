@@ -1,0 +1,36 @@
+{
+  "seq": 25,
+  "id": "PTD-0025",
+  "type": "decision",
+  "timestamp": "2026-06-22T10:30:00Z",
+  "actor": "builder-agent",
+  "summary": "Этап 6 (AI-агенты), модуль 5/8: Housing-агент. housing_agent.py — read-only статический разбор Disbursement.sol + жилищных записей реестра, доказывает модель целевого расхода «оплата напрямую поставщику» в коде (release-to-provider-only/provider-fixed/refund-to-treasury/tranche-limit/guardian-cannot-move + targeted-escrow/provider-onchain/category-priority) по ESCROW-TARGETED-DISBURSEMENT.md. Тест-инвариант test_housing.py (23/23). CI расширен. TESTNET-ONLY.",
+  "refs": [
+    "ai-agents/housing_agent.py",
+    "ai-agents/test_housing.py",
+    ".github/workflows/ai-agents.yml"
+  ],
+  "payload": {
+    "decision": "Этап 6 (AI-агенты), модуль 5/8: Housing-агент. ai-agents/housing_agent.py — служебный read-only агент (стандартная библиотека Python, без сети), профильный помощник по жилищным кейсам. Доказывает, что главный принцип целевого расхода (docs/ESCROW-TARGETED-DISBURSEMENT.md) — «помощь не выдаётся на руки, она оплачивается напрямую поставщику услуги (арендодателю)» — заложен В КОД контракта целевого escrow contracts/contracts/Disbursement.sol, а не только описан. Часть A (инварианты контракта): release-to-provider-only (release(id, amount) НЕ принимает адрес получателя — транш уходит строго на c.provider кейса), provider-fixed (адрес поставщика фиксируется в open и не переназначается — нет setProvider/.provider=), refund-to-treasury (refund возвращает остаток В КАЗНУ, не получателю — услуга не оказана → средства не теряются), tranche-limit (потолок одного транша maxRelease — поэтапные выплаты/лимиты), guardian-cannot-move (средства двигает только executor; guardian лишь ставит паузу — «безопасность ≠ власть»). Часть B (записи реестра category=housing): targeted-escrow (provider + escrow_id привязаны к on-chain escrow), provider-onchain (валидный ненулевой адрес 0x+40hex), category-priority (уровень = «housing_loss» из docs/PRIORITIES.md, читается из документа). Вывод человекочитаемый и --json; код возврата 0/1; «красный» = сигнал сообществу, не действие. Тест-инвариант ai-agents/test_housing.py (23/23) на временном мини-репо доказывает, что красное ловится на каждое отклонение, зелёное не ложно-падает. CI .github/workflows/ai-agents.yml расширен (+ тест Housing + Housing; добавлены триггеры на contracts/contracts и docs/PRIORITIES.md). При первом прогоне на реальном Disbursement.sol: 8/8 зелёный. TESTNET-ONLY, без реальных средств/ключей.",
+    "rationale": "Конституция ст. 9: ИИ служит, но не правит — агент read-only, находка = сигнал, а не действие. Housing замыкает на машинную проверку центральный вопрос доверия модели целевого расхода: «как подтвердить, что помощь ушла на жильё, а не на что-то другое?». Ответ модели — не собирать чеки постфактум, а сделать целевой расход невозможным к нарушению ПО ПОСТРОЕНИЮ: средства уходят не получателю, а напрямую поставщику. Агент доказывает это прямо из исходника контракта (release без адреса-параметра → получателя нельзя подменить; нет setProvider/.provider= → поставщик зафиксирован; refund → treasury → срыв сделки не теряет деньги; maxRelease → крупное дробится на транши; денежные ветви только у executor → guardian не получает власти над средствами), а не доверяет словам в документации. Это привязывает CONSTITUTION ст. 3/4/5/7, PRIORITIES «жильё = уровень 2» и ANTI-ABUSE §1–§2 к коду. По образцу Reputation-агента: гибрид статического разбора .sol + проверки записей реестра; чтобы аудит не был «зелёным по умолчанию» — тест-инвариант на отравленных версиях контракта/записей.",
+    "deliverables": [
+      "ai-agents/housing_agent.py: служебный read-only агент — 5 инвариантов контракта целевого escrow (release-to-provider-only/provider-fixed/refund-to-treasury/tranche-limit/guardian-cannot-move над Disbursement.sol) + 3 проверки жилищных записей реестра (targeted-escrow/provider-onchain/category-priority), извлечение сигнатуры/тела функции по балансу скобок, вырезание комментариев Solidity, уровень приоритета жилья читается из docs/PRIORITIES.md, вывод человекочитаемый и --json, код 0/1, опция --root для теста",
+      "ai-agents/test_housing.py: тест-инвариант на временном мини-репо (23/23) — доказывает «красное ловится, зелёное не ложно-падает» (release с адресом-параметром, добавлен setProvider, refund получателю вместо казны, снят maxRelease, release под guardian, запись без escrow_id, битый/нулевой адрес поставщика, неверный приоритет; корректные контракт+записи — зелёные; не-жилищные записи игнорируются; пустой реестр — зелёный; комментарий-фикстура не краснит)",
+      "ai-agents/README.md (+ EN README.en.md): Housing отмечен ✅ каркас, добавлен раздел «что делает и как запустить» + таблицы проверок (часть A/B) + описание тест-инварианта",
+      ".github/workflows/ai-agents.yml: CI расширен — + тест Housing + Housing на каждый push/PR (read-only); добавлены триггеры путей contracts/contracts/** и docs/PRIORITIES.md"
+    ],
+    "rails": [
+      "агент read-only: ничего не двигает и ничем не владеет, только читает исходник контракта/реестр и докладывает; находка = сигнал, а не действие (ст. 9)",
+      "только стандартная библиотека Python, без сети — детерминированно в CI; реальных средств/ключей/mainnet нет",
+      "проверяет, что помощь оплачивается напрямую поставщику и не уходит «на руки», а guardian не двигает средства (укрепляет рельсы целевого расхода)",
+      "приватность заявителей: публичен адрес поставщика-получателя и факт, не личность",
+      "пульс неприкосновенен: loop.sh/report.sh/.env/logs не тронуты",
+      "двуязычность RU↔EN в одном коммите"
+    ],
+    "status": "adopted",
+    "spec": "docs/ESCROW-TARGETED-DISBURSEMENT.md",
+    "roadmap_item": "Этап 6 — AI-агенты (каркас): модуль 5/8 — Housing-агент"
+  },
+  "prev_hash": "8968e6d3d6a589cdbde9593486830e9292cae709844603027a868e9c7c7b79cb",
+  "hash": "73c321dfe7e292f118411a9d939c901fdf9b72869a8e45722dc665aae8a6f33f"
+}

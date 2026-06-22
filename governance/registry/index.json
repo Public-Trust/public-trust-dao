@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 25,
-  "head_hash": "8968e6d3d6a589cdbde9593486830e9292cae709844603027a868e9c7c7b79cb",
+  "count": 26,
+  "head_hash": "73c321dfe7e292f118411a9d939c901fdf9b72869a8e45722dc665aae8a6f33f",
   "entries": [
     {
       "seq": 0,
@@ -228,6 +228,15 @@
       "summary": "Этап 6 (AI-агенты), модуль 4/8: Reputation-агент. reputation_agent.py — read-only статический разбор Reputation.sol + space.json, доказывает «1 человек = 1 голос» в коде (soulbound/bounded-weight/no-funds/roles-separated/off-chain-equal) по GOVERNANCE.md §2-§3. Тест-инвариант test_reputation.py (17/17). CI расширен. TESTNET-ONLY.",
       "hash": "8968e6d3d6a589cdbde9593486830e9292cae709844603027a868e9c7c7b79cb",
       "file": "records/0024-decision.json"
+    },
+    {
+      "seq": 25,
+      "id": "PTD-0025",
+      "type": "decision",
+      "timestamp": "2026-06-22T10:30:00Z",
+      "summary": "Этап 6 (AI-агенты), модуль 5/8: Housing-агент. housing_agent.py — read-only статический разбор Disbursement.sol + жилищных записей реестра, доказывает модель целевого расхода «оплата напрямую поставщику» в коде (release-to-provider-only/provider-fixed/refund-to-treasury/tranche-limit/guardian-cannot-move + targeted-escrow/provider-onchain/category-priority) по ESCROW-TARGETED-DISBURSEMENT.md. Тест-инвариант test_housing.py (23/23). CI расширен. TESTNET-ONLY.",
+      "hash": "73c321dfe7e292f118411a9d939c901fdf9b72869a8e45722dc665aae8a6f33f",
+      "file": "records/0025-decision.json"
     }
   ]
 }

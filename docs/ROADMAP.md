@@ -154,8 +154,19 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
     выдаёт/отзывает бейдж, governor правит параметры), `off-chain-equal` (Snapshot =
     равный `ticket` value=1, не плутократия). Тест-инвариант
     [`test_reputation.py`](../ai-agents/test_reputation.py) (17/17). `PTD-0024`.
-  - [ ] Модули 5–8: Housing / Governance / Mediator /
-    Documentation — по одному «до зелёного».
+  - [x] Модуль 5/8 (сессия 28): **Housing** [`housing_agent.py`](../ai-agents/housing_agent.py)
+    — профильный помощник по жилищным кейсам. Read-only доказывает модель целевого
+    расхода (docs/ESCROW-TARGETED-DISBURSEMENT.md) «помощь оплачивается напрямую
+    поставщику, не на руки» В КОДЕ `contracts/contracts/Disbursement.sol`:
+    `release-to-provider-only` (release без адреса-параметра → транш строго на
+    c.provider), `provider-fixed` (нет setProvider/.provider=), `refund-to-treasury`
+    (возврат в казну, не получателю), `tranche-limit` (потолок maxRelease),
+    `guardian-cannot-move` (средства двигает только executor) + проверки жилищных
+    записей реестра (`targeted-escrow`/`provider-onchain`/`category-priority`,
+    уровень читается из PRIORITIES.md). Тест-инвариант
+    [`test_housing.py`](../ai-agents/test_housing.py) (23/23). CI расширен (+ триггеры
+    на contracts/contracts и docs/PRIORITIES.md). `PTD-0025`.
+  - [ ] Модули 6–8: Governance / Mediator / Documentation — по одному «до зелёного».
 
 ### P1 — материалы и инфраструктура (часть — из INBOX)
 
@@ -252,12 +263,42 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 - [ ] Лёгкий Solidity-инвариант-сканер как переиспользуемый модуль: вынести из
   Reputation-агента вырезание комментариев + извлечение тела функции по балансу
   скобок в общий `ai-agents/solidity_scan.py` — пригодится будущим агентам по
-  контрактам (Governance/Audit) (сессия 27).
+  контрактам (Governance/Audit) (сессия 27). Housing-агент (сессия 28) продублировал
+  те же помощники (`strip_solidity_comments`/`_function_body`/`_function_sig`) — уже
+  ТРИ копии, рефакторинг назрел.
+- [ ] Housing-агент: когда появится вайтлист поставщиков (открытый вопрос
+  [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md) §8 — кто ведёт
+  и как верифицирует арендодателей/аптеки), добавить проверку `provider-whitelisted`:
+  `provider` жилищной записи входит в публичный реестр проверенных поставщиков
+  (категории `housing`) — закрыть критическую точку доверия модели B (сессия 28).
+- [ ] Сквозной тест-инвариант Housing «запись ↔ on-chain escrow»: сверять, что у
+  жилищной записи реестра `escrow_id` соответствует реально открытому кейсу в
+  `Disbursement` (через события `Opened(id, …, provider, …)`), а `provider` записи =
+  `provider` кейса — связать реестр и контракт в одну проверку целевого расхода
+  (развитие идеи «выплата ↔ запись реестра», сессия 28).
 
 ---
 
 ## Сделано
 
+- **PTD-0025 (сессия 28):** Этап 6 (AI-агенты), модуль 5/8 — **Housing-агент**.
+  [`housing_agent.py`](../ai-agents/housing_agent.py) — служебный read-only агент,
+  профильный помощник по жилищным кейсам: доказывает, что модель целевого расхода
+  ([`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md)) — «помощь
+  оплачивается напрямую поставщику, не на руки» — заложена В КОД контракта
+  [`Disbursement.sol`](../contracts/contracts/Disbursement.sol): `release-to-provider-only`
+  (release без адреса-параметра → транш строго на c.provider), `provider-fixed`
+  (нет setProvider/.provider=), `refund-to-treasury` (возврат в казну, не получателю),
+  `tranche-limit` (потолок maxRelease), `guardian-cannot-move` (средства двигает
+  только executor; guardian лишь ставит паузу) + проверки жилищных записей реестра
+  (`targeted-escrow`/`provider-onchain`/`category-priority`, уровень читается из
+  [`PRIORITIES.md`](PRIORITIES.md)). Вывод человекочитаемый и `--json`; код 0/1;
+  «красный» = сигнал. **Тест-инвариант** [`test_housing.py`](../ai-agents/test_housing.py)
+  (23/23) доказывает «красное ловится, зелёное не ложно-падает» (отравленные версии
+  контракта/записей; не-жилищные записи игнорируются; отсев комментариев). CI
+  [`ai-agents.yml`](../.github/workflows/ai-agents.yml) расширен (+ триггеры на
+  contracts/contracts и docs/PRIORITIES.md). На реальном `Disbursement.sol`: 8/8.
+  `PTD-0025`. TESTNET-ONLY. Дальше — модули 6–8 (Governance / Mediator / Documentation).
 - **PTD-0024 (сессия 27):** Этап 6 (AI-агенты), модуль 4/8 — **Reputation-агент**.
   [`reputation_agent.py`](../ai-agents/reputation_agent.py) — служебный read-only
   агент: статически разбирает ончейн-контракт репутации
@@ -420,3 +461,4 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 | Мета-агент «прогнать всех» / pre-commit-хук / лексический линтер запретов | агент | 25 |
 | Тест-инвариант «выплата ↔ запись реестра» / самопроверка агентов в CI / Reputation-агент | агент | 26 |
 | Reputation на Governor.sol / проверка cap деплоя / общий solidity_scan.py | агент | 27 |
+| Рефакторинг общих solidity-помощников (3 копии) / Housing provider-whitelist / сквозной тест «запись ↔ on-chain escrow» | агент | 28 |

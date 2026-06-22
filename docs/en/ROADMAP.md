@@ -160,8 +160,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     (verifier mints/revokes the badge, governor changes parameters), `off-chain-equal`
     (Snapshot = equal `ticket` value=1, not plutocracy). Test invariant
     [`test_reputation.py`](../../ai-agents/test_reputation.py) (17/17). `PTD-0024`.
-  - [ ] Modules 5–8: Housing / Governance / Mediator /
-    Documentation — one at a time, "to green".
+  - [x] Module 5/8 (session 28): **Housing** [`housing_agent.py`](../../ai-agents/housing_agent.py)
+    — a domain helper for housing cases. Read-only, it proves the targeted-disbursement
+    model (docs/ESCROW-TARGETED-DISBURSEMENT.md) "help pays the provider directly, not
+    into hand" IN CODE of `contracts/contracts/Disbursement.sol`: `release-to-provider-only`
+    (release takes no recipient address → tranche goes strictly to c.provider),
+    `provider-fixed` (no setProvider/.provider=), `refund-to-treasury` (refund to the
+    treasury, not the recipient), `tranche-limit` (maxRelease cap), `guardian-cannot-move`
+    (only executor moves funds) + housing registry-record checks
+    (`targeted-escrow`/`provider-onchain`/`category-priority`, level read from
+    PRIORITIES.md). Test invariant [`test_housing.py`](../../ai-agents/test_housing.py)
+    (23/23). CI extended (+ triggers on contracts/contracts and docs/PRIORITIES.md). `PTD-0025`.
+  - [ ] Modules 6–8: Governance / Mediator / Documentation — one at a time, "to green".
 
 ### P1 — materials and infrastructure (partly from INBOX)
 
@@ -259,11 +269,42 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] A reusable lightweight Solidity-invariant scanner module: extract comment stripping
   + brace-balanced function-body extraction from the Reputation agent into a shared
   `ai-agents/solidity_scan.py` — useful for future contract agents (Governance/Audit) (session 27).
+  The Housing agent (session 28) duplicated the same helpers
+  (`strip_solidity_comments`/`_function_body`/`_function_sig`) — now THREE copies, the
+  refactor is overdue.
+- [ ] Housing agent: once a provider whitelist exists (open question in
+  [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md) §8 — who maintains
+  and verifies landlords/pharmacies), add a `provider-whitelisted` check: a housing
+  record's `provider` is in the public registry of verified providers (category
+  `housing`) — closing the critical trust point of model B (session 28).
+- [ ] End-to-end Housing invariant "record ↔ on-chain escrow": verify that a housing
+  record's `escrow_id` matches a real case opened in `Disbursement` (via `Opened(id, …,
+  provider, …)` events) and the record's `provider` = the case's `provider` — tying the
+  registry and the contract into one targeted-disbursement check (extends the "payout ↔
+  registry record" idea, session 28).
 
 ---
 
 ## Done
 
+- **PTD-0025 (session 28):** Stage 6 (AI agents), module 5/8 — **the Housing agent**.
+  [`housing_agent.py`](../../ai-agents/housing_agent.py) is a service read-only agent, a
+  domain helper for housing cases: it proves the targeted-disbursement model
+  ([`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md)) — "help pays the
+  provider directly, not into hand" — is built INTO THE CODE of
+  [`Disbursement.sol`](../../contracts/contracts/Disbursement.sol): `release-to-provider-only`
+  (release takes no recipient address → tranche strictly to c.provider), `provider-fixed`
+  (no setProvider/.provider=), `refund-to-treasury` (refund to treasury, not the recipient),
+  `tranche-limit` (maxRelease cap), `guardian-cannot-move` (only executor moves funds;
+  guardian only pauses) + housing registry-record checks
+  (`targeted-escrow`/`provider-onchain`/`category-priority`, level read from
+  [`PRIORITIES.md`](PRIORITIES.md)). Human-readable and `--json` output; exit 0/1; "red" =
+  a signal. A **test invariant** [`test_housing.py`](../../ai-agents/test_housing.py) (23/23)
+  proves "red is caught, green doesn't false-fail" (poisoned contract/record versions;
+  non-housing records ignored; comments stripped). CI
+  [`ai-agents.yml`](../../.github/workflows/ai-agents.yml) extended (+ triggers on
+  contracts/contracts and docs/PRIORITIES.md). On the real `Disbursement.sol`: 8/8.
+  `PTD-0025`. TESTNET-ONLY. Next — modules 6–8 (Governance / Mediator / Documentation).
 - **PTD-0024 (session 27):** Stage 6 (AI agents), module 4/8 — **the Reputation agent**.
   [`reputation_agent.py`](../../ai-agents/reputation_agent.py) is a service read-only
   agent: it statically analyzes the on-chain reputation contract
@@ -428,3 +469,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Meta-agent "run all" / pre-commit hook / lexical prohibitions linter | agent | 25 |
 | "Payment ↔ registry record" invariant / agent self-test in CI / Reputation agent | agent | 26 |
 | Reputation on Governor.sol / deploy cap check / shared solidity_scan.py | agent | 27 |
+| Refactor shared solidity helpers (3 copies) / Housing provider-whitelist / end-to-end "record ↔ on-chain escrow" test | agent | 28 |

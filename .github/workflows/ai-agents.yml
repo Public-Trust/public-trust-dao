@@ -11,7 +11,10 @@ name: AI-агенты (целостность governance + рельсы безо
 #  • Reputation — модель «1 человек = 1 голос» в коде Reputation.sol и в
 #    настройках Snapshot (soulbound, вес [1..1+cap], роли, не плутократия);
 #    его тест-инвариант доказывает, что красное реально ловится.
-# Любое нарушение целостности/рельс/справедливости/модели голоса валит сборку.
+#  • Housing — целевой escrow жилищной помощи в коде Disbursement.sol и в записях
+#    реестра (транш только поставщику, refund в казну, потолок транша, приоритет);
+#    его тест-инвариант доказывает, что красное реально ловится.
+# Любое нарушение целостности/рельс/справедливости/модели голоса/escrow валит сборку.
 # Read-only: агенты ничего не двигают и ничем не владеют.
 on:
   push:
@@ -21,6 +24,8 @@ on:
       - "scripts/ipfs_manifest.py"
       - "scripts/safe_config.py"
       - "scripts/snapshot_config.py"
+      - "contracts/contracts/**"
+      - "docs/PRIORITIES.md"
       - "governance/**"
       - ".github/workflows/ai-agents.yml"
   pull_request:
@@ -30,6 +35,8 @@ on:
       - "scripts/ipfs_manifest.py"
       - "scripts/safe_config.py"
       - "scripts/snapshot_config.py"
+      - "contracts/contracts/**"
+      - "docs/PRIORITIES.md"
       - "governance/**"
   workflow_dispatch:
 
@@ -58,3 +65,7 @@ jobs:
         run: python3 ai-agents/test_reputation.py
       - name: Прогнать Reputation-агента (модель «1 человек = 1 голос»)
         run: python3 ai-agents/reputation_agent.py
+      - name: Тест-инвариант Housing (доказать, что красное ловится)
+        run: python3 ai-agents/test_housing.py
+      - name: Прогнать Housing-агента (целевой escrow жилищной помощи)
+        run: python3 ai-agents/housing_agent.py

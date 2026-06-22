@@ -39,7 +39,7 @@ This sets hard boundaries for EVERY agent in this directory:
 | **Guardian** | Watches the safety rails: no private keys/secrets in the repo, no mainnet/real funds, no TESTNET-first violations. | ✅ scaffold (`guardian_agent.py`) |
 | **Fairness** | Checks fairness of distribution per [`PRIORITIES.md`](../docs/en/PRIORITIES.md): priority respected, limits/collective review/staging/privacy. | ✅ scaffold (`fairness_agent.py`) |
 | **Reputation** | Computes/validates voting weights per [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3: "1 person = 1 vote", soulbound, "uniqueness ≠ power". | ✅ scaffold (`reputation_agent.py`) |
-| **Housing** | Domain helper for housing cases (escrow paying the provider directly per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)). | ⏳ planned |
+| **Housing** | Domain helper for housing cases (escrow paying the provider directly per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)). | ✅ scaffold (`housing_agent.py`) |
 | **Governance** | Helps with the proposal lifecycle (format, quorum, timing, ties to the constitution); does not vote itself. | ⏳ planned |
 | **Mediator** | Assists with disputes/appeals per [`ANTI-ABUSE.md`](../docs/en/ANTI-ABUSE.md) — structures, does not decide. | ⏳ planned |
 | **Documentation** | Watches RU↔EN sync, link integrity, freshness of the repo map. | ⏳ planned |
@@ -177,7 +177,52 @@ a correct contract+settings stay "green" with no false positives (including igno
 mentions inside comments).
 
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
-Guardian (+test) + Fairness (+test) + Reputation (+test) on every push/PR.
+Guardian (+test) + Fairness (+test) + Reputation (+test) + Housing (+test) on every push/PR.
+
+## Housing agent — what it does and how to run it
+
+`housing_agent.py` is a domain helper for housing cases. Read-only, it proves that the
+core targeted-disbursement principle — **"help is not handed out as cash; it pays the
+service provider (the landlord) directly"** — is built **into the code**
+([`contracts/contracts/Disbursement.sol`](../contracts/contracts/Disbursement.sol)),
+not just described in [`docs/ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md);
+and it checks housing registry records (`category=housing`).
+
+Part A — targeted-escrow contract invariants:
+
+| Check | What it requires | Protects |
+|-------|------------------|----------|
+| `release-to-provider-only` | `release(id, amount)` takes no recipient address; the tranche goes strictly to the case's `c.provider` | Art. 5 / ESCROW §2 — pay the provider directly, not "into hand" |
+| `provider-fixed` | the provider address is fixed in `open`, never reassigned (no `setProvider`/`.provider =`) | Art. 5 / ESCROW §3 — the only possible recipient is set in advance |
+| `refund-to-treasury` | `refund` returns the remainder to `treasury`, not to the recipient/provider | Art. 7 / ESCROW §2 — service not rendered → funds are not lost, go back to the fund |
+| `tranche-limit` | `release` caps a single tranche at `maxRelease` | ANTI-ABUSE §1–§2 — staged payments/limits lower risk |
+| `guardian-cannot-move` | only `executor` moves funds; `guardian` can only pause (moves no funds) | Art. 2/9 — "safety ≠ power" |
+
+Part B — housing registry records (`category=housing`):
+
+| Check | What it requires | Protects |
+|-------|------------------|----------|
+| `targeted-escrow` | the record has a `provider` + `escrow_id` (link to the on-chain escrow) | Art. 3/5 / ESCROW §2 — pay the provider directly, visible in the registry |
+| `provider-onchain` | `provider` is a valid non-zero `0x`+40 hex address | Art. 5 / ESCROW §5 — the provider address is public, not the person |
+| `category-priority` | a `category=housing` level equals "housing_loss" from [`PRIORITIES.md`](../docs/en/PRIORITIES.md) (read from the doc) | Art. 5 — priority by the nature of the need (housing), not by identity |
+
+```bash
+python3 ai-agents/housing_agent.py          # human-readable report
+python3 ai-agents/housing_agent.py --json    # machine-readable (for CI/other agents)
+```
+
+Exit code `0` — the targeted-disbursement model is intact; `1` — a deviation was found
+(a **signal** to the community, not an action: the agent fixes nothing and controls nothing).
+
+A **test invariant** [`test_housing.py`](test_housing.py) proves Housing works rather than
+being "green by default": for every deviation (release with a recipient parameter, a
+`setProvider` added, `refund` to the recipient instead of treasury, the tranche cap removed,
+`release` under `guardian`, a record without `escrow_id`, a malformed/zero provider address,
+a wrong housing priority) the agent must return "red", while a correct contract+records stay
+"green" with no false positives (including ignoring mentions inside comments and non-housing
+records).
+
+CI runs Housing (+test) in the same workflow.
 
 ## Rails (for all agents in this directory)
 
