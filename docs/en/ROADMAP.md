@@ -450,15 +450,29 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   they are read from the same `lib/i18n.ts` list (`t.learn`) used by the home-page showcase
   "Understand how the fund works" (single source of text, RU↔EN). One string key `seeAlso`
   (RU/EN) + a `see-also` CSS block. `PTD-0104`. TESTNET-ONLY.
-- [ ] **"See also" should also reach working screens where it is natural** — right now the
+- [x] **"See also" should also reach working screens where it is natural** — right now the
   `SeeAlso` block links only explanation screens to one another. Add soft explanation→action
   hops where they help a person: "How we decide" → the `/voting/` ballot, "Direct payment" →
   the `/apply/` form, "Treasury window" from the money-related screens. Titles come from the
-  same `t.screens` list (no duplication). Pure front-end (proposed in session 107).
-- [ ] **Documentation agent: every explanation screen has a "See also" block** — a soft check
+  same `t.screens` list (no duplication). Pure front-end (proposed in session 107). **Done
+  (session 108):** `SeeAlso.tsx` gained a `RELATED_ACTIONS` map and a separate sublist labelled
+  "And here is where you can do it" (`seeAlsoDo`, RU↔EN); titles reuse the same `t.screens`
+  list, action cards carry an accent edge. `PTD-0105`. TESTNET-ONLY.
+- [x] **Documentation agent: every explanation screen has a "See also" block** — a soft check
   that each `platform/app/<slug>/page.tsx` in the `RELATED` map contains `<SeeAlso …/>` (so the
   cross-navigation does not silently regress when new screens are added). A warning, not a
-  blocker (extends `PTD-0104`, proposed in session 107).
+  blocker (extends `PTD-0104`, proposed in session 107). **Done (session 109):** the
+  `see-also-present` check in `documentation_agent.py` — every source screen of the
+  `RELATED`/`RELATED_ACTIONS` maps has a `page.tsx` that actually renders `<SeeAlso`; otherwise
+  a soft warning (verdict stays green). `PTD-0106`.
+- [x] **Documentation agent: targets of the `RELATED`/`RELATED_ACTIONS` maps exist** — a soft
+  check that every address in both `SeeAlso.tsx` maps is present in `t.learn`/`t.screens` (a
+  broken cross-link won't appear silently when a screen is renamed). A warning, not a blocker
+  (extends `PTD-0105`, proposed in session 108). **Done (session 109):** the `see-also-targets`
+  check — keys and values of `RELATED` are matched against `t.learn`, values of
+  `RELATED_ACTIONS` against `t.screens` (exactly how `SeeAlso.tsx` resolves them); a dangling
+  address → a soft warning (verdict stays green). Dependency-free parsers; silent when the
+  platform files are absent. +6 test scenarios (73/73). `PTD-0106`.
 - [x] **A "Support the project" card on the platform home page** — the `support` screen was
   in the menu but had no card on the home page (`platform/app/page.tsx`). **Done (session
   105):** the home page gained a whole section "Understand how the fund works" — a showcase
@@ -922,6 +936,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   warn but suggest the most similar existing slug in the target file (Levenshtein /
   longest common substring), so a human immediately sees what the section was renamed
   to. Stays a soft hint, not a block (proposed session 97).
+
+- [ ] **Documentation agent: "See also" is mutually symmetric** — a soft check that if
+  screen A links to screen B under "See also", then B mentions A too (the `RELATED` map in
+  `SeeAlso.tsx` is symmetric). Asymmetry isn't an error (sometimes intentional), so warning
+  only; helps spot one-way links where a person hits a dead end with no way back (extends
+  `PTD-0106`, proposed session 109).
+
+- [ ] **Documentation agent: every working platform screen has a `page.tsx`** — a soft check
+  that every address in `t.screens`/`t.learn` (`lib/i18n.ts`) maps to a real
+  `platform/app/<slug>/page.tsx` directory. `see-also-targets` checks the reverse (map
+  addresses exist in i18n); this closes the other side: a screen promised in the menu/showcase
+  actually exists rather than 404-ing (extends `PTD-0106`, proposed session 109).
 
 ---
 

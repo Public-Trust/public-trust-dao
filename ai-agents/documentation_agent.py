@@ -33,6 +33,12 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • glossary-symmetry → число статей в RU-глоссарии и EN-зеркале совпадает ..... ст. 3/6
     (МЯГКАЯ: предупреждает, если глоссарии разъехались по объёму — статью добавили
      в один язык, а в зеркало перенести забыли; PTD-0040)
+  • see-also-targets  → адреса карт «См. также» платформы есть в текстах i18n ... ст. 3/6
+    (МЯГКАЯ: предупреждает, если адрес из RELATED/RELATED_ACTIONS в SeeAlso.tsx не
+     найден в t.learn/t.screens — перекрёстная ссылка тихо исчезнет; PTD-0105)
+  • see-also-present  → экран-источник карты реально рисует <SeeAlso/> .......... ст. 3/6
+    (МЯГКАЯ: предупреждает, если экран есть в карте «См. также», но его page.tsx
+     не отрисовывает компонент — блок ссылок молча не появится; PTD-0104)
 
 Правило пар (выводится из пути, а не зашито пофайлово):
   docs/NAME.md            ↔ docs/en/NAME.md
@@ -98,6 +104,24 @@ FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
 # непонятные технические слова были объяснены простыми словами именно здесь.
 GLOSSARY_RU = "docs/GLOSSARY.md"
 GLOSSARY_EN = "docs/en/GLOSSARY.md"
+
+# Перекрёстная навигация «См. также» в платформе. Компонент SeeAlso.tsx держит
+# две карты адресов: RELATED (объяснение → близкое объяснение) и RELATED_ACTIONS
+# (объяснение → рабочий экран, где это применить). Заголовки берутся не из карт, а
+# из списков t.learn / t.screens в lib/i18n.ts (один источник текста RU↔EN). Эти
+# мягкие проверки следят, чтобы карты и тексты не разъехались молча: чтобы каждый
+# адрес карты существовал в i18n, а каждый экран-источник реально отрисовывал блок
+# «См. также» (ст. 3 — проверяемость; ст. 6 — понятность; PTD-0104/0105).
+SEEALSO_TSX = "platform/components/SeeAlso.tsx"
+I18N_TS = "platform/lib/i18n.ts"
+PLATFORM_APP = "platform/app"
+
+# Адрес-слаг экрана платформы в кавычках: "/manifesto/", "/voting/" и т.п.
+TS_HREF_RE = re.compile(r'"(/[^"]*/)"')
+# Запись карты SeeAlso: "ключ-адрес": [ "адрес", ... ] — ключ и тело списка.
+TS_MAP_ENTRY_RE = re.compile(r'"(/[^"]*/)"\s*:\s*\[([^\]]*)\]')
+# href в элементе массива i18n: href: "/apply/".
+TS_ARRAY_HREF_RE = re.compile(r'href:\s*"([^"]+)"')
 
 # Жирный заголовок статьи глоссария: строка, начинающаяся с **...** (термин).
 BOLD_HEAD_RE = re.compile(r"^\*\*.+?\*\*", re.MULTILINE)
@@ -679,6 +703,150 @@ def check_constitutional_prohibitions(root, public_texts):
     return ("pass" if not violations else "warn"), violations
 
 
+def _ts_object_block(text, name):
+    """Тело объектного литерала `const <name>: ... = { ... }` из .tsx/.ts.
+
+    Возвращает строку между внешними фигурными скобками (с учётом вложенности)
+    или None, если объявление не найдено. Списки внутри используют [ ], а не { },
+    поэтому первая закрывающая `}` на нулевой глубине — это конец карты.
+    """
+    m = re.search(r"const\s+" + re.escape(name) + r"\s*:[^=]*=\s*\{", text)
+    if not m:
+        return None
+    start = m.end() - 1  # позиция открывающей «{»
+    depth = 0
+    for j in range(start, len(text)):
+        ch = text[j]
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return text[start + 1:j]
+    return None
+
+
+def parse_seealso_map(text, name):
+    """Карта SeeAlso (`RELATED`/`RELATED_ACTIONS`) → {ключ-адрес: [адрес, ...]}."""
+    block = _ts_object_block(text, name)
+    if block is None:
+        return {}
+    out = {}
+    for key, body in TS_MAP_ENTRY_RE.findall(block):
+        out[key] = TS_HREF_RE.findall(body)
+    return out
+
+
+def parse_i18n_hrefs(text, key):
+    """Множество адресов href из массива `<key>: [ ... ]` в lib/i18n.ts.
+
+    Массив встречается дважды (блоки RU и EN) — адреса в них одинаковы, объединяем.
+    Объявление типа `<key>: {...}[]` сюда не попадает (требуется именно `[`).
+    """
+    hrefs = set()
+    for m in re.finditer(r"\b" + re.escape(key) + r"\s*:\s*\[", text):
+        start = m.end() - 1  # позиция открывающей «[»
+        depth = 0
+        for j in range(start, len(text)):
+            ch = text[j]
+            if ch == "[":
+                depth += 1
+            elif ch == "]":
+                depth -= 1
+                if depth == 0:
+                    hrefs.update(TS_ARRAY_HREF_RE.findall(text[start + 1:j]))
+                    break
+    return hrefs
+
+
+def check_see_also_targets(root):
+    """МЯГКАЯ: каждый адрес карт «См. также» существует в текстах i18n.
+
+    Компонент `SeeAlso.tsx` разрешает адреса так: ключи и значения `RELATED` ищет
+    в `t.learn` (экраны-объяснения), значения `RELATED_ACTIONS` — в `t.screens`
+    (рабочие экраны). Если экран переименуют в `lib/i18n.ts`, а карту поправить
+    забудут, `find(...)` молча вернёт `undefined` и ссылка тихо исчезнет с экрана.
+    Эта проверка сверяет каждый адрес обеих карт с адресами из i18n и предупреждает
+    о «висячих» (warn, не блок — ст. 3/6, PTD-0105). Если файлов платформы нет
+    (мини-репозиторий в тесте) или их не удалось распарсить — проверять нечего → pass.
+    """
+    if not (os.path.exists(os.path.join(root, SEEALSO_TSX)) and
+            os.path.exists(os.path.join(root, I18N_TS))):
+        return "pass", []
+    related = parse_seealso_map(read_text(root, SEEALSO_TSX), "RELATED")
+    actions = parse_seealso_map(read_text(root, SEEALSO_TSX), "RELATED_ACTIONS")
+    i18n = read_text(root, I18N_TS)
+    learn = parse_i18n_hrefs(i18n, "learn")
+    screens = parse_i18n_hrefs(i18n, "screens")
+    # Ничего не распарсили (дрейф формата) — молчим, чтобы не кричать ложно.
+    if (not related and not actions) or not learn or not screens:
+        return "pass", []
+    violations = []
+    # Ключи обеих карт — это экраны-объяснения → должны быть в t.learn.
+    for src, mapping in (("RELATED", related), ("RELATED_ACTIONS", actions)):
+        for key in mapping:
+            if key not in learn:
+                violations.append({
+                    "record": f"{SEEALSO_TSX} → {src}",
+                    "problem": (f"экран-ключ «{key}» карты не найден в t.learn "
+                                "(lib/i18n.ts) — экран переименовали, а карту нет"),
+                })
+    # Значения RELATED ведут на объяснения (t.learn); RELATED_ACTIONS — на рабочие
+    # экраны (t.screens). Каждый адрес должен существовать в своём списке.
+    for key, vals in related.items():
+        for href in vals:
+            if href not in learn:
+                violations.append({
+                    "record": f"{SEEALSO_TSX} → RELATED[{key}]",
+                    "problem": (f"адрес «{href}» не найден в t.learn — ссылка «См. "
+                                "также» тихо исчезнет с экрана"),
+                })
+    for key, vals in actions.items():
+        for href in vals:
+            if href not in screens:
+                violations.append({
+                    "record": f"{SEEALSO_TSX} → RELATED_ACTIONS[{key}]",
+                    "problem": (f"адрес «{href}» не найден в t.screens — ссылка-"
+                                "действие тихо исчезнет с экрана"),
+                })
+    return ("pass" if not violations else "warn"), violations
+
+
+def check_see_also_present(root):
+    """МЯГКАЯ: каждый экран-источник карт «См. также» отрисовывает <SeeAlso/>.
+
+    Адрес-ключ в `RELATED`/`RELATED_ACTIONS` означает «на этом экране снизу должен
+    стоять блок перекрёстных ссылок». Если экран добавили в карту, но забыли
+    вставить сам компонент `<SeeAlso slug=…/>` в его `page.tsx`, навигация молча не
+    появится. Проверка сверяет: у каждого экрана-ключа есть файл страницы и в нём
+    встречается `<SeeAlso` (warn, не блок — ст. 3/6, PTD-0104). Если компонента нет
+    (мини-репозиторий в тесте) или карты пусты — проверять нечего → pass.
+    """
+    if not os.path.exists(os.path.join(root, SEEALSO_TSX)):
+        return "pass", []
+    tsx = read_text(root, SEEALSO_TSX)
+    keys = set(parse_seealso_map(tsx, "RELATED")) | set(parse_seealso_map(tsx, "RELATED_ACTIONS"))
+    if not keys:
+        return "pass", []
+    violations = []
+    for slug in sorted(keys):
+        page = f"{PLATFORM_APP}/{slug.strip('/')}/page.tsx"
+        full = os.path.join(root, page)
+        if not os.path.exists(full):
+            violations.append({
+                "record": page,
+                "problem": (f"экран «{slug}» есть в карте «См. также», но файла "
+                            "страницы нет — перекрёстная навигация молча отвалится"),
+            })
+        elif "<SeeAlso" not in read_text(root, page):
+            violations.append({
+                "record": page,
+                "problem": (f"экран «{slug}» есть в карте «См. также», но страница не "
+                            "отрисовывает <SeeAlso/> — человек не увидит блок ссылок"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 CHECKS = [
     {
         "key": "bilingual-pairs",
@@ -733,6 +901,20 @@ CHECKS = [
         "fn": "prohibitions",
         "soft": True,
     },
+    {
+        "key": "see-also-targets",
+        "title": "Адреса карт «См. также» (SeeAlso.tsx) существуют в текстах i18n",
+        "guards": "ст. 3/6 — перекрёстная навигация платформы не «отвалится» молча при переименовании экрана (PTD-0105); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "seealso_targets",
+        "soft": True,
+    },
+    {
+        "key": "see-also-present",
+        "title": "Каждый экран-источник карты «См. также» отрисовывает <SeeAlso/>",
+        "guards": "ст. 3/6 — у экрана-объяснения не пропадёт молча блок перекрёстных ссылок (PTD-0104); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "seealso_present",
+        "soft": True,
+    },
 ]
 
 
@@ -755,6 +937,8 @@ def run(root):
     # Публичные человеко-видимые тексты = двуязычные .md + витрина web/*.html.
     public_texts = public_docs + git_tracked_web_html(root)
     prohib_status, prohib_v = check_constitutional_prohibitions(root, public_texts)
+    seealso_t_status, seealso_t_v = check_see_also_targets(root)
+    seealso_p_status, seealso_p_v = check_see_also_present(root)
 
     results = {
         "pairs": (pairs_status, pairs_v),
@@ -765,6 +949,8 @@ def run(root):
         "nodead": (nodead_status, nodead_v),
         "symmetry": (sym_status, sym_v),
         "prohibitions": (prohib_status, prohib_v),
+        "seealso_targets": (seealso_t_status, seealso_t_v),
+        "seealso_present": (seealso_p_status, seealso_p_v),
     }
 
     checks = []

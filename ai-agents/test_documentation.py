@@ -489,6 +489,161 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # --- Мягкие проверки «См. также» платформы (see-also-targets / -present) ----
+    # Логика: карты RELATED/RELATED_ACTIONS в SeeAlso.tsx и тексты t.learn/t.screens
+    # в lib/i18n.ts не должны разъезжаться молча — битый адрес или экран без
+    # <SeeAlso/> ПРЕДУПРЕЖДАЮТ (warn), но вердикт не роняют (soft).
+
+    # Корректный минимальный платформенный набор: карта ссылается только на адреса,
+    # которые есть в i18n, и каждый экран-источник рисует <SeeAlso/>.
+    PLATFORM_GOOD = {
+        "platform/lib/i18n.ts": (
+            "export const ru = {\n"
+            "  screens: [\n"
+            '    { title: "Заявка", href: "/apply/" },\n'
+            '    { title: "Голос", href: "/voting/" },\n'
+            "  ],\n"
+            "  learn: [\n"
+            '    { title: "Манифест", href: "/manifesto/" },\n'
+            '    { title: "Как решаем", href: "/governance/" },\n'
+            "  ],\n"
+            "};\n"
+        ),
+        "platform/components/SeeAlso.tsx": (
+            "const RELATED: Record<string, string[]> = {\n"
+            '  "/manifesto/": ["/governance/"],\n'
+            '  "/governance/": ["/manifesto/"],\n'
+            "};\n"
+            "const RELATED_ACTIONS: Record<string, string[]> = {\n"
+            '  "/governance/": ["/voting/"],\n'
+            "};\n"
+            "export default function SeeAlso() { return null; }\n"
+        ),
+        "platform/app/manifesto/page.tsx": (
+            'export default function P() { return <SeeAlso slug="/manifesto/" />; }\n'
+        ),
+        "platform/app/governance/page.tsx": (
+            'export default function P() { return <SeeAlso slug="/governance/" />; }\n'
+        ),
+    }
+
+    def with_platform(extra):
+        f = dict(GOOD_FILES)
+        f.update(PLATFORM_GOOD)
+        f.update(extra)
+        return f
+
+    # 24. Корректная платформа → обе проверки pass, вердикт green, без тревог.
+    print("\n[мягкие проверки: корректная карта «См. также» → pass, без предупреждений]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        code, report = run_agent(tmp)
+        check("вердикт green / exit=0", report.get("verdict") == "green" and code == 0)
+        check("see-also-targets == pass", status_of(report, "see-also-targets") == "pass")
+        check("see-also-present == pass", status_of(report, "see-also-present") == "pass")
+        check("предупреждений нет", report.get("warnings", 0) == 0)
+        check("see-also-targets помечена soft", _is_soft(report, "see-also-targets"))
+        check("see-also-present помечена soft", _is_soft(report, "see-also-present"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 25. Адрес в RELATED ведёт на экран, которого нет в t.learn → targets warn.
+    print("\n[мягкая проверка: висячий адрес RELATED → see-also-targets warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        broken = with_platform({
+            "platform/components/SeeAlso.tsx": (
+                "const RELATED: Record<string, string[]> = {\n"
+                '  "/manifesto/": ["/nonexistent/"],\n'
+                "};\n"
+                "const RELATED_ACTIONS: Record<string, string[]> = {\n"
+                "};\n"
+                "export default function SeeAlso() { return null; }\n"
+            ),
+        })
+        make_repo(tmp, broken)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("see-also-targets == warn для висячего адреса",
+              status_of(report, "see-also-targets") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 26. Значение RELATED_ACTIONS не из t.screens → targets warn.
+    print("\n[мягкая проверка: действие-ссылка не из t.screens → see-also-targets warn]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        broken = with_platform({
+            "platform/components/SeeAlso.tsx": (
+                "const RELATED: Record<string, string[]> = {\n"
+                '  "/manifesto/": ["/governance/"],\n'
+                '  "/governance/": ["/manifesto/"],\n'
+                "};\n"
+                "const RELATED_ACTIONS: Record<string, string[]> = {\n"
+                '  "/governance/": ["/manifesto/"],\n'  # /manifesto/ — объяснение, не рабочий экран
+                "};\n"
+                "export default function SeeAlso() { return null; }\n"
+            ),
+        })
+        make_repo(tmp, broken)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green", report.get("verdict") == "green")
+        check("see-also-targets == warn (адрес-действие не из t.screens)",
+              status_of(report, "see-also-targets") == "warn")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 27. Экран есть в карте, но его page.tsx не рисует <SeeAlso/> → present warn.
+    print("\n[мягкая проверка: экран без <SeeAlso/> → see-also-present warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        broken = with_platform({
+            "platform/app/governance/page.tsx": (
+                "export default function P() { return <main>без блока ссылок</main>; }\n"
+            ),
+        })
+        make_repo(tmp, broken)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("see-also-present == warn для экрана без <SeeAlso/>",
+              status_of(report, "see-also-present") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 28. Экран из карты вообще без файла page.tsx → present warn.
+    print("\n[мягкая проверка: экран карты без файла страницы → see-also-present warn]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        broken = dict(GOOD_FILES)
+        broken.update(PLATFORM_GOOD)
+        broken.pop("platform/app/governance/page.tsx")  # файла страницы нет
+        make_repo(tmp, broken)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green", report.get("verdict") == "green")
+        check("see-also-present == warn для отсутствующей страницы",
+              status_of(report, "see-also-present") == "warn")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 29. Без файлов платформы вовсе — обе проверки молчат (pass), вердикт green.
+    print("\n[мягкие проверки: без платформы не предупреждают (нечего линтовать)]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, dict(GOOD_FILES))
+        code, report = run_agent(tmp)
+        check("see-also-targets == pass без платформы",
+              status_of(report, "see-also-targets") == "pass")
+        check("see-also-present == pass без платформы",
+              status_of(report, "see-also-present") == "pass")
+        check("предупреждений нет", report.get("warnings", 0) == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 

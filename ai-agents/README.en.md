@@ -251,7 +251,10 @@ git-tracked `.md` files (over what is actually published):
 | `anchor-integrity` *(soft)* | a link anchor `FILE.md#section` (and `#section` within the same file) points to a real heading (GitHub-style slug) | Art. 3 — verifiability; links don't rot when sections are renamed |
 | `glossary-coverage` *(soft)* | key technical terms (DAO, escrow, multisig, …) have an entry in the glossary (RU+EN) | Art. 3/6 — clarity/explainability (`PTD-0040`) |
 | `glossary-no-dead` *(soft)* | every glossary entry's term is actually used in at least one normative document (inverse of `glossary-coverage`) | Art. 3/6 — clarity/explainability (`PTD-0040`) |
+| `glossary-symmetry` *(soft)* | the RU glossary and its EN mirror have the same number of entries (a term wasn't left untranslated in one language) | Art. 3/6 — clarity/explainability (`PTD-0040`) |
 | `constitutional-prohibitions` *(soft)* | public texts (`.md` + the `web/*.html` storefront) make no forbidden promises: yield/profit, investment/pyramid, pay-to-recruit (referrals) — our own "this is NOT an investment" disclaimers and prohibition lists do not count as violations | Art. 3/6 + `PRINCIPLES.md` "Constitutional prohibitions" for public texts |
+| `see-also-targets` *(soft)* | every address in the platform's "See also" maps (`RELATED`/`RELATED_ACTIONS` in `SeeAlso.tsx`) exists in the `i18n` texts (`t.learn`/`t.screens`) — a cross-link won't silently break when a screen is renamed | Art. 3/6 — verifiability/clarity (`PTD-0105`) |
+| `see-also-present` *(soft)* | every screen that is a source in a "See also" map actually renders the `<SeeAlso/>` component in its `page.tsx` (the cross-link block won't silently disappear) | Art. 3/6 — verifiability/clarity (`PTD-0104`) |
 
 > The `glossary-coverage` and `glossary-no-dead` checks are **soft**: they only warn
 > (so the glossary neither falls behind the documents nor grows stale) and **never
