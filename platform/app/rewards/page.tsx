@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 
 // Зеркало нормативного документа docs/REWARDS-MODEL.md внутри приложения
 // (тот же приём, что «Порядок помощи» ↔ PRIORITIES.md): простым языком,
@@ -92,6 +93,7 @@ export default function RewardsPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/rewards/" />
     </main>
   );
 }

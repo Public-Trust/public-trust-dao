@@ -554,6 +554,7 @@ export type Dict = {
   learn: { title: string; text: string; href: string }[];
   transparencyTitle: string;
   transparencyText: string;
+  seeAlso: string;
   footerNote: string;
   contact: string;
   builtNote: string;
@@ -718,6 +719,7 @@ export const DICT: Record<Lang, Dict> = {
     transparencyTitle: "Честно и без слежки",
     transparencyText:
       "В платформе нет сторонних счётчиков, рекламы и слежки. Шрифты системные, ничего не подгружается с чужих серверов. Весь код открыт, каждое решение записано в открытый журнал.",
+    seeAlso: "См. также",
     footerNote:
       "Public Trust DAO — общественное благо, не инвестиция. Всё на тестовой сети, без реальных денег.",
     contact: "Контакт",
@@ -2036,6 +2038,7 @@ export const DICT: Record<Lang, Dict> = {
     transparencyTitle: "Honest and without surveillance",
     transparencyText:
       "The platform has no third-party counters, ads, or tracking. Fonts are system fonts, nothing loads from other people's servers. All code is open and every decision is written to the open record.",
+    seeAlso: "See also",
     footerNote:
       "Public Trust DAO — a public good, not an investment. Everything is on a test network, with no real money.",
     contact: "Contact",

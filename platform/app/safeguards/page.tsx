@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 
 // Зеркало нормативного документа docs/ANTI-ABUSE.md внутри приложения
 // (тот же приём, что «Порядок помощи» ↔ PRIORITIES.md и «Помощь и награда»
@@ -85,6 +86,7 @@ export default function SafeguardsPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/safeguards/" />
     </main>
   );
 }

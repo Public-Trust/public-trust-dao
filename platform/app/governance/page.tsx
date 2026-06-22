@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 
 // Зеркало нормативного документа docs/GOVERNANCE.md внутри приложения (тот же
 // приём «экран-зеркало», что «Конституция» ↔ CONSTITUTION.md, «Порядок помощи» ↔
@@ -101,6 +102,7 @@ export default function GovernancePage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/governance/" />
     </main>
   );
 }

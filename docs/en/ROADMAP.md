@@ -437,13 +437,28 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
-- [ ] **Cross-screen "see also" links between the platform's mirror screens** — the
+- [x] **Cross-screen "see also" links between the platform's mirror screens** — the
   series of screens (`manifesto`, `constitution`, `governance`, `priorities`, `rewards`,
   `safeguards`, `work`, `accountability`, `direct-help`, `support`, `glossary`) is closed
-  (session 104, `PTD-0101`); now connect them with human "see also" links inside the text
+  (session 104, `PTD-0101`); connect them with human "see also" links inside the text
   (e.g. from "Support the project" → to "Direct payment" and "How we decide"), so a person
   can move between explanations without returning to the home page. Pure front-end, no new
-  dependencies (proposed in session 104).
+  dependencies (proposed in session 104). **Done (session 107):** each of the 11 explanation
+  screens now ends with a "See also" block holding 3 links to closely related explanations.
+  Built as a reusable component [`platform/components/SeeAlso.tsx`](../../platform/components/SeeAlso.tsx):
+  the relation map is keyed by screen path, while titles/descriptions are NOT duplicated —
+  they are read from the same `lib/i18n.ts` list (`t.learn`) used by the home-page showcase
+  "Understand how the fund works" (single source of text, RU↔EN). One string key `seeAlso`
+  (RU/EN) + a `see-also` CSS block. `PTD-0104`. TESTNET-ONLY.
+- [ ] **"See also" should also reach working screens where it is natural** — right now the
+  `SeeAlso` block links only explanation screens to one another. Add soft explanation→action
+  hops where they help a person: "How we decide" → the `/voting/` ballot, "Direct payment" →
+  the `/apply/` form, "Treasury window" from the money-related screens. Titles come from the
+  same `t.screens` list (no duplication). Pure front-end (proposed in session 107).
+- [ ] **Documentation agent: every explanation screen has a "See also" block** — a soft check
+  that each `platform/app/<slug>/page.tsx` in the `RELATED` map contains `<SeeAlso …/>` (so the
+  cross-navigation does not silently regress when new screens are added). A warning, not a
+  blocker (extends `PTD-0104`, proposed in session 107).
 - [x] **A "Support the project" card on the platform home page** — the `support` screen was
   in the menu but had no card on the home page (`platform/app/page.tsx`). **Done (session
   105):** the home page gained a whole section "Understand how the fund works" — a showcase

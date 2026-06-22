@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 
 // Зеркало нормативного документа docs/ACCOUNTABILITY.md внутри приложения
 // (тот же приём, что «Порядок помощи» ↔ PRIORITIES.md, «Помощь и награда» ↔
@@ -97,6 +98,7 @@ export default function AccountabilityPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/accountability/" />
     </main>
   );
 }

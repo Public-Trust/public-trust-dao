@@ -924,6 +924,49 @@ h3 {
   margin: 0 8px;
 }
 
+/* «См. также» — перекрёстные ссылки между экранами-объяснениями.
+   Лёгкая тонированная панель, чтобы блок читался как навигация, а не как
+   часть текста. Карточки-ссылки переиспользуют токены границ/радиуса. */
+.see-also {
+  margin-top: 28px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+}
+.see-also h2 {
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+}
+.see-also-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+.see-also-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.see-also-link {
+  font-weight: 600;
+  text-decoration: none;
+}
+.see-also-link:hover {
+  text-decoration: underline;
+}
+.see-also-text {
+  color: var(--text-soft);
+  font-size: 0.92rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;

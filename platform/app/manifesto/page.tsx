@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 
 // Зеркало нормативного документа docs/MANIFESTO.md внутри приложения (тот же
 // приём «экран-зеркало», что «Конституция» ↔ CONSTITUTION.md, «Как фонд
@@ -98,6 +99,7 @@ export default function ManifestoPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/manifesto/" />
     </main>
   );
 }

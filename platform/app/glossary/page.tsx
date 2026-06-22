@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 import { countTerms, searchGlossary } from "@/lib/glossary";
 
 // Полный нормативный глоссарий в открытом репозитории — словарь на экране
@@ -93,6 +94,7 @@ export default function GlossaryPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/glossary/" />
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 import { PRIORITIES } from "@/lib/application";
 
 // Зеркало нормативного документа docs/PRIORITIES.md внутри приложения.
@@ -83,6 +84,7 @@ export default function PrioritiesPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/priorities/" />
     </main>
   );
 }

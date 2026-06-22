@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 
 // Зеркало нормативного документа docs/SUPPORT-MODEL.md внутри приложения (тот же
 // приём «экран-зеркало», что «Манифест» ↔ MANIFESTO.md, «Конституция» ↔
@@ -108,6 +109,7 @@ export default function SupportPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/support/" />
     </main>
   );
 }

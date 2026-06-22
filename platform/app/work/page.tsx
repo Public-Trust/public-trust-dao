@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 
 // Зеркало нормативного документа docs/PROOF-OF-CONTRIBUTION.md внутри приложения
 // (тот же приём, что «Порядок помощи» ↔ PRIORITIES.md, «Помощь и награда» ↔
@@ -100,6 +101,7 @@ export default function WorkPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/work/" />
     </main>
   );
 }

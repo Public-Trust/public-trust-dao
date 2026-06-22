@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useI18n } from "@/components/Providers";
+import SeeAlso from "@/components/SeeAlso";
 
 // Зеркало нормативного документа docs/ESCROW-TARGETED-DISBURSEMENT.md внутри
 // приложения (тот же приём «экран-зеркало», что «Порядок помощи» ↔ PRIORITIES.md,
@@ -90,6 +91,7 @@ export default function DirectHelpPage() {
           </a>
         </p>
       </section>
+      <SeeAlso slug="/direct-help/" />
     </main>
   );
 }
