@@ -24,6 +24,13 @@ Run-All (мета-агент) — Public Trust DAO (Этап 6, консолид
   • governance    — жизненный цикл предложения в конфигах управления (не голосует) ст. 4/5
   • mediator      — процесс споров/апелляций (структурирует, не решает) ........ ст. 9.2
 
+Помимо восьми агентов мета-агент прогоняет ещё и СТРАЖА СТРУКТУРЫ
+(`structure_guard.py`) — служебный модуль качества каталога `ai-agents/`. Его
+«красное» (нарушение обязательного стандарта) валит общий вердикт наравне с
+агентами, а его МЯГКИЕ предупреждения (severity=soft: например, у шага CI нет
+человеческого имени) выводятся в сводке отдельным числом, НЕ валя сборку — чтобы
+операторская сводка их не теряла, но и не краснела из-за подсказки к читаемости.
+
 Флаги:
   • --with-contracts — пробросить в Audit прогон тестов смарт-контрактов (нужен Node/npm);
   • --with-tests     — дополнительно прогнать тест-инварианты агентов (`test_*.py`):
@@ -79,6 +86,12 @@ TESTS = [
     "test_structure_guard.py",
     "test_run_all.py",
 ]
+
+# Страж структуры каталога ai-agents/ — служебный модуль качества (не один из
+# восьми агентов, поэтому идёт отдельной графой, чтобы «агенты 8/8» оставались
+# стабильны). Его hard-нарушение валит общий вердикт, а мягкие предупреждения
+# (severity=soft) лишь выводятся числом в сводке, не валя сборку.
+GUARD = "structure_guard.py"
 
 
 def _run(cmd):
@@ -144,6 +157,43 @@ def run_test(script):
     }
 
 
+def run_guard():
+    """Запускает стража структуры (structure_guard.py) и разбирает его отчёт.
+
+    Возвращает dict с вердиктом, счётом и числом мягких предупреждений (`warnings`)
+    — либо None, если стража нет в каталоге агентов (тогда проверка неприменима и
+    НЕ влияет на общий вердикт; его пропажа громко завалит другие шаги CI сама).
+    Hard-«красное» стража валит общий вердикт; мягкие предупреждения — нет."""
+    path = os.path.join(AGENTS_DIR, GUARD)
+    if not os.path.isfile(path):
+        return None
+    code, out = _run([sys.executable, path, "--json"])
+
+    result = {
+        "key": "structure_guard",
+        "exit_code": code,
+        "verdict": "red",
+        "passed": None,
+        "total": None,
+        "warnings": 0,
+        "output": "",
+    }
+    try:
+        report = json.loads(out)
+        result["verdict"] = report.get("verdict", "red")
+        result["passed"] = report.get("passed")
+        result["total"] = report.get("total")
+        result["warnings"] = report.get("warnings", 0)
+        result["checks"] = report.get("checks", [])
+        if result["verdict"] == "green" and code != 0:
+            result["verdict"] = "red"
+            result["output"] = "несогласованность: verdict=green, но exit_code!=0"
+    except (ValueError, TypeError):
+        result["verdict"] = "red"
+        result["output"] = out
+    return result
+
+
 def main(argv):
     parser = argparse.ArgumentParser(
         description="Мета-агент Public Trust DAO: прогнать всех восемь агентов и свести в один вердикт."
@@ -167,12 +217,18 @@ def main(argv):
 
     agent_results = [run_agent(a, args.with_contracts) for a in AGENTS]
     test_results = [run_test(t) for t in TESTS] if args.with_tests else []
+    guard_result = run_guard()  # None, если стража нет (неприменимо)
 
     agents_green = sum(1 for r in agent_results if r["verdict"] == "green")
     tests_green = sum(1 for r in test_results if r["verdict"] == "green")
+    # Страж зелёный, если его нет (неприменимо) либо его вердикт green. Мягкие
+    # предупреждения (warnings) на вердикт НЕ влияют — только hard-«красное».
+    guard_green = guard_result is None or guard_result["verdict"] == "green"
+    guard_warnings = guard_result["warnings"] if guard_result else 0
     all_green = (
         agents_green == len(agent_results)
         and tests_green == len(test_results)
+        and guard_green
     )
 
     report = {
@@ -183,8 +239,10 @@ def main(argv):
         "agents_total": len(agent_results),
         "tests_green": tests_green,
         "tests_total": len(test_results),
+        "guard_warnings": guard_warnings,
         "agents": agent_results,
         "tests": test_results,
+        "guard": guard_result,
     }
 
     if args.json:
@@ -218,11 +276,28 @@ def main(argv):
                 for line in (r["output"] or "(нет вывода)").splitlines():
                     print(f"    | {line}")
 
+    if guard_result is not None:
+        mark = "✓" if guard_result["verdict"] == "green" else "✗"
+        score = ""
+        if guard_result["passed"] is not None and guard_result["total"] is not None:
+            score = f"  ({guard_result['passed']}/{guard_result['total']})"
+        print("\nСТРАЖ СТРУКТУРЫ (стандарты качества каталога ai-agents/):")
+        print(f"\n{mark} [structure_guard]{score}  мягких предупреждений: {guard_warnings}")
+        if guard_result["verdict"] != "green":
+            for line in (guard_result["output"] or "(нет вывода)").splitlines():
+                print(f"    | {line}")
+        elif guard_warnings:
+            print("    | есть мягкие предупреждения (не валят сборку): подробности — "
+                  "python3 ai-agents/structure_guard.py")
+
     print("\n" + "-" * 70)
     verdict = "ЗЕЛЁНО ✓" if all_green else "КРАСНО ✗"
     summary = f"агенты {agents_green}/{len(agent_results)}"
     if test_results:
         summary += f", тесты {tests_green}/{len(test_results)}"
+    if guard_result is not None:
+        summary += f", страж {guard_result['passed']}/{guard_result['total']}"
+        summary += f", мягких предупреждений стража: {guard_warnings}"
     print(f"ИТОГ: {verdict}  ({summary})")
     print("-" * 70)
     if not all_green:

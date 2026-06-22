@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 67,
-  "head_hash": "475bab2b6ac912861af521a2e756c68caa0568c60355ff12f9e22f90ed10664a",
+  "count": 68,
+  "head_hash": "a424ec13d8ff8704adee870878c69a93f3d6bc93db3b6225fbd0145890ef5463",
   "entries": [
     {
       "seq": 0,
@@ -606,6 +606,15 @@
       "summary": "Страж структуры: десятая (третья мягкая) проверка ci-step-has-body — у шага с '- name:' есть тело run:/uses: (не пустой шаг; иначе тело выпало по опечатке отступа, а шаг выглядит настоящим); severity=soft: предупреждает, не валит сборку; число проверок 9→10",
       "hash": "475bab2b6ac912861af521a2e756c68caa0568c60355ff12f9e22f90ed10664a",
       "file": "records/0066-decision.json"
+    },
+    {
+      "seq": 67,
+      "id": "PTD-0067",
+      "type": "decision",
+      "timestamp": "2026-06-22T13:35:36Z",
+      "summary": "Мета-агент run_all показывает мягкие предупреждения стража структуры: прогоняет structure_guard заодно и выводит отдельной графой в сводке (страж 10/10, мягких предупреждений: N); hard-red валит общий вердикт, soft-warnings только показываются числом, не валя сборку; test_run_all 13→21",
+      "hash": "a424ec13d8ff8704adee870878c69a93f3d6bc93db3b6225fbd0145890ef5463",
+      "file": "records/0067-decision.json"
     }
   ]
 }

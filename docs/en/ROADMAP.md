@@ -502,10 +502,26 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   commands (`REQUIRED_WORKFLOW_COMMANDS`); `uses:` steps (checkout, setup-python) without a
   name are not warned. Extend the soft name check to all list steps (on top of
   `_workflow_step_items`) so the whole CI map reads in plain words (proposed in session 69).
-- [ ] **`run_all`/meta-agent surfaces the guard's soft warnings** — the guard's `warnings`
+- [x] **`run_all`/meta-agent surfaces the guard's soft warnings** — the guard's `warnings`
   count is currently printed only in its own report; add it so the shared
   `run_all --with-tests` run also prints the total number of soft warnings (without failing
   the build) — so the operator summary does not lose them (proposed in session 67).
+  → Done (session 70): the meta-agent [`run_all.py`](../../ai-agents/run_all.py) now runs
+  the structure guard too (new `run_guard()`, `GUARD` constant) and shows it as a separate
+  line in the summary — `guard 10/10, guard soft warnings: N` (and in `--json`: keys
+  `guard`/`guard_warnings`). The guard's hard "red" fails the overall verdict alongside the
+  agents; soft warnings are only surfaced as a count and do not fail the build; an absent
+  guard is not applicable. Test invariant [`test_run_all.py`](../../ai-agents/test_run_all.py)
+  13/13→21/21 (fake guard: warnings do not fail, hard-red fails, green+exit≠0 anomaly is
+  red, absent guard not applicable). `PTD-0067`.
+- [ ] **`run_all` surfaces not only the count but the guard's individual soft warnings** —
+  the summary currently prints the total; add a per-line list under the guard row (which
+  check, which step) so the operator summary explains a warning without a separate
+  `structure_guard.py` run (follow-up to `PTD-0067`, session 70).
+- [ ] **Machine-readable project "status light" from `run_all --json`** — persist the last
+  `run_all` verdict (including `guard_warnings`) to an artifact file under `governance/`, as
+  the basis for a future public status indicator with no external services (related to the
+  long-standing "badge in governance/" idea, now with the guard's warning count; session 70).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared

@@ -9,7 +9,10 @@
   • агент, упавший без валидного JSON → красный (а не «пропущен/зелён»);
   • аномалия «verdict=green, но exit_code!=0» → красный (агент сломан);
   • общий вердикт green ТОЛЬКО если все агенты (и тесты, если включены) зелёные;
-  • тест-инварианты прогоняются лишь при --with-tests и тоже валят общий вердикт.
+  • тест-инварианты прогоняются лишь при --with-tests и тоже валят общий вердикт;
+  • страж структуры (structure_guard.py): его hard-«красное» валит общий вердикт,
+    а мягкие предупреждения (warnings) — НЕ валят, но выводятся числом в сводке;
+    отсутствие стража в каталоге неприменимо (не влияет на вердикт).
 
 Метод: подменяем у модуля `run_all` каталог агентов (`AGENTS_DIR`) и списки
 `AGENTS`/`TESTS` на набор фейковых скриптов с заранее известным поведением, затем
@@ -69,6 +72,16 @@ def fake_test(exit_code):
     return f"import sys\nsys.exit({exit_code})\n"
 
 
+def fake_guard(verdict, passed, total, warnings, exit_code):
+    """Фейковый страж структуры: печатает отчёт того же вида, что structure_guard.py."""
+    return (
+        "import json, sys\n"
+        f"print(json.dumps({{'agent':'structure_guard','verdict':{verdict!r},"
+        f"'passed':{passed},'total':{total},'warnings':{warnings},'checks':[]}}))\n"
+        f"sys.exit({exit_code})\n"
+    )
+
+
 def write(tmp, name, content):
     with open(os.path.join(tmp, name), "w", encoding="utf-8") as fh:
         fh.write(content)
@@ -80,6 +93,14 @@ def run_main(mod, argv):
     with contextlib.redirect_stdout(buf):
         code = mod.main(["run_all.py"] + argv)
     return code
+
+
+def run_main_capture(mod, argv):
+    """Как run_main, но возвращает (код возврата, перехваченный stdout)."""
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        code = mod.main(["run_all.py"] + argv)
+    return code, buf.getvalue()
 
 
 def main():
@@ -152,6 +173,47 @@ def main():
 
         mod.TESTS = ["pass_test.py"]
         check("зелёный тест с --with-tests не ложно-падает → exit 0",
+              run_main(mod, ["--with-tests", "--json"]) == 0)
+
+        # --- Кирпичик run_guard: страж структуры ---
+        # До сих пор structure_guard.py в tmp НЕ было → run_guard неприменим.
+        print("\n[run_guard: страж структуры]")
+        check("стража нет в каталоге → None (неприменимо, не валит)",
+              mod.run_guard() is None)
+
+        guard_path = os.path.join(tmp, "structure_guard.py")
+        write(tmp, "structure_guard.py", fake_guard("green", 8, 10, 2, 0))
+        gg = mod.run_guard()
+        check("страж green/exit0 → verdict green, warnings проброшены",
+              gg["verdict"] == "green" and gg["warnings"] == 2)
+
+        write(tmp, "structure_guard.py", fake_guard("red", 5, 10, 0, 1))
+        check("страж red/exit1 → verdict red", mod.run_guard()["verdict"] == "red")
+
+        write(tmp, "structure_guard.py", fake_guard("green", 8, 10, 0, 1))  # аномалия
+        check("страж green+exit!=0 (аномалия) → verdict red",
+              mod.run_guard()["verdict"] == "red")
+
+        # --- Страж в общем вердикте через main() ---
+        print("\n[main: страж структуры в общем вердикте]")
+        mod.AGENTS = [{"key": "a", "script": "green_agent.py", "guards": ""}]
+        mod.TESTS = ["pass_test.py"]
+
+        # Мягкие предупреждения стража НЕ валят сборку, но выводятся в сводке.
+        write(tmp, "structure_guard.py", fake_guard("green", 7, 10, 3, 0))
+        code, out = run_main_capture(mod, ["--with-tests"])
+        check("страж с мягкими предупреждениями НЕ валит общий вердикт → exit 0", code == 0)
+        check("сводка выводит число мягких предупреждений стража",
+              "мягких предупреждений стража: 3" in out)
+
+        # Hard-«красное» стража валит общий вердикт наравне с агентами.
+        write(tmp, "structure_guard.py", fake_guard("red", 5, 10, 0, 1))
+        check("страж hard-red валит общий вердикт → exit 1",
+              run_main(mod, ["--with-tests", "--json"]) == 1)
+
+        # Стража убрали — снова неприменим, общий вердикт зелёный.
+        os.remove(guard_path)
+        check("стража нет → не влияет на вердикт (агент+тест зелёные) → exit 0",
               run_main(mod, ["--with-tests", "--json"]) == 0)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
