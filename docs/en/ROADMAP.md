@@ -486,15 +486,35 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   from any document (proposed session 54). → Done (session 57), `PTD-0054` (the same
   work that closed "Glossary link in the header of normative docs" above): the pointer
   with the exact group name was added to all six docs (RU + EN).
-- [ ] **Glossary pointer in the header of the remaining public docs** — extend the same
+- [x] **Glossary pointer in the header of the remaining public docs** — extend the same
   navigation pointer to the non-technical but still term-bearing docs (`SUPPORT-MODEL`,
   `ACCOUNTABILITY`, `SECURITY`, `PRINCIPLES`, `CONSTITUTION`), so the "term one click
   from its explanation" rule holds uniformly across the whole corpus (proposed session
   57; continuation of the P3 "glossary link").
+  → Done (session 59), `PTD-0056`: a pointer with the exact glossary group added to all
+  five docs (RU + EN). The plain-language rule now holds uniformly across the whole
+  corpus of public documents.
+
+- [ ] **Documentation agent: soft check "header pointer leads to the glossary"** — a
+  light read-only check that public docs containing known technical words carry a header
+  pointer to `GLOSSARY.md` with a group name matching a real heading in the glossary;
+  warns (does not block), so the navigation link does not lag behind new docs (proposed
+  session 59; akin to the "jargon next to its explanation" idea).
 
 ---
 
 ## Done
+
+- **PTD-0056 (session 59):** P3 (plain language) — **glossary pointer in the header of
+  the remaining public docs.** A line "Unfamiliar technical words … are explained in
+  plain language in the [`GLOSSARY.md`](GLOSSARY.md) — the "…" group" with the exact
+  group name (Money and aid / Transparency and verifiability / Safety and technology /
+  Basics) was added to the headers of `SUPPORT-MODEL` / `ACCOUNTABILITY` / `SECURITY` /
+  `PRINCIPLES` / `CONSTITUTION` (RU + EN). For `SECURITY.md` (at the repo root) the link
+  points to `docs/GLOSSARY.md` / `docs/en/GLOSSARY.md`. Completes the generalization of
+  PTD-0054: the "term one click from its explanation" rule now holds uniformly across the
+  whole corpus of public documents. The meaning of the docs is unchanged. Documentation
+  3/3, run_all 8/8 + tests 11/11, IPFS verify=OK (19), registry 57.
 
 - **PTD-0054 (session 57):** P3 (plain language) — **glossary pointer in the header of
   six normative docs.** A line "Unfamiliar technical words … are explained in plain

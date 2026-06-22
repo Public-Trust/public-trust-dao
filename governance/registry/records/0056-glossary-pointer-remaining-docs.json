@@ -1,0 +1,44 @@
+{
+  "seq": 56,
+  "id": "PTD-0056",
+  "type": "decision",
+  "timestamp": "2026-06-22T11:47:49Z",
+  "actor": "builder-agent",
+  "summary": "P3 (понятный язык) — в шапку остальных публичных доков (SUPPORT-MODEL/ACCOUNTABILITY/SECURITY/PRINCIPLES/CONSTITUTION, RU+EN) добавлен указатель на глоссарий с конкретной группой; теперь правило «термин в один клик от объяснения» (PTD-0040, ст. 3/6) действует единообразно во всём корпусе публичных доков. Смысл доков не изменён.",
+  "refs": [
+    "docs/SUPPORT-MODEL.md",
+    "docs/ACCOUNTABILITY.md",
+    "SECURITY.md",
+    "docs/PRINCIPLES.md",
+    "docs/CONSTITUTION.md",
+    "docs/GLOSSARY.md"
+  ],
+  "payload": {
+    "decision": "P3 (понятный язык) — указатель на глоссарий добавлен в шапку остальных публичных доков. В SUPPORT-MODEL / ACCOUNTABILITY / SECURITY / PRINCIPLES / CONSTITUTION (RU и EN-зеркало) во вводный блок добавлена строка «Непонятные технические слова из этого документа объяснены простым языком в [глоссарии](GLOSSARY.md) — группа «…»» с указанием конкретной группы глоссария. Смысл документов не изменён — добавлена только навигационная подсказка к человеческому объяснению терминов.",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9). Верхний P3 (контракт PersonhoodVerifier) недоступен — диск хоста заполнен (~0,9 ГБ свободно), contracts/node_modules отсутствует, hardhat/npm не прогнать. Взят следующий завершаемый pure-doc пункт ROADMAP «Указатель на глоссарий в шапке остальных публичных доков» (продолжение PTD-0054, который покрыл шесть нормативных доков). Прямо служит правилу понятного языка (PTD-0040, конституция ст. 3 «понятность» / ст. 6 «объяснимость»): теперь правило «непонятный термин — в один клик от объяснения» действует единообразно во всём корпусе публичных документов, а не только в нормативных шести.",
+    "deliverables": [
+      "docs/SUPPORT-MODEL.md (+EN) — указатель на глоссарий, группа «Деньги и помощь» / «Money and aid»",
+      "docs/ACCOUNTABILITY.md (+EN) — указатель на глоссарий, группа «Прозрачность и проверяемость» / «Transparency and verifiability»",
+      "SECURITY.md (+EN SECURITY.en.md) — указатель на глоссарий, группа «Безопасность и техника» / «Safety and technology» (ссылка docs/GLOSSARY.md и docs/en/GLOSSARY.md, т.к. файл в корне)",
+      "docs/PRINCIPLES.md (+EN) — указатель на глоссарий, группа «Основы» / «Basics»",
+      "docs/CONSTITUTION.md (+EN) — указатель на глоссарий, группа «Основы» / «Basics»",
+      "governance/ipfs/manifest.json — пересобран (изменились публичные доки), verify=OK (19)",
+      "governance/registry/ — запись PTD-0056 (type=decision)"
+    ],
+    "rails": [
+      "Только документация; код/средства/ключи/контракты не затронуты",
+      "Двуязычность RU↔EN в одном коммите; названия групп указателя точно совпадают с заголовками групп GLOSSARY.md (RU/EN)",
+      "Смысл публичных документов не изменён — добавлена только навигационная строка",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) не тронут"
+    ],
+    "status": "adopted",
+    "spec": "docs/GLOSSARY.md",
+    "verification": "Documentation-агент 3/3 (bilingual-pairs/language-switcher/link-integrity — все ссылки GLOSSARY.md резолвятся); run_all --with-tests: агенты 8/8, тесты 11/11; IPFS verify=OK (19)",
+    "advances_roadmap": [
+      "Указатель на глоссарий в шапке остальных публичных доков"
+    ]
+  },
+  "prev_hash": "8adb0c22db57d572a9fb0b8a55e684ddfa55d7f02ed06d4b4e4b81e9a5b01ebe",
+  "hash": "bddacb0f7f76512ff280ef1b82b95b11f2dc8479ddd759644868b7d437ad653f"
+}

@@ -9,6 +9,9 @@
 > Full source manifesto: [`MANIFESTO.md`](MANIFESTO.md).
 > Related normative documents: [`PRINCIPLES.md`](PRINCIPLES.md),
 > [`PRIORITIES.md`](PRIORITIES.md), [`ANTI-ABUSE.md`](ANTI-ABUSE.md).
+>
+> Unfamiliar technical words from this document are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Basics" group.
 
 ---
 

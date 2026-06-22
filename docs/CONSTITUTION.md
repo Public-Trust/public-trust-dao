@@ -9,6 +9,9 @@
 > Полный исходный манифест: [`MANIFESTO.md`](MANIFESTO.md).
 > Связанные нормативные документы: [`PRINCIPLES.md`](PRINCIPLES.md),
 > [`PRIORITIES.md`](PRIORITIES.md), [`ANTI-ABUSE.md`](ANTI-ABUSE.md).
+>
+> Непонятные технические слова из этого документа объяснены простым языком в
+> [глоссарии](GLOSSARY.md) — группа «Основы».
 
 ---
 

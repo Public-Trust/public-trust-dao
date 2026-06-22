@@ -1,11 +1,11 @@
 {
   "files": [
     {
-      "bytes": 24114,
-      "cid": "bafkreia7na4jwhqb7vxdvudkyu4adx3f44x7xie4xlo6lqspqxdms57f54",
+      "bytes": 24371,
+      "cid": "bafkreiafc6uoq5apwaxxhgj6vaq7dlryhuhz4ika7ahigwg3yg3jqgifga",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ACCOUNTABILITY.md",
-      "sha256": "1f68389b1e01fd6e3ad06ac53801df65e72ffba09cbadde5c24f85c6c977e5ef",
+      "sha256": "0517a8e8740fb02f73993ea821f1ae383d0f9e2140f80e8358dbc1b698190530",
       "single_block": true
     },
     {
@@ -17,11 +17,11 @@
       "single_block": true
     },
     {
-      "bytes": 8020,
-      "cid": "bafkreierp6ratmppda4kcdnbbilstfq3mgemqbixa4l3hk2a4xazdwjaue",
+      "bytes": 8235,
+      "cid": "bafkreibusr3m3yo6o4kpzaw2odxmt6byooeytqjxenwmtiaefhbymswzau",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/CONSTITUTION.md",
-      "sha256": "917fa209b1ef1838a10da10a1729961b6188c805170717b3ab40e5c191d920a1",
+      "sha256": "349476cde1de7714fc82da70eec9f838738989c137236cc9a00429c3864ad905",
       "single_block": true
     },
     {
@@ -81,11 +81,11 @@
       "single_block": true
     },
     {
-      "bytes": 3445,
-      "cid": "bafkreigaiecigyprnjawkrygk4tmpu3xnvkch4ph7bkag6hfak445jvgaa",
+      "bytes": 3660,
+      "cid": "bafkreicelqo6vfs6rb7pmlu74uykaqyex35cjyqas4nt5myiagr3fyrtwe",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/PRINCIPLES.md",
-      "sha256": "c041048361f16a416547065726c7d3776d5423f1e7f8540378e502b9cea6a600",
+      "sha256": "445c1dea965e887ef62e9fe530a04304befa24e200971b3eb30801a3b2e233b1",
       "single_block": true
     },
     {
@@ -129,32 +129,32 @@
       "single_block": true
     },
     {
-      "bytes": 106894,
-      "cid": "bafkreig45zl52qojj7ylckidhcph7wi4nhdcvnvz5sahcm6ftaf73sr5hq",
+      "bytes": 109225,
+      "cid": "bafkreidqrm54lkhvuzqknfdjcjefetm3guk2t5s4nwodzjpegmv6q2bnby",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ROADMAP.md",
-      "sha256": "dcee57dd41c94ff0b12903389e7fd91c69c62ab6b9ec807133c5980bfdca3d3c",
+      "sha256": "708b3bc5a8f5a660a694691248524d9b3515a9f65c6d9c3ca5e4332be8682d0e",
       "single_block": true
     },
     {
-      "bytes": 9142,
-      "cid": "bafkreieiog2srtv73g2v74o25rffkr5rtibdytcd3x3lrabfb5pejpts5a",
+      "bytes": 9373,
+      "cid": "bafkreidlkyu3lzhwn3kg3vhawst4w2gxqlxrxjpi4qibxb72tgimxmcjyu",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/SUPPORT-MODEL.md",
-      "sha256": "8871b528cebfd9b55ff1daec4a5547b19a023c4c43ddf6b880250f5e44be72e8",
+      "sha256": "6b5629b5e4f66ed46dd4e0b4a7cb68d782ef1ba5e8e4101b87fa9990cbb049c5",
       "single_block": true
     },
     {
-      "bytes": 46392,
-      "cid": "bafkreieypul6f2bnumr5bptm5f7ifelx6aqxp35nkkr4noc6kskp76gq5a",
+      "bytes": 47213,
+      "cid": "bafkreibrucnuzkuksfedps7fupvbjgs4ritfkh67ylnmhyb5taifp2mjw4",
       "cid_kind": "raw-leaf-v1",
       "path": "governance/registry/index.json",
-      "sha256": "987d17e2e82da323d0be6ce97e829177f02177efad52a3c6b85e5494fff8d0e8",
+      "sha256": "31a09b4caa8a914837cbe5a3ea149a5c8a26551fdfc2dac3e03d981057e989b7",
       "single_block": true
     }
   ],
   "kind": "ipfs-content-manifest",
-  "manifest_fingerprint_sha256": "aeb5f0f6acfe0c0bc08199ee4be41fb2e042baba81780afde02f383a11c89f99",
+  "manifest_fingerprint_sha256": "dc86e92c92095b8df1f250de404a228d6d4f4c8330002c7e16e9dcb0c28bd983",
   "project": "Public Trust DAO",
   "spec": "CIDv1, codec=raw(0x55), multihash=sha2-256, multibase=base32. Эквивалент `ipfs add --cid-version=1 --raw-leaves=true` для одноблочных файлов (<=256 KiB). Вычисляется и проверяется из содержимого, без аккаунта пиннера.",
   "verify": "python3 scripts/ipfs_manifest.py verify",

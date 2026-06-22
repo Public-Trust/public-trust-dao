@@ -7,6 +7,9 @@
 > документ от [`PRINCIPLES.md`](PRINCIPLES.md), [`CONSTITUTION.md`](CONSTITUTION.md),
 > [`GOVERNANCE.md`](GOVERNANCE.md) и [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md).
 >
+> Непонятные технические слова из этого документа объяснены простым языком в
+> [глоссарии](GLOSSARY.md) — группа «Деньги и помощь».
+>
 > Зарегистрирован как решение в публичном реестре:
 > [`governance/registry/`](../governance/registry/) (запись `PTD-0014`).
 >

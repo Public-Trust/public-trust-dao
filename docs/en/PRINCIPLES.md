@@ -5,6 +5,9 @@
 > Normative document. Derived from [`CONSTITUTION.md`](CONSTITUTION.md) and
 > [`MANIFESTO.md`](MANIFESTO.md). The prohibitions below are binding and must be
 > observed literally in code, in AI agents, in governance, and in any public text.
+>
+> Unfamiliar technical words from this document are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Basics" group.
 
 ## Foundational principles
 

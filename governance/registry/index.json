@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 56,
-  "head_hash": "8adb0c22db57d572a9fb0b8a55e684ddfa55d7f02ed06d4b4e4b81e9a5b01ebe",
+  "count": 57,
+  "head_hash": "bddacb0f7f76512ff280ef1b82b95b11f2dc8479ddd759644868b7d437ad653f",
   "entries": [
     {
       "seq": 0,
@@ -507,6 +507,15 @@
       "summary": "INBOX #23 — официальный публичный контакт проекта fedorgrigorev@proton.me проставлен везде (RU+EN): README, сайт, AUTHORS, EMAIL-SETUP (действующий адрес), OUTREACH (обратный адрес). Временный стартовый адрес до доменной почты.",
       "hash": "8adb0c22db57d572a9fb0b8a55e684ddfa55d7f02ed06d4b4e4b81e9a5b01ebe",
       "file": "records/0055-set-project-email.json"
+    },
+    {
+      "seq": 56,
+      "id": "PTD-0056",
+      "type": "decision",
+      "timestamp": "2026-06-22T11:47:49Z",
+      "summary": "P3 (понятный язык) — в шапку остальных публичных доков (SUPPORT-MODEL/ACCOUNTABILITY/SECURITY/PRINCIPLES/CONSTITUTION, RU+EN) добавлен указатель на глоссарий с конкретной группой; теперь правило «термин в один клик от объяснения» (PTD-0040, ст. 3/6) действует единообразно во всём корпусе публичных доков. Смысл доков не изменён.",
+      "hash": "bddacb0f7f76512ff280ef1b82b95b11f2dc8479ddd759644868b7d437ad653f",
+      "file": "records/0056-glossary-pointer-remaining-docs.json"
     }
   ]
 }

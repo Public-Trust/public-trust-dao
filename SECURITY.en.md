@@ -14,6 +14,9 @@ breaking the code) and the automated
 [Guardian agent](ai-agents/guardian_agent.py), which machine-checks the rails on
 every push.
 
+Unfamiliar technical words from this document are explained in plain language in the
+[glossary](docs/en/GLOSSARY.md) — the "Safety and technology" group.
+
 ---
 
 ## Current project status (matters for severity)

@@ -21,6 +21,9 @@
 > This is a **design document** — a principle and rules for future smart contracts
 > (Stage 5) and AI helpers (Stage 6). The document itself controls nothing.
 >
+> Unfamiliar technical words from this document are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Transparency and verifiability" group.
+>
 > Registered as a decision in the public registry:
 > [`governance/registry/`](../../governance/registry/) (record `PTD-0047`).
 >
