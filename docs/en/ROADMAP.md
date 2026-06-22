@@ -119,11 +119,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
       +4 tests to green (54/54 with all contracts). `PTD-0020`.
   - [ ] Part 4: a public testnet run (e.g. Polygon Amoy) — network/RPC/test guardian
     addresses to be agreed with the operator (keys via `contracts/.env`).
-- [ ] **Stage 6 — AI agents (skeleton):** in `ai-agents/` describe and set up the
-  Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
-  modules as helper scripts for upholding the constitution (service modules, not
+- [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
+  all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,
-  not an action).
+  not an action), each "to green" and with a test invariant, all in the CI
+  `ai-agents.yml`: Audit, Guardian, Fairness, Reputation, Housing, Documentation,
+  Governance, Mediator.
   - [x] Module 1/8 (session 24): the [`ai-agents/`](../../ai-agents/) scaffold
     (README RU/EN with the "AI serves, does not rule" principle and a table of the 8
     agents) + the first working agent **Audit**
@@ -191,8 +192,17 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     `multisig-not-sole` (threshold ≥2 and below the owner count, 3-of-5), `lifecycle-links`
     (config links resolve). Invariant test [`test_governance.py`](../../ai-agents/test_governance.py)
     (26/26). CI extended. On the real configs: 6/6. `PTD-0027`.
-  - [ ] Module 8/8 — last: **Mediator** (structures disputes/appeals per `ANTI-ABUSE.md`,
-    does not decide) — "to green". Closes the framework for all eight agents.
+  - [x] Module 8/8 — last (session 31): **Mediator** [`mediator_agent.py`](../../ai-agents/mediator_agent.py)
+    — a read-only check of the dispute/appeal process (the artifact
+    [`governance/mediation/dispute-process.json`](../../governance/mediation/dispute-process.json))
+    per `ANTI-ABUSE.md` §6: `appeal-for-every-sanction` (every sanction — refusal/
+    reputation/freeze/exclusion — has an appeal), `mediator-not-decider` (people decide,
+    ≥2, not an AI/one person), `independent-review` (the appeal is decided by someone
+    other than the author of the sanction), `valid-lifecycle` (one start/terminal/no dead
+    ends/all reachable), `bounded-timelines` (timelines > 0), `process-links` (links
+    resolve); it **STRUCTURES, does NOT decide** (Art. 9.2). Test invariant
+    [`test_mediator.py`](../../ai-agents/test_mediator.py) (26/26). CI extended. On the
+    real artifact: 6/6. **Closed the framework of all eight agents (8/8).** `PTD-0028`.
 
 ### P1 — materials and infrastructure (partly from INBOX)
 
@@ -252,6 +262,27 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
+- [ ] **A personhood-verification adapter contract (`PersonhoodVerifier`)** — based on
+  `docs/IDENTITY-VERIFICATION.md`: a thin contract that accepts a proof from one of the
+  allowed proof-of-personhood methods and calls `Reputation.mint` only when
+  `verified ∧ unique (nullifier unused)`; the method allow-list is under `Timelock`.
+  Grounds "uniqueness ≠ power" in code (proposed session 44).
+- [x] **Identity-verification terms in `GLOSSARY.md`** (+RU) — add in plain words:
+  "proof-of-personhood", "zero-knowledge / proof without disclosure", "nullifier",
+  "liveness", "vouching (web-of-trust)" — each linking to `IDENTITY-VERIFICATION.md`
+  (proposed session 44). → Done (session 53), a new group "Identity verification — is
+  there a live person behind the account" in [`GLOSSARY.md`](GLOSSARY.md) (+RU): 6 terms
+  in plain words (protection from fakes/Sybil, proof-of-personhood, liveness,
+  zero-knowledge, nullifier, vouching), each linking to
+  [`IDENTITY-VERIFICATION.md`](IDENTITY-VERIFICATION.md). `PTD-0050`.
+- [x] **Cross-links `IDENTITY-VERIFICATION.md` ↔ `GLOSSARY.md`** — inside the
+  identity-verification document itself, put a link to the glossary entry at the first
+  mention of each technical word (and the glossary already links back to the document) —
+  so an unfamiliar term is one click away in both directions (proposed session 53; a
+  special case of "glossary link in doc headers"). → Done (session 54): six terms (Sybil
+  attack, proof-of-personhood, liveness, web-of-trust, zero-knowledge, nullifier) at
+  first mention link to [`GLOSSARY.md`](GLOSSARY.md) + a glossary pointer in the header;
+  RU↔EN, `PTD-0051`.
 - [ ] **GitHub label catalog `.github/labels.yml`** — a single set of labels
   (`bug`, `idea`, `governance`, `safety`, …) referenced by the issue forms, so
   label colors/descriptions are reproducible and not set up by hand (proposed session 37).
@@ -285,6 +316,11 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   `disbursement`: a verifiable record of a work/volunteering reward (proof artifact, ≥2
   reviewers, amount within the band) so that every W/V accrual is in the public registry
   and recomputable (session 41).
+- [ ] **An `appeal` registry record template/schema** + tie-in to the Mediator: when a
+  dispute reaches `resolved`, the outcome is fixed as an `appeal` record in
+  `governance/registry/`; the agent checks that a finished dispute has such a record
+  (close the appeal process onto the public registry, like `disbursement` ↔ escrow;
+  proposed session 31).
 - [ ] Treasury dashboard (read-only) — public state of the test treasury from the registry.
 - [ ] Aid request templates (anonymous, no personal data) — form + schema.
 - [ ] "Explain like I'm five" — short explainers for each normative doc.
@@ -429,11 +465,58 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   (proposed session 33; akin to "agent self-test in CI").
   → Done (session 51) via the `agents-have-invariants` + `no-orphan-tests` checks of the
   guard [`structure_guard.py`](../../ai-agents/structure_guard.py), `PTD-0048`.
+- [x] **Catch up the EN mirror `docs/en/ROADMAP.md`** — the RU roadmap had run ahead (the
+  "Done" section and the idea bank held items up to `PTD-0051`, while EN had drifted: P0
+  Stage 6 still showed Mediator open and the P3 bank lacked the newer
+  identity/glossary/meta items). The Documentation agent stayed green (the pair, the
+  switcher and the links were intact), but the content was out of sync — a violation of
+  the "RU↔EN in sync" rule. Done in one careful pass (discovered session 54).
+  → Done (session 55): Stage 6 marked complete (8/8) with the Mediator module filled in;
+  the P3 bank gained the identity/glossary/meta items; the "Done" section gained
+  `PTD-0050`/`PTD-0051`; `PTD-0052`.
+- [ ] **Glossary link in the header of ALL normative docs** (generalization) — now that
+  the pattern is done on `IDENTITY-VERIFICATION.md`, add the same short pointer
+  "unfamiliar word → [`GLOSSARY.md`](GLOSSARY.md)" to the header of the remaining public
+  docs (`GOVERNANCE`, `ANTI-ABUSE`, `REWARDS-MODEL`, `PROOF-OF-CONTRIBUTION`, `ESCROW`,
+  `PRIORITIES`) — so the glossary is one click away from any document (proposed session
+  54; continuation of the P3 "glossary link in doc headers").
 
 ---
 
 ## Done
 
+- **PTD-0052 (session 55):** P3 (plain language / bilingual sync) — **caught up the EN
+  mirror [`docs/en/ROADMAP.md`](ROADMAP.md)**. The RU roadmap had run ahead while the EN
+  one drifted: P0 Stage 6 still showed the Mediator module open (RU had it 8/8 complete),
+  and the P3 idea bank lacked the newer items (`PersonhoodVerifier`; identity terms in
+  the glossary, `PTD-0050`; cross-links IDENTITY↔GLOSSARY, `PTD-0051`; an `appeal`
+  registry record; the glossary-link-in-headers generalization). The Documentation agent
+  stayed green (pair/switcher/links intact) but the content was out of sync — a violation
+  of the "RU↔EN in sync" rule. In one pass: Stage 6 marked complete with the Mediator
+  module filled in (`PTD-0028`); the P3 bank synced; the "Done" section gained
+  `PTD-0050`/`PTD-0051`/`PTD-0052`. No money/keys/contracts touched. `PTD-0052`. TESTNET-ONLY.
+- **PTD-0051 (session 54):** P3 (plain language) — **cross-links
+  [`IDENTITY-VERIFICATION.md`](IDENTITY-VERIFICATION.md) ↔ [`GLOSSARY.md`](GLOSSARY.md)**.
+  In the identity-verification document (+RU), each technical word now links to its
+  glossary entry at first mention — all six terms of the "Identity verification" group
+  (Sybil attack, proof-of-personhood, liveness, web-of-trust, zero-knowledge, nullifier);
+  a "unfamiliar words → [`GLOSSARY.md`](GLOSSARY.md), the 'Identity verification' group"
+  pointer was added to the header. The link is now bidirectional: the glossary points to
+  the document (`PTD-0050`), the document points to the glossary. Documentation agent 3/3
+  (link-integrity green); IPFS verify=OK (19); `run_all --with-tests`: agents 8/8,
+  tests 11/11. `PTD-0051`. TESTNET-ONLY.
+- **PTD-0050 (session 53):** P3 (idea bank, plain language) — **identity-verification
+  terms added to the glossary in plain words**. A new group "Identity verification — is
+  there a live person behind the account" in [`GLOSSARY.md`](GLOSSARY.md) (+RU): six
+  entries in human language — "protection from fakes and bot accounts" (Sybil attack),
+  "confirmation that you are a live unique person" (proof-of-personhood), "liveness
+  check" (liveness), "proof without disclosure" (zero-knowledge), "a one-time
+  'already registered' mark" (nullifier), "vouching by live people" (web-of-trust, the
+  camera-free fallback). Each entry links to
+  [`IDENTITY-VERIFICATION.md`](IDENTITY-VERIFICATION.md); the technical term is in
+  parentheses for developers (the plain-language rule, `PTD-0040`). The group list in
+  "How to use" was extended; RU↔EN in sync. Documentation agent 3/3
+  (pairs/switcher/links green); IPFS manifest rebuilt (verify=OK). `PTD-0050`. TESTNET-ONLY.
 - **PTD-0049 (session 52):** P3 (Stage-6 quality standards) — **structure guard
   extended with the `run-all-covers-all` check** in
   [`structure_guard.py`](../../ai-agents/structure_guard.py) (test invariant 17→25).

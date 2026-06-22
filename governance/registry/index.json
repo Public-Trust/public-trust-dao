@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 52,
-  "head_hash": "33afda11620eb0f467f0510c3bb003b8c0ec662aa756a9e11bef6ae839875118",
+  "count": 53,
+  "head_hash": "e94eb95ca0e721ed384c64b740aaff7d45fa52e2c9a650caefe8fb4beed0e515",
   "entries": [
     {
       "seq": 0,
@@ -471,6 +471,15 @@
       "summary": "P3 (понятный язык) — в IDENTITY-VERIFICATION.md (+EN) добавлены перекрёстные ссылки на глоссарий: каждый технический термин (атака Сивиллы, proof-of-personhood, liveness, web-of-trust, zero-knowledge, nullifier) при первом упоминании ведёт на статью GLOSSARY.md; в шапку — указатель на группу «Проверка личности». Связь IDENTITY↔GLOSSARY теперь двусторонняя.",
       "hash": "33afda11620eb0f467f0510c3bb003b8c0ec662aa756a9e11bef6ae839875118",
       "file": "records/0051-cross-links-identity-glossary.json"
+    },
+    {
+      "seq": 52,
+      "id": "PTD-0052",
+      "type": "decision",
+      "timestamp": "2026-06-22T15:30:00Z",
+      "summary": "P3 (синхронизация RU↔EN) — догнан EN-зеркало docs/en/ROADMAP.md: P0 Этап 6 отмечен завершённым (8/8) с модулем Mediator (PTD-0028), P3-банк дополнен отсутствовавшими идентификационными/глоссарными/мета-пунктами, раздел «Сделано» — записями PTD-0050/0051/0052. Восстановлена содержательная двуязычная синхронность роадмапа.",
+      "hash": "e94eb95ca0e721ed384c64b740aaff7d45fa52e2c9a650caefe8fb4beed0e515",
+      "file": "records/0052-decision.json"
     }
   ]
 }

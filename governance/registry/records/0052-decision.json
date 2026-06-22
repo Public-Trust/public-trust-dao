@@ -1,0 +1,36 @@
+{
+  "seq": 52,
+  "id": "PTD-0052",
+  "type": "decision",
+  "timestamp": "2026-06-22T15:30:00Z",
+  "actor": "builder-agent",
+  "summary": "P3 (синхронизация RU↔EN) — догнан EN-зеркало docs/en/ROADMAP.md: P0 Этап 6 отмечен завершённым (8/8) с модулем Mediator (PTD-0028), P3-банк дополнен отсутствовавшими идентификационными/глоссарными/мета-пунктами, раздел «Сделано» — записями PTD-0050/0051/0052. Восстановлена содержательная двуязычная синхронность роадмапа.",
+  "refs": [
+    "docs/en/ROADMAP.md",
+    "docs/ROADMAP.md"
+  ],
+  "payload": {
+    "decision": "P3 (понятный язык / синхронизация RU↔EN) — догнан EN-зеркало docs/en/ROADMAP.md, отставшее по содержанию от RU. Приведены в соответствие: (1) P0 Этап 6 — отмечен завершённым (8/8, сессия 31) с заполненным модулем Mediator (PTD-0028), который в EN оставался открытым; (2) P3-банк идей дополнен отсутствовавшими пунктами — контракт PersonhoodVerifier, термины проверки личности в глоссарии (PTD-0050), перекрёстные ссылки IDENTITY↔GLOSSARY (PTD-0051), шаблон записи реестра типа appeal, обобщение «ссылка на глоссарий в шапке всех нормативных доков»; (3) раздел «Сделано» дополнен записями PTD-0050/PTD-0051/PTD-0052. В RU-роадмапе пункт «Догнать EN-зеркало» отмечен [x].",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9): верхний P3 (контракт PersonhoodVerifier) недоступен — диск хоста заполнен (~0,85 ГБ свободно), contracts/node_modules отсутствует, hardhat/npm не прогнать. Взят следующий завершаемый pure-doc пункт — догнать дрейф EN-роадмапа, замеченный и заведённый в ROADMAP сессией 54. Это прямое исполнение рельса проекта «вся документация двуязычна RU↔EN синхронно»: Documentation-агент проверяет наличие пары/переключателя/ссылок, но не содержательную синхронность, поэтому дрейф копился незаметно. Приведение EN к RU восстанавливает реальную двуязычную синхронность нормативного living-документа.",
+    "deliverables": [
+      "docs/en/ROADMAP.md — P0 Этап 6 отмечен завершённым (8/8) + модуль Mediator (PTD-0028); P3-банк дополнен 5 пунктами (PersonhoodVerifier, GLOSSARY-термины PTD-0050, cross-links PTD-0051, appeal-запись, glossary-in-headers); раздел Done дополнен PTD-0050/0051/0052",
+      "docs/ROADMAP.md — пункт «Догнать EN-зеркало» отмечен [x]; запись PTD-0052 в «Сделано»",
+      "governance/registry/ — запись PTD-0052 (type=decision)",
+      "governance/ipfs/manifest.json — пересобран (docs/ROADMAP.md изменился), verify=OK"
+    ],
+    "rails": [
+      "Только документация; код/средства/ключи/контракты не затронуты",
+      "Двуязычность RU↔EN в одном коммите; Documentation-агент link-integrity 3/3",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) не тронут"
+    ],
+    "status": "adopted",
+    "spec": "docs/en/ROADMAP.md",
+    "verification": "Documentation-агент 3/3 (bilingual-pairs/language-switcher/link-integrity зелёные); run_all --with-tests: агенты 8/8, тесты 11/11; IPFS verify=OK",
+    "advances_roadmap": [
+      "Догнать EN-зеркало docs/en/ROADMAP.md"
+    ]
+  },
+  "prev_hash": "33afda11620eb0f467f0510c3bb003b8c0ec662aa756a9e11bef6ae839875118",
+  "hash": "e94eb95ca0e721ed384c64b740aaff7d45fa52e2c9a650caefe8fb4beed0e515"
+}
