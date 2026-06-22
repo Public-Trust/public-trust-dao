@@ -223,9 +223,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   Emphasis "contribution ≠ power over the treasury" (1 person = 1 vote; authorship = recognition).
 - [ ] **Glossary** of key terms (DAO, escrow, multisig, registry, distribution
   priority) in plain language, RU/EN — so documents are clear to non-technical readers.
-- [ ] **CODE_OF_CONDUCT.md (+EN)** — split the code of conduct out of CONTRIBUTING into
+- [x] **CODE_OF_CONDUCT.md (+EN)** — split the code of conduct out of CONTRIBUTING into
   a separate canonical file (GitHub recognizes and surfaces it on the "Community" page),
   linking to the constitution/principles (proposed session 34).
+  → Done (session 35), [`CODE_OF_CONDUCT.en.md`](../../CODE_OF_CONDUCT.en.md), `PTD-0032`.
+  Key: breaking the safety rails = breaking the code; decisions are made by people
+  (not an agent, Art. 9); privacy of reporters/recipients; Contributor Covenant 2.1 attribution.
 - [ ] **Issue/PR templates (.github/ISSUE_TEMPLATE, PULL_REQUEST_TEMPLATE)** — channel
   contributions into the CONTRIBUTING formats (bug/idea/governance proposal; rails
   checklist: bilingual, no secrets, TESTNET) — a "ready to click" stub for outsiders
@@ -239,6 +242,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
+- [ ] **SECURITY.md (+EN)** — canonical security policy file (GitHub recognizes it
+  and shows a "Report a vulnerability" button): where and how to report a rails/contract
+  flaw, what's in scope (testnet only), what we do NOT promise (no real-money bounty
+  before audit), private channel = the same `security@` from [`EMAIL-SETUP.md`](EMAIL-SETUP.md).
+  Complements CODE_OF_CONDUCT (breaking the rails = breaking conduct) and the Guardian
+  agent (proposed session 35).
 - [ ] Treasury dashboard (read-only) — public state of the test treasury from the registry.
 - [ ] Aid request templates (anonymous, no personal data) — form + schema.
 - [ ] "Explain like I'm five" — short explainers for each normative doc.

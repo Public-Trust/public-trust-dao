@@ -100,8 +100,10 @@ These rules mirror the project's safety rails and are checked in CI:
 
 ## Code of conduct
 
-The project is built on human dignity and mutual aid (see
-[`docs/en/PRINCIPLES.md`](docs/en/PRINCIPLES.md)). In short:
+The full text is in the canonical [`CODE_OF_CONDUCT.en.md`](CODE_OF_CONDUCT.en.md)
+file (GitHub surfaces it on the "Community" tab). The project is built on human
+dignity and mutual aid (see [`docs/en/PRINCIPLES.md`](docs/en/PRINCIPLES.md)). In
+short:
 
 - Respect people. Critique ideas and code, not individuals.
 - Be honest and verifiable: back claims with links and facts.

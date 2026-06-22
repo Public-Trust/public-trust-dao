@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 32,
-  "head_hash": "5474493295d4308f1c72d574466c6c8cd694bf7e33b38815ce64d19d1231fe8d",
+  "count": 33,
+  "head_hash": "a43dcdcbd5b0fd48b15ce7829e2949c0d58d718fdbb45fe42b15c1a530920118",
   "entries": [
     {
       "seq": 0,
@@ -291,6 +291,15 @@
       "summary": "P2 ROADMAP — CONTRIBUTING.md (+ EN): открытая инструкция «как участвовать» (issue/PR/предложение в governance/путь к участнику-хранителю), рельсы вклада, кодекс поведения, самопроверка целостности, лицензии. Ключевой акцент: ВКЛАД ≠ ВЛАСТЬ НАД КАЗНОЙ (1 человек = 1 голос; авторство = признание, не собственность). Documentation-агент зелёный, run_all 8/8 + тесты 8/8. TESTNET-ONLY.",
       "hash": "5474493295d4308f1c72d574466c6c8cd694bf7e33b38815ce64d19d1231fe8d",
       "file": "records/0031-contributing-guide.json"
+    },
+    {
+      "seq": 32,
+      "id": "PTD-0032",
+      "type": "decision",
+      "timestamp": "2026-06-22T15:30:00Z",
+      "summary": "P2 ROADMAP — CODE_OF_CONDUCT.md (+ EN): канонический кодекс поведения (GitHub Community). Вынесен из CONTRIBUTING в полный файл: стандарты, приватность заявителей/подопечных, КОНСТИТУЦИОННЫЕ РЕЛЬСЫ КАК ЧАСТЬ ПОВЕДЕНИЯ (нарушение рельс безопасности = нарушение кодекса), каналы сообщения и эскалация людьми (не агентом, ст. 9), апелляция (ANTI-ABUSE), атрибуция Contributor Covenant 2.1. Documentation-агент зелёный, run_all 8/8. TESTNET-ONLY.",
+      "hash": "a43dcdcbd5b0fd48b15ce7829e2949c0d58d718fdbb45fe42b15c1a530920118",
+      "file": "records/0032-decision.json"
     }
   ]
 }
