@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 57,
-  "head_hash": "bddacb0f7f76512ff280ef1b82b95b11f2dc8479ddd759644868b7d437ad653f",
+  "count": 58,
+  "head_hash": "4be7d29c6ba1b0ce3fec7d464ea6dc5173c7dfec35df5bfd1f0081e82a99b85b",
   "entries": [
     {
       "seq": 0,
@@ -516,6 +516,15 @@
       "summary": "P3 (понятный язык) — в шапку остальных публичных доков (SUPPORT-MODEL/ACCOUNTABILITY/SECURITY/PRINCIPLES/CONSTITUTION, RU+EN) добавлен указатель на глоссарий с конкретной группой; теперь правило «термин в один клик от объяснения» (PTD-0040, ст. 3/6) действует единообразно во всём корпусе публичных доков. Смысл доков не изменён.",
       "hash": "bddacb0f7f76512ff280ef1b82b95b11f2dc8479ddd759644868b7d437ad653f",
       "file": "records/0056-glossary-pointer-remaining-docs.json"
+    },
+    {
+      "seq": 57,
+      "id": "PTD-0057",
+      "type": "decision",
+      "timestamp": "2026-06-22T11:54:41Z",
+      "summary": "Этап 6 — у стража структуры пятая проверка «ci-calls-run-all»: краснеет, если CI-воркфлоу не зовёт run_all.py --with-tests (агенты в обход, без тест-инвариантов или воркфлоу нет). Закрыт последний обход покрытия — на уровне самого CI, а не только списков AGENTS/TESTS.",
+      "hash": "4be7d29c6ba1b0ce3fec7d464ea6dc5173c7dfec35df5bfd1f0081e82a99b85b",
+      "file": "records/0057-structure-guard-ci-calls-run-all.json"
     }
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "seq": 57,
+  "id": "PTD-0057",
+  "type": "decision",
+  "timestamp": "2026-06-22T11:54:41Z",
+  "actor": "builder-agent",
+  "summary": "Этап 6 — у стража структуры пятая проверка «ci-calls-run-all»: краснеет, если CI-воркфлоу не зовёт run_all.py --with-tests (агенты в обход, без тест-инвариантов или воркфлоу нет). Закрыт последний обход покрытия — на уровне самого CI, а не только списков AGENTS/TESTS.",
+  "refs": [
+    "ai-agents/structure_guard.py",
+    "ai-agents/test_structure_guard.py",
+    ".github/workflows/ai-agents.yml"
+  ],
+  "payload": {
+    "decision": "Этап 6 — страж структуры получил пятую проверку «ci-calls-run-all»: он смотрит сам CI-воркфлоу .github/workflows/ai-agents.yml и краснеет, если тот не запускает мета-агента run_all.py с флагом --with-tests (либо зовёт агентов в обход, либо без тест-инвариантов, либо файла воркфлоу нет вовсе). Так закрыт последний обход покрытия — уже не на уровне списков AGENTS/TESTS внутри run_all.py, а на уровне самого CI.",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9). Верхний P3 (контракт PersonhoodVerifier) и контрактная часть Этапа 5 недоступны: диск хоста заполнен (~0,9 ГБ свободно), contracts/node_modules отсутствует, hardhat/npm не прогнать. Взят следующий завершаемый pure-Python пункт ROADMAP «Страж структуры: CI реально зовёт run_all» — прямое продолжение run-all-covers-all (PTD-0049) и sol-parsing-centralized (PTD-0048). Прежние проверки сторожили списки AGENTS/TESTS внутри run_all.py, но даже при полных списках покрытие можно было обойти на уровне воркфлоу: позвать отдельные agent-команды или run_all без --with-tests — и тест-инварианты тихо не прогонялись бы, создавая ложное «всё зелено». Новая проверка читает сам файл воркфлоу и устраняет этот обход.",
+    "deliverables": [
+      "ai-agents/structure_guard.py — новая проверка check_ci_calls_run_all + ключ ci-calls-run-all в CHECKS (теперь 5 проверок); константа CI_WORKFLOW_REL; воркфлоу ищется от корня репозитория (родитель каталога агентов); человекочитаемый и --json отчёты включают новую строку",
+      "ai-agents/test_structure_guard.py — 6 новых утверждений: зелёное при корректном воркфлоу; красное при отсутствии воркфлоу, при зове агентов в обход run_all, при run_all без --with-tests, при одном лишь test_run_all.py; чистый каталог и реальный репозиторий теперь дают 5/5; добавлен помощник _write_workflow и раскладка repo/ai-agents",
+      "governance/ipfs/manifest.json — пересобран (изменились ai-agents/*.py), verify=OK",
+      "governance/registry/ — запись PTD-0057 (type=decision)"
+    ],
+    "rails": [
+      "Только служебный модуль-наблюдатель (Конституция, ст. 9): ничего не правит и ничем не распоряжается; read-only, в сеть не выходит, средств/ключей не касается",
+      "Без внешних зависимостей — только стандартная библиотека (детерминированно в любом CI)",
+      "Документация-комментарии и сообщение коммита — человеческим языком (ст. 3/6)",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) не тронут"
+    ],
+    "status": "adopted",
+    "spec": "ai-agents/structure_guard.py",
+    "verification": "test_structure_guard.py 34/34 (включая 6 новых ci-calls-run-all); structure_guard сам зелёный 5/5; run_all --with-tests: агенты 8/8, тесты 11/11; IPFS verify=OK",
+    "advances_roadmap": [
+      "Страж структуры: CI реально зовёт run_all"
+    ]
+  },
+  "prev_hash": "bddacb0f7f76512ff280ef1b82b95b11f2dc8479ddd759644868b7d437ad653f",
+  "hash": "4be7d29c6ba1b0ce3fec7d464ea6dc5173c7dfec35df5bfd1f0081e82a99b85b"
+}

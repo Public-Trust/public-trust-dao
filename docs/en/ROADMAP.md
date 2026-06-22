@@ -408,11 +408,21 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   [`structure_guard.py`](../../ai-agents/structure_guard.py), `PTD-0049`. Also closed a
   real gap: `test_run_all.py` was added to `TESTS` (the meta-agent wasn't running its
   own test invariant; tests 10→11).
-- [ ] **Structure-guard: CI actually calls `run_all`** — add a check that
+- [x] **Structure-guard: CI actually calls `run_all`** — add a check that
   `.github/workflows/ai-agents.yml` really runs `run_all.py --with-tests` (not separate
   agent commands that bypass it) — so coverage can't be bypassed at the CI-workflow
   level either, not just the `AGENTS`/`TESTS` lists (follow-up to `run-all-covers-all`,
   session 52).
+  → Done (session 60) via the fifth `ci-calls-run-all` check of
+  [`structure_guard.py`](../../ai-agents/structure_guard.py): it reads the workflow file
+  itself and goes red if it does not call `run_all.py` with `--with-tests` (agents
+  bypassed, no test invariants, or no workflow at all). `test_structure_guard.py` 34/34,
+  guard green 5/5, `PTD-0057`.
+- [ ] **Structure-guard: workflow trigger paths include `ai-agents/**`** — check that
+  the `on.push.paths` (and `pull_request.paths`) block in
+  `.github/workflows/ai-agents.yml` actually contains `ai-agents/**`, otherwise an agent
+  change won't trigger CI at all and coverage is bypassed even earlier — at the trigger
+  level, not the command (follow-up to `ci-calls-run-all`, session 60).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -948,3 +958,4 @@ To keep self-development transparent, we record the origin of ideas.
 | CONTRIBUTING (done) / CODE_OF_CONDUCT as separate file / issue+PR templates | agent | 34 |
 | Glossary (done) / glossary link in doc headers / agent term check | agent | 36 |
 | Issue/PR templates (done) / GitHub labels in .github/labels / branch autosetup | agent | 37 |
+| Guard: CI calls run_all (done) / guard checks workflow trigger paths (on.push.paths includes ai-agents/**) / Documentation agent: soft "header pointer leads to glossary" check | agent | 60 |
