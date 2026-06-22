@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 75,
-  "head_hash": "420209ca40511544520e6506f2ef4e9e5bf5e41673fb910cd956ad7fcf8a7d35",
+  "count": 76,
+  "head_hash": "2eae8edc0d456321ceb52cfef2192c735b5910d1bd38935484f61aea4fc724de",
   "entries": [
     {
       "seq": 0,
@@ -678,6 +678,15 @@
       "summary": "Опциональный рабочий процесс синхронизации меток .github/workflows/labels.yml: заготовка «до кнопки» приводит метки реального репозитория в соответствие с каталогом .github/labels.yml; запускает только оператор вручную (workflow_dispatch), по умолчанию предпросмотр без изменений",
       "hash": "420209ca40511544520e6506f2ef4e9e5bf5e41673fb910cd956ad7fcf8a7d35",
       "file": "records/0074-decision.json"
+    },
+    {
+      "seq": 75,
+      "id": "PTD-0075",
+      "type": "decision",
+      "timestamp": "2026-06-22T17:30:00Z",
+      "summary": "Каркас публичной платформы фонда на Next.js (папка platform/): статическая сборка под бесплатный GitHub Pages с заделом под будущий сервер; первый рабочий экран (главная: миссия + дисклеймер + витрина будущих экранов), двуязычный RU<->EN, светлая/тёмная темы, доступность; сборку проверяет CI .github/workflows/platform.yml, витрина web/ остаётся живой",
+      "hash": "2eae8edc0d456321ceb52cfef2192c735b5910d1bd38935484f61aea4fc724de",
+      "file": "records/0075-decision.json"
     }
   ]
 }

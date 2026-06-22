@@ -1,0 +1,60 @@
+name: Platform (Next.js) build
+
+# Простыми словами: этот рабочий процесс собирает платформу из папки platform/
+# на серверах GitHub и проверяет, что она собирается без ошибок. Локально мы её
+# не собираем (на хосте кончилось место на диске), поэтому проверка идёт здесь.
+#
+# Пока это ТОЛЬКО проверка сборки: готовый статический сайт сохраняется как
+# артефакт. Публикацию на GitHub Pages подключим отдельным шагом, когда начнём
+# переводить людей с витрины web/ на платформу (чтобы не сломать живой сайт).
+#
+# Transparency rail: NEXT_TELEMETRY_DISABLED=1 — Next.js не шлёт анонимную
+# статистику наружу.
+
+on:
+  push:
+    paths:
+      - 'platform/**'
+      - '.github/workflows/platform.yml'
+  pull_request:
+    paths:
+      - 'platform/**'
+      - '.github/workflows/platform.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - name: Забрать репозиторий (checkout)
+        uses: actions/checkout@v4
+
+      - name: Поставить Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Установить зависимости
+        run: npm install --no-audit --no-fund
+
+      - name: Проверить типы (typecheck)
+        run: npm run typecheck
+
+      - name: Собрать статический сайт (next export)
+        run: npm run build
+
+      - name: Сохранить готовый сайт как артефакт
+        uses: actions/upload-artifact@v4
+        with:
+          name: platform-static
+          path: platform/out
+          if-no-files-found: error

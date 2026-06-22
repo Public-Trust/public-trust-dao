@@ -1,0 +1,14 @@
+# Зависимости и сборка платформы — не коммитим (генерируются при сборке).
+/node_modules
+/.next
+/out
+/build
+
+# Служебное
+next-env.d.ts
+*.tsbuildinfo
+.env*
+!.env.example
+
+# ОС/редактор
+.DS_Store

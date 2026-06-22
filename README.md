@@ -40,7 +40,10 @@ Public Trust DAO обеспечивает людям базовую безопа
   [`Treasury.sol`](contracts/contracts/Treasury.sol) — базовый слой казны (release
   только через executor=мультисиг/Timelock, лимит выплаты, аварийная пауза, события)
   + тесты «до зелёного». Реальных средств/ключей нет.
-- `web/` — публичный сайт (GitHub Pages).
+- `web/` — публичный сайт-витрина (GitHub Pages).
+- [`platform/`](platform/) — полноценная web-платформа на Next.js (приложение для
+  людей): подать заявку, открытый журнал, голосование, окно казны. Статическая
+  сборка под бесплатный хостинг, без сторонних трекеров. Каркас + первый экран.
 - `governance/` — управление (Safe multisig 3-из-5, Snapshot/Aragon).
   - [`governance/registry/`](governance/registry/) — публичный, проверяемый,
     защищённый от подмены реестр решений (append-only hash-chain).

@@ -40,7 +40,10 @@ No one owns the project. The founder is an ordinary participant. The project bel
   [`Treasury.sol`](contracts/contracts/Treasury.sol) — base treasury layer (release
   only via executor=multisig/Timelock, per-release cap, emergency pause, events)
   + tests "to green". No real funds/keys.
-- `web/` — public website (GitHub Pages).
+- `web/` — public showcase website (GitHub Pages).
+- [`platform/`](platform/) — full web platform on Next.js (the application for
+  people): apply for help, open record, voting, treasury window. Static export for
+  free hosting, no third-party trackers. Skeleton + first screen.
 - `governance/` — governance (Safe multisig 3-of-5, Snapshot/Aragon).
   - [`governance/registry/`](governance/registry/) — a public, verifiable,
     tamper-resistant registry of decisions (append-only hash-chain).

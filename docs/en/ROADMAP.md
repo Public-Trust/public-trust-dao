@@ -119,6 +119,23 @@ Self-development does NOT lift the safety rails — it operates strictly within 
       +4 tests to green (54/54 with all contracts). `PTD-0020`.
   - [ ] Part 4: a public testnet run (e.g. Polygon Amoy) — network/RPC/test guardian
     addresses to be agreed with the operator (keys via `contracts/.env`).
+- [ ] **Fund platform on Next.js (INBOX #34):** a full web application for people
+  (web first, per [`PRODUCT-INTERFACES.md`](PRODUCT-INTERFACES.md)). Static export
+  (`next export`) for free GitHub Pages, with architectural room for a future server.
+  Transparency rails: no third-party trackers/CDN, system fonts, pinned dependencies.
+  RU↔EN, accessibility. The `web/` showcase stays live; migration is gradual.
+  - [x] Skeleton + first screen (session 78): `platform/` project (Next.js 15, App
+    Router, TypeScript, React 19) — home page (mission + disclaimer + a showcase of 6
+    upcoming screens), bilingual RU↔EN, light/dark themes, accessibility; the build is
+    verified by CI [`.github/workflows/platform.yml`](../../.github/workflows/platform.yml)
+    on GitHub's servers (host disk is 100% locally). `PTD-0075`. TESTNET-ONLY.
+  - [ ] "Connect a wallet" screen (MetaMask) + a clear explanation.
+  - [ ] "Apply for help" screen (anonymous form per `PRIORITIES.md`).
+  - [ ] "Open record" screen — reading registry records from `governance/registry/`.
+  - [ ] "Voting" screen (one person = one vote, per `GOVERNANCE.md`).
+  - [ ] "Treasury window" screen (read-only test treasury state).
+  - [ ] "Identity check" screen by levels (per `IDENTITY-VERIFICATION.md`).
+  - [ ] Wire up platform publishing to GitHub Pages during migration from `web/`.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,
