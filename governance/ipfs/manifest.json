@@ -129,11 +129,11 @@
       "single_block": true
     },
     {
-      "bytes": 197860,
-      "cid": "bafkreiajmbyhngp6wzjhmxlmedooyjxhq6xvtizzl6j7okn72r63i6v5te",
+      "bytes": 199663,
+      "cid": "bafkreiewmaw6snw7frlpj4fzjcfmqiay62ug6whkqyqnraxriqbhkrynmu",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ROADMAP.md",
-      "sha256": "0960707699feb652765d6c20dcec26e787af59a3395f93f729bfd47db47abd99",
+      "sha256": "96602de936df2c56f4f0b9488ac82018f6a86f58ea8620d882f1440275470d65",
       "single_block": true
     },
     {
@@ -145,16 +145,16 @@
       "single_block": true
     },
     {
-      "bytes": 123709,
-      "cid": "bafkreieniacta7sxb3plza6kg72wrkhxlxc4du4q7nqmcspzwrvekimbru",
+      "bytes": 126611,
+      "cid": "bafkreig4ylphmz3qc656ayyc3v6stvmxwjptftrcvxfl3j7emcetavkuz4",
       "cid_kind": "raw-leaf-v1",
       "path": "governance/registry/index.json",
-      "sha256": "8d4005307e570edebc83ca37f568a8f75dc5c1d390fb60c149f9b46a4521818d",
+      "sha256": "dcc2de76677017bbe06302dd7d29d597b25f32ce22adcabda7e46089305554cf",
       "single_block": true
     }
   ],
   "kind": "ipfs-content-manifest",
-  "manifest_fingerprint_sha256": "20ccd9516df4054d136d8c5268bab5d405d668fb9b511cfd89fa11ffded04596",
+  "manifest_fingerprint_sha256": "bf18feccefc273fecbb342d19e3399bfaadfc9b85fd8e18c551df70d0ee2da93",
   "project": "Public Trust DAO",
   "spec": "CIDv1, codec=raw(0x55), multihash=sha2-256, multibase=base32. Эквивалент `ipfs add --cid-version=1 --raw-leaves=true` для одноблочных файлов (<=256 KiB). Вычисляется и проверяется из содержимого, без аккаунта пиннера.",
   "verify": "python3 scripts/ipfs_manifest.py verify",
