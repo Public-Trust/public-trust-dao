@@ -1,0 +1,58 @@
+{
+  "files": [
+    {
+      "bytes": 4522,
+      "cid": "bafkreidasxvp2ysyxkhsiddmh2mmea7jg4ueft4uzfrcxsttjhzh72j5vm",
+      "cid_kind": "raw-leaf-v1",
+      "path": "docs/ANTI-ABUSE.md",
+      "sha256": "6095eafd6258ba8f240c6c3e98c203e9372842cf94c9622bca7349f27fe93dab",
+      "single_block": true
+    },
+    {
+      "bytes": 7969,
+      "cid": "bafkreiaij5traq3cfsyech43lb3wqat5irn4hcm7reiddeb7erkigic2zq",
+      "cid_kind": "raw-leaf-v1",
+      "path": "docs/CONSTITUTION.md",
+      "sha256": "084f671043622cb0411f9b587768027d445bc3899f891031903f245483205acc",
+      "single_block": true
+    },
+    {
+      "bytes": 13575,
+      "cid": "bafkreicmto2wdqlj7aypgjk2qwgny6uq25xpkqdfw35cqonrf4kqan6iym",
+      "cid_kind": "raw-leaf-v1",
+      "path": "docs/MANIFESTO.md",
+      "sha256": "4c9bb561c169f830f3255a858cdc7a90d76ef54065b6fa2839b12f150037c8c3",
+      "single_block": true
+    },
+    {
+      "bytes": 3396,
+      "cid": "bafkreihh3pf5g2eqadaaoryoo7ww4nvewr5qo6snpfbglkwk2dwbokpdh4",
+      "cid_kind": "raw-leaf-v1",
+      "path": "docs/PRINCIPLES.md",
+      "sha256": "e7dbcbd3689000c007470e77ed6e36a4b47b077a4d794265aacad0ec1729e33f",
+      "single_block": true
+    },
+    {
+      "bytes": 4147,
+      "cid": "bafkreigt2c6kmgpdab2scyyn6mtf2ikynjp6xmh42kzmhdnza467kcvsgq",
+      "cid_kind": "raw-leaf-v1",
+      "path": "docs/PRIORITIES.md",
+      "sha256": "d3d0bca619e3007521630df3265d21586a5febb0fcd2b2c38db9073df50ab234",
+      "single_block": true
+    },
+    {
+      "bytes": 1404,
+      "cid": "bafkreibvs7mg3aaal73ey6ycdceyygw2r7fg44k62jlcgfa2ckbbbxufvi",
+      "cid_kind": "raw-leaf-v1",
+      "path": "governance/registry/index.json",
+      "sha256": "3597d86d80005ff64c7b0218898c1ada8fca6e715ed25623141a128210de85aa",
+      "single_block": true
+    }
+  ],
+  "kind": "ipfs-content-manifest",
+  "manifest_fingerprint_sha256": "d11e57b87028705d1af494457f81e3925dd9dcfe5bb6b65964c6299070249e4c",
+  "project": "Public Trust DAO",
+  "spec": "CIDv1, codec=raw(0x55), multihash=sha2-256, multibase=base32. Эквивалент `ipfs add --cid-version=1 --raw-leaves=true` для одноблочных файлов (<=256 KiB). Вычисляется и проверяется из содержимого, без аккаунта пиннера.",
+  "verify": "python3 scripts/ipfs_manifest.py verify",
+  "version": 1
+}

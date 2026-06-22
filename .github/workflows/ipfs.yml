@@ -1,0 +1,35 @@
+name: Проверка IPFS-манифеста
+
+# Гарантия прозрачности: на каждый push/PR проверяем, что content-addressed
+# манифест ключевых документов (CID/sha256) сходится с их реальным содержимым.
+# Если документ изменили, а manifest.json не пересобрали (или наоборот) — сборка
+# падает, и расхождение видно публично.
+on:
+  push:
+    paths:
+      - "docs/**"
+      - "governance/registry/index.json"
+      - "governance/ipfs/**"
+      - "scripts/ipfs_manifest.py"
+      - ".github/workflows/ipfs.yml"
+  pull_request:
+    paths:
+      - "docs/**"
+      - "governance/registry/index.json"
+      - "governance/ipfs/**"
+      - "scripts/ipfs_manifest.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Проверить IPFS-манифест (verify)
+        run: python3 scripts/ipfs_manifest.py verify
