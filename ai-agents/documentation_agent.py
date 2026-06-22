@@ -53,6 +53,13 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
     (МЯГКАЯ, парная к mirror-doc-coverage: предупреждает, если экран есть в карте и
      его страница заведена, но в витрину t.learn он не попал — человек не дойдёт до
      него с главной; PTD-0110)
+  • mirror-doc-distinct → у каждого экрана-зеркала свой отдельный документ ....... ст. 3/6
+    (МЯГКАЯ: предупреждает, если два ключа MIRROR_DOCS указывают на ОДИН и тот же
+     docs/X.md — почти всегда опечатка в карте, из-за которой один документ остаётся
+     без своего зеркала; PTD-0111)
+  • mirror-doc-original → путь карты ведёт на RU-первоисточник, не на перевод ..... ст. 3/6
+    (МЯГКАЯ: предупреждает, если значение карты лежит в docs/en/ или *.en.md —
+     тогда пересказ сверяется с переводом, а не с нормой RU; PTD-0111)
   • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
      односторонняя связь оставляет человека без обратного пути; PTD-0106)
@@ -1014,6 +1021,66 @@ def check_mirror_doc_showcase(root):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_mirror_doc_distinct(mirror_docs=MIRROR_DOCS):
+    """МЯГКАЯ: у каждого экрана-зеркала свой отдельный нормативный документ.
+
+    Карта `MIRROR_DOCS` связывает экран-пересказ (слаг) с его документом в `docs/`.
+    Если ДВА разных ключа указывают на ОДИН и тот же `docs/X.md` — это почти всегда
+    опечатка в карте: один документ получает сразу два «зеркала», а какой-то другой
+    остаётся вовсе без своего. `mirror-doc-link`/`mirror-doc-exists` смотрят на
+    каждую запись по отдельности и такого совпадения не замечают. Эта проверка
+    ловит дубликаты: для каждого документа, на который ссылаются ≥2 экранов, —
+    предупреждение (warn, не блок — ст. 3/6, PTD-0111). Карта зашита в коде и от
+    репозитория не зависит, поэтому проверяется всегда. Параметр `mirror_docs`
+    оставлен для тест-инварианта (подсунуть карту с дублем).
+    """
+    by_doc = {}
+    for slug, doc in sorted(mirror_docs.items()):
+        by_doc.setdefault(doc, []).append(slug)
+    violations = []
+    for doc, slugs in sorted(by_doc.items()):
+        if len(slugs) > 1:
+            violations.append({
+                "record": f"MIRROR_DOCS → {doc}",
+                "problem": (f"на один документ {doc} ссылаются сразу несколько "
+                            f"экранов-зеркал ({', '.join(slugs)}) — почти всегда "
+                            "опечатка в карте, из-за которой какой-то другой "
+                            "нормативный документ остаётся без своего зеркала"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
+def check_mirror_doc_original(mirror_docs=MIRROR_DOCS):
+    """МЯГКАЯ: путь карты ведёт на RU-первоисточник в docs/, а не на перевод.
+
+    Экран-зеркало пересказывает простыми словами НОРМУ, а норма у проекта — это
+    русский оригинал в `docs/` (EN-зеркала лежат в `docs/en/` и `*.en.md`, см.
+    правило двуязычности). Если значение карты `MIRROR_DOCS` укажет на перевод
+    (`docs/en/X.md` или `X.en.md`), пересказ начнёт сверяться с переводом, а не с
+    первоисточником — и при расхождении RU↔EN зеркало «уедет» от нормы незаметно.
+    Проверка следит, чтобы каждое значение карты лежало в `docs/` и НЕ было
+    EN-зеркалом (warn, не блок — ст. 3/6, PTD-0111). Карта зашита в коде; параметр
+    `mirror_docs` оставлен для тест-инварианта.
+    """
+    violations = []
+    for slug, doc in sorted(mirror_docs.items()):
+        norm = doc.replace("\\", "/")
+        is_en = (
+            norm.startswith("docs/en/")
+            or "/en/" in norm
+            or norm.endswith(".en.md")
+        )
+        if is_en:
+            violations.append({
+                "record": f"MIRROR_DOCS[{slug}]",
+                "problem": (f"путь-значение {doc} ведёт на EN-перевод, а не на "
+                            "RU-первоисточник в docs/ — пересказ будет сверяться с "
+                            "переводом, а не с нормой (при расхождении RU↔EN зеркало "
+                            "«уедет» от первоисточника незаметно)"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 def check_see_also_symmetric(root):
     """МЯГКАЯ: связь «См. также» между экранами-объяснениями взаимна.
 
@@ -1144,6 +1211,20 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "mirror-doc-distinct",
+        "title": "У каждого экрана-зеркала свой отдельный нормативный документ (нет дублей в MIRROR_DOCS)",
+        "guards": "ст. 3/6 — два экрана на один документ почти всегда опечатка карты, из-за которой другой документ остаётся без зеркала (PTD-0111); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_distinct",
+        "soft": True,
+    },
+    {
+        "key": "mirror-doc-original",
+        "title": "Путь из карты MIRROR_DOCS ведёт на RU-первоисточник в docs/, а не на перевод",
+        "guards": "ст. 3/6 — пересказ сверяется с нормой (RU-оригинал), а не с EN-переводом, иначе зеркало «уедет» при расхождении языков (PTD-0111); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_original",
+        "soft": True,
+    },
+    {
         "key": "see-also-symmetric",
         "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
         "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
@@ -1178,6 +1259,8 @@ def run(root):
     mirror_cov_status, mirror_cov_v = check_mirror_doc_complete(root)
     mirror_exist_status, mirror_exist_v = check_mirror_doc_exists(root)
     mirror_show_status, mirror_show_v = check_mirror_doc_showcase(root)
+    mirror_dist_status, mirror_dist_v = check_mirror_doc_distinct()
+    mirror_orig_status, mirror_orig_v = check_mirror_doc_original()
     seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
@@ -1195,6 +1278,8 @@ def run(root):
         "mirror_doc_complete": (mirror_cov_status, mirror_cov_v),
         "mirror_doc_exists": (mirror_exist_status, mirror_exist_v),
         "mirror_doc_showcase": (mirror_show_status, mirror_show_v),
+        "mirror_doc_distinct": (mirror_dist_status, mirror_dist_v),
+        "mirror_doc_original": (mirror_orig_status, mirror_orig_v),
         "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 

@@ -917,6 +917,69 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # --- Мягкие проверки целостности карты MIRROR_DOCS: distinct / original ------
+    # Карта MIRROR_DOCS зашита в коде агента и от мини-репо не зависит, поэтому
+    # warn-случай (дубль значения / путь на перевод) нельзя смоделировать файлами —
+    # импортируем функции напрямую и подсовываем им синтетическую карту. На реальной
+    # (дефолтной) карте обе обязаны быть green/soft — это проверяем через --json.
+    sys.path.insert(0, HERE)
+    import documentation_agent as doc
+
+    # 37. mirror-doc-distinct: чистая карта (все значения разные) → pass.
+    print("\n[мягкая проверка: карта без дублей → mirror-doc-distinct pass]")
+    clean = {"a": "docs/A.md", "b": "docs/B.md", "c": "docs/C.md"}
+    st, viol = doc.check_mirror_doc_distinct(clean)
+    check("mirror-doc-distinct == pass на чистой карте", st == "pass")
+    check("нарушений нет", viol == [])
+
+    # 38. mirror-doc-distinct: два ключа на один документ → warn, с обоими слагами.
+    print("\n[мягкая проверка: дубль значения в карте → mirror-doc-distinct warn]")
+    dup = {"a": "docs/SAME.md", "b": "docs/SAME.md", "c": "docs/C.md"}
+    st, viol = doc.check_mirror_doc_distinct(dup)
+    check("mirror-doc-distinct == warn при дубле", st == "warn")
+    check("нарушение названо ровно одно (один задвоенный документ)", len(viol) == 1)
+    check("в тексте нарушения упомянуты оба ключа-дубля",
+          "a" in viol[0]["problem"] and "b" in viol[0]["problem"])
+    check("чистый документ C в нарушения не попал",
+          "docs/C.md" not in viol[0]["record"])
+
+    # 39. mirror-doc-original: все значения в docs/ (RU-оригиналы) → pass.
+    print("\n[мягкая проверка: все пути на RU-первоисточник → mirror-doc-original pass]")
+    ru_only = {"a": "docs/A.md", "b": "docs/SUB-DIR.md"}
+    st, viol = doc.check_mirror_doc_original(ru_only)
+    check("mirror-doc-original == pass для путей в docs/", st == "pass")
+    check("нарушений нет", viol == [])
+
+    # 40. mirror-doc-original: путь ведёт на EN-перевод (docs/en/ и *.en.md) → warn.
+    print("\n[мягкая проверка: путь на перевод → mirror-doc-original warn]")
+    translated = {"a": "docs/A.md", "b": "docs/en/B.md", "c": "docs/C.en.md"}
+    st, viol = doc.check_mirror_doc_original(translated)
+    check("mirror-doc-original == warn при путях-переводах", st == "warn")
+    check("оба перевода (docs/en/ и *.en.md) пойманы", len(viol) == 2)
+    check("RU-оригинал docs/A.md не помечен нарушением",
+          all("[a]" not in v["record"] for v in viol))
+
+    # 41. Реальная (дефолтная) карта MIRROR_DOCS чиста: distinct и original pass,
+    #     обе помечены soft, в полном отчёте на реальном репо они присутствуют.
+    print("\n[мягкие проверки на дефолтной карте → distinct/original pass+soft, есть в отчёте]")
+    st_d, viol_d = doc.check_mirror_doc_distinct()
+    st_o, viol_o = doc.check_mirror_doc_original()
+    check("mirror-doc-distinct == pass на дефолтной карте", st_d == "pass" and viol_d == [])
+    check("mirror-doc-original == pass на дефолтной карте", st_o == "pass" and viol_o == [])
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        code, report = run_agent(tmp)
+        check("вердикт green / exit=0", report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-distinct присутствует и pass",
+              status_of(report, "mirror-doc-distinct") == "pass")
+        check("mirror-doc-original присутствует и pass",
+              status_of(report, "mirror-doc-original") == "pass")
+        check("mirror-doc-distinct помечена soft", _is_soft(report, "mirror-doc-distinct"))
+        check("mirror-doc-original помечена soft", _is_soft(report, "mirror-doc-original"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 

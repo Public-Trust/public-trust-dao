@@ -548,16 +548,32 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   only checks the string on the screen and misses a vanished file, this one catches it. Both
   checks this session have no dependencies, +6 test scenarios (112/112), both green on the real
   repo, run_all 8/8. `PTD-0110`. TESTNET-ONLY.
-- [ ] **Documentation agent: a mirror screen has its own (not a shared) normative doc** — a
+- [x] **Documentation agent: a mirror screen has its own (not a shared) normative doc** — a
   soft check that distinct `MIRROR_DOCS` keys don't point to the SAME `docs/X.md` (barring
   intentional exceptions): two retelling screens on one document is almost always a map typo
   that leaves one doc without its mirror. A warning, not a block (extension of `PTD-0110`,
-  proposed session 113).
-- [ ] **Documentation agent: a `MIRROR_DOCS` path points to the RU original, not the EN
+  proposed session 113). **Done (session 114):** the `mirror-doc-distinct` check in
+  `documentation_agent.py` — for every document referenced by ≥2 keys, a soft warning listing
+  the duplicated screens. `mirror-doc-link`/`mirror-doc-exists` look at each entry separately
+  and miss the value collision. `PTD-0111`.
+- [x] **Documentation agent: a `MIRROR_DOCS` path points to the RU original, not the EN
   mirror** — a soft check that map values live under `docs/` (not `docs/en/` and not `*.en.md`):
   a mirror screen must link to the RU normative source, otherwise the retelling is checked
   against a translation rather than the norm. A warning, not a block (extension of `PTD-0110`,
-  proposed session 113).
+  proposed session 113). **Done (session 114):** the `mirror-doc-original` check in
+  `documentation_agent.py` — catches values like `docs/en/X.md` and `*.en.md`. Both checks this
+  session are repo-independent (the map is in code) and take the map as a parameter for the
+  test invariant; +18 test scenarios (130/130, direct unit calls on synthetic maps), both green
+  on the real map, run_all 8/8. `PTD-0111`. TESTNET-ONLY.
+- [ ] **Documentation agent: `MIRROR_DOCS` values are normalized** — a soft check on the shape
+  of each map value: exactly `docs/<NAME>.md` (no `./`, no trailing spaces, ends in `.md`, not a
+  directory) — so a "dirty" entry can't slip past `mirror-doc-original`/`mirror-doc-exists` due
+  to an unexpected format. A warning, not a block (extension of `PTD-0111`, proposed session 114).
+- [ ] **Documentation agent: a mirror's normative doc is itself bilingual (has an EN pair)** — a
+  soft check that for every `docs/X.md` value in `MIRROR_DOCS` a `docs/en/X.md` exists: the
+  retelling screen points to the RU source, but if the source itself has no EN mirror, an
+  English-speaking person hits a dead end. Ties the mirror map to the bilingual rule
+  (`bilingual-pairs`). A warning, not a block (extension of `PTD-0111`, proposed session 114).
 - [x] **Identity-verification terms in `GLOSSARY.md`** (+RU) — add in plain words:
   "proof-of-personhood", "zero-knowledge / proof without disclosure", "nullifier",
   "liveness", "vouching (web-of-trust)" — each linking to `IDENTITY-VERIFICATION.md`
