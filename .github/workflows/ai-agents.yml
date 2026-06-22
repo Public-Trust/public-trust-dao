@@ -14,7 +14,10 @@ name: AI-агенты (целостность governance + рельсы безо
 #  • Housing — целевой escrow жилищной помощи в коде Disbursement.sol и в записях
 #    реестра (транш только поставщику, refund в казну, потолок транша, приоритет);
 #    его тест-инвариант доказывает, что красное реально ловится.
-# Любое нарушение целостности/рельс/справедливости/модели голоса/escrow валит сборку.
+#  • Documentation — двуязычность RU↔EN (у каждого публичного дока есть пара и
+#    переключатель языка) + целостность относительных ссылок во всех .md;
+#    его тест-инвариант доказывает, что красное реально ловится.
+# Любое нарушение целостности/рельс/справедливости/модели голоса/escrow/документации валит сборку.
 # Read-only: агенты ничего не двигают и ничем не владеют.
 on:
   push:
@@ -27,6 +30,8 @@ on:
       - "contracts/contracts/**"
       - "docs/PRIORITIES.md"
       - "governance/**"
+      - "**/*.md"
+      - "*.md"
       - ".github/workflows/ai-agents.yml"
   pull_request:
     paths:
@@ -38,6 +43,8 @@ on:
       - "contracts/contracts/**"
       - "docs/PRIORITIES.md"
       - "governance/**"
+      - "**/*.md"
+      - "*.md"
   workflow_dispatch:
 
 permissions:
@@ -69,3 +76,7 @@ jobs:
         run: python3 ai-agents/test_housing.py
       - name: Прогнать Housing-агента (целевой escrow жилищной помощи)
         run: python3 ai-agents/housing_agent.py
+      - name: Тест-инвариант Documentation (доказать, что красное ловится)
+        run: python3 ai-agents/test_documentation.py
+      - name: Прогнать Documentation-агента (двуязычность RU↔EN + ссылки)
+        run: python3 ai-agents/documentation_agent.py

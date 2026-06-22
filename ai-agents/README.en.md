@@ -42,7 +42,7 @@ This sets hard boundaries for EVERY agent in this directory:
 | **Housing** | Domain helper for housing cases (escrow paying the provider directly per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)). | ✅ scaffold (`housing_agent.py`) |
 | **Governance** | Helps with the proposal lifecycle (format, quorum, timing, ties to the constitution); does not vote itself. | ⏳ planned |
 | **Mediator** | Assists with disputes/appeals per [`ANTI-ABUSE.md`](../docs/en/ANTI-ABUSE.md) — structures, does not decide. | ⏳ planned |
-| **Documentation** | Watches RU↔EN sync, link integrity, freshness of the repo map. | ⏳ planned |
+| **Documentation** | Watches RU↔EN bilinguality (a pair + a language switcher for every public doc) and the integrity of relative links across all `.md`. | ✅ scaffold (`documentation_agent.py`) |
 
 We build them one by one, "to green", with no token stubs. The scaffold opens with
 **Audit** — useful right away: one command checks the whole governance layer.
@@ -177,7 +177,8 @@ a correct contract+settings stay "green" with no false positives (including igno
 mentions inside comments).
 
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
-Guardian (+test) + Fairness (+test) + Reputation (+test) + Housing (+test) on every push/PR.
+Guardian (+test) + Fairness (+test) + Reputation (+test) + Housing (+test) +
+Documentation (+test) on every push/PR.
 
 ## Housing agent — what it does and how to run it
 
@@ -223,6 +224,48 @@ a wrong housing priority) the agent must return "red", while a correct contract+
 records).
 
 CI runs Housing (+test) in the same workflow.
+
+## Documentation agent — what it does and how to run it
+
+`documentation_agent.py` turns two project rules into a machine check: the
+operator's instruction that **"all documentation is bilingual (RU↔EN)"** and the
+constitutional **verifiability** (Art. 3) / **openness** (Art. 6). Read-only over
+git-tracked `.md` files (over what is actually published):
+
+| Check | What it requires | What it guards |
+|-------|------------------|----------------|
+| `bilingual-pairs` | every public doc has an RU↔EN counterpart (pairing rule from the path) | Art. 6 — openness/clarity; "all documentation is bilingual" |
+| `language-switcher` | the top of the doc has a correct `[Русский]·[English]` switcher pointing to the paired file | Art. 6 — availability in both languages |
+| `link-integrity` | every relative link in `.md` resolves to an existing file/directory | Art. 3 — verifiability; a doc with no broken links is actually readable |
+
+**Pairing rule** (derived from the path, not hardcoded per file):
+`docs/NAME.md` ↔ `docs/en/NAME.md`; `<dir>/README.md` ↔ `<dir>/README.en.md`;
+a root-level `NAME.md` ↔ `NAME.en.md` (e.g. `REPO-STRUCTURE`, `AUTHORS`).
+Single-language internal files (`BUILDER.md`, `LAUNCH.md`, `PROGRESS.md`,
+`DECISIONS.md`, `comms/*`) are excluded by design — they are the circuit's
+back-office, not the fund's public documentation. External links
+(`http`/`mailto`/anchors) and the contents of ```…``` code fences are not part of
+the link check — no false positives.
+
+```bash
+python3 ai-agents/documentation_agent.py          # human-readable report
+python3 ai-agents/documentation_agent.py --json    # machine-readable (for CI/other agents)
+```
+
+Exit code `0` — documentation is intact and bilingual; `1` — a discrepancy was
+found (a **signal** to the community, not an action: the agent does not write
+translations or fix links).
+
+The **invariant test** [`test_documentation.py`](test_documentation.py) proves
+that Documentation works rather than being "green by default": for every
+discrepancy (no EN mirror, no RU original, a missing/broken/swapped switcher, a
+broken relative link) the agent must return "red", and on clean bilingual
+documentation — "green" with no false positives (single-language internal files,
+external links, and code fences must not trip it). On its first run the agent
+immediately caught a real gap — `governance/ipfs/README.md` and
+`governance/registry/README.md` had no EN mirrors; they were added (now 8/8).
+
+CI runs Documentation (+test) in the same workflow.
 
 ## Rails (for all agents in this directory)
 

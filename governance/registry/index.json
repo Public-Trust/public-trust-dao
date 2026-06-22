@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 26,
-  "head_hash": "73c321dfe7e292f118411a9d939c901fdf9b72869a8e45722dc665aae8a6f33f",
+  "count": 27,
+  "head_hash": "85b8950ae0f2bebfa220c34124bf09966932d7ea4aa9f49a1b2166f4538ea8d3",
   "entries": [
     {
       "seq": 0,
@@ -237,6 +237,15 @@
       "summary": "Этап 6 (AI-агенты), модуль 5/8: Housing-агент. housing_agent.py — read-only статический разбор Disbursement.sol + жилищных записей реестра, доказывает модель целевого расхода «оплата напрямую поставщику» в коде (release-to-provider-only/provider-fixed/refund-to-treasury/tranche-limit/guardian-cannot-move + targeted-escrow/provider-onchain/category-priority) по ESCROW-TARGETED-DISBURSEMENT.md. Тест-инвариант test_housing.py (23/23). CI расширен. TESTNET-ONLY.",
       "hash": "73c321dfe7e292f118411a9d939c901fdf9b72869a8e45722dc665aae8a6f33f",
       "file": "records/0025-decision.json"
+    },
+    {
+      "seq": 26,
+      "id": "PTD-0026",
+      "type": "decision",
+      "timestamp": "2026-06-22T11:00:00Z",
+      "summary": "Этап 6 (AI-агенты), модуль 6/8: Documentation-агент. documentation_agent.py — read-only проверка двуязычности RU↔EN (пара + переключатель языка у каждого публичного дока) и целостности относительных ссылок во всех .md, по правилу пар из пути. Тест-инвариант test_documentation.py (17/17). При первом прогоне вскрыл и закрыл пробел: добавлены EN-зеркала governance/ipfs/README.md и governance/registry/README.md. Закрывает P2 «авто-проверка двуязычности в CI». CI расширен. TESTNET-ONLY.",
+      "hash": "85b8950ae0f2bebfa220c34124bf09966932d7ea4aa9f49a1b2166f4538ea8d3",
+      "file": "records/0026-documentation-agent.json"
     }
   ]
 }

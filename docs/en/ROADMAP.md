@@ -171,7 +171,17 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     (`targeted-escrow`/`provider-onchain`/`category-priority`, level read from
     PRIORITIES.md). Test invariant [`test_housing.py`](../../ai-agents/test_housing.py)
     (23/23). CI extended (+ triggers on contracts/contracts and docs/PRIORITIES.md). `PTD-0025`.
-  - [ ] Modules 6–8: Governance / Mediator / Documentation — one at a time, "to green".
+  - [x] Module 6/8 (session 29): **Documentation** [`documentation_agent.py`](../../ai-agents/documentation_agent.py)
+    — a read-only check of RU↔EN bilinguality and link integrity over git-tracked
+    `.md`: `bilingual-pairs` (every public doc has an RU↔EN pair — pairing rule
+    derived from the path), `language-switcher` (a correct `[Русский]·[English]`
+    switcher at the top, pointing to the paired file), `link-integrity` (all relative
+    links resolve; external links and code fences excluded). Invariant test
+    [`test_documentation.py`](../../ai-agents/test_documentation.py) (17/17). On its
+    first run it caught and closed a real gap — EN mirrors were added for
+    `governance/ipfs/README.md` and `governance/registry/README.md`. Also closes the
+    P2 "automatic bilingual check in CI". `PTD-0026`.
+  - [ ] Modules 7–8: Governance / Mediator — one at a time, "to green".
 
 ### P1 — materials and infrastructure (partly from INBOX)
 
@@ -202,8 +212,10 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   priority) in plain language, RU/EN — so documents are clear to non-technical readers.
 - [ ] **"Transparency" page on the site** — gather links: registry, IPFS manifest,
   CI statuses, how to verify integrity yourself (`registry.py verify`).
-- [ ] **Automated bilingual check in CI** — a linter that fails the build if an RU
-  doc changed without its EN pair (or vice versa).
+- [x] **Automated bilingual check in CI** — a linter that fails the build if an RU
+  doc has no EN pair (or vice versa), a missing switcher, or a broken link.
+  → Implemented by the Documentation agent (session 29):
+  [`ai-agents/documentation_agent.py`](../../ai-agents/documentation_agent.py), `PTD-0026`.
 
 ### P3 — idea bank (raw, up for discussion)
 
@@ -239,9 +251,11 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   the checks from `safe_config.py`/`snapshot_config.py` (session 24).
   → Realized (session 25): [`guardian_agent.py`](../../ai-agents/guardian_agent.py) +
   test invariant [`test_guardian.py`](../../ai-agents/test_guardian.py), `PTD-0022`.
-- [ ] Documentation agent: an RU↔EN bilingual linter (an RU doc ↔ its EN mirror
-  changed together) + relative-link integrity — also closes the P2 item "automatic
-  bilingual check in CI" (session 24).
+- [x] Documentation agent: an RU↔EN bilingual linter (an RU doc ↔ its EN mirror) +
+  relative-link integrity — also closes the P2 item "automatic bilingual check in
+  CI" (session 24). → Implemented (session 29):
+  [`documentation_agent.py`](../../ai-agents/documentation_agent.py) +
+  [`test_documentation.py`](../../ai-agents/test_documentation.py), `PTD-0026`.
 - [ ] Meta-agent "run all": a single `ai-agents/run_all.py` entry point that runs every
   ready agent (Audit + Guardian + …) in sequence and folds their reports into one
   "green/red" for the whole project (session 25).
@@ -282,11 +296,42 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   provider, …)` events) and the record's `provider` = the case's `provider` — tying the
   registry and the contract into one targeted-disbursement check (extends the "payout ↔
   registry record" idea, session 28).
+- [ ] Documentation agent: a "translation freshness" check — an RU doc and its EN
+  mirror should change IN THE SAME commit (git diff: if only one of the pair is touched
+  in a commit/diff — a soft warning). Closes "bilinguality is in sync", not just "both
+  files exist" (session 29).
+- [ ] Documentation agent: link-anchor check (`FILE.md#section`) — that `#section`
+  matches a real heading in the target file, so internal links don't rot when sections
+  are renamed (session 29).
+- [ ] A lexical linter of constitutional prohibitions for public texts
+  (README/web/PROMOTION): no "guaranteed returns"/"investment"/"pyramid"/"referrals"
+  (the literal prohibitions of `PRINCIPLES.md`) — could become part of Documentation or
+  a separate mini-agent (session 29; previously proposed as a Guardian extension).
 
 ---
 
 ## Done
 
+- **PTD-0026 (session 29):** Stage 6 (AI agents), module 6/8 — **the Documentation
+  agent**. [`documentation_agent.py`](../../ai-agents/documentation_agent.py) — a
+  service read-only agent: it turns the project rule "all documentation is bilingual
+  (RU↔EN)" and constitutional verifiability (Art. 3) / openness (Art. 6) into a machine
+  check. Three checks over git-tracked `.md`: `bilingual-pairs` (every public doc has
+  an RU↔EN pair — the pairing rule is derived from the path: `docs/NAME.md`↔`docs/en/NAME.md`;
+  `<dir>/README.md`↔`<dir>/README.en.md`; root `NAME.md`↔`NAME.en.md`),
+  `language-switcher` (a correct `[Русский]·[English]` switcher at the top, pointing to
+  the paired file), `link-integrity` (all relative links resolve; external links and
+  code fences excluded — no false positives). Single-language internal files
+  (`BUILDER`/`LAUNCH`/`PROGRESS`/`DECISIONS`/`comms`) are excluded by design.
+  Human-readable and `--json` output; exit 0/1; "red" = a signal. The **invariant
+  test** [`test_documentation.py`](../../ai-agents/test_documentation.py) (17/17)
+  proves "red is caught, green doesn't fail falsely". **Immediate value:** on its first
+  run the agent caught a real bilinguality gap — `governance/ipfs/README.md` and
+  `governance/registry/README.md` had no EN mirrors; EN mirrors + switchers were added
+  (now 8/8 checks green). Also closes the P2 "automatic bilingual check in CI". CI
+  [`ai-agents.yml`](../../.github/workflows/ai-agents.yml) extended (+ Documentation
+  test + Documentation; triggers on `**/*.md`, `*.md`). `PTD-0026`. TESTNET-ONLY. Next —
+  modules 7–8 (Governance / Mediator).
 - **PTD-0025 (session 28):** Stage 6 (AI agents), module 5/8 — **the Housing agent**.
   [`housing_agent.py`](../../ai-agents/housing_agent.py) is a service read-only agent, a
   domain helper for housing cases: it proves the targeted-disbursement model
@@ -470,3 +515,4 @@ To keep self-development transparent, we record the origin of ideas.
 | "Payment ↔ registry record" invariant / agent self-test in CI / Reputation agent | agent | 26 |
 | Reputation on Governor.sol / deploy cap check / shared solidity_scan.py | agent | 27 |
 | Refactor shared solidity helpers (3 copies) / Housing provider-whitelist / end-to-end "record ↔ on-chain escrow" test | agent | 28 |
+| Meta-agent run_all / lexical prohibition linter for public texts / changelog from the registry | agent | 29 |
