@@ -318,6 +318,12 @@
       </div>
     </div>
     <div class="fine">
+      <p><a class="statusbadge" id="statusbadge" data-state="loading"
+            href="transparency.html#livestatus" role="status" aria-live="polite"
+            title="Состояние проекта — откройте страницу «Прозрачность» за подробностями">
+        <span class="dot" aria-hidden="true"></span>
+        <span data-role="badgetext">Проверяю состояние…</span>
+      </a></p>
       <p class="status-line"><span class="blip"></span> Bootstrap. Разработка ведётся публично и проверяемо.</p>
       <p>Public Trust DAO — общественное благо, не инвестиция. Проект не обещает
          доходности и не гарантирует прибыль. Никто не является владельцем; средства
@@ -359,6 +365,9 @@
     items.forEach(function (el) { io.observe(el); });
   })();
 </script>
+
+<!-- Компактный значок-светофор: тем же origin читает ./status.json, без внешних запросов. -->
+<script src="assets/status.js" defer></script>
 
 </body>
 </html>

@@ -415,6 +415,24 @@ p code, li code {
 .statuslight .warns li { line-height: 1.5; }
 .statuslight .src { margin: 14px 0 0; color: var(--muted); font-size: .82rem; }
 
+/* Компактный значок-светофор для шапки/футера остальных страниц. */
+.statusbadge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-weight: 600; font-size: .9rem; color: var(--muted);
+  text-decoration: none; border: 1px solid var(--border);
+  background: var(--bg-soft); border-radius: 999px; padding: 5px 12px;
+}
+.statusbadge:hover { border-color: var(--border-2); }
+.statusbadge .dot {
+  width: 9px; height: 9px; border-radius: 50%; flex: none;
+  background: var(--muted); border: 1px solid var(--border-2);
+}
+.statusbadge.is-green { color: var(--good); }
+.statusbadge.is-green .dot { background: var(--good); border-color: var(--good); }
+.statusbadge.is-red { color: var(--danger); }
+.statusbadge.is-red .dot { background: var(--danger); border-color: var(--danger); }
+.statusbadge.is-error .dot { background: var(--warn-text); border-color: var(--warn-border); }
+
 /* ============================ Адаптив ============================ */
 @media (max-width: 640px) {
   .nav { display: none; }            /* на узких экранах якоря прячем, остаются инструменты */

@@ -317,6 +317,12 @@
       </div>
     </div>
     <div class="fine">
+      <p><a class="statusbadge" id="statusbadge" data-state="loading"
+            href="transparency.en.html#livestatus" role="status" aria-live="polite"
+            title="Project status — open the Transparency page for details">
+        <span class="dot" aria-hidden="true"></span>
+        <span data-role="badgetext">Checking status…</span>
+      </a></p>
       <p class="status-line"><span class="blip"></span> Bootstrap. Development is carried out publicly and verifiably.</p>
       <p>Public Trust DAO is a public good, not an investment. The project promises no
          yield and guarantees no profit. There is no owner; funds and decisions are not
@@ -358,6 +364,9 @@
     items.forEach(function (el) { io.observe(el); });
   })();
 </script>
+
+<!-- Compact status light: reads ./status.json from the same origin, no external requests. -->
+<script src="assets/status.js" defer></script>
 
 </body>
 </html>

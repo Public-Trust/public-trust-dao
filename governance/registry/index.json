@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 71,
-  "head_hash": "a8b7795d3c627529c2ca200d56bcc3f20369889472a03c84fce17abc88a5b118",
+  "count": 72,
+  "head_hash": "a98e304de613ed8f3a6a21dfd000ea6f68261f846609f68b6c641a1ac1366b97",
   "entries": [
     {
       "seq": 0,
@@ -642,6 +642,15 @@
       "summary": "Публичный «живой светофор» состояния проекта на странице Прозрачности сайта (web/transparency.html +EN): секция читает тем же origin артефакт status.json (копию governance/status/run_all_status.json, кладёт деплой Pages) и рисует человеку зелёно/красно + счёт агентов/тестов/стража и мягкие предупреждения; общий двуязычный assets/status.js, политика без сторонних запросов сохранена",
       "hash": "a8b7795d3c627529c2ca200d56bcc3f20369889472a03c84fce17abc88a5b118",
       "file": "records/0070-decision.json"
+    },
+    {
+      "seq": 71,
+      "id": "PTD-0071",
+      "type": "decision",
+      "timestamp": "2026-06-22T15:40:00Z",
+      "summary": "Компактный значок-светофор состояния проекта в футере стартовых страниц сайта (web/index.html +EN): маленькая точка + слово, тем же origin читает status.json и ведёт на секцию «Прозрачность» с подробностями; общий assets/status.js теперь одним запросом рисует и полный виджет, и компактный значок; политика без сторонних запросов сохранена",
+      "hash": "a98e304de613ed8f3a6a21dfd000ea6f68261f846609f68b6c641a1ac1366b97",
+      "file": "records/0071-decision.json"
     }
   ]
 }

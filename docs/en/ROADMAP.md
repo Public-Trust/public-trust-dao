@@ -544,10 +544,14 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   `governance/status/`: the Pages deploy ([`pages.yml`](../../.github/workflows/pages.yml)) copies
   the artifact into `web/status.json` on the fly (not committed, in `.gitignore`) and redeploys
   the site when the status changes. The "zero external requests" policy is preserved. `PTD-0070`.
-- [ ] **Compact status-light chip in the header/footer of the other site pages** — a tiny
+- [x] **Compact status-light chip in the header/footer of the other site pages** — a tiny
   indicator (green/red dot + "checks are fine") that the same `assets/status.js` reads from
   `./status.json` and that links to the Transparency section for details, so the status is
-  visible from any page, not only the Transparency page (continuation of `PTD-0070`, session 73).
+  visible from any page, not only the Transparency page. → Done (session 74), `PTD-0071`.
+- [ ] **Status-light chip in the topbar too, not only the footer** — add the same compact
+  `#statusbadge` to the header `.nav-tools` of the landing pages (next to the language/theme
+  toggles), so the status is visible immediately without scrolling to the footer; on narrow
+  screens hide it gracefully together with the navigation (continuation of `PTD-0071`, session 74).
 - [ ] **Guard/CI: status artifact not stale vs the current verdict** — a soft check that the
   committed `governance/status/run_all_status.json` matches a fresh `run_all --status-out`
   (otherwise the in-repo light is stale); or a CI step regenerates the artifact (determinism
@@ -646,6 +650,15 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0071 (session 74):** P2 (transparency) — **compact status-light chip on the other site
+  pages.** The footer of the landing pages ([`web/index.html`](../../web/index.html) + EN) gained
+  a compact `#statusbadge` chip: a small dot + word ("checks are green" / "out of sync") that reads
+  `./status.json` same-origin and links to the Transparency section (`#livestatus`) for details —
+  so the status is visible from any page, not only the Transparency page. The shared
+  [`web/assets/status.js`](../../web/assets/status.js) was refactored: a single request renders both
+  the full `#statuslight` widget and the compact `#statusbadge` chip (whichever is on the page).
+  The `.statusbadge` style uses theme tokens, no external dependencies. The "zero external requests"
+  policy is preserved. Continuation of `PTD-0070`.
 - **PTD-0070 (session 73):** P2 (transparency) — **public "live status light" of the project
   on the site.** The Transparency page ([`web/transparency.html`](../../web/transparency.html)
   + EN) gained a `#livestatus` section with a `.statuslight` widget: a shared bilingual
@@ -1211,3 +1224,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Guard: CI calls run_all (done) / guard checks workflow trigger paths (on.push.paths includes ai-agents/**) / Documentation agent: soft "header pointer leads to glossary" check | agent | 60 |
 | Guard: trigger paths include ai-agents/** (done) / guard checks workflow also runs test_run_all.py | agent | 63 |
 | Machine-readable run_all status light (done) / public status light on the site from the artifact / guard: status artifact not stale vs verdict | agent | 72 |
+| Public status light on the site (done) / compact status chip on the other pages / chip in the topbar too, not only the footer | agent | 73 |
