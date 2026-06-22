@@ -636,6 +636,136 @@ h3 {
   gap: 10px;
 }
 
+/* Окно казны */
+.balance-label {
+  margin: 6px 0 4px;
+  font-size: 1.05rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+.balance-amount {
+  margin: 0 0 6px;
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.balance-unit {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-soft);
+}
+.compose-bar {
+  display: flex;
+  height: 16px;
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+.compose-seg {
+  display: block;
+  height: 100%;
+}
+.compose-seg--reserve {
+  background: var(--border);
+}
+.compose-seg--help {
+  background: var(--accent);
+}
+.compose-seg--reward {
+  background: var(--text-soft);
+}
+.split-list {
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.split-row {
+  border-left: 4px solid var(--border);
+  padding-left: 12px;
+}
+.split-row--help {
+  border-left-color: var(--accent);
+}
+.split-row--reward {
+  border-left-color: var(--text-soft);
+}
+.split-row dt {
+  font-weight: 600;
+}
+.split-row dd {
+  margin: 2px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.split-amount {
+  font-weight: 600;
+}
+.split-hint {
+  color: var(--text-soft);
+  font-size: 0.9rem;
+}
+.coverage-state {
+  margin: 4px 0 8px;
+}
+.coverage-badge {
+  font-size: 0.95rem;
+}
+.movement-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.movement {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.movement:last-child {
+  border-bottom: none;
+}
+.movement-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 10px;
+  flex: 1 1 60%;
+  min-width: 0;
+}
+.movement-desc {
+  color: var(--text);
+}
+.movement-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  white-space: nowrap;
+}
+.movement-amount {
+  font-weight: 600;
+}
+.movement-amount--in {
+  color: var(--accent);
+}
+.movement-amount--out {
+  color: var(--text-soft);
+}
+.movement-date {
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
 /* Прозрачность */
 .transparency {
   padding: 8px 0 48px;

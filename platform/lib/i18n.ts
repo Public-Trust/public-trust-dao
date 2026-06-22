@@ -5,6 +5,7 @@
 // основном тексте нет — это требование понятного языка (решение PTD-0040).
 
 import type { ProposalStatus, VoteChoice } from "@/lib/voting";
+import type { MovementKind, TreasuryCoverage } from "@/lib/treasury";
 
 export type Lang = "ru" | "en";
 
@@ -122,6 +123,36 @@ export type VotingDict = {
   verifyLink: string;
 };
 
+export type TreasuryDict = {
+  back: string;
+  title: string;
+  lead: string;
+  demoNote: string;
+  readonlyNote: string;
+  unit: string;
+  asOfLabel: string;
+  balanceLabel: string;
+  balanceHint: string;
+  splitTitle: string;
+  reserveLabel: string;
+  reserveHint: string;
+  helpLabel: string;
+  helpHint: string;
+  rewardLabel: string;
+  rewardHint: string;
+  ofDistributable: string;
+  coverageTitle: string;
+  coverageLabels: Record<TreasuryCoverage, string>;
+  coverageHint: string;
+  movementsTitle: string;
+  movementsHint: string;
+  movementLabels: Record<MovementKind, string>;
+  movements: Record<string, string>;
+  howTitle: string;
+  how: string[];
+  verifyLink: string;
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -150,6 +181,7 @@ export type Dict = {
   apply: ApplyDict;
   journal: JournalDict;
   voting: VotingDict;
+  treasury: TreasuryDict;
 };
 
 export const DICT: Record<Lang, Dict> = {
@@ -198,6 +230,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Окно казны",
         text: "Видно состояние общей казны и куда уходят средства — только для просмотра.",
+        href: "/treasury/",
       },
       {
         title: "Проверка личности",
@@ -403,6 +436,63 @@ export const DICT: Record<Lang, Dict> = {
       ],
       verifyLink: "Как устроено управление (документ GOVERNANCE)",
     },
+    treasury: {
+      back: "← На главную",
+      title: "Окно казны",
+      lead: "Здесь видно состояние общей казны: сколько в ней всего, сколько отложено в неприкосновенный запас и сколько готово пойти на прямую помощь людям и на скромную благодарность за работу. Это окно только для просмотра — потратить отсюда ничего нельзя.",
+      demoNote:
+        "Пока умные контракты не запущены в тестовой сети, ниже — показательное состояние и показательные движения (примеры). Все суммы в тестовых единицах, реальных денег нет. Настоящие данные появятся, когда оператор развернёт контракты в тестовой сети.",
+      readonlyNote:
+        "Это окно ничего не делает с деньгами — только показывает. Распоряжаться казной может лишь принятое голосование, и казна исполняет его сама, с задержкой на проверку.",
+      unit: "тестовые единицы",
+      asOfLabel: "Состояние на",
+      balanceLabel: "Всего в казне",
+      balanceHint:
+        "Всё, что есть в общей казне на сейчас. Дальше показано, как это поделено.",
+      splitTitle: "Как поделены средства",
+      reserveLabel: "Неприкосновенный запас",
+      reserveHint:
+        "Бережётся на чёрный день и не тратится. Сначала откладывается он, и только остаток распределяется.",
+      helpLabel: "На прямую помощь людям",
+      helpHint:
+        "Идёт на нужды людей напрямую (например, оплата жилья или лекарств поставщику). По правилам — всегда не меньше 70% распределяемого остатка.",
+      rewardLabel: "На благодарность за работу",
+      rewardHint:
+        "Скромная благодарность тем, кто помогает фонду работать. Держится в пределах потолка (примерно треть остатка), не больше.",
+      ofDistributable: "от распределяемого остатка",
+      coverageTitle: "Насколько фонд обеспечен",
+      coverageLabels: {
+        scarce: "Скудно",
+        modest: "Скромно",
+        good: "Хорошо",
+        ample: "С запасом",
+      },
+      coverageHint:
+        "Чем лучше фонд обеспечен, тем шире может быть помощь. Когда средств мало — помогают самому срочному, а благодарность за работу держат минимальной.",
+      movementsTitle: "Последние движения",
+      movementsHint:
+        "Новые сверху. Прямая помощь всегда оплачивает нужду напрямую поставщику — деньги не выдаются на руки.",
+      movementLabels: {
+        in: "Поступление",
+        help: "Прямая помощь",
+        reward: "Благодарность за работу",
+      },
+      movements: {
+        "mv-5": "Оплата месяца аренды напрямую арендодателю для семьи после пожара",
+        "mv-4": "Пожертвование в казну",
+        "mv-3": "Оплата лекарств напрямую аптеке",
+        "mv-2": "Благодарность за проверку заявок и работу с реестром",
+        "mv-1": "Пожертвование в казну",
+      },
+      howTitle: "Как это устроено простыми словами",
+      how: [
+        "Сначала казна откладывает неприкосновенный запас, и только остаток идёт в дело — так помощь не обрывается в трудный месяц.",
+        "На прямую помощь людям всегда идёт не меньше 70% распределяемого остатка; благодарность за работу — под жёстким потолком.",
+        "Ни один человек не распоряжается деньгами в одиночку: тратит казна только по принятому голосованию и сама, с задержкой на проверку.",
+        "Каждое движение средств попадёт в открытый журнал и будет закреплено отпечатком — проверить сможет любой.",
+      ],
+      verifyLink: "Как казна делит средства (документ REWARDS-MODEL)",
+    },
   },
   en: {
     htmlLang: "en",
@@ -449,6 +539,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Treasury window",
         text: "See the state of the shared treasury and where funds go — view only.",
+        href: "/treasury/",
       },
       {
         title: "Identity check",
@@ -653,6 +744,63 @@ export const DICT: Record<Lang, Dict> = {
         "A passed decision is executed by the treasury itself by the rules, with a delay for review; no single person can route money around the vote.",
       ],
       verifyLink: "How governance works (GOVERNANCE document)",
+    },
+    treasury: {
+      back: "← Back to home",
+      title: "Treasury window",
+      lead: "Here you can see the state of the shared treasury: how much there is in total, how much is set aside as an untouchable reserve, and how much is ready to go to direct help for people and to a modest thank-you for work. This window is view-only — nothing can be spent from here.",
+      demoNote:
+        "Until the smart contracts run on a test network, the figures below are a demonstration state and demonstration movements (examples). All amounts are in test units, with no real money. Real data appears once the operator deploys the contracts on a test network.",
+      readonlyNote:
+        "This window does nothing with the money — it only shows it. Only a passed vote can direct the treasury, and the treasury carries it out itself, with a delay for review.",
+      unit: "test units",
+      asOfLabel: "State as of",
+      balanceLabel: "Total in the treasury",
+      balanceHint:
+        "Everything in the shared treasury right now. Below is how it is split.",
+      splitTitle: "How the funds are split",
+      reserveLabel: "Untouchable reserve",
+      reserveHint:
+        "Kept for a rainy day and not spent. It is set aside first, and only the remainder is distributed.",
+      helpLabel: "For direct help to people",
+      helpHint:
+        "Goes to people's needs directly (for example, paying housing or medicine to the provider). By the rules — always at least 70% of the distributable remainder.",
+      rewardLabel: "For a thank-you for work",
+      rewardHint:
+        "A modest thank-you to those who help the fund run. Kept under a cap (about a third of the remainder), no more.",
+      ofDistributable: "of the distributable remainder",
+      coverageTitle: "How well the fund is provided for",
+      coverageLabels: {
+        scarce: "Scarce",
+        modest: "Modest",
+        good: "Good",
+        ample: "Ample",
+      },
+      coverageHint:
+        "The better the fund is provided for, the wider help can be. When funds are low, the most urgent needs come first and the thank-you for work is kept minimal.",
+      movementsTitle: "Latest movements",
+      movementsHint:
+        "Newest first. Direct help always pays the need straight to the provider — no cash is handed out.",
+      movementLabels: {
+        in: "Incoming",
+        help: "Direct help",
+        reward: "Thank-you for work",
+      },
+      movements: {
+        "mv-5": "One month of rent paid directly to the landlord for a family after a fire",
+        "mv-4": "Donation to the treasury",
+        "mv-3": "Medicine paid directly to the pharmacy",
+        "mv-2": "Thank-you for reviewing applications and working with the record",
+        "mv-1": "Donation to the treasury",
+      },
+      howTitle: "How it works, in plain words",
+      how: [
+        "First the treasury sets aside an untouchable reserve, and only the remainder goes to work — so help does not stop in a hard month.",
+        "Direct help to people always gets at least 70% of the distributable remainder; the thank-you for work is under a hard cap.",
+        "No single person directs the money: the treasury spends only on a passed vote and does so itself, with a delay for review.",
+        "Every movement of funds goes into the open record and is anchored by a fingerprint — anyone can check it.",
+      ],
+      verifyLink: "How the treasury splits funds (REWARDS-MODEL document)",
     },
   },
 };

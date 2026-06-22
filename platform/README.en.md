@@ -44,8 +44,16 @@ same code can run as a server by turning off static export.
   run on a test network, the vote is built as a verifiable draft right in the
   browser (copy/save/change) and kept only with the person; the proposals shown are
   demonstrations, and nothing leaves the browser.
+- **Treasury window** (`/treasury/`) — the state of the shared treasury in plain
+  words and view-only: how much in total, how much is in the untouchable reserve,
+  how much goes to direct help for people (always at least 70% of the distributable
+  remainder) and to a modest thank-you for work (under a cap); a clear composition
+  bar, a "how well the fund is provided for" level, and the latest movements
+  (incoming and targeted payments). Nothing can be spent from here; until the
+  contracts run on a test network the state is a demonstration, amounts are in test
+  units, and nothing is loaded from outside.
 
-Next in line: treasury window → identity check.
+Next in line: identity check.
 
 ## Transparency rails (followed literally)
 
@@ -94,9 +102,10 @@ platform/
     apply/        the "Apply for help" screen
     journal/      the "Open record" screen
     voting/       the "Voting" screen
+    treasury/     the "Treasury window" screen
   components/     shared UI parts (header, footer, language/theme provider)
   lib/            bilingual texts (i18n) and data layers (wallet.ts, application.ts,
-                  journal.ts, voting.ts) + a snapshot of the registry (journal-data.json)
+                  journal.ts, voting.ts, treasury.ts) + a snapshot of the registry (journal-data.json)
   next.config.mjs build settings (static export)
   package.json    dependencies (exact versions)
 ```
