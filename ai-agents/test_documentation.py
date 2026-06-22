@@ -977,8 +977,83 @@ def main():
               status_of(report, "mirror-doc-original") == "pass")
         check("mirror-doc-distinct помечена soft", _is_soft(report, "mirror-doc-distinct"))
         check("mirror-doc-original помечена soft", _is_soft(report, "mirror-doc-original"))
+        check("mirror-doc-normalized присутствует и pass",
+              status_of(report, "mirror-doc-normalized") == "pass")
+        check("mirror-doc-bilingual присутствует и pass",
+              status_of(report, "mirror-doc-bilingual") == "pass")
+        check("mirror-doc-normalized помечена soft", _is_soft(report, "mirror-doc-normalized"))
+        check("mirror-doc-bilingual помечена soft", _is_soft(report, "mirror-doc-bilingual"))
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+    # --- Мягкая проверка нормализованной формы значений MIRROR_DOCS --------------
+    # 42. mirror-doc-normalized: чистая карта (ровно docs/<ИМЯ>.md) → pass.
+    print("\n[мягкая проверка: форма docs/<ИМЯ>.md → mirror-doc-normalized pass]")
+    norm_ok = {"a": "docs/A.md", "b": "docs/LONG-NAME.md"}
+    st, viol = doc.check_mirror_doc_normalized(norm_ok)
+    check("mirror-doc-normalized == pass на чистой карте", st == "pass")
+    check("нарушений нет", viol == [])
+
+    # 43. mirror-doc-normalized: грязные записи → warn, каждая поймана.
+    print("\n[мягкая проверка: грязные пути → mirror-doc-normalized warn]")
+    dirty = {
+        "space": "docs/A.md ",          # хвостовой пробел
+        "rel": "docs/./B.md",           # шаг ./
+        "dir": "docs/sub/",             # каталог + не .md
+        "ext": "docs/C.txt",            # не .md
+        "sub": "docs/sub/D.md",         # подкаталог (лишний уровень)
+        "ok": "docs/OK.md",             # чистая — не должна попасть
+    }
+    st, viol = doc.check_mirror_doc_normalized(dirty)
+    check("mirror-doc-normalized == warn при грязных путях", st == "warn")
+    check("поймано ровно 5 грязных записей (чистая OK не в счёт)", len(viol) == 5)
+    check("чистая запись docs/OK.md не помечена",
+          all("[ok]" not in v["record"] for v in viol))
+    by_rec = {v["record"]: v["problem"] for v in viol}
+    check("хвостовой пробел назван", "пробел" in by_rec.get("MIRROR_DOCS[space]", ""))
+    check("относительный шаг ./ назван", "./" in by_rec.get("MIRROR_DOCS[rel]", ""))
+    check("каталог назван", "каталог" in by_rec.get("MIRROR_DOCS[dir]", ""))
+    check("не-.md назван", ".md" in by_rec.get("MIRROR_DOCS[ext]", ""))
+
+    # 44. mirror-doc-normalized: реальная карта чиста → pass.
+    print("\n[мягкая проверка: дефолтная карта нормализована → pass]")
+    st_n, viol_n = doc.check_mirror_doc_normalized()
+    check("mirror-doc-normalized == pass на дефолтной карте", st_n == "pass" and viol_n == [])
+
+    # --- Мягкая проверка EN-пары у нормативного дока зеркала ----------------------
+    # 45. mirror-doc-bilingual: у дока есть EN-зеркало → pass; нет → warn.
+    print("\n[мягкая проверка: EN-пара дока зеркала → mirror-doc-bilingual]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        # Берём реальное значение карты (manifesto → docs/MANIFESTO.md) и кладём
+        # RU-оригинал. С EN-зеркалом — pass, без него — warn по этому же доку.
+        ru_rel = doc.MIRROR_DOCS["manifesto"]               # docs/MANIFESTO.md
+        en_rel = "docs/en/" + ru_rel[len("docs/"):]         # docs/en/MANIFESTO.md
+        os.makedirs(os.path.join(tmp, os.path.dirname(ru_rel)), exist_ok=True)
+        os.makedirs(os.path.join(tmp, os.path.dirname(en_rel)), exist_ok=True)
+        with open(os.path.join(tmp, ru_rel), "w", encoding="utf-8") as fh:
+            fh.write("# RU\n")
+        # без EN — ждём warn именно по manifesto
+        st, viol = doc.check_mirror_doc_bilingual(tmp)
+        check("mirror-doc-bilingual == warn без EN-зеркала", st == "warn")
+        check("предупреждение названо по manifesto",
+              any("[manifesto]" in v["record"] for v in viol))
+        # пропавший RU-документ другого ключа НЕ дублирует warn (его дело mirror-doc-exists)
+        check("пропавшие RU-доки прочих ключей не дают предупреждений",
+              all("[manifesto]" in v["record"] for v in viol))
+        # добавляем EN-зеркало → этот ключ уходит из нарушений
+        with open(os.path.join(tmp, en_rel), "w", encoding="utf-8") as fh:
+            fh.write("# EN\n")
+        st2, viol2 = doc.check_mirror_doc_bilingual(tmp)
+        check("после добавления EN-зеркала manifesto уходит из нарушений",
+              all("[manifesto]" not in v["record"] for v in viol2))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 46. mirror-doc-bilingual: на реальном репо все EN-пары на месте → pass.
+    print("\n[мягкая проверка: дефолтное репо — все EN-пары есть → pass]")
+    st_b, viol_b = doc.check_mirror_doc_bilingual(doc.ROOT)
+    check("mirror-doc-bilingual == pass на реальном репо", st_b == "pass" and viol_b == [])
 
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1

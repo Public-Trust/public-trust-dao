@@ -60,6 +60,12 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • mirror-doc-original → путь карты ведёт на RU-первоисточник, не на перевод ..... ст. 3/6
     (МЯГКАЯ: предупреждает, если значение карты лежит в docs/en/ или *.en.md —
      тогда пересказ сверяется с переводом, а не с нормой RU; PTD-0111)
+  • mirror-doc-normalized → значение карты имеет форму ровно docs/<ИМЯ>.md ........ ст. 3/6
+    (МЯГКАЯ: предупреждает о «грязной» записи — хвостовые пробелы, «./», подкаталог,
+     не .md — чтобы кривой путь не обошёл mirror-doc-original/-exists молча; PTD-0112)
+  • mirror-doc-bilingual → у нормативного дока зеркала есть EN-пара docs/en/X.md ... ст. 3/6
+    (МЯГКАЯ: предупреждает, если у RU-первоисточника из карты нет EN-зеркала —
+     экран ведёт на RU, а англоязычный человек упрётся в тупик; PTD-0112)
   • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
      односторонняя связь оставляет человека без обратного пути; PTD-0106)
@@ -1081,6 +1087,86 @@ def check_mirror_doc_original(mirror_docs=MIRROR_DOCS):
     return ("pass" if not violations else "warn"), violations
 
 
+# Нормализованная форма пути-значения карты: ровно один уровень под docs/, .md.
+MIRROR_DOC_NORM_RE = re.compile(r"^docs/[^/]+\.md$")
+
+
+def check_mirror_doc_normalized(mirror_docs=MIRROR_DOCS):
+    """МЯГКАЯ: значение карты MIRROR_DOCS имеет форму ровно `docs/<ИМЯ>.md`.
+
+    `mirror-doc-exists`/`mirror-doc-original` сверяют путь по сути (есть ли файл,
+    не перевод ли это). Но если запись «грязная» — с хвостовым пробелом, шагом
+    `./`, подкаталогом или без расширения `.md` — она может молча обойти эти
+    проверки или повести себя неожиданно (например, `os.path.exists` нормализует
+    `docs/./X.md`, и пропажу никто не заметит). Эта проверка следит за самой формой
+    записи: после `.strip()` путь должен совпадать с исходным (нет лишних пробелов)
+    и матчить `docs/<ИМЯ>.md` — ровно один уровень под `docs/`, оканчивается на
+    `.md`, без `./`/`../` и без хвостового `/` (не каталог). Любое отклонение —
+    предупреждение (warn, не блок — ст. 3/6, PTD-0112). Карта зашита в коде; параметр
+    `mirror_docs` оставлен для тест-инварианта.
+    """
+    violations = []
+    for slug, doc in sorted(mirror_docs.items()):
+        problems = []
+        if doc != doc.strip():
+            problems.append("лишние пробелы по краям пути")
+        norm = doc.strip().replace("\\", "/")
+        if "./" in norm:  # покрывает и «./», и «../»
+            problems.append("относительный шаг «./» или «../» в пути")
+        if norm.endswith("/"):
+            problems.append("хвостовой «/» — путь указывает на каталог, не на файл")
+        elif not norm.endswith(".md"):
+            problems.append("путь не оканчивается на «.md» (не markdown-документ)")
+        if not MIRROR_DOC_NORM_RE.match(norm):
+            problems.append("форма не «docs/<ИМЯ>.md» (ожидается ровно один уровень под docs/)")
+        if problems:
+            # Убираем возможные повторы причин, сохраняя порядок.
+            seen = []
+            for p in problems:
+                if p not in seen:
+                    seen.append(p)
+            violations.append({
+                "record": f"MIRROR_DOCS[{slug}]",
+                "problem": (f"путь-значение «{doc}» не в нормализованной форме "
+                            f"docs/<ИМЯ>.md: {'; '.join(seen)} — кривая запись может "
+                            "молча обойти mirror-doc-exists/-original"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
+def check_mirror_doc_bilingual(root):
+    """МЯГКАЯ: у нормативного дока зеркала есть EN-пара `docs/en/X.md`.
+
+    Экран-пересказ ведёт человека на RU-первоисточник `docs/X.md` (это гарантирует
+    `mirror-doc-original`). Но правило двуязычности требует, чтобы у каждого
+    публичного документа было EN-зеркало. Если у первоисточника карты EN-пары нет,
+    англоязычный человек, перейдя из экрана в норму, упрётся в тупик. Эта проверка
+    связывает карту зеркал с правилом двуязычности: для каждого значения `docs/X.md`,
+    которое реально есть в репозитории, должен существовать и `docs/en/X.md`
+    (warn, не блок — ст. 3/6, PTD-0112). Сам пропавший первоисточник — забота
+    `mirror-doc-exists`, поэтому отсутствующий RU-документ здесь молча пропускаем,
+    чтобы не дублировать предупреждение. Значения-переводы (их ловит
+    `mirror-doc-original`) тоже пропускаем.
+    """
+    violations = []
+    for slug, doc in sorted(MIRROR_DOCS.items()):
+        norm = doc.strip().replace("\\", "/")
+        if not norm.startswith("docs/") or norm.startswith("docs/en/"):
+            continue  # не RU-первоисточник в docs/ — не наша забота
+        if not os.path.exists(os.path.join(root, norm)):
+            continue  # пропажу самого дока ловит mirror-doc-exists
+        en = "docs/en/" + norm[len("docs/"):]
+        if not os.path.exists(os.path.join(root, en)):
+            violations.append({
+                "record": f"MIRROR_DOCS[{slug}]",
+                "problem": (f"у нормативного документа {norm} нет EN-зеркала {en} — "
+                            "экран-пересказ ведёт на RU-первоисточник, но "
+                            "англоязычный человек, перейдя в норму, упрётся в тупик "
+                            "(нарушение правила двуязычности RU↔EN)"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 def check_see_also_symmetric(root):
     """МЯГКАЯ: связь «См. также» между экранами-объяснениями взаимна.
 
@@ -1225,6 +1311,20 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "mirror-doc-normalized",
+        "title": "Значение карты MIRROR_DOCS имеет нормализованную форму docs/<ИМЯ>.md",
+        "guards": "ст. 3/6 — «грязная» запись (пробелы, ./, подкаталог, не .md) не обойдёт mirror-doc-exists/-original молча (PTD-0112); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_normalized",
+        "soft": True,
+    },
+    {
+        "key": "mirror-doc-bilingual",
+        "title": "У нормативного документа зеркала есть EN-пара docs/en/X.md",
+        "guards": "ст. 3/6 — экран ведёт на RU-первоисточник, а у того есть EN-зеркало, иначе англоязычный человек упрётся в тупик (PTD-0112); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_bilingual",
+        "soft": True,
+    },
+    {
         "key": "see-also-symmetric",
         "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
         "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
@@ -1261,6 +1361,8 @@ def run(root):
     mirror_show_status, mirror_show_v = check_mirror_doc_showcase(root)
     mirror_dist_status, mirror_dist_v = check_mirror_doc_distinct()
     mirror_orig_status, mirror_orig_v = check_mirror_doc_original()
+    mirror_norm_status, mirror_norm_v = check_mirror_doc_normalized()
+    mirror_bil_status, mirror_bil_v = check_mirror_doc_bilingual(root)
     seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
@@ -1280,6 +1382,8 @@ def run(root):
         "mirror_doc_showcase": (mirror_show_status, mirror_show_v),
         "mirror_doc_distinct": (mirror_dist_status, mirror_dist_v),
         "mirror_doc_original": (mirror_orig_status, mirror_orig_v),
+        "mirror_doc_normalized": (mirror_norm_status, mirror_norm_v),
+        "mirror_doc_bilingual": (mirror_bil_status, mirror_bil_v),
         "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 

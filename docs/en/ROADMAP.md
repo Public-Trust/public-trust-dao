@@ -565,15 +565,34 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   session are repo-independent (the map is in code) and take the map as a parameter for the
   test invariant; +18 test scenarios (130/130, direct unit calls on synthetic maps), both green
   on the real map, run_all 8/8. `PTD-0111`. TESTNET-ONLY.
-- [ ] **Documentation agent: `MIRROR_DOCS` values are normalized** — a soft check on the shape
+- [x] **Documentation agent: `MIRROR_DOCS` values are normalized** — a soft check on the shape
   of each map value: exactly `docs/<NAME>.md` (no `./`, no trailing spaces, ends in `.md`, not a
   directory) — so a "dirty" entry can't slip past `mirror-doc-original`/`mirror-doc-exists` due
   to an unexpected format. A warning, not a block (extension of `PTD-0111`, proposed session 114).
-- [ ] **Documentation agent: a mirror's normative doc is itself bilingual (has an EN pair)** — a
+  **Done (session 115):** the `mirror-doc-normalized` check in `documentation_agent.py` — after
+  `.strip()` the path must equal the original and match `docs/<NAME>.md` (regex `^docs/[^/]+\.md$`);
+  each deviation is named (space / `./` / directory / not `.md` / extra level). The map is in
+  code; the function takes it as a parameter for the test invariant. `PTD-0112`. TESTNET-ONLY.
+- [x] **Documentation agent: a mirror's normative doc is itself bilingual (has an EN pair)** — a
   soft check that for every `docs/X.md` value in `MIRROR_DOCS` a `docs/en/X.md` exists: the
   retelling screen points to the RU source, but if the source itself has no EN mirror, an
   English-speaking person hits a dead end. Ties the mirror map to the bilingual rule
   (`bilingual-pairs`). A warning, not a block (extension of `PTD-0111`, proposed session 114).
+  **Done (session 115):** the `mirror-doc-bilingual` check — for each RU source of the map that
+  actually exists, `docs/en/X.md` is required; a missing RU doc itself is left to `mirror-doc-exists`
+  (no duplicate warnings), translation values to `mirror-doc-original`. Both checks this session
+  are dependency-free, +19 test scenarios (149/149), both green on the real repo (11 values
+  normalized, all 11 docs have EN pairs), run_all 8/8. `PTD-0112`. TESTNET-ONLY.
+- [ ] **Documentation agent: a `MIRROR_DOCS` key is a valid href slug** — a soft check that every
+  map key looks like `<lower-case-with-dashes>` (no spaces, capitals or slashes), i.e. usable as
+  the platform href `/<key>/`. Today a typo in a key (`Manifesto`, `direct help`) silently
+  desyncs the map from the `t.learn` showcase. A warning, not a block (extension of `PTD-0112`,
+  proposed session 115).
+- [ ] **Documentation agent: a mirror screen links to the EN source alongside the RU link** — a
+  soft check that a mirror screen's page links not only to `docs/X.md` but also to its EN pair
+  `docs/en/X.md` (or points to it in the screen's EN version) — so an English-speaking person can
+  reach the English norm from the plain-language retelling, not just the Russian one. Builds on
+  `mirror-doc-bilingual`. A warning, not a block (proposed session 115).
 - [x] **Identity-verification terms in `GLOSSARY.md`** (+RU) — add in plain words:
   "proof-of-personhood", "zero-knowledge / proof without disclosure", "nullifier",
   "liveness", "vouching (web-of-trust)" — each linking to `IDENTITY-VERIFICATION.md`
