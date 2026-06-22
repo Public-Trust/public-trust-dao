@@ -66,6 +66,10 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • mirror-doc-bilingual → у нормативного дока зеркала есть EN-пара docs/en/X.md ... ст. 3/6
     (МЯГКАЯ: предупреждает, если у RU-первоисточника из карты нет EN-зеркала —
      экран ведёт на RU, а англоязычный человек упрётся в тупик; PTD-0112)
+  • mirror-doc-slug → ключ карты MIRROR_DOCS — валидный адрес-слаг ............... ст. 3/6
+    (МЯГКАЯ: предупреждает, если ключ записан не как «<строчные-с-дефисами>»
+     (заглавные, пробел, слэш) — он перестаёт быть рабочим адресом /<ключ>/ и
+     тихо рассинхронит карту с витриной t.learn; PTD-0114)
   • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
      односторонняя связь оставляет человека без обратного пути; PTD-0106)
@@ -1089,6 +1093,11 @@ def check_mirror_doc_original(mirror_docs=MIRROR_DOCS):
 
 # Нормализованная форма пути-значения карты: ровно один уровень под docs/, .md.
 MIRROR_DOC_NORM_RE = re.compile(r"^docs/[^/]+\.md$")
+# Ключ карты MIRROR_DOCS обязан годиться как адрес-слаг платформы «/<ключ>/»:
+# только строчные латинские буквы и цифры, разделённые одиночными дефисами, без
+# ведущего/хвостового дефиса и без двойных. (Совпадает с тем, как ключ потом
+# подставляется в путь экрана `/<ключ>/` витрины t.learn.)
+MIRROR_DOC_SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
 def check_mirror_doc_normalized(mirror_docs=MIRROR_DOCS):
@@ -1163,6 +1172,53 @@ def check_mirror_doc_bilingual(root):
                             "экран-пересказ ведёт на RU-первоисточник, но "
                             "англоязычный человек, перейдя в норму, упрётся в тупик "
                             "(нарушение правила двуязычности RU↔EN)"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
+def check_mirror_doc_slug(mirror_docs=MIRROR_DOCS):
+    """МЯГКАЯ: ключ карты MIRROR_DOCS — валидный адрес-слаг «<строчные-с-дефисами>».
+
+    Ключ карты — это не просто метка: он подставляется в адрес экрана платформы
+    `/<ключ>/` и должен совпадать с адресом в витрине `t.learn` (это сверяют
+    `mirror-doc-coverage`/`mirror-doc-showcase`). Если ключ записать «по-человечески»
+    с заглавной, пробелом или слэшем (`Manifesto`, `direct help`, `docs/x`), он
+    перестанет быть рабочим адресом — карта тихо рассинхронится с витриной, а
+    парные проверки сравнивают строки и расхождение не объяснят. Эта проверка следит
+    за самой формой ключа: только строчные латинские буквы и цифры, разделённые
+    одиночными дефисами, без ведущего/хвостового дефиса и без двойных. Любое
+    отклонение — предупреждение (warn, не блок — ст. 3/6, PTD-0114). Карта зашита в
+    коде; параметр `mirror_docs` оставлен для тест-инварианта.
+    """
+    violations = []
+    for slug in sorted(mirror_docs):
+        problems = []
+        if slug != slug.strip():
+            problems.append("лишние пробелы по краям ключа")
+        s = slug.strip()
+        if not s:
+            problems.append("пустой ключ")
+        else:
+            if s != s.lower():
+                problems.append("заглавные буквы (адрес платформы — в нижнем регистре)")
+            if " " in s:
+                problems.append("пробел внутри ключа")
+            if "/" in s:
+                problems.append("слэш «/» в ключе (это адрес одного уровня, не путь)")
+            if not MIRROR_DOC_SLUG_RE.match(s):
+                problems.append(
+                    "форма не «<строчные-с-дефисами>» (только a-z, цифры и одиночные "
+                    "дефисы, без ведущего/хвостового и двойных дефисов)")
+        if problems:
+            seen = []
+            for p in problems:
+                if p not in seen:
+                    seen.append(p)
+            violations.append({
+                "record": f"MIRROR_DOCS[{slug}]",
+                "problem": (f"ключ «{slug}» не годится как адрес-слаг платформы "
+                            f"/{slug}/: {'; '.join(seen)} — карта тихо "
+                            "рассинхронится с витриной t.learn"),
             })
     return ("pass" if not violations else "warn"), violations
 
@@ -1325,6 +1381,13 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "mirror-doc-slug",
+        "title": "Ключ карты MIRROR_DOCS — валидный адрес-слаг <строчные-с-дефисами>",
+        "guards": "ст. 3/6 — ключ годится как адрес экрана /<ключ>/ и не рассинхронит карту с витриной t.learn (PTD-0114); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_slug",
+        "soft": True,
+    },
+    {
         "key": "see-also-symmetric",
         "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
         "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
@@ -1363,6 +1426,7 @@ def run(root):
     mirror_orig_status, mirror_orig_v = check_mirror_doc_original()
     mirror_norm_status, mirror_norm_v = check_mirror_doc_normalized()
     mirror_bil_status, mirror_bil_v = check_mirror_doc_bilingual(root)
+    mirror_slug_status, mirror_slug_v = check_mirror_doc_slug()
     seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
@@ -1384,6 +1448,7 @@ def run(root):
         "mirror_doc_original": (mirror_orig_status, mirror_orig_v),
         "mirror_doc_normalized": (mirror_norm_status, mirror_norm_v),
         "mirror_doc_bilingual": (mirror_bil_status, mirror_bil_v),
+        "mirror_doc_slug": (mirror_slug_status, mirror_slug_v),
         "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 

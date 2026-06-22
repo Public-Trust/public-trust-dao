@@ -14,7 +14,7 @@ This is the project's history as one list: what was decided and done, and when. 
 - **The feed is generated mechanically** from [`governance/registry/index.json`](governance/registry/index.json) — nothing is written by hand.
 - **Entry text is verbatim from the registry,** which is kept in Russian as the source language; so the wording of each line below mirrors the canonical Russian record.
 
-Total entries: **114**. Current record fingerprint: `02fa9b63f962d63f6cbfecc2734025b808cbcc8038b655c4090763068eec4d45`.
+Total entries: **116**. Current record fingerprint: `ba5b840242edb0811f07d3ba0ca79359e8854e841690579a8c79ceddd83958a2`.
 
 ---
 
@@ -31,6 +31,8 @@ Total entries: **114**. Current record fingerprint: `02fa9b63f962d63f6cbfecc2734
 
 ## 2026-06-22
 
+- **PTD-0115** (decision) — Страж (Guardian): убрана ложная тревога проверки no-key-material на русском отпечатке журнала в CHANGELOG. После ввода ленты изменений (PTD-0113) строка CHANGELOG.md «Текущий…. [Full entry](governance/registry/records/0115-decision.json)
+- **PTD-0114** (decision) — Documentation-агент: новая мягкая проверка mirror-doc-slug. [Full entry](governance/registry/records/0114-decision.json)
 - **PTD-0105** (decision) — Платформа: блок «См. также» на экранах-объяснениях теперь ведёт не только к близким объяснениям, но и к рабочему экрану, где прочитанное можно применить (мягкий переход…. [Full entry](governance/registry/records/0105-decision.json)
 - **PTD-0104** (decision) — Платформа: связаны перекрёстными ссылками «См. также» одиннадцать экранов-объяснений (зеркал нормативных доков: Манифест, Конституция, Как решаем, Порядок помощи, Помощь и…. [Full entry](governance/registry/records/0104-decision.json)
 - **PTD-0103** (decision) — Платформа: на главной визуально отделён блок объяснений от блока рабочих экранов (platform/app/page.tsx + globals.css). Раньше обе секции главной (шесть рабочих экранов и…. [Full entry](governance/registry/records/0103-platform-home-learn-distinct.json)

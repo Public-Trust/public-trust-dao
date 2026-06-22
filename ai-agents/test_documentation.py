@@ -1055,6 +1055,55 @@ def main():
     st_b, viol_b = doc.check_mirror_doc_bilingual(doc.ROOT)
     check("mirror-doc-bilingual == pass на реальном репо", st_b == "pass" and viol_b == [])
 
+    # --- Мягкая проверка формы ключа MIRROR_DOCS как адреса-слага -----------------
+    # 47. mirror-doc-slug: чистые ключи (строчные с дефисами/цифрами) → pass.
+    print("\n[мягкая проверка: ключи-слаги → mirror-doc-slug pass]")
+    slug_ok = {"manifesto": "docs/A.md", "direct-help": "docs/B.md", "rule-42": "docs/C.md"}
+    st, viol = doc.check_mirror_doc_slug(slug_ok)
+    check("mirror-doc-slug == pass на чистых ключах", st == "pass")
+    check("нарушений нет", viol == [])
+
+    # 48. mirror-doc-slug: кривые ключи → warn, каждый пойман, чистый не задет.
+    print("\n[мягкая проверка: кривые ключи → mirror-doc-slug warn]")
+    slug_bad = {
+        "Manifesto": "docs/A.md",       # заглавная
+        "direct help": "docs/B.md",     # пробел внутри
+        "docs/x": "docs/C.md",          # слэш
+        "-lead": "docs/D.md",           # ведущий дефис
+        "trail-": "docs/E.md",          # хвостовой дефис
+        "ok-slug": "docs/F.md",         # чистый — не должен попасть
+    }
+    st, viol = doc.check_mirror_doc_slug(slug_bad)
+    check("mirror-doc-slug == warn при кривых ключах", st == "warn")
+    check("поймано ровно 5 кривых ключей (чистый ok-slug не в счёт)", len(viol) == 5)
+    check("чистый ключ ok-slug не помечен",
+          all("[ok-slug]" not in v["record"] for v in viol))
+    by_rec = {v["record"]: v["problem"] for v in viol}
+    check("заглавная названа", "регистр" in by_rec.get("MIRROR_DOCS[Manifesto]", "")
+          or "Заглавн" in by_rec.get("MIRROR_DOCS[Manifesto]", "")
+          or "заглавн" in by_rec.get("MIRROR_DOCS[Manifesto]", ""))
+    check("пробел назван", "пробел" in by_rec.get("MIRROR_DOCS[direct help]", ""))
+    check("слэш назван", "/" in by_rec.get("MIRROR_DOCS[docs/x]", ""))
+    check("ведущий дефис пойман формой",
+          "форма" in by_rec.get("MIRROR_DOCS[-lead]", ""))
+    check("хвостовой дефис пойман формой",
+          "форма" in by_rec.get("MIRROR_DOCS[trail-]", ""))
+
+    # 49. mirror-doc-slug: реальная (дефолтная) карта чиста → pass; есть в отчёте + soft.
+    print("\n[мягкая проверка: дефолтная карта — ключи-слаги → pass + soft в отчёте]")
+    st_s, viol_s = doc.check_mirror_doc_slug()
+    check("mirror-doc-slug == pass на дефолтной карте", st_s == "pass" and viol_s == [])
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        code, report = run_agent(tmp)
+        check("вердикт green / exit=0 (slug)", report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-slug присутствует и pass",
+              status_of(report, "mirror-doc-slug") == "pass")
+        check("mirror-doc-slug помечена soft", _is_soft(report, "mirror-doc-slug"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 

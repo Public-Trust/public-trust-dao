@@ -106,7 +106,10 @@ It walks the git-tracked files (what is actually published) and checks:
 To avoid false positives on the registry's and manifest's legitimate `sha256`/CID
 values, a 64-hex token counts as a key **only outside** hash fields
 (`hash`/`prev_hash`/`sha256`/…), and environment references
-(`process.env.PRIVATE_KEY`) are not treated as a leak.
+(`process.env.PRIVATE_KEY`) are not treated as a leak. Hash context is recognized in
+human-readable texts too, including via Russian hint words ("отпечаток", "хэш"/"хеш") —
+e.g. the line "Текущий отпечаток журнала: `<64-hex>`" in `CHANGELOG.md` is not mistaken
+for a private key (`PTD-0115`).
 
 ```bash
 python3 ai-agents/guardian_agent.py          # human-readable report
@@ -263,6 +266,7 @@ git-tracked `.md` files (over what is actually published):
 | `mirror-doc-original` *(soft)* | the path value in the `MIRROR_DOCS` map points to the RU source in `docs/`, not a translation (`docs/en/…` or `*.en.md`) — otherwise the retelling is checked against the translation rather than the norm, and the mirror silently drifts when RU↔EN diverge | Art. 3/6 — verifiability/clarity (`PTD-0111`) |
 | `mirror-doc-normalized` *(soft)* | the path value in the `MIRROR_DOCS` map is in the normalized form exactly `docs/<NAME>.md` (no trailing spaces, no `./`/`../`, ends in `.md`, not a directory/sub-path) — a "dirty" entry could silently slip past `mirror-doc-exists`/`mirror-doc-original` | Art. 3/6 — verifiability/clarity (`PTD-0112`) |
 | `mirror-doc-bilingual` *(soft)* | a normative document from the map (`docs/X.md`, one that actually exists) has its EN mirror `docs/en/X.md` — otherwise the screen leads to the RU source, but an English-speaking person hits a dead end on reaching the norm; ties the mirror map to the bilingual rule | Art. 3/6 — verifiability/clarity (`PTD-0112`) |
+| `mirror-doc-slug` *(soft)* | a `MIRROR_DOCS` map key is a valid address slug `<lowercase-with-hyphens>` (only `a-z`, digits and single hyphens; no uppercase, spaces, slashes, leading/trailing or double hyphens) — otherwise the key stops being a working screen address `/<key>/` and the map silently drifts out of sync with the `t.learn` showcase | Art. 3/6 — verifiability/clarity (`PTD-0114`) |
 | `see-also-symmetric` *(soft)* | the "See also" link between explanation screens is mutual: if screen A points to B in `RELATED`, then B points back to A — a person always has a return path, no dead ends. Asymmetry is allowed (hubs like the glossary / "How we decide"), so it only warns | Art. 3/6 — verifiability/clarity (`PTD-0106`) |
 
 > The `glossary-coverage` and `glossary-no-dead` checks are **soft**: they only warn

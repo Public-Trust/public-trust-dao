@@ -583,16 +583,28 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   (no duplicate warnings), translation values to `mirror-doc-original`. Both checks this session
   are dependency-free, +19 test scenarios (149/149), both green on the real repo (11 values
   normalized, all 11 docs have EN pairs), run_all 8/8. `PTD-0112`. TESTNET-ONLY.
-- [ ] **Documentation agent: a `MIRROR_DOCS` key is a valid href slug** — a soft check that every
+- [x] **Documentation agent: a `MIRROR_DOCS` key is a valid href slug** — a soft check that every
   map key looks like `<lower-case-with-dashes>` (no spaces, capitals or slashes), i.e. usable as
   the platform href `/<key>/`. Today a typo in a key (`Manifesto`, `direct help`) silently
   desyncs the map from the `t.learn` showcase. A warning, not a block (extension of `PTD-0112`,
-  proposed session 115).
+  proposed session 115). **Done (session 117):** the `mirror-doc-slug` check in
+  `documentation_agent.py` — for each map key: only lowercase Latin letters and digits separated
+  by single hyphens, no leading/trailing or double hyphens (regex `^[a-z0-9]+(?:-[a-z0-9]+)*$`);
+  every deviation is named precisely (capitals / space / slash / shape). The map is hard-coded;
+  the function takes it as a parameter for the test invariant; +3 test scenarios (163/163), green
+  on the real map, documentation agent 20 checks green, run_all 39/39. `PTD-0114`. TESTNET-ONLY.
 - [ ] **Documentation agent: a mirror screen links to the EN source alongside the RU link** — a
   soft check that a mirror screen's page links not only to `docs/X.md` but also to its EN pair
   `docs/en/X.md` (or points to it in the screen's EN version) — so an English-speaking person can
   reach the English norm from the plain-language retelling, not just the Russian one. Builds on
   `mirror-doc-bilingual`. A warning, not a block (proposed session 115).
+- [ ] **Documentation agent: a `t.learn` showcase href is a valid slug** — the mirror of
+  `mirror-doc-slug` from the other side: every `href` in the "Understand how the fund works"
+  showcase (`lib/i18n.ts`) has the exact form `/<lower-case-with-dashes>/` (leading and trailing
+  slash, the same slug between them as the map key). Today the slug is only checked on the
+  `MIRROR_DOCS` key; a malformed `href` in the showcase itself (`/Manifesto/`, `/direct help/`)
+  would desync it from the map just the same, but nothing catches it. A warning, not a block
+  (extension of `PTD-0114`, proposed session 117).
 - [x] **Identity-verification terms in `GLOSSARY.md`** (+RU) — add in plain words:
   "proof-of-personhood", "zero-knowledge / proof without disclosure", "nullifier",
   "liveness", "vouching (web-of-trust)" — each linking to `IDENTITY-VERIFICATION.md`
