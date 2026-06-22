@@ -12,6 +12,10 @@ export function SiteFooter() {
         <p className="footer-note">{t.footerNote}</p>
         <p className="footer-meta">
           <Link href="/about/">{t.navAbout}</Link>
+          <span className="dot" aria-hidden="true">
+            ·
+          </span>
+          <Link href="/privacy/">{t.navMyData}</Link>
         </p>
         <p className="footer-meta">
           <span>{t.builtNote}</span>

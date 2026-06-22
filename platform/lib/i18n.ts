@@ -221,6 +221,29 @@ export type NotFoundDict = {
   about: string;
 };
 
+export type MyDataDict = {
+  back: string;
+  title: string;
+  lead: string;
+  whyTitle: string;
+  why: string[];
+  storedTitle: string;
+  storedHint: string;
+  empty: string;
+  walletNote: string;
+  // Понятные подписи к видам записей. Для голоса заголовок ниже дополняется
+  // номером предложения, а выбор человека — словами «За/Против/Воздержался».
+  kindLabels: { identityAction: string; identityMethod: string; vote: string; other: string };
+  voteRefLabel: string; // «по предложению»
+  voteChoice: { for: string; against: string; abstain: string };
+  identityActionValue: { read: string; apply: string; vote: string; receive: string };
+  identityMethodValue: { social: string; passport: string; liveness: string; vouch: string };
+  rawLabel: string; // подпись «как хранится» для прочих значений
+  remove: string;
+  removeAll: string;
+  removed: string;
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -237,6 +260,7 @@ export type Dict = {
   navLabel: string;
   navHome: string;
   navAbout: string;
+  navMyData: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -250,6 +274,7 @@ export type Dict = {
   builtNote: string;
   about: AboutDict;
   notFound: NotFoundDict;
+  myData: MyDataDict;
   wallet: WalletDict;
   apply: ApplyDict;
   journal: JournalDict;
@@ -277,6 +302,7 @@ export const DICT: Record<Lang, Dict> = {
     navLabel: "Экраны платформы",
     navHome: "Главная",
     navAbout: "О платформе",
+    navMyData: "Мои данные",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -393,6 +419,46 @@ export const DICT: Record<Lang, Dict> = {
       lead: "Похоже, ссылка устарела или в адресе опечатка. Платформу мы собираем шаг за шагом — возможно, этот экран ещё готовится. Ничего не потеряно: вернитесь на главную и выберите нужный раздел.",
       home: "← На главную",
       about: "О платформе",
+    },
+    myData: {
+      back: "← На главную",
+      title: "Что приложение помнит о вас",
+      lead: "Здесь видно всё, что платформа сохранила в этом браузере, и здесь же это можно стереть — целиком или по одной записи. Всё хранится только у вас, ничего не уходит на сторонние серверы и не попадает в блокчейн.",
+      whyTitle: "Главное — простыми словами",
+      why: [
+        "Платформа не следит за вами и не собирает досье. Всё, что вы выбираете на экранах, остаётся в памяти вашего браузера на этом устройстве.",
+        "Никакие эти записи не уходят наружу: ни на сервер фонда, ни в блокчейн. Их видите только вы — здесь и сейчас.",
+        "В любой момент вы можете всё стереть. После этого платформа о вас ничего не помнит — это ваше право.",
+        "Если открыть платформу в другом браузере или на другом устройстве, этих записей там не будет: они не «следуют» за вами.",
+      ],
+      storedTitle: "Что сохранено в этом браузере",
+      storedHint: "Это всё, что платформа сейчас помнит о вас на этом устройстве.",
+      empty: "Платформа сейчас ничего о вас не помнит в этом браузере — список пуст.",
+      walletNote: "Подключение кошелька здесь не хранится: оно читается «вживую» у самого кошелька и платформой не запоминается. Отключить кошелёк можно на экране «Подключить кошелёк» или в самом кошельке.",
+      kindLabels: {
+        identityAction: "Проверка личности: выбранное действие",
+        identityMethod: "Проверка личности: выбранный способ",
+        vote: "Голос",
+        other: "Сохранённая запись",
+      },
+      voteRefLabel: "по предложению",
+      voteChoice: { for: "За", against: "Против", abstain: "Воздержался" },
+      identityActionValue: {
+        read: "Смотреть сайт",
+        apply: "Подать заявку на помощь",
+        vote: "Голосовать",
+        receive: "Получать помощь или выплату",
+      },
+      identityMethodValue: {
+        social: "Через круг знакомых (без биометрии)",
+        passport: "Паспорт из множества признаков",
+        liveness: "Проверка «живости» у внешнего сервиса",
+        vouch: "Поручительство живых людей (без камеры)",
+      },
+      rawLabel: "Как хранится",
+      remove: "Стереть",
+      removeAll: "Стереть всё",
+      removed: "Стёрто",
     },
     wallet: {
       back: "← На главную",
@@ -730,6 +796,7 @@ export const DICT: Record<Lang, Dict> = {
     navLabel: "Platform screens",
     navHome: "Home",
     navAbout: "About",
+    navMyData: "My data",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -846,6 +913,46 @@ export const DICT: Record<Lang, Dict> = {
       lead: "The link is probably out of date, or there's a typo in the address. We're building the platform step by step — this screen may still be on the way. Nothing is lost: go back to the home page and pick the section you need.",
       home: "← Back to home",
       about: "About the platform",
+    },
+    myData: {
+      back: "← Back to home",
+      title: "What the app remembers about you",
+      lead: "Here you can see everything the platform has saved in this browser, and erase it here too — all of it, or one record at a time. It is all kept only on your side; nothing leaves for third-party servers and nothing goes on-chain.",
+      whyTitle: "The essentials, in plain words",
+      why: [
+        "The platform does not track you and keeps no dossier. Everything you choose on the screens stays in this browser's memory, on this device.",
+        "None of these records leave: not to the fund's server, not to the blockchain. Only you see them — here and now.",
+        "You can erase everything at any moment. After that the platform remembers nothing about you — that is your right.",
+        "If you open the platform in another browser or on another device, these records won't be there: they do not follow you around.",
+      ],
+      storedTitle: "What is saved in this browser",
+      storedHint: "This is everything the platform currently remembers about you on this device.",
+      empty: "The platform currently remembers nothing about you in this browser — the list is empty.",
+      walletNote: "A wallet connection is not stored here: it is read live from the wallet itself and the platform does not remember it. You can disconnect on the “Connect a wallet” screen or in the wallet itself.",
+      kindLabels: {
+        identityAction: "Identity check: chosen action",
+        identityMethod: "Identity check: chosen method",
+        vote: "Vote",
+        other: "Saved record",
+      },
+      voteRefLabel: "on proposal",
+      voteChoice: { for: "For", against: "Against", abstain: "Abstained" },
+      identityActionValue: {
+        read: "Browse the site",
+        apply: "Apply for help",
+        vote: "Vote",
+        receive: "Receive help or a payout",
+      },
+      identityMethodValue: {
+        social: "Through a circle of acquaintances (no biometrics)",
+        passport: "A passport of many signals",
+        liveness: "A “liveness” check by an external service",
+        vouch: "Vouching by real people (no camera)",
+      },
+      rawLabel: "Stored as",
+      remove: "Erase",
+      removeAll: "Erase everything",
+      removed: "Erased",
     },
     wallet: {
       back: "← Back to home",

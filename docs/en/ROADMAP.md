@@ -740,6 +740,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0085 (session 88):** INBOX #34 (platform) — **“What the app remembers about you” screen**
+  ([`platform/app/privacy/`](../../platform/app/privacy/)) + data layer
+  [`platform/lib/storage.ts`](../../platform/lib/storage.ts). One place where a person sees
+  EVERYTHING the platform has saved in their browser (the choice on “Identity check”, vote drafts)
+  and can erase it — all of it or one record at a time. The right to “see and delete my data”
+  (dignity, no tracking — [`ACCOUNTABILITY.md`](ACCOUNTABILITY.md)/[`GOVERNANCE.md`](GOVERNANCE.md)).
+  All records live under the shared `ptd:` prefix, so new screens appear in the list automatically;
+  the wallet is deliberately not stored (read live). Nothing leaves the browser or goes on-chain.
+  Bilingual RU↔EN (`MyDataDict`), plain language (PTD-0040), no new dependencies; added to the
+  persistent menu and footer.
 - **PTD-0072 (session 75):** P2 (transparency) — **status-light chip in the topbar too, not only
   the footer.** The header of the landing pages ([`web/index.html`](../../web/index.html) + EN),
   inside `.nav-tools` next to the language/theme toggles, gained a compact `#statusbadge-top` chip
@@ -1325,3 +1335,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Machine-readable run_all status light (done) / public status light on the site from the artifact / guard: status artifact not stale vs verdict | agent | 72 |
 | Public status light on the site (done) / compact status chip on the other pages / chip in the topbar too, not only the footer | agent | 73 |
 | Label catalog .github/labels.yml (done) / optional label sync / guard: label catalog has no duplicates and valid hex colors | agent | 76 |
+| “What the app remembers about you” screen (done) / “erase my data” button right on the Voting and Identity screens linking to “My data” / export all drafts as one file (a backup for the person) | agent | 88 |
