@@ -83,9 +83,10 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P1 — materials and infrastructure (partly from INBOX)
 
-- [ ] **Promotion (INBOX #6):** a landing page for people, a short pitch RU/EN, an
+- [x] **Promotion (INBOX #6):** a landing page for people, a short pitch RU/EN, an
   announcement post, a FAQ "this is a public good, NOT an investment". Prepared by
-  the agent; publishing done by the operator.
+  the agent; publishing done by the operator. → Done (session 9),
+  [`PROMOTION.md`](PROMOTION.md), `PTD-0006`.
 - [ ] **Project email (INBOX #7):** instructions for the operator — domain+mail
   options (ProtonMail/own domain), texts. Registration done by the operator.
 - [ ] **Testnet wallet + Safe (INBOX #10):** describe/create a test wallet and a
@@ -112,11 +113,23 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] "Explain like I'm five" — short explainers for each normative doc.
 - [ ] Automated changelog from the decision registry (generate `CHANGELOG.md`).
 - [ ] Reputation model for guardians/reviewers (anti-collusion) — draft spec.
+- [ ] Turn the landing copy from [`PROMOTION.md`](PROMOTION.md) into a real
+  human-oriented page in `web/` (simpler than the normative site; same "no external
+  requests/trackers" policy).
+- [ ] Project media kit: a single logo/palette/icon (SVG, no external fonts) +
+  brief usage rules — so materials look consistent.
+- [ ] Press page / one-pager "about the project for press and partners" (RU/EN)
+  based on the boilerplate in `PROMOTION.md` — facts, links, contacts, quotable text.
 
 ---
 
 ## Done
 
+- **PTD-0006 (session 9):** promotion materials [`PROMOTION.md`](PROMOTION.md)
+  (+EN) — message rails, boilerplate+disclaimer, landing copy, pitch RU/EN (3
+  formats), announcement post (Telegram + Twitter/X), FAQ "public good, NOT an
+  investment", publication checklist. All texts checked against the constitutional
+  prohibitions. "Ready-to-press" drafts — published by the operator. Closes INBOX #6.
 - **PTD-0005 (session 8):** set up the self-development mechanism itself — this
   `ROADMAP.md` (+EN), the rule in `BUILDER.md` ("INBOX empty → next ROADMAP item")
   and the autonomy-by-default mode (INBOX #9). Closes INBOX #5 and #9.
@@ -133,3 +146,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Autonomy-by-default mode | operator (INBOX #9) | 8 |
 | CONTRIBUTING / glossary / transparency page / CI bilingual | agent | 8 |
 | Treasury dashboard / request templates / changelog / reputation | agent | 8 |
+| Landing page in web / media kit / press page | agent | 9 |

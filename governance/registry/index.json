@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 6,
-  "head_hash": "579076d4b44d2e8a865130a4a3c3cbcbf89ee1df723ce15a21e0226055f377f3",
+  "count": 7,
+  "head_hash": "682e26a0438ca20a98861121aa6cfe977d0ed857743e0a22cfcd8cecc66b9699",
   "entries": [
     {
       "seq": 0,
@@ -57,6 +57,15 @@
       "summary": "Механизм саморазвития: ROADMAP.md (RU/EN) + правило в BUILDER.md (INBOX пуст → ROADMAP) + режим автономии по умолчанию",
       "hash": "579076d4b44d2e8a865130a4a3c3cbcbf89ee1df723ce15a21e0226055f377f3",
       "file": "records/0005-self-development-roadmap.json"
+    },
+    {
+      "seq": 6,
+      "id": "PTD-0006",
+      "type": "decision",
+      "timestamp": "2026-06-22T05:50:00Z",
+      "summary": "Материалы продвижения (INBOX #6): лендинг-копия, питч RU/EN, пост-анонс, FAQ «общественное благо, НЕ инвестиция» — docs/PROMOTION.md (+EN)",
+      "hash": "682e26a0438ca20a98861121aa6cfe977d0ed857743e0a22cfcd8cecc66b9699",
+      "file": "records/0006-promotion-materials.json"
     }
   ]
 }
