@@ -766,6 +766,14 @@ h3 {
   max-width: 64ch;
   color: var(--text-soft);
 }
+
+/* Словарь простыми словами */
+.glossary-list {
+  gap: 14px;
+}
+.glossary-list .faq-item dt {
+  color: var(--text);
+}
 .split-row-main {
   display: flex;
   flex-wrap: wrap;

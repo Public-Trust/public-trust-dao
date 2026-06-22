@@ -6,6 +6,7 @@
 
 import type { ProposalStatus, VoteChoice } from "@/lib/voting";
 import type { MovementKind, TreasuryCoverage } from "@/lib/treasury";
+import type { GlossaryGroup } from "@/lib/glossary";
 import type {
   IdentityAction,
   IdentityLevel,
@@ -244,6 +245,22 @@ export type MyDataDict = {
   removed: string;
 };
 
+export type GlossaryDict = {
+  back: string;
+  title: string;
+  lead: string;
+  keyTitle: string;
+  key: string[];
+  searchLabel: string;
+  searchPlaceholder: string;
+  countLabel: string; // «слов в словаре»
+  nothingFound: string;
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+  groups: GlossaryGroup[];
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -260,6 +277,7 @@ export type Dict = {
   navLabel: string;
   navHome: string;
   navAbout: string;
+  navGlossary: string;
   navMyData: string;
   screensTitle: string;
   screensLead: string;
@@ -273,6 +291,7 @@ export type Dict = {
   contact: string;
   builtNote: string;
   about: AboutDict;
+  glossary: GlossaryDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -302,6 +321,7 @@ export const DICT: Record<Lang, Dict> = {
     navLabel: "Экраны платформы",
     navHome: "Главная",
     navAbout: "О платформе",
+    navGlossary: "Словарь",
     navMyData: "Мои данные",
     screensTitle: "Что появится в платформе",
     screensLead:
@@ -412,6 +432,228 @@ export const DICT: Record<Lang, Dict> = {
       constitutionLink: "Конституция фонда (главный закон проекта)",
       registryLink: "Открытый журнал решений (репозиторий)",
       siteLink: "О фонде — главный сайт",
+    },
+    glossary: {
+      back: "← На главную",
+      title: "Что значат слова — словарь простыми словами",
+      lead: "Здесь ключевые слова проекта объяснены по-человечески. Если в каком-то экране или документе встретилось непонятное слово — скорее всего, оно есть тут. Важно понять идею, а не устройство: главная мысль проекта простая — общий прозрачный фонд помощи, которым никто не владеет единолично.",
+      keyTitle: "Если ничего не запомнить — запомните три вещи",
+      key: [
+        "Это помощь людям, а не способ заработать. Не вложение и не пирамида.",
+        "Никто не владеет фондом единолично — решает сообщество, исполняет код.",
+        "Всё открыто и проверяемо: документы, решения, код, движения средств.",
+      ],
+      searchLabel: "Поиск по словарю",
+      searchPlaceholder: "Например: казна, голос, кошелёк…",
+      countLabel: "слов в словаре",
+      nothingFound:
+        "По этому запросу слов не нашлось. Попробуйте другое слово или очистите поиск.",
+      sourceTitle: "Откуда это",
+      sourceNote:
+        "Словарь — это зеркало нормативного документа «Глоссарий» из открытого репозитория. Не хватает слова? Это хороший повод предложить его добавить.",
+      sourceLink: "Полный глоссарий в репозитории",
+      groups: [
+        {
+          id: "basics",
+          title: "Основы",
+          entries: [
+            {
+              term: "Public Trust DAO (Общественный фонд доверия)",
+              def: "Открытое сообщество и приложение для прозрачной взаимопомощи. Не компания, не фонд с владельцем, не способ заработать.",
+            },
+            {
+              term: "ДАО (сообщество без владельца, англ. DAO)",
+              def: "Способ организоваться без начальника: правила записаны открыто — в тексте и в коде, — а решения принимает сообщество голосованием, а не один человек.",
+            },
+            {
+              term: "Общественное благо",
+              def: "То, чем пользуются все и что не принадлежит никому лично — как чистый воздух или открытая дорога. Проект — общественное благо, а не вложение: оно не обещает и не может обещать доход.",
+            },
+            {
+              term: "Конституция",
+              def: "Главный свод правил проекта: кто мы, чего нельзя, как принимаются решения. Высший закон проекта.",
+            },
+            {
+              term: "Манифест",
+              def: "Короткое заявление о смысле и ценностях проекта — «зачем мы существуем».",
+            },
+            {
+              term: "Рельсы безопасности",
+              def: "Жёсткие границы, которые проект не переступает ни при каких условиях: только тестовая сеть до проверки кода, никаких секретов в открытом коде, никаких обещаний дохода, никакой власти в одних руках.",
+            },
+            {
+              term: "Дисклеймер «не вложение, не пирамида»",
+              def: "Обязательная честная оговорка рядом с любым призывом: проект не приносит прибыль, не платит за привлечение людей, не гарантирует доход. Это защита людей от ложных ожиданий, а не формальность.",
+            },
+          ],
+        },
+        {
+          id: "governance",
+          title: "Управление и голосование",
+          entries: [
+            {
+              term: "Управление (англ. governance)",
+              def: "Как сообщество принимает решения: кто может предлагать, как голосуют, как решение исполняется.",
+            },
+            {
+              term: "Один человек — один голос",
+              def: "Вес голоса зависит от того, что ты человек-участник, а не от того, сколько у тебя денег. Голос нельзя купить, продать или скупить.",
+            },
+            {
+              term: "Власть денег (плутократия)",
+              def: "Порядок «у кого больше денег — у того больше голосов». Проект это запрещает: именно поэтому вес голоса не зависит от баланса.",
+            },
+            {
+              term: "Личный непередаваемый знак участника (англ. soulbound)",
+              def: "Цифровая отметка «это проверенный уникальный участник». Её нельзя передать, продать или подарить — поэтому право голоса нельзя скупить.",
+            },
+            {
+              term: "Репутация",
+              def: "Накопленное признание за проверяемый вклад. Может немного увеличить вес голоса, но только в жёстких пределах — и никогда не даёт права распоряжаться деньгами.",
+            },
+            {
+              term: "Защита от накруток и фейковых аккаунтов",
+              def: "Меры против того, чтобы один человек завёл много поддельных аккаунтов ради лишних голосов или повторной помощи. Подтверждение уникальности при этом не даёт власти над деньгами: «уникальность — не власть».",
+            },
+            {
+              term: "Кворум",
+              def: "Минимальное число голосов, без которого решение не считается принятым — чтобы важное не решали два человека втихую.",
+            },
+            {
+              term: "Предложение на голосование",
+              def: "Оформленный вопрос: что предлагается, зачем, как связано с конституцией и приоритетами, варианты «за/против».",
+            },
+          ],
+        },
+        {
+          id: "money",
+          title: "Деньги и помощь",
+          entries: [
+            {
+              term: "Казна",
+              def: "Общий кошелёк сообщества, откуда идёт помощь. Никто не распоряжается им единолично — средства двигаются только по прошедшему голосованию.",
+            },
+            {
+              term: "Общий кошелёк на несколько подписей (схема «3 из 5»)",
+              def: "Кошелёк, которым управляют несколько человек вместе: чтобы что-то сделать, нужны подписи минимум трёх хранителей из пяти. Один человек не может ни увести средства, ни заблокировать всё в одиночку.",
+            },
+            {
+              term: "Хранитель",
+              def: "Один из доверенных людей, чья подпись участвует в общем кошельке. Хранитель — обычный участник (1 голос), а не владелец: он исполняет волю голосования, а не управляет проектом.",
+            },
+            {
+              term: "Целевая выплата (оплата нужды напрямую)",
+              def: "Главный принцип помощи: не даём деньги на руки, а оплачиваем нужду напрямую поставщику. Например, при помощи с жильём деньги уходят сразу арендодателю — так помощь нельзя перенаправить не по назначению.",
+            },
+            {
+              term: "Поставщик",
+              def: "Тот, кому уходит целевая выплата напрямую (арендодатель, аптека, поставщик услуги), а не сам получатель помощи.",
+            },
+            {
+              term: "Выплата частями (поэтапно)",
+              def: "Помощь выдаётся не одной суммой, а частями — это снижает риск злоупотреблений и позволяет остановиться, если что-то пошло не так.",
+            },
+            {
+              term: "Порядок помощи (приоритет)",
+              def: "Правило, кому помогать в первую очередь, когда средств меньше, чем нужд: сначала угроза жизни и базовое выживание, потом — менее срочное.",
+            },
+            {
+              term: "Апелляция",
+              def: "Право обжаловать решение — например, отказ в помощи. У каждого ограничивающего решения должен быть путь обжалования, который рассматривают люди, а не один человек и не ИИ.",
+            },
+            {
+              term: "Коллективная проверка",
+              def: "Заявку подтверждает не один человек, а несколько независимо — чтобы никто не мог единолично «провести» выплату.",
+            },
+          ],
+        },
+        {
+          id: "transparency",
+          title: "Прозрачность и проверяемость",
+          entries: [
+            {
+              term: "Открытый журнал решений (реестр)",
+              def: "Открытый список всех значимых решений проекта. У каждой записи свой номер (PTD-XXXX). Любой может посмотреть, что и когда решили.",
+            },
+            {
+              term: "Защита записей от подмены (цепочка отпечатков)",
+              def: "Каждая запись журнала запечатана отпечатком и ссылается на отпечаток предыдущей. Если кто-то задним числом изменит старую запись — отпечатки перестанут сходиться, и подмена сразу видна.",
+            },
+            {
+              term: "Отпечаток файла (хэш)",
+              def: "Короткий «цифровой отпечаток» файла или текста. Малейшее изменение содержимого полностью меняет отпечаток — поэтому он доказывает, что данные не подменили.",
+            },
+            {
+              term: "Распределённое хранилище (англ. IPFS)",
+              def: "Способ хранить файлы так, что адрес файла вычисляется из его содержимого. Скачал файл по адресу — можешь сам проверить, что это именно тот файл.",
+            },
+            {
+              term: "В блокчейне / вне блокчейна",
+              def: "«В блокчейне» — записано в публичной общей книге, проверяемо всеми и неизменяемо. «Вне блокчейна» — например, обсуждение на площадке голосования. Деньги двигаются только в блокчейне и только по прошедшему голосованию.",
+            },
+          ],
+        },
+        {
+          id: "security",
+          title: "Безопасность и техника",
+          entries: [
+            {
+              term: "Умный контракт (англ. smart contract)",
+              def: "Программа в блокчейне, которая исполняет правила автоматически и одинаково для всех — её нельзя «попросить сделать исключение». В проекте это казна, целевые выплаты, голосование и знак участника.",
+            },
+            {
+              term: "Тестовая сеть и основная сеть",
+              def: "Тестовая сеть — «учебная», с ненастоящими монетами для проверки. Основная — реальная, с реальными деньгами. Рельс проекта: всё строится и тестируется только в тестовой сети; реальные средства — лишь после независимой проверки кода и явного решения людей.",
+            },
+            {
+              term: "Секретный ключ (приватный ключ / сид-фраза)",
+              def: "Секрет, дающий полный контроль над кошельком — как пароль от сейфа. Такие секреты никогда не хранятся в открытом коде проекта: это жёсткий рельс безопасности.",
+            },
+            {
+              term: "Независимая проверка кода (аудит)",
+              def: "Проверка кода умных контрактов сторонними специалистами на ошибки и уязвимости до того, как в систему попадут реальные средства. Без неё реальные деньги не запускаются.",
+            },
+            {
+              term: "Задержка перед исполнением (англ. timelock)",
+              def: "Обязательная пауза между «решение принято» и «решение исполнено». Это окно, чтобы успеть заметить ошибку или злоупотребление и при необходимости остановить.",
+            },
+            {
+              term: "Аварийная пауза",
+              def: "Возможность временно остановить операции при угрозе. Важно: пауза только останавливает — она не позволяет двигать средства или направлять их куда-то. «Безопасность — не власть».",
+            },
+            {
+              term: "ИИ-агенты (служебные помощники)",
+              def: "Программы-помощники, которые автоматически проверяют, что проект соблюдает свои правила (нет ли в коде секретов, справедливо ли распределение). ИИ служит, но не правит: агент только подаёт сигнал, решения принимают люди.",
+            },
+          ],
+        },
+        {
+          id: "identity",
+          title: "Проверка личности — что за аккаунтом живой человек",
+          entries: [
+            {
+              term: "Подтверждение «живой уникальный человек»",
+              def: "Проверка, что за аккаунтом — один реальный живой человек, а не бот и не десятый аккаунт того же лица. Это проверка факта «человек настоящий и один», а не сбор того, кто именно этот человек.",
+            },
+            {
+              term: "Проверка «живости»",
+              def: "Способ убедиться, что перед сервисом — живой человек прямо сейчас, а не фотография, видео или маска. Фонду возвращается только ответ «да/нет»; само фото или видео в инфраструктуру фонда не попадает.",
+            },
+            {
+              term: "Доказательство без раскрытия личности",
+              def: "Способ доказать утверждение — например «я уникальный человек» или «мне есть 18» — не показывая сами данные. В общий журнал попадает только результат «да, подходит», а не личные сведения.",
+            },
+            {
+              term: "Пометка «уже зарегистрирован»",
+              def: "Технический признак, который говорит системе «этот человек здесь уже есть», но не раскрывает, кто это. Он позволяет соблюсти правило «один человек — один аккаунт», не связывая аккаунт с настоящей личностью.",
+            },
+            {
+              term: "Поручительство живых людей (запасной путь без камеры)",
+              def: "Если у человека нет смартфона или интернета или он не хочет показывать лицо, его могут подтвердить несколько уже проверенных участников. Это обязательный запасной путь — без него фонд отрезал бы самых уязвимых. Поручители рискуют своей репутацией, если подтвердят выдуманного человека.",
+            },
+          ],
+        },
+      ],
     },
     notFound: {
       code: "Страница не найдена",
@@ -796,6 +1038,7 @@ export const DICT: Record<Lang, Dict> = {
     navLabel: "Platform screens",
     navHome: "Home",
     navAbout: "About",
+    navGlossary: "Glossary",
     navMyData: "My data",
     screensTitle: "What the platform will include",
     screensLead:
@@ -906,6 +1149,228 @@ export const DICT: Record<Lang, Dict> = {
       constitutionLink: "The fund's constitution (the project's main law)",
       registryLink: "Open record of decisions (repository)",
       siteLink: "About the fund — main site",
+    },
+    glossary: {
+      back: "← Back to home",
+      title: "What the words mean — a plain-language glossary",
+      lead: "Here the project's key words are explained in human terms. If a word in a screen or document was unclear, it is probably here. What matters is the idea, not the machinery: the project's core thought is simple — a shared, transparent fund for helping people that nobody owns alone.",
+      keyTitle: "If you remember nothing else, remember three things",
+      key: [
+        "This is help for people, not a way to earn. Not an investment and not a pyramid.",
+        "Nobody owns the fund alone — the community decides, the code carries it out.",
+        "Everything is open and checkable: documents, decisions, code, money movements.",
+      ],
+      searchLabel: "Search the glossary",
+      searchPlaceholder: "For example: treasury, vote, wallet…",
+      countLabel: "words in the glossary",
+      nothingFound:
+        "No words match this search. Try another word or clear the search.",
+      sourceTitle: "Where this comes from",
+      sourceNote:
+        "The glossary mirrors the normative “Glossary” document in the open repository. Missing a word? That's a good reason to suggest adding it.",
+      sourceLink: "Full glossary in the repository",
+      groups: [
+        {
+          id: "basics",
+          title: "Basics",
+          entries: [
+            {
+              term: "Public Trust DAO",
+              def: "An open community and application for transparent mutual aid. Not a company, not an owner-run fund, not a way to earn.",
+            },
+            {
+              term: "DAO (a community without an owner)",
+              def: "A way to organise without a boss: the rules are written openly — in text and in code — and decisions are made by the community through voting, not by one person.",
+            },
+            {
+              term: "Public good",
+              def: "Something everyone uses and nobody owns personally — like clean air or an open road. The project is a public good, not an investment: it does not and cannot promise income.",
+            },
+            {
+              term: "Constitution",
+              def: "The project's main body of rules: who we are, what is forbidden, how decisions are made. The project's highest law.",
+            },
+            {
+              term: "Manifesto",
+              def: "A short statement of the project's meaning and values — “why we exist.”",
+            },
+            {
+              term: "Safety rails",
+              def: "Hard boundaries the project never crosses: only a test network until the code is reviewed, no secrets in open code, no promises of income, no power in one pair of hands.",
+            },
+            {
+              term: "The “not an investment, not a pyramid” disclaimer",
+              def: "A mandatory honest note next to any call to act: the project brings no profit, pays nothing for recruiting people, guarantees no income. It protects people from false expectations — not a formality.",
+            },
+          ],
+        },
+        {
+          id: "governance",
+          title: "Governance and voting",
+          entries: [
+            {
+              term: "Governance",
+              def: "How the community makes decisions: who may propose, how people vote, how a decision is carried out.",
+            },
+            {
+              term: "One person — one vote",
+              def: "Your vote's weight comes from being a human participant, not from how much money you have. A vote cannot be bought, sold, or hoarded.",
+            },
+            {
+              term: "Rule by money (plutocracy)",
+              def: "The order where “whoever has more money has more votes.” The project forbids it: that's why a vote's weight does not depend on your balance.",
+            },
+            {
+              term: "A personal non-transferable participant badge (soulbound)",
+              def: "A digital mark “this is a verified, unique participant.” It cannot be transferred, sold, or gifted — so the right to vote cannot be bought up.",
+            },
+            {
+              term: "Reputation",
+              def: "Accumulated recognition for checkable contribution. It can slightly raise a vote's weight, but only within hard limits — and it never grants the right to handle money.",
+            },
+            {
+              term: "Protection against fake accounts and vote-stuffing",
+              def: "Measures that stop one person from creating many fake accounts for extra votes or repeated aid. Confirming uniqueness gives no power over money: “uniqueness is not power.”",
+            },
+            {
+              term: "Quorum",
+              def: "The minimum number of votes without which a decision does not count — so that important things aren't decided quietly by two people.",
+            },
+            {
+              term: "A proposal to vote on",
+              def: "A framed question: what is proposed, why, how it ties to the constitution and priorities, and the “for/against” options.",
+            },
+          ],
+        },
+        {
+          id: "money",
+          title: "Money and aid",
+          entries: [
+            {
+              term: "Treasury",
+              def: "The community's shared wallet that aid comes from. Nobody controls it alone — funds move only by a passed vote.",
+            },
+            {
+              term: "A shared multi-signature wallet (a “3 of 5” scheme)",
+              def: "A wallet several people control together: to do anything, at least three of five guardians must sign. One person can neither take the funds nor freeze everything alone.",
+            },
+            {
+              term: "Guardian",
+              def: "One of the trusted people whose signature takes part in the shared wallet. A guardian is an ordinary participant (one vote), not an owner: they carry out the will of the vote, they don't run the project.",
+            },
+            {
+              term: "Targeted payment (paying the need directly)",
+              def: "The core principle of aid: we don't hand over cash, we pay the need directly to the provider. For housing help, money goes straight to the landlord — so aid can't be redirected elsewhere.",
+            },
+            {
+              term: "Provider",
+              def: "Whoever receives the targeted payment directly (landlord, pharmacy, service provider), not the aid recipient themselves.",
+            },
+            {
+              term: "Payment in stages",
+              def: "Aid is given not as one lump sum but in parts — this lowers the risk of abuse and lets us stop if something goes wrong.",
+            },
+            {
+              term: "Order of aid (priority)",
+              def: "The rule for who is helped first when there's less money than need: first threats to life and basic survival, then less urgent needs.",
+            },
+            {
+              term: "Appeal",
+              def: "The right to contest a decision — for example a denial of aid. Every limiting decision must have a path to appeal, reviewed by people, not by one person and not by an AI.",
+            },
+            {
+              term: "Collective review",
+              def: "An application is confirmed not by one person but by several independently — so nobody can push a payout through alone.",
+            },
+          ],
+        },
+        {
+          id: "transparency",
+          title: "Transparency and checkability",
+          entries: [
+            {
+              term: "Open record of decisions (the registry)",
+              def: "An open list of all the project's significant decisions. Each entry has its own number (PTD-XXXX). Anyone can see what was decided and when.",
+            },
+            {
+              term: "Tamper protection for records (a chain of fingerprints)",
+              def: "Each record entry is sealed with a fingerprint and refers to the previous one's fingerprint. If someone alters an old entry after the fact, the fingerprints stop matching and the tampering is immediately visible.",
+            },
+            {
+              term: "A file's fingerprint (hash)",
+              def: "A short “digital fingerprint” of a file or text. The slightest change to the content completely changes the fingerprint — so it proves the data was not swapped.",
+            },
+            {
+              term: "Distributed storage (IPFS)",
+              def: "A way to store files so that a file's address is computed from its content. Download a file by its address and you can check for yourself it's exactly that file.",
+            },
+            {
+              term: "On-chain / off-chain",
+              def: "“On-chain” means written into the public shared ledger — checkable by everyone and unchangeable. “Off-chain” means outside it, such as a discussion on a voting platform. Money moves only on-chain and only by a passed vote.",
+            },
+          ],
+        },
+        {
+          id: "security",
+          title: "Security and the technical side",
+          entries: [
+            {
+              term: "Smart contract",
+              def: "A program in the blockchain that enforces rules automatically and identically for everyone — it can't be “asked to make an exception.” In the project these are the treasury, targeted payments, voting, and the participant badge.",
+            },
+            {
+              term: "Test network and main network",
+              def: "A test network is a “practice” one with play money for checking. The main one is real, with real money. The project's rail: everything is built and tested only on a test network; real funds only after an independent code review and an explicit decision by people.",
+            },
+            {
+              term: "Secret key (private key / seed phrase)",
+              def: "A secret giving full control over a wallet — like the password to a safe. Such secrets are never kept in the project's open code: that's a hard safety rail.",
+            },
+            {
+              term: "Independent code review (audit)",
+              def: "A review of the smart-contract code by outside specialists for bugs and weaknesses before real funds enter the system. Without it, real money is not launched.",
+            },
+            {
+              term: "A delay before execution (timelock)",
+              def: "A mandatory pause between “decision passed” and “decision carried out.” It's a window to notice a mistake or abuse and stop it if needed.",
+            },
+            {
+              term: "Emergency pause",
+              def: "The ability to temporarily stop operations when there's a threat. Important: a pause only stops — it does not let anyone move funds or direct them somewhere. “Safety is not power.”",
+            },
+            {
+              term: "AI agents (service helpers)",
+              def: "Helper programs that automatically check the project follows its own rules (no secrets in code, fair distribution). AI serves but does not rule: an agent only raises a signal; people make the decisions.",
+            },
+          ],
+        },
+        {
+          id: "identity",
+          title: "Identity check — that a living person is behind an account",
+          entries: [
+            {
+              term: "Confirming a “living, unique person”",
+              def: "A check that there's one real living person behind an account — not a bot and not the tenth account of the same individual. It's a check of the fact “the person is real and single,” not a collection of who exactly they are.",
+            },
+            {
+              term: "Liveness check",
+              def: "A way to make sure that what's in front of the service is a living person right now, not a photo, video, or mask. Only a “yes/no” answer is returned to the fund; the photo or video itself never reaches the fund's systems.",
+            },
+            {
+              term: "Proof without revealing your identity",
+              def: "A way to prove a statement — for example “I'm a unique person” or “I'm over 18” — without showing the data itself. Only the result “yes, qualifies” enters the shared record, not personal details.",
+            },
+            {
+              term: "An “already registered” marker",
+              def: "A technical sign that tells the system “this person is already here” without revealing who they are. It lets us keep the “one person — one account” rule without linking the account to a real identity.",
+            },
+            {
+              term: "Vouching by living people (a fallback without a camera)",
+              def: "If a person has no smartphone or internet, or doesn't want to show their face, several already-verified participants can confirm them. This is a mandatory fallback — without it the fund would cut off the most vulnerable. Vouchers risk their own reputation if they confirm a made-up person.",
+            },
+          ],
+        },
+      ],
     },
     notFound: {
       code: "Page not found",

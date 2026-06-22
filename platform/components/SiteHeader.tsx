@@ -23,6 +23,7 @@ export function SiteHeader() {
     ...t.screens
       .filter((s) => s.href)
       .map((s) => ({ label: s.short ?? s.title, href: s.href as string })),
+    { label: t.navGlossary, href: "/glossary/" },
     { label: t.navMyData, href: "/privacy/" },
   ];
 

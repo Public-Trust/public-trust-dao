@@ -174,6 +174,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     entry page in plain words (what it is, what to know right now, where to start, honest
     and without surveillance, FAQ); added to the header menu and footer, RU↔EN; content
     drawn from already-adopted materials with no new promises. `PTD-0083`. TESTNET-ONLY.
+  - [x] A clear "page not found" (404) page: `platform/app/not-found.tsx` — a calm
+    explanation and a way back (home / about), RU↔EN. `PTD-0084`.
+  - [x] "What the app remembers about you" (My data) page: `platform/app/privacy/`
+    + the `platform/lib/storage.ts` data layer — a person sees EVERYTHING the platform
+    has saved in their browser and can erase it all or one record at a time; nothing
+    leaves the browser. Added to the menu and footer, RU↔EN. `PTD-0085`. TESTNET-ONLY.
+  - [x] "What the words mean — a plain-language glossary" screen (session 87):
+    `platform/app/glossary/` + the `platform/lib/glossary.ts` data layer — a mirror of
+    the normative [`docs/GLOSSARY.md`](GLOSSARY.md) inside the app: ~38 of the project's
+    key words in human terms, grouped by meaning, live search over term and definition,
+    a word count; a technical term appears only in parentheses (plain-language rule).
+    Added to the menu, RU↔EN, no new dependencies. `PTD-0086`. TESTNET-ONLY.
   - [ ] Wire up platform publishing to GitHub Pages during migration from `web/`.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
