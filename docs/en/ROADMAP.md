@@ -764,6 +764,17 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0088 (session 91):** INBOX #34 (platform) — **“Who the fund helps first: the order of
+  help” screen** ([`platform/app/priorities/`](../../platform/app/priorities/)) — mirrors the
+  normative [`PRIORITIES.md`](PRIORITIES.md) inside the app. Plain language (PTD-0040): when the
+  treasury holds less than the requests, whose hardship is covered first. A leading “main idea in
+  plain words” section (5 pillars), a numbered order of the 10 levels (short labels reused from
+  `apply.priorityLabels`, human explanations from `priorities.meanings`), “how it works in
+  practice”, an honest note that “urgency does not cancel the checks”, plus links to the request
+  screen and the normative document. Reuses `PRIORITIES` from
+  [`lib/application.ts`](../../platform/lib/application.ts) (nothing duplicated), no new
+  dependencies (zero outbound requests). Bilingual RU↔EN (`PrioritiesDict`), added to the
+  persistent menu and linked from the “Request help” screen.
 - **PTD-0085 (session 88):** INBOX #34 (platform) — **“What the app remembers about you” screen**
   ([`platform/app/privacy/`](../../platform/app/privacy/)) + data layer
   [`platform/lib/storage.ts`](../../platform/lib/storage.ts). One place where a person sees
@@ -1361,3 +1372,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Label catalog .github/labels.yml (done) / optional label sync / guard: label catalog has no duplicates and valid hex colors | agent | 76 |
 | “What the app remembers about you” screen (done) / “erase my data” button right on the Voting and Identity screens linking to “My data” / export all drafts as one file (a backup for the person) | agent | 88 |
 | "Take a copy" of your data as one file (done) / upgrade Next from 15.1.6 to a patched version (security advisory CVE-2025-66478) / show the "take a copy" button even when the list is empty (an honest empty template file) | agent | 90 |
+| "Order of help" screen (done) / Documentation agent: soft check "an in-app mirror screen in platform/app isn't stale vs its normative doc" (priorities↔PRIORITIES, glossary↔GLOSSARY) / link the "Treasury window" screen to "Order of help" (help pools ↔ who comes first) | agent | 91 |

@@ -20,6 +20,7 @@ export function SiteHeader() {
   const navItems = [
     { label: t.navHome, href: "/" },
     { label: t.navAbout, href: "/about/" },
+    { label: t.navPriorities, href: "/priorities/" },
     ...t.screens
       .filter((s) => s.href)
       .map((s) => ({ label: s.short ?? s.title, href: s.href as string })),

@@ -140,6 +140,11 @@ export default function ApplyPage() {
             <div className="field">
               <label htmlFor="priority">{a.priorityLabel}</label>
               <p className="field-hint">{a.priorityHint}</p>
+              <p className="field-hint">
+                <Link className="screen-card-link" href="/priorities/">
+                  {a.priorityExplain}
+                </Link>
+              </p>
               <select
                 id="priority"
                 value={input.priorityKey}

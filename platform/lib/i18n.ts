@@ -53,6 +53,7 @@ export type ApplyDict = {
   formTitle: string;
   priorityLabel: string;
   priorityHint: string;
+  priorityExplain: string;
   priorityChoose: string;
   priorityLabels: Record<string, string>;
   needLabel: string;
@@ -214,6 +215,27 @@ export type AboutDict = {
   siteLink: string;
 };
 
+export type PrioritiesDict = {
+  back: string;
+  title: string;
+  lead: string;
+  keyTitle: string; // «Главное — простыми словами»
+  key: string[];
+  orderTitle: string;
+  orderHint: string;
+  // Человеческое пояснение для каждого ключа важности (короткие подписи —
+  // в apply.priorityLabels, их экран переиспользует).
+  meanings: Record<string, string>;
+  howTitle: string;
+  how: string[];
+  fairTitle: string;
+  fairNote: string;
+  applyLink: string;
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -284,6 +306,7 @@ export type Dict = {
   navAbout: string;
   navGlossary: string;
   navMyData: string;
+  navPriorities: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -297,6 +320,7 @@ export type Dict = {
   builtNote: string;
   about: AboutDict;
   glossary: GlossaryDict;
+  priorities: PrioritiesDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -328,6 +352,7 @@ export const DICT: Record<Lang, Dict> = {
     navAbout: "О платформе",
     navGlossary: "Словарь",
     navMyData: "Мои данные",
+    navPriorities: "Порядок помощи",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -660,6 +685,46 @@ export const DICT: Record<Lang, Dict> = {
         },
       ],
     },
+    priorities: {
+      back: "← На главную",
+      title: "Кому фонд помогает раньше: порядок помощи",
+      lead: "Это честный ответ на простой вопрос: если в общей казне денег меньше, чем просьб о помощи, чью беду закрывать первой. Порядок зависит только от тяжести нужды, а не от того, кто человек.",
+      keyTitle: "Главное — простыми словами",
+      key: [
+        "Сначала — спасение жизни и крыша над головой. Дальше — лечение и еда. Это базовые вещи, без которых человеку не выжить.",
+        "Помощь идёт по тяжести беды, а не по тому, кто человек. Происхождение, репутация и статус участника на очередь не влияют — только сама беда.",
+        "Очередь — это про скорость рассмотрения, а не про поблажки в проверке. Срочную беду смотрят первой, но деньги всё равно идут по частям, с лимитами, и каждую выплату проверяют несколько независимых людей.",
+        "Когда беды одинаковой тяжести — делим честно и открыто. Правило, кого взять первым, заранее опубликовано и одинаково для всех.",
+        "Долгая польза для всех — в самом конце списка, но не выкинута. Сначала спасаем людей, потом вкладываемся в общее будущее.",
+      ],
+      orderTitle: "Порядок помощи — от самого срочного к менее срочному",
+      orderHint: "Чем выше в списке, тем раньше просьбу берут в работу, когда денег на всех не хватает.",
+      meanings: {
+        life_threat: "человеку прямо сейчас угрожает смерть",
+        housing_loss: "не дать человеку оказаться на улице, срочное жильё",
+        medical: "лечение, лекарства, неотложная медицинская помощь",
+        food: "продукты, горячее питание",
+        children: "помощь детям и семьям с детьми",
+        elderly: "уход, сопровождение, базовые нужды пожилых людей",
+        disability: "поддержка людей с инвалидностью",
+        self_reliance: "работа, инструменты, выход из кризиса своими силами",
+        education: "переобучение, новая профессия, цифровая грамотность",
+        public_good: "open source, наука, экология, общая инфраструктура",
+      },
+      howTitle: "Как это работает на деле",
+      how: [
+        "Мало денег — первыми идут те, чья беда тяжелее: чем выше в списке, тем раньше просьбу берут в работу.",
+        "Очередь не выключает защиту от обмана: деньги по частям, лимиты на крупные суммы, коллективная проверка — всегда.",
+        "Очередь зависит только от беды, а не от человека: репутация и статус не двигают вверх или вниз.",
+        "Равные по тяжести обслуживаются по честному и открытому правилу (например, кто раньше обратился).",
+      ],
+      fairTitle: "Срочность не отменяет проверку",
+      fairNote: "Высокий приоритет ускоряет рассмотрение, но не открывает «зелёный коридор» без проверки. Все обычные предохранители фонда — поэтапные выплаты, лимиты, независимая проверка — действуют всегда.",
+      applyLink: "Нужна помощь? Перейти к спокойной анонимной заявке →",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «В каком порядке фонд помогает». Порядок вытекает из конституции (статья 5 «справедливое распределение») и одинаков для всех.",
+      sourceLink: "Открыть документ «Порядок помощи» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -762,6 +827,7 @@ export const DICT: Record<Lang, Dict> = {
       formTitle: "Заявка",
       priorityLabel: "Какая это беда",
       priorityHint: "Выберите, к чему ближе всего ваша ситуация. От этого зависит, насколько срочно её рассмотрят.",
+      priorityExplain: "Как фонд решает, кому помочь раньше →",
       priorityChoose: "— выберите —",
       priorityLabels: {
         life_threat: "1 · Угроза жизни",
@@ -1048,6 +1114,7 @@ export const DICT: Record<Lang, Dict> = {
     navAbout: "About",
     navGlossary: "Glossary",
     navMyData: "My data",
+    navPriorities: "Order of help",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -1380,6 +1447,46 @@ export const DICT: Record<Lang, Dict> = {
         },
       ],
     },
+    priorities: {
+      back: "← Home",
+      title: "Who the fund helps first: the order of help",
+      lead: "This is the honest answer to a simple question: if the shared treasury holds less than the requests for help, whose hardship is covered first. The order depends only on how severe the need is, not on who the person is.",
+      keyTitle: "The main idea — in plain words",
+      key: [
+        "First — saving life and a roof over one's head. Then treatment and food. These are the basics a person cannot survive without.",
+        "Help follows the severity of the hardship, not who the person is. Background, reputation and participant status do not affect the queue — only the need itself.",
+        "The queue is about how fast a case is reviewed, not about easing the checks. An urgent case is reviewed first, but money still goes out in parts, with limits, and every payout is checked by several independent people.",
+        "When hardships are equally severe, we share fairly and openly. The rule for who goes first is published in advance and the same for everyone.",
+        "Long-term benefit for everyone is at the very end of the list, but not thrown out. First we save people, then we invest in the shared future.",
+      ],
+      orderTitle: "The order of help — from most urgent to less urgent",
+      orderHint: "The higher on the list, the sooner a request is taken into work when there isn't enough money for everyone.",
+      meanings: {
+        life_threat: "the person faces death right now",
+        housing_loss: "keeping a person off the street, urgent housing",
+        medical: "treatment, medicine, urgent medical care",
+        food: "groceries, hot meals",
+        children: "help for children and families with children",
+        elderly: "care, support and basic needs of older people",
+        disability: "support for people with disabilities",
+        self_reliance: "work, tools, getting out of a crisis on one's own",
+        education: "retraining, a new profession, digital literacy",
+        public_good: "open source, science, ecology, shared infrastructure",
+      },
+      howTitle: "How it works in practice",
+      how: [
+        "When money is short, those whose hardship is more severe go first: the higher on the list, the sooner the request is taken into work.",
+        "The queue never switches off fraud protection: money in parts, limits on large amounts, collective review — always.",
+        "The queue depends only on the hardship, not on the person: reputation and status don't move anyone up or down.",
+        "Equally severe cases are served by a fair and open rule (for example, who applied earlier).",
+      ],
+      fairTitle: "Urgency does not cancel the checks",
+      fairNote: "High priority speeds up the review but does not open a “green corridor” without checks. All the fund's usual safeguards — staged payouts, limits, independent review — apply at all times.",
+      applyLink: "Need help? Go to the calm, anonymous request →",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund's normative document “The order in which the fund helps”. The order follows from the constitution (article 5, “fair distribution”) and is the same for everyone.",
+      sourceLink: "Open the “Order of help” document →",
+    },
     notFound: {
       code: "Page not found",
       title: "There's no such page here",
@@ -1482,6 +1589,7 @@ export const DICT: Record<Lang, Dict> = {
       formTitle: "Application",
       priorityLabel: "What kind of need is this",
       priorityHint: "Choose what your situation is closest to. This sets how urgently it is reviewed.",
+      priorityExplain: "How the fund decides who gets help first →",
       priorityChoose: "— choose —",
       priorityLabels: {
         life_threat: "1 · Threat to life",
