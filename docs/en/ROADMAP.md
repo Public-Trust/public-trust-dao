@@ -448,11 +448,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   red if it does not run `test_run_all.py` as a separate step. `test_structure_guard.py`
   50/50, guard green 7/7, `PTD-0061`. Completed coverage-bypass protection all the way up
   (lists → CI call → trigger firing → running the reduction's own test invariant).
-- [ ] **Structure-guard: workflow checked for CI-step completeness** — generalize
+- [x] **Structure-guard: workflow checked for CI-step completeness** — generalize
   `ci-calls-run-all`/`ci-runs-test-run-all`: instead of one check per command, keep a
   single list of "required workflow commands" in the guard and turn red if any is missing
   — so a newly required CI step cannot be forgotten, without multiplying near-identical
   checks (proposed in session 64).
+  → Done (session 65) via the `ci-has-required-steps` check of
+  [`structure_guard.py`](../../ai-agents/structure_guard.py): a single declarative list
+  `REQUIRED_WORKFLOW_COMMANDS` (currently `run_all.py --with-tests` and `test_run_all.py`),
+  red if any command is missing; the two former twin checks were removed, check count 7→6.
+  `test_structure_guard.py` 49/49, guard green 6/6, `PTD-0062`.
+- [ ] **Structure-guard: a dedicated workflow step per required CI command** — follow-up
+  to `ci-has-required-steps`: check not just that a command appears anywhere in the file,
+  but that it has its own `- run:` step (not hidden in a comment or sharing a line) — so
+  one required command's failure cannot mask another (proposed in session 65).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -545,6 +554,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0062 (session 65):** P3 (Stage 6 quality) — **structure-guard: `ci-has-required-steps`
+  check (single list of required CI commands).** Generalized the two former twin checks
+  `ci-calls-run-all` (PTD-0057) and `ci-runs-test-run-all` (PTD-0061) into one driven by a
+  declarative list `REQUIRED_WORKFLOW_COMMANDS` (key, regex, "why"): the guard turns red if
+  the workflow drops any required command (currently `run_all.py --with-tests` and
+  `test_run_all.py`). A newly required CI step is now one line in the list, with no
+  near-identical check code multiplied. Guard check count 7→6 (consolidation).
+  `test_structure_guard.py` 49/49 (scenarios migrated; added that a violation names exactly
+  the missing command), guard 6/6, run_all 8/8 + tests 11/11, IPFS verify=OK (19),
+  registry 63. Agent README (RU/EN): table row replaced, counter 50/50 → 49/49.
 - **PTD-0061 (session 64):** P3 (Stage 6 quality) — **structure-guard: seventh
   `ci-runs-test-run-all` check.** The CI workflow must run the meta-agent's own test
   invariant `test_run_all.py` as a separate step, not only `run_all.py --with-tests`:

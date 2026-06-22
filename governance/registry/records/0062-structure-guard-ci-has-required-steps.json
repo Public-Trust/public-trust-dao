@@ -1,0 +1,37 @@
+{
+  "seq": 62,
+  "id": "PTD-0062",
+  "type": "decision",
+  "timestamp": "2026-06-22T12:45:07Z",
+  "actor": "builder-agent",
+  "summary": "Страж структуры: проверка ci-has-required-steps — единый список обязательных команд воркфлоу (REQUIRED_WORKFLOW_COMMANDS) вместо двух близнецов ci-calls-run-all и ci-runs-test-run-all; новый обязательный шаг CI = одна строка списка, без размножения проверок (7→6)",
+  "refs": [
+    "ai-agents/structure_guard.py",
+    "ai-agents/test_structure_guard.py",
+    "ai-agents/README.md"
+  ],
+  "payload": {
+    "decision": "Страж структуры (structure_guard.py) обобщил две прежние точечные проверки CI — ci-calls-run-all (PTD-0057) и ci-runs-test-run-all (PTD-0061) — в одну проверку ci-has-required-steps, основанную на едином списке обязательных команд воркфлоу REQUIRED_WORKFLOW_COMMANDS. Вместо отдельной функции на каждую команду страж держит список (ключ, regex, человеческое «зачем») и краснеет при пропаже любой команды в .github/workflows/ai-agents.yml. Сейчас в списке две команды: run_all.py --with-tests (прогон всех агентов и их тест-инвариантов; без --with-tests или в обход они не прогонятся) и test_run_all.py (собственный тест-инвариант мета-агента, доказывает исправность сведения красное→красное). Так новый обязательный шаг CI нельзя забыть — достаточно дописать строку в список, не размножая почти одинаковый код проверок. Число проверок стража 7→6 (консолидация). Проверка trigger-paths-include-agents сохранена отдельной (она о срабатывании триггера, не о наборе команд).",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9). Контрактная часть Этапа 5 и верхний P3 (PersonhoodVerifier) недоступны: диск хоста заполнен (~0,9 ГБ свободно, df 100%), contracts/node_modules отсутствует, hardhat/npm не прогнать. Взят верхний доступный pure-Python пункт ROADMAP «Страж структуры: воркфлоу проверяется на полноту шагов CI» (предложен сессией 64). Прямое продолжение и упрощение цепочки защиты покрытия от обхода: списки AGENTS/TESTS (run-all-covers-all) → команды воркфлоу (теперь единый ci-has-required-steps вместо двух близнецов) → срабатывание триггера (trigger-paths-include-agents). Служит ст. 3 (открытость/проверяемость): полнота обязательных шагов CI стережётся декларативным списком, расширяемым без размножения проверок.",
+    "deliverables": [
+      "ai-agents/structure_guard.py — удалены check_ci_calls_run_all и check_ci_runs_test_run_all; добавлены список REQUIRED_WORKFLOW_COMMANDS и проверка check_ci_has_required_steps (читает воркфлоу, краснеет при пропаже любой команды списка; отсутствие воркфлоу = нарушение); CHECKS: две записи заменены одной (ключ ci-has-required-steps); докстринг переписан (пункты 4 и 6 слиты в новый пункт 5, триггер-пункт стал #4)",
+      "ai-agents/test_structure_guard.py — сценарии ci-calls-run-all/ci-runs-test-run-all мигрированы на ci-has-required-steps; добавлены проверки, что нарушение названо ровно пропавшей командой (test_run_all.py в нарушениях, run_all.py --with-tests — нет) и что REQUIRED_WORKFLOW_COMMANDS непуст; счётчики 7→6; реальный репозиторий 6/6; всего 49/49",
+      "ai-agents/README.md (+EN README.en.md) — строка таблицы ci-has-required-steps вместо двух прежних; обновлён абзац тест-инварианта (50/50 → 49/49) и список отравленных сценариев"
+    ],
+    "rails": [
+      "Только код стража/тест/доки; средства/ключи/контракты не затронуты",
+      "Read-only служебный модуль (ст. 9): находка = сигнал сообществу, ничего не правит",
+      "Двуязычность RU↔EN: README обновлён в обе стороны в одном коммите",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) и сам воркфлоу не тронуты"
+    ],
+    "status": "adopted",
+    "spec": "ai-agents/structure_guard.py",
+    "verification": "structure_guard на реальном репо: ЗЕЛЁНО 6/6 (включая ci-has-required-steps — реальный воркфлоу содержит обе обязательные команды); test_structure_guard.py 49/49; run_all --with-tests: агенты 8/8, тесты 11/11; test_run_all.py 13/13",
+    "advances_roadmap": [
+      "Страж структуры: воркфлоу проверяется на полноту шагов CI"
+    ]
+  },
+  "prev_hash": "1664ee951744c1f9dd32b6c5db665a1837fa16663ab760d24459c7d0dd5a8ec4",
+  "hash": "24318ed85f7eabd2023638f20c9e93057e1ff016663def95225c5130edcd00a6"
+}
