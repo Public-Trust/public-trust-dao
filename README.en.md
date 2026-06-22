@@ -35,6 +35,8 @@ No one owns the project. The founder is an ordinary participant. The project bel
     tamper-resistant registry of decisions (append-only hash-chain).
   - [`governance/safe/`](governance/safe/) — Safe multisig 3-of-5 test-treasury
     blueprint (testnet, no real money/keys) + a rail validator.
+  - [`governance/snapshot/`](governance/snapshot/) — off-chain Snapshot voting
+    blueprint (one person = one vote, not plutocracy) + a rail validator.
 - `ai-agents/` — AI modules serving the mission (they hold no funds and have no power).
 
 ## Principles

@@ -35,6 +35,8 @@ Public Trust DAO обеспечивает людям базовую безопа
     защищённый от подмены реестр решений (append-only hash-chain).
   - [`governance/safe/`](governance/safe/) — макет тестовой казны Safe multisig
     3-из-5 (testnet, без реальных денег/ключей) + валидатор рельс.
+  - [`governance/snapshot/`](governance/snapshot/) — макет off-chain голосования
+    Snapshot (1 человек = 1 голос, не плутократия) + валидатор рельс.
 - `ai-agents/` — AI-модули, служащие миссии (не владеют средствами, не имеют власти).
 
 ## Принципы

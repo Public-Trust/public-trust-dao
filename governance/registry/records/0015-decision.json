@@ -1,0 +1,40 @@
+{
+  "seq": 15,
+  "id": "PTD-0015",
+  "type": "decision",
+  "timestamp": "2026-06-22T06:05:00Z",
+  "actor": "builder-agent",
+  "summary": "Этап 4 (Governance, часть 1): макет off-chain Snapshot space — governance/snapshot/ (space.json '1 человек = 1 голос' ticket value=1 + JSON-схема + README RU/EN + валидатор рельс scripts/snapshot_config.py + CI). Snapshot = палата обсуждения/сигнала, средства не двигает. status=draft (ENS/создание space — за оператором).",
+  "refs": [
+    "governance/snapshot/space.json",
+    "governance/snapshot/README.md",
+    "governance/snapshot/README.en.md",
+    "scripts/snapshot_config.py",
+    "docs/GOVERNANCE.md"
+  ],
+  "payload": {
+    "decision": "Создан макет off-chain пространства голосования Snapshot (Этап 4 — Governance, часть 1) в governance/snapshot/: машиночитаемый space.json (настройки Snapshot для вставки, стратегия «ticket» value=1 = 1 человек = 1 голос, допуск только верифицированных, типы предложений, привязка к docs/GOVERNANCE.md) + JSON-схема + двуязычный README (RU/EN) + валидатор рельс scripts/snapshot_config.py + CI .github/workflows/snapshot.yml. Snapshot — палата обсуждения/сигнала перед он-чейн исполнением; средства сам не двигает.",
+    "rationale": "Off-chain голосование даёт дешёвую проверяемую палату обсуждения уже на bootstrap (подпись кошелька бесплатна, результат публичен), не требуя газа и развёрнутых контрактов. Стратегия равного веса «ticket» воплощает запрет плутократии (CONSTITUTION ст. 2, запрет №5): больше денег ≠ больше голосов. Рельсы держит код, а не только текст — валидатор отклоняет mainnet, стратегии по балансу токена, незащищённое от Сивиллы голосование и любые приватные ключи/секреты в репо.",
+    "deliverables": [
+      "governance/snapshot/space.json: настройки Snapshot (ticket value=1, onlyMembers+validation, типы предложений, lifecycle, анти-Сивилла), status=draft-awaiting-operator",
+      "governance/snapshot/schema/snapshot-space.schema.json: JSON-схема конфига",
+      "governance/snapshot/README.md (+ EN README.en.md): что это/чего НЕ, параметры, типы предложений, анти-Сивилла, инструкция оператору «до кнопки», проверка валидатором, связь с планом",
+      "scripts/snapshot_config.py verify: валидатор рельс без зависимостей",
+      ".github/workflows/snapshot.yml: CI verify на push/PR"
+    ],
+    "rails": [
+      "off-chain голос — сигнал, средства Snapshot не двигает (off_chain_signaling=true)",
+      "только testnet (chain_id из allow-list, отказ на mainnet)",
+      "1 человек = 1 голос: только равновесные стратегии (ticket value=1), плутократия по балансу токена отклоняется",
+      "голосование закрыто для не-верифицированных (анти-Сивилла), уникальность ≠ власть",
+      "нет приватных ключей/сид-фраз/секретов в репо (валидатор ловит 64-hex и слова private key/mnemonic/seed)",
+      "ENS-домен и создание space на snapshot.org — за оператором (заготовка «до кнопки»)",
+      "двуязычность RU↔EN в одном коммите"
+    ],
+    "status": "adopted",
+    "spec": "docs/GOVERNANCE.md",
+    "roadmap_item": "Этап 4 — Governance, часть 1 (макет Snapshot space)"
+  },
+  "prev_hash": "0570e9ed5d8f5d1405f7889c76588d04024348b400ed90bea8c53fa0779fe00f",
+  "hash": "904944dce84ee700ba2a2d3e1542ff30b1bfb2c75c1ffe159deeab480236dc70"
+}

@@ -1,0 +1,129 @@
+{
+  "schema": "governance/snapshot/schema/snapshot-space.schema.json",
+  "name": "Public Trust DAO — Off-chain Governance (Snapshot)",
+  "purpose": "Макет off-chain пространства голосования (Snapshot) для Этапа 4 — governance. Реализует «1 человек = 1 голос» (не плутократия) как дешёвый сигнал/обсуждение ПЕРЕД он-чейн исполнением. Snapshot не двигает средства сам (gasless подписи) — это палата обсуждения; исполнение — через Safe/Timelock после прошедшего голосования. См. docs/GOVERNANCE.md §4.",
+  "status": "draft-awaiting-operator",
+  "off_chain_signaling": true,
+  "space": {
+    "ens": null,
+    "id": null,
+    "controller": null,
+    "url": null,
+    "note": "Snapshot-пространство контролируется ENS-доменом и кошельком-контроллером. ens/id/controller/url заполняет оператор после создания пространства (см. README §5). До этого — черновик."
+  },
+  "network": {
+    "name": "Polygon Amoy testnet",
+    "chain_id": "80002",
+    "is_testnet": true,
+    "note": "Сеть нужна Snapshot только как точка отсчёта (snapshot block) для стратегий. Голосование off-chain (подпись, без газа), средства не двигаются. Совпадает с governance/safe (testnet). Реальная сеть/исполнение — отдельный шаг после аудита (CONSTITUTION ст. 4.4)."
+  },
+  "settings": {
+    "name": "Public Trust DAO",
+    "about": "Прозрачный фонд общественного доверия. Голос каждого верифицированного человека — один (1 человек = 1 голос), власть и деньги не покупаются. Это общественное благо, НЕ инвестиция и НЕ пирамида.",
+    "network": "80002",
+    "symbol": "VOICE",
+    "admins": [],
+    "moderators": [],
+    "members": [],
+    "strategies": [
+      {
+        "name": "ticket",
+        "network": "80002",
+        "params": {
+          "symbol": "VOICE",
+          "value": 1
+        }
+      }
+    ],
+    "filters": {
+      "onlyMembers": true,
+      "minScore": 1
+    },
+    "validation": {
+      "name": "basic",
+      "params": {
+        "minScore": 1,
+        "strategies": [
+          {
+            "name": "ticket",
+            "network": "80002",
+            "params": { "symbol": "VOICE", "value": 1 }
+          }
+        ]
+      }
+    },
+    "voteValidation": {
+      "name": "basic",
+      "params": {}
+    },
+    "voting": {
+      "delay": 86400,
+      "period": 432000,
+      "quorum": 0,
+      "type": "single-choice",
+      "hideAbout": false,
+      "privacy": ""
+    },
+    "plugins": {}
+  },
+  "one_person_one_vote": {
+    "principle": "Право голоса даёт верифицированная уникальность человека, а не количество токенов/денег (docs/GOVERNANCE.md §2, CONSTITUTION ст. 2, запрет №5).",
+    "how_on_snapshot": "Стратегия голосования = «ticket» с value=1: каждый допущенный адрес получает ровно 1 голос, независимо от баланса. Допуск к голосованию — только верифицированные уникальные участники (soulbound-бейдж/whitelist), через filters.onlyMembers + validation. Так не возникает плутократия: больше денег ≠ больше влияния.",
+    "not_plutocracy": "Запрещены стратегии, взвешивающие голос по балансу токена/монеты (erc20-balance-of, erc721 с весом, делегирование баланса и т.п.) — это превратило бы фонд во «власть денег» (противоречит ст. 2). Валидатор рельс это блокирует.",
+    "not_for_sale": "Право голоса непередаваемо (soulbound) и не торгуется; вес голоса = 1 и не покупается внесением средств."
+  },
+  "proposal_types": [
+    {
+      "key": "signal",
+      "title": "Сигнал/обсуждение",
+      "desc": "Необязывающий опрос настроения сообщества перед он-чейн внесением. Большинство решений начинается здесь.",
+      "binding": false
+    },
+    {
+      "key": "disbursement-direction",
+      "title": "Направление помощи / приоритеты",
+      "desc": "Голосование о направлениях и приоритетах распределения помощи строго в рамках docs/PRIORITIES.md (агент/Safe не решают это сами).",
+      "binding": false,
+      "links": ["docs/PRIORITIES.md", "docs/ANTI-ABUSE.md"]
+    },
+    {
+      "key": "parameter-change",
+      "title": "Изменение параметров управления",
+      "desc": "Кворум, сроки, лимиты, параметры анти-Сивиллы, полномочия мультисига — меняются только голосованием и публично (docs/GOVERNANCE.md §5–6).",
+      "binding": false
+    },
+    {
+      "key": "constitution-amendment",
+      "title": "Поправка к конституции",
+      "desc": "Предложение поправки по ст. 10: повышенный кворум и супербольшинство; неизменяемое ядро (ст. 1, 2, 3, п. 6.2) не затрагивается. Off-chain голос — это сигнал; ратификация — по процедуре ст. 10.",
+      "binding": false,
+      "requires_supermajority": true,
+      "links": ["docs/CONSTITUTION.md"]
+    },
+    {
+      "key": "phase-transition",
+      "title": "Переход фазы децентрализации",
+      "desc": "Решение о переходе A→B→C→D (docs/GOVERNANCE.md §6) — сам предмет голосования сообщества.",
+      "binding": false
+    }
+  ],
+  "lifecycle": "ЧЕРНОВИК → ОБСУЖДЕНИЕ (Snapshot) → [он-чейн] ВНЕСЕНО в Governor → ГОЛОСОВАНИЕ (кворум+срок) → ПРИНЯТО/ОТКЛОНЕНО → TIMELOCK (окно аудита/апелляции) → ИСПОЛНЕНО казной → ЗАПИСЬ в публичный реестр. Snapshot покрывает шаг ОБСУЖДЕНИЕ/сигнал (docs/GOVERNANCE.md §7).",
+  "anti_sybil": {
+    "principle": "Уникальность ≠ власть (docs/GOVERNANCE.md §3). Допуск к голосованию подтверждает «это уникальный живой человек», но не даёт власти над казной — распоряжение решает голосование.",
+    "layers": [
+      "proof-of-personhood (децентрализованный, предпочтительно)",
+      "социальное поручительство (web-of-trust, с лимитами)",
+      "ревью-комиссия уникальности (временная, bootstrap; не подписывает выплаты)"
+    ],
+    "privacy": "Публичен факт «адрес X — верифицированный уникальный участник», не личность (псевдонимность, как в реестре и ANTI-ABUSE.md)."
+  },
+  "links": {
+    "governance_spec": "docs/GOVERNANCE.md",
+    "constitution": "docs/CONSTITUTION.md",
+    "priorities": "docs/PRIORITIES.md",
+    "anti_abuse": "docs/ANTI-ABUSE.md",
+    "safe_multisig": "governance/safe/README.md",
+    "registry": "governance/registry/",
+    "readme": "governance/snapshot/README.md"
+  }
+}

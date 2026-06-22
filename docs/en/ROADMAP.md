@@ -71,11 +71,13 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   executor/emergency, the decentralization path, Sybil resistance without power
   concentration, constitutional amendments as a proposal. → Done (session 10),
   [`GOVERNANCE.md`](GOVERNANCE.md), `PTD-0007`. The base spec for parts 1–2.
-- [ ] **Stage 4 — Governance, part 1:** Snapshot space mock-up (off-chain) in
+- [x] **Stage 4 — Governance, part 1:** Snapshot space mock-up (off-chain) in
   `governance/snapshot/` — `space.json`/README per [`GOVERNANCE.md`](GOVERNANCE.md):
   "1 human = 1 vote" strategy (not plutocracy), quorum, proposal types, link to the
   constitution (distribution priority, appeals).
-  Actually creating the space (ENS/domain/controller wallet) — operator request.
+  → Done (session 18), [`governance/snapshot/`](../../governance/snapshot/),
+  `PTD-0015` (config + JSON schema + README RU/EN + rail validator
+  `scripts/snapshot_config.py` + CI). Creating the space (ENS/controller) — operator request.
 - [x] **Stage 4 — Governance, part 2:** Safe multisig mock-up, 5 guardians (3-of-5)
   in `governance/safe/` — scheme, roles (executor/emergency pause per
   [`GOVERNANCE.md`](GOVERNANCE.md)), signing policy, no real addresses.
@@ -136,11 +138,24 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   brief usage rules — so materials look consistent.
 - [ ] Press page / one-pager "about the project for press and partners" (RU/EN)
   based on the boilerplate in `PROMOTION.md` — facts, links, contacts, quotable text.
+- [ ] Snapshot proposal templates (RU/EN) for each `proposal_type` in
+  `governance/snapshot/space.json` — a single format (context / what is proposed /
+  link to the constitution / vote options) so proposals are comparable and verifiable.
+- [ ] One governance validator in CI: a single script runs `registry.py verify`
+  + `ipfs_manifest.py verify` + `safe_config.py verify` + `snapshot_config.py verify`
+  in one command (a convenient green/red for the whole governance layer).
 
 ---
 
 ## Done
 
+- **PTD-0015 (session 18):** off-chain voting mock-up
+  [`governance/snapshot/`](../../governance/snapshot/) — `space.json` (Snapshot
+  settings: `ticket` value=1 strategy = "1 person = 1 vote", admission for verified
+  participants only, proposal types, link to GOVERNANCE/PRIORITIES/CONSTITUTION) +
+  JSON schema + README (RU/EN) + rail validator `scripts/snapshot_config.py` (testnet
+  only, no token-balance plutocracy, anti-Sybil, no private keys) + CI. Snapshot =
+  discussion/signal chamber, does not move funds. Closes Stage 4 part 1.
 - **PTD-0014 (session 17):** support model [`SUPPORT-MODEL.md`](SUPPORT-MODEL.md)
   (+EN) — support comes from the working system itself (transparent multisig
   treasury 3-of-5 + contracts, every flow in the registry and on-chain, spending by
@@ -180,3 +195,4 @@ To keep self-development transparent, we record the origin of ideas.
 | CONTRIBUTING / glossary / transparency page / CI bilingual | agent | 8 |
 | Treasury dashboard / request templates / changelog / reputation | agent | 8 |
 | Landing page in web / media kit / press page | agent | 9 |
+| Snapshot proposal templates / one governance validator in CI | agent | 18 |

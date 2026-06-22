@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 15,
-  "head_hash": "0570e9ed5d8f5d1405f7889c76588d04024348b400ed90bea8c53fa0779fe00f",
+  "count": 16,
+  "head_hash": "904944dce84ee700ba2a2d3e1542ff30b1bfb2c75c1ffe159deeab480236dc70",
   "entries": [
     {
       "seq": 0,
@@ -138,6 +138,15 @@
       "summary": "Модель приёма поддержки/донатов (INBOX): поддержка через саму работающую систему (прозрачная казна-мультисиг 3-из-5 + контракты, видна в реестре), без отдельной кнопки «Поддержать»; адрес для реальных денег — только после запуска и аудита. Создан docs/SUPPORT-MODEL.md (+EN), честное объяснение на сайте.",
       "hash": "0570e9ed5d8f5d1405f7889c76588d04024348b400ed90bea8c53fa0779fe00f",
       "file": "records/0014-support-model.json"
+    },
+    {
+      "seq": 15,
+      "id": "PTD-0015",
+      "type": "decision",
+      "timestamp": "2026-06-22T06:05:00Z",
+      "summary": "Этап 4 (Governance, часть 1): макет off-chain Snapshot space — governance/snapshot/ (space.json '1 человек = 1 голос' ticket value=1 + JSON-схема + README RU/EN + валидатор рельс scripts/snapshot_config.py + CI). Snapshot = палата обсуждения/сигнала, средства не двигает. status=draft (ENS/создание space — за оператором).",
+      "hash": "904944dce84ee700ba2a2d3e1542ff30b1bfb2c75c1ffe159deeab480236dc70",
+      "file": "records/0015-decision.json"
     }
   ]
 }

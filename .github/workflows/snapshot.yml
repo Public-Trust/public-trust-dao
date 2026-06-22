@@ -1,0 +1,31 @@
+name: Проверка конфига Snapshot space
+
+# Рельсы безопасности: на каждый push/PR проверяем конфиг off-chain пространства
+# голосования — только testnet (без mainnet), «1 человек = 1 голос» (без
+# плутократических стратегий), ограничение для верифицированных участников и
+# ОТСУТСТВИЕ приватных ключей/секретов в репозитории. Нарушение рельс валит сборку.
+on:
+  push:
+    paths:
+      - "governance/snapshot/**"
+      - "scripts/snapshot_config.py"
+      - ".github/workflows/snapshot.yml"
+  pull_request:
+    paths:
+      - "governance/snapshot/**"
+      - "scripts/snapshot_config.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Проверить конфиг Snapshot (verify)
+        run: python3 scripts/snapshot_config.py verify
