@@ -7,3 +7,6 @@
 *_private*
 wallet*.json
 keystore/
+
+# логи/состояние пульса
+logs/
