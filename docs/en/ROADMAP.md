@@ -745,9 +745,14 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   mirror should change IN THE SAME commit (git diff: if only one of the pair is touched
   in a commit/diff — a soft warning). Closes "bilinguality is in sync", not just "both
   files exist" (session 29).
-- [ ] Documentation agent: link-anchor check (`FILE.md#section`) — that `#section`
+- [x] Documentation agent: link-anchor check (`FILE.md#section`) — that `#section`
   matches a real heading in the target file, so internal links don't rot when sections
-  are renamed (session 29).
+  are renamed (session 29). **Done (session 97):** added a soft `anchor-integrity`
+  check — the anchor is built by GitHub's rule (lowercase, punctuation stripped,
+  spaces→hyphens, Cyrillic preserved, duplicates→`-1`/`-2`, explicit HTML `name`/`id`
+  anchors honoured); validates both same-file `#section` and cross-file
+  `FILE.md#section`; a broken FILE is left to the blocking `link-integrity`. Test
+  invariant grown 14→18 scenarios (38/38), green/0 warnings on the real repo. `PTD-0094`.
 - [ ] A lexical linter of constitutional prohibitions for public texts
   (README/web/PROMOTION): no "guaranteed returns"/"investment"/"pyramid"/"referrals"
   (the literal prohibitions of `PRINCIPLES.md`) — could become part of Documentation or
@@ -809,6 +814,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   pointer to `GLOSSARY.md` with a group name matching a real heading in the glossary;
   warns (does not block), so the navigation link does not lag behind new docs (proposed
   session 59; akin to the "jargon next to its explanation" idea).
+
+- [ ] **Documentation agent: suggest the nearest heading on a broken anchor** — an
+  extension of `anchor-integrity` (`PTD-0094`): when an anchor is not found, don't just
+  warn but suggest the most similar existing slug in the target file (Levenshtein /
+  longest common substring), so a human immediately sees what the section was renamed
+  to. Stays a soft hint, not a block (proposed session 97).
 
 ---
 

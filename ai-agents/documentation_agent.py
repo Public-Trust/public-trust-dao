@@ -21,6 +21,9 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • bilingual-pairs   → у каждого публичного дока есть пара RU↔EN ........... ст. 6
   • language-switcher → вверху дока корректный переключатель [RU]·[EN] ...... ст. 6
   • link-integrity    → все относительные ссылки в .md ведут к чему-то ...... ст. 3
+  • anchor-integrity  → якорь ссылки FILE.md#section ведёт к реальному ....... ст. 3
+    заголовку (МЯГКАЯ: предупреждает, не роняет вердикт — расчёт слага имеет
+    краевые случаи; ловит «гниль» якорей при переименовании разделов)
   • glossary-coverage → ключевые термины проекта описаны в глоссарии ........ ст. 3/6
     (МЯГКАЯ проверка: только предупреждает, не роняет вердикт — чтобы глоссарий
      не отставал от документов; PTD-0040)
@@ -226,6 +229,63 @@ def resolve_link(root, src_rel, target):
     return os.path.exists(full), joined
 
 
+# --- Якоря заголовков (для проверки ссылок вида FILE.md#section) ---
+# Заголовок markdown: 1..6 решёток, текст, опц. закрывающие решётки (ATX-closed).
+HEADING_RE = re.compile(r"^ {0,3}(#{1,6})\s+(.+?)\s*#*\s*$", re.MULTILINE)
+# HTML-якоря в теле дока: <a name="..."> / <a id="..."> — тоже валидные цели.
+HTML_ANCHOR_RE = re.compile(r'<a\b[^>]*?\b(?:name|id)\s*=\s*"([^"]+)"', re.IGNORECASE)
+# Пунктуация, которую GitHub-slugger ВЫРЕЗАЕТ из заголовка при построении якоря.
+# Дефис и подчёркивание он СОХРАНЯЕТ; буквы (в т.ч. кириллица) и цифры остаются.
+SLUG_DROP = set("'\"!#$%&()*+,./:;<=>?@[\\]^`{|}~")
+
+
+def clean_heading_md(text):
+    """Снимает markdown-разметку с текста заголовка перед построением якоря."""
+    text = re.sub(r"`([^`]*)`", r"\1", text)             # инлайн-код
+    text = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", text)  # ссылка [t](u) → t
+    text = re.sub(r"\[([^\]]*)\]\[[^\]]*\]", r"\1", text)  # ссылка-ссылка [t][r] → t
+    text = text.replace("**", "").replace("__", "")        # жирный
+    return text
+
+
+def slugify_heading(text):
+    """Якорь заголовка по правилу GitHub: нижний регистр, без пунктуации,
+    пробелы → дефисы. Кириллица сохраняется (как и на github.com)."""
+    s = clean_heading_md(text)
+    s = re.sub(r"<[^>]+>", "", s)            # снять остаточные html-теги
+    s = s.strip().lower()
+    s = "".join(ch for ch in s if ch not in SLUG_DROP)
+    s = re.sub(r"\s+", "-", s)
+    return s
+
+
+def extract_anchors(text):
+    """Множество якорей, доступных в доке: слаги заголовков (с учётом повторов,
+    как у GitHub: второй одинаковый → `-1`, третий → `-2`) + явные HTML-якоря."""
+    cleaned = FENCE_RE.sub("", text)
+    anchors = set()
+    seen = {}
+    for m in HEADING_RE.finditer(cleaned):
+        base = slugify_heading(m.group(2))
+        if not base:
+            continue
+        n = seen.get(base, 0)
+        anchors.add(base if n == 0 else f"{base}-{n}")
+        seen[base] = n + 1
+    for name in HTML_ANCHOR_RE.findall(cleaned):
+        anchors.add(name.strip().lower())
+    return anchors
+
+
+def split_anchor(target):
+    """Делит цель ссылки на (путь, якорь|None). Query (?...) отбрасываем."""
+    no_q = target.split("?", 1)[0]
+    if "#" in no_q:
+        path, anchor = no_q.split("#", 1)
+        return path, anchor
+    return no_q, None
+
+
 # ---- Проверки. Каждая возвращает (status, violations[list]). ----
 
 def check_bilingual_pairs(root, public_docs, existing):
@@ -285,6 +345,54 @@ def check_link_integrity(root, all_docs):
                     "problem": f"битая относительная ссылка → {target!r} (→ {resolved})",
                 })
     return ("pass" if not violations else "fail"), violations
+
+
+def check_anchor_integrity(root, all_docs, existing):
+    """МЯГКАЯ проверка: ссылка вида FILE.md#section (или #section внутри того же
+    файла) указывает на реально существующий заголовок целевого .md.
+
+    Зачем: при переименовании раздела внутренние ссылки молча «гниют» — файл на
+    месте (link-integrity зелёный), а якорь уже не ведёт никуда. Проверяем только
+    .md-цели, существующие и git-отслеживаемые; если файла нет — это уже ловит
+    блокирующая link-integrity, здесь молчим. Якорь строим по правилу GitHub.
+    Проверка МЯГКАЯ (warn): расчёт слага имеет краевые случаи, поэтому она лишь
+    предупреждает, а не роняет вердикт и пульс (ст. 3 — проверяемость).
+    """
+    anchors_cache = {}
+
+    def anchors_for(rel):
+        if rel not in anchors_cache:
+            anchors_cache[rel] = extract_anchors(read_text(root, rel))
+        return anchors_cache[rel]
+
+    violations = []
+    for doc in all_docs:
+        text = read_text(root, doc)
+        for target in extract_links(text):
+            # Внешние цели пропускаем; но чистый «#anchor» (своя страница) НЕ внешний.
+            if target.startswith(("http://", "https://", "mailto:", "//", "<")):
+                continue
+            path, anchor = split_anchor(target)
+            if not anchor:
+                continue
+            if not path:
+                tgt_rel = doc  # якорь внутри того же файла
+            else:
+                ok, resolved = resolve_link(root, doc, path)
+                if not ok or resolved is None:
+                    continue  # битый файл — забота блокирующей link-integrity
+                tgt_rel = resolved
+            # Проверяем якоря только в существующих git-отслеживаемых .md.
+            if not tgt_rel.endswith(".md") or tgt_rel not in existing:
+                continue
+            if anchor.strip().lower() not in anchors_for(tgt_rel):
+                where = "в этом же файле" if tgt_rel == doc else f"в {tgt_rel}"
+                violations.append({
+                    "record": doc,
+                    "problem": (f"якорь ссылки не найден как заголовок: → {target!r} "
+                                f"(нет раздела «#{anchor}» {where})"),
+                })
+    return ("pass" if not violations else "warn"), violations
 
 
 def glossary_headings_blob(text):
@@ -438,6 +546,13 @@ CHECKS = [
         "fn": "links",
     },
     {
+        "key": "anchor-integrity",
+        "title": "Якоря ссылок FILE.md#section ведут к реальным заголовкам",
+        "guards": "ст. 3 — проверяемость; внутренние ссылки не гниют при переименовании разделов; МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "anchors",
+        "soft": True,
+    },
+    {
         "key": "glossary-coverage",
         "title": "Ключевые технические термины описаны в глоссарии (RU+EN)",
         "guards": "ст. 3/6 — понятность/объяснимость (PTD-0040); МЯГКАЯ — предупреждает, не блокирует",
@@ -464,6 +579,7 @@ def run(root):
     pairs_status, pairs_v = check_bilingual_pairs(root, public_docs, existing)
     switch_status, switch_v = check_language_switcher(root, public_docs, existing)
     links_status, links_v = check_link_integrity(root, all_md)
+    anchors_status, anchors_v = check_anchor_integrity(root, all_md, existing)
     cov_status, cov_v = check_glossary_coverage(root, existing)
     # Корпус для «мёртвых статей» — публичные доки минус сами глоссарии.
     corpus_docs = [p for p in public_docs if p not in (GLOSSARY_RU, GLOSSARY_EN)]
@@ -473,6 +589,7 @@ def run(root):
         "pairs": (pairs_status, pairs_v),
         "switcher": (switch_status, switch_v),
         "links": (links_status, links_v),
+        "anchors": (anchors_status, anchors_v),
         "coverage": (cov_status, cov_v),
         "nodead": (nodead_status, nodead_v),
     }

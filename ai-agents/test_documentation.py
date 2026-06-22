@@ -263,6 +263,98 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # 15. Мягкая проверка якорей: ссылка на несуществующий раздел того же файла
+    #     → anchor-integrity ПРЕДУПРЕЖДАЕТ, но НЕ роняет вердикт.
+    broken_anchor = replace(
+        "docs/A.md",
+        "[Русский] · [English](en/A.md)\n\n# A (RU)\n\n"
+        "См. [раздел](#нет-такого-раздела).\n",
+    )
+    print("\n[мягкая проверка: битый якорь #section предупреждает, но НЕ роняет вердикт]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, broken_anchor)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("anchor-integrity == warn для битого якоря",
+              status_of(report, "anchor-integrity") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+        check("проверка помечена soft", _is_soft(report, "anchor-integrity"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 16. Верный якорь на заголовок того же файла → anchor-integrity pass.
+    #     «# A (RU)» → слаг «a-ru» (нижний регистр, скобки вырезаны, пробел → дефис).
+    good_anchor = replace(
+        "docs/A.md",
+        "[Русский] · [English](en/A.md)\n\n# A (RU)\n\n"
+        "См. [раздел](#a-ru).\n",
+    )
+    print("\n[мягкая проверка: верный якорь #section не предупреждает]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, good_anchor)
+        code, report = run_agent(tmp)
+        check("anchor-integrity == pass для верного якоря",
+              status_of(report, "anchor-integrity") == "pass")
+        check("предупреждений нет", report.get("warnings", 0) == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 17. Кросс-файловый якорь FILE.md#section: верный ведёт к заголовку другого
+    #     файла (pass), битый — предупреждает (warn). Битый ФАЙЛ при этом не наша
+    #     забота (его ловит блокирующая link-integrity), а вот живой файл с мёртвым
+    #     якорем ловим именно здесь.
+    cross_ok = replace(
+        "README.md",
+        "[Русский] · [English](README.en.md)\n\n# Заголовок\n\n"
+        "См. [раздел A](docs/A.md#a-ru).\n",
+    )
+    print("\n[мягкая проверка: кросс-файловый якорь FILE.md#section, верный → pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, cross_ok)
+        code, report = run_agent(tmp)
+        check("anchor-integrity == pass для верного кросс-файлового якоря",
+              status_of(report, "anchor-integrity") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    cross_bad = replace(
+        "README.md",
+        "[Русский] · [English](README.en.md)\n\n# Заголовок\n\n"
+        "См. [раздел A](docs/A.md#такого-раздела-нет).\n",
+    )
+    print("\n[мягкая проверка: кросс-файловый якорь на мёртвый раздел → warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, cross_bad)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("anchor-integrity == warn для битого кросс-файлового якоря",
+              status_of(report, "anchor-integrity") == "warn")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 18. Повторяющиеся заголовки: как на GitHub, второй одинаковый слаг → «-1».
+    #     Ссылка на «#раздел-1» должна быть валидной (второй «# Раздел»).
+    dup_headings = replace(
+        "docs/A.md",
+        "[Русский] · [English](en/A.md)\n\n# Раздел\n\nтекст\n\n# Раздел\n\n"
+        "См. [второй](#раздел-1) и [первый](#раздел).\n",
+    )
+    print("\n[мягкая проверка: повторяющиеся заголовки → якорь «-1» валиден (как у GitHub)]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, dup_headings)
+        code, report = run_agent(tmp)
+        check("anchor-integrity == pass (и #раздел, и #раздел-1 существуют)",
+              status_of(report, "anchor-integrity") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 
