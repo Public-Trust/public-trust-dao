@@ -287,6 +287,37 @@ h3 {
 .screen-card--ready {
   border-color: var(--accent);
 }
+
+/* Блок объяснений (не действия) — мягко отделён от рабочих экранов:
+   тонированная панель, метка-подсказка «чтение, не действие», нейтральная
+   пунктирная рамка карточек вместо акцентной «рабочей». */
+.screens--learn {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 22px;
+  margin-top: 8px;
+}
+.screens-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.screens-head h2 {
+  margin: 0;
+}
+.badge--learn {
+  background: var(--surface);
+}
+.screens--learn .screen-grid {
+  margin-top: 16px;
+}
+.screen-card--learn {
+  background: var(--surface);
+  border-style: dashed;
+  border-color: var(--border);
+}
 .badge--ready {
   background: var(--accent);
   color: var(--accent-contrast);

@@ -57,12 +57,18 @@ export default function Home() {
         </ul>
       </section>
 
-      <section className="screens" aria-labelledby="learn-title">
-        <h2 id="learn-title">{t.learnTitle}</h2>
+      <section
+        className="screens screens--learn"
+        aria-labelledby="learn-title"
+      >
+        <div className="screens-head">
+          <h2 id="learn-title">{t.learnTitle}</h2>
+          <span className="badge badge--learn">{t.learnHint}</span>
+        </div>
         <p className="lead">{t.learnLead}</p>
         <ul className="screen-grid">
           {t.learn.map((item) => (
-            <li key={item.href} className="screen-card screen-card--ready">
+            <li key={item.href} className="screen-card screen-card--learn">
               <div className="screen-card-head">
                 <h3>{item.title}</h3>
               </div>

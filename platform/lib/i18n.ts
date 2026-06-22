@@ -550,6 +550,7 @@ export type Dict = {
   screens: { title: string; text: string; href?: string; short?: string }[];
   learnTitle: string;
   learnLead: string;
+  learnHint: string;
   learn: { title: string; text: string; href: string }[];
   transparencyTitle: string;
   transparencyText: string;
@@ -656,6 +657,7 @@ export const DICT: Record<Lang, Dict> = {
     learnTitle: "Разобраться, как устроен фонд",
     learnLead:
       "Эти экраны — не действия, а объяснения простыми словами. Каждый — зеркало нормативного документа фонда: можно понять, как всё устроено, не открывая GitHub.",
+    learnHint: "Чтение, а не действие",
     learn: [
       {
         title: "Манифест",
@@ -1973,6 +1975,7 @@ export const DICT: Record<Lang, Dict> = {
     learnTitle: "Understand how the fund works",
     learnLead:
       "These screens are not actions but plain-language explanations. Each one mirrors a normative document of the fund: you can understand how everything works without opening GitHub.",
+    learnHint: "Reading, not an action",
     learn: [
       {
         title: "Manifesto",

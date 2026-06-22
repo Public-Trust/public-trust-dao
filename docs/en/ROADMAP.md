@@ -456,12 +456,17 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   before an audit). Texts RU↔EN (`learnTitle`/`learnLead`/`learn[]` in `lib/i18n.ts`),
   reused the showcase CSS, no new dependencies. `PTD-0102`. TESTNET-ONLY. Also closes the
   general visibility of the explainer series.
-- [ ] **Visually separate the explainer block from the working-screens block on the home
+- [x] **Visually separate the explainer block from the working-screens block on the home
   page** — both home-page sections (six working screens and eleven explainer screens) now
   use the same visual device (`screen-grid`/`screen-card`), and a person might confuse a
   "working screen" with an "explanation". Give the explainer section a light distinction —
   a hint label "these are explanations, not actions" or a different background/border.
-  Pure CSS, no new dependencies (proposed in session 105).
+  Pure CSS, no new dependencies (proposed in session 105). **Done (session 106):** the
+  "Understand how the fund works" section is now a softly tinted panel (background
+  `--surface-2`, border, rounded) with a hint chip "Reading, not an action" (`learnHint`,
+  RU↔EN) by the heading, and its cards got a neutral **dashed** border instead of the green
+  accent (which on the home page means "a ready working screen"). Pure CSS + one text key,
+  no new dependencies. `PTD-0103`.
 - [ ] **Documentation agent: every platform mirror screen links to its normative doc** —
   a soft check that each explainer screen `platform/app/<slug>/` has a link to its source
   in `docs/` (the mirror has not drifted from the normative document). An extension of the
