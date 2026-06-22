@@ -84,6 +84,17 @@ def _write_workflow(repo_root, run_line="python3 ai-agents/run_all.py --with-tes
         fh.write("".join(parts))
 
 
+def _write_raw_workflow(repo_root, yaml_text):
+    """Кладёт .github/workflows/ai-agents.yml с дословным содержимым yaml_text.
+
+    Нужен для точных сценариев ci-required-cmd-own-step, где важна сама форма
+    шагов run: (две команды в одном блоке; команда лишь в комментарии)."""
+    wf_dir = os.path.join(repo_root, ".github", "workflows")
+    os.makedirs(wf_dir, exist_ok=True)
+    with open(os.path.join(wf_dir, "ai-agents.yml"), "w", encoding="utf-8") as fh:
+        fh.write(yaml_text)
+
+
 # --- Чистый каталог: всё зелёное -----------------------------------------
 # Раскладываем как настоящий репозиторий: repo/ai-agents + repo/.github/...,
 # чтобы проверка ci-has-required-steps нашла воркфлоу там, где он бывает в жизни.
@@ -99,7 +110,7 @@ with tempfile.TemporaryDirectory() as repo:
     _write_workflow(repo)
     rep = structure_guard.run(d)
     check("вердикт зелёный", rep["verdict"] == "green")
-    check("все 6 проверок прошли", rep["passed"] == rep["total"] == 6)
+    check("все 7 проверок прошли", rep["passed"] == rep["total"] == 7)
     check("агент с импортом из solidity_scan НЕ краснит sol-проверку",
           _status(rep, "sol-parsing-centralized") == "pass")
     check("run_all покрывает агента и тесты → run-all-covers-all зелёная",
@@ -108,6 +119,8 @@ with tempfile.TemporaryDirectory() as repo:
           _status(rep, "trigger-paths-include-agents") == "pass")
     check("воркфлоу содержит оба обязательных шага → ci-has-required-steps зелёная",
           _status(rep, "ci-has-required-steps") == "pass")
+    check("у каждой команды свой шаг run: → ci-required-cmd-own-step зелёная",
+          _status(rep, "ci-required-cmd-own-step") == "pass")
 
 # --- Агент не включён в AGENTS run_all: красное на run-all-covers-all -----
 print("агент в обход run_all:")
@@ -376,11 +389,104 @@ with tempfile.TemporaryDirectory() as repo:
 check("REQUIRED_WORKFLOW_COMMANDS непуст",
       len(structure_guard.REQUIRED_WORKFLOW_COMMANDS) >= 2)
 
+# --- Проверка ci-required-cmd-own-step: у каждой команды свой шаг run: -----
+# _write_workflow по умолчанию даёт каждой команде ОТДЕЛЬНЫЙ `- run:` → зелёная.
+print("у каждой обязательной команды свой шаг run::")
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_workflow(repo)  # два отдельных шага
+    rep = structure_guard.run(d)
+    check("ci-required-cmd-own-step зелёная (у каждой команды свой шаг)",
+          _status(rep, "ci-required-cmd-own-step") == "pass")
+
+# Две обязательные команды в ОДНОМ шаге run: |  → провал одной маскирует другую.
+print("две команды делят один шаг run::")
+SHARED_STEP_WF = (
+    'on:\n  push:\n    paths:\n      - "ai-agents/**"\n'
+    '  pull_request:\n    paths:\n      - "ai-agents/**"\n'
+    'jobs:\n  agents:\n    steps:\n'
+    '      - run: |\n'
+    '          python3 ai-agents/test_run_all.py\n'
+    '          python3 ai-agents/run_all.py --with-tests\n'
+)
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, SHARED_STEP_WF)
+    rep = structure_guard.run(d)
+    # Обе команды присутствуют в файле → старая проверка не видит проблемы...
+    check("ci-has-required-steps зелёная (обе команды в файле есть)",
+          _status(rep, "ci-has-required-steps") == "pass")
+    # ...а новая ловит, что они делят один шаг.
+    check("ci-required-cmd-own-step провалена (команды делят шаг run:)",
+          _status(rep, "ci-required-cmd-own-step") == "fail")
+    check("вердикт красный", rep["verdict"] == "red")
+
+# Команда есть ТОЛЬКО в комментарии → запущена не будет; старая проверка её
+# «видит» (ищет по всем строкам), новая — нет (смотрит тела шагов run:).
+print("обязательная команда лишь в комментарии:")
+COMMENT_ONLY_WF = (
+    'on:\n  push:\n    paths:\n      - "ai-agents/**"\n'
+    '  pull_request:\n    paths:\n      - "ai-agents/**"\n'
+    'jobs:\n  agents:\n    steps:\n'
+    '      # TODO: вернуть python3 ai-agents/run_all.py --with-tests\n'
+    '      - run: python3 ai-agents/test_run_all.py\n'
+)
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, COMMENT_ONLY_WF)
+    rep = structure_guard.run(d)
+    check("ci-has-required-steps зелёная (команда есть в комментарии)",
+          _status(rep, "ci-has-required-steps") == "pass")
+    check("ci-required-cmd-own-step провалена (команда не запускается шагом run:)",
+          _status(rep, "ci-required-cmd-own-step") == "fail")
+    items = [v["item"] for c in rep["checks"] if c["key"] == "ci-required-cmd-own-step"
+             for v in c["violations"]]
+    check("нарушение названо командой run_all.py --with-tests",
+          "run_all.py --with-tests" in items)
+    check("test_run_all.py НЕ среди нарушений (он в своём шаге run:)",
+          "test_run_all.py" not in items)
+
+# Блочный скаляр run: | с РАЗНЫМИ командами в разных шагах → зелёная.
+print("две команды в раздельных блоках run: | :")
+SEP_BLOCKS_WF = (
+    'on:\n  push:\n    paths:\n      - "ai-agents/**"\n'
+    '  pull_request:\n    paths:\n      - "ai-agents/**"\n'
+    'jobs:\n  agents:\n    steps:\n'
+    '      - name: тест мета-агента\n'
+    '        run: |\n'
+    '          python3 ai-agents/test_run_all.py\n'
+    '      - name: прогон всех\n'
+    '        run: |\n'
+    '          python3 ai-agents/run_all.py --with-tests\n'
+)
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, SEP_BLOCKS_WF)
+    rep = structure_guard.run(d)
+    check("ci-required-cmd-own-step зелёная (раздельные блоки run: |)",
+          _status(rep, "ci-required-cmd-own-step") == "pass")
+
 # --- Сторож-регресс: настоящий каталог ai-agents/ сейчас зелёный ----------
 print("настоящий каталог ai-agents/:")
 real = structure_guard.run()
 check("реальный репозиторий: вердикт зелёный", real["verdict"] == "green")
-check("реальный репозиторий: 6/6 проверок прошли", real["passed"] == real["total"] == 6)
+check("реальный репозиторий: 7/7 проверок прошли", real["passed"] == real["total"] == 7)
 
 # --- Итог ----------------------------------------------------------------
 print()

@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 63,
-  "head_hash": "24318ed85f7eabd2023638f20c9e93057e1ff016663def95225c5130edcd00a6",
+  "count": 64,
+  "head_hash": "1edd8748c26536a860dfa24f580ee472599b72ade94ebe5b7ea721e8e783062c",
   "entries": [
     {
       "seq": 0,
@@ -570,6 +570,15 @@
       "summary": "Страж структуры: проверка ci-has-required-steps — единый список обязательных команд воркфлоу (REQUIRED_WORKFLOW_COMMANDS) вместо двух близнецов ci-calls-run-all и ci-runs-test-run-all; новый обязательный шаг CI = одна строка списка, без размножения проверок (7→6)",
       "hash": "24318ed85f7eabd2023638f20c9e93057e1ff016663def95225c5130edcd00a6",
       "file": "records/0062-structure-guard-ci-has-required-steps.json"
+    },
+    {
+      "seq": 63,
+      "id": "PTD-0063",
+      "type": "decision",
+      "timestamp": "2026-06-22T12:55:04Z",
+      "summary": "Страж структуры: седьмая проверка ci-required-cmd-own-step — у каждой обязательной команды CI свой шаг run: (читает тела run:, ловит команду лишь в комментарии и две команды в одном шаге); развитие ci-has-required-steps, число проверок 6→7",
+      "hash": "1edd8748c26536a860dfa24f580ee472599b72ade94ebe5b7ea721e8e783062c",
+      "file": "records/0063-decision.json"
     }
   ]
 }

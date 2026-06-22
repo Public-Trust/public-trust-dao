@@ -458,10 +458,22 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   `REQUIRED_WORKFLOW_COMMANDS` (currently `run_all.py --with-tests` and `test_run_all.py`),
   red if any command is missing; the two former twin checks were removed, check count 7→6.
   `test_structure_guard.py` 49/49, guard green 6/6, `PTD-0062`.
-- [ ] **Structure-guard: a dedicated workflow step per required CI command** — follow-up
+- [x] **Structure-guard: a dedicated workflow step per required CI command** — follow-up
   to `ci-has-required-steps`: check not just that a command appears anywhere in the file,
   but that it has its own `- run:` step (not hidden in a comment or sharing a line) — so
   one required command's failure cannot mask another (proposed in session 65).
+  → Done (session 66) via the `ci-required-cmd-own-step` check of
+  [`structure_guard.py`](../../ai-agents/structure_guard.py): the `_workflow_run_steps`
+  helper reads the `run:` step bodies (inline and block), and the check requires each
+  command in `REQUIRED_WORKFLOW_COMMANDS` to run in at least one step and not share a step
+  with another. Catches a command left only in a comment (the old check still "saw" it) and
+  two commands in one `run:`. Check count 6→7. `test_structure_guard.py` 59/59, guard green
+  7/7, `PTD-0063`.
+- [ ] **Structure-guard: every `run:` step has a human-readable `name:`** — soft follow-up
+  to `ci-required-cmd-own-step`: warn (do not block) if a required CI step runs without a
+  `- name:` — so a failure reads humanly in the GitHub Actions log ("Run all agents") rather
+  than as a bare command. Builds on the existing `_workflow_run_steps`/step parser
+  (proposed in session 66).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -554,6 +566,17 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0063 (session 66):** P3 (Stage 6 quality) — **structure-guard: seventh
+  `ci-required-cmd-own-step` check (a dedicated `run:` step per required CI command).**
+  Follow-up to `ci-has-required-steps` (PTD-0062): the old check confirmed a command exists
+  *anywhere* in the file — including comments and step names, and two commands could share a
+  `run:` step. The new check reads the `run:` step bodies themselves (new `_workflow_run_steps`
+  helper parses inline and block `run:`) and requires each command in `REQUIRED_WORKFLOW_COMMANDS`
+  to (a) actually run in at least one step and (b) not share a step with another — otherwise a
+  failure of one masks the other (`&&` short-circuits; a comment never runs). Guard check count
+  6→7. `test_structure_guard.py` 49→59 (4 new scenarios incl. command-only-in-comment and
+  two-commands-one-step), guard 7/7, run_all 8/8 + tests 11/11, IPFS verify=OK (19), registry 64.
+  Agent README (RU/EN): new table row.
 - **PTD-0062 (session 65):** P3 (Stage 6 quality) — **structure-guard: `ci-has-required-steps`
   check (single list of required CI commands).** Generalized the two former twin checks
   `ci-calls-run-all` (PTD-0057) and `ci-runs-test-run-all` (PTD-0061) into one driven by a
