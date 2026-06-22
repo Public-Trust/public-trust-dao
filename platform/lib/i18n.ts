@@ -193,6 +193,26 @@ export type IdentityDict = {
   verifyLink: string;
 };
 
+export type AboutDict = {
+  back: string;
+  title: string;
+  lead: string;
+  whatTitle: string;
+  what: string[];
+  nowTitle: string;
+  nowNote: string;
+  startTitle: string;
+  start: string[];
+  honestTitle: string;
+  honest: string[];
+  faqTitle: string;
+  faq: { q: string; a: string }[];
+  linksTitle: string;
+  constitutionLink: string;
+  registryLink: string;
+  siteLink: string;
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -208,6 +228,7 @@ export type Dict = {
   ctaSite: string;
   navLabel: string;
   navHome: string;
+  navAbout: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -219,6 +240,7 @@ export type Dict = {
   footerNote: string;
   contact: string;
   builtNote: string;
+  about: AboutDict;
   wallet: WalletDict;
   apply: ApplyDict;
   journal: JournalDict;
@@ -245,6 +267,7 @@ export const DICT: Record<Lang, Dict> = {
     ctaSite: "О фонде (главный сайт)",
     navLabel: "Экраны платформы",
     navHome: "Главная",
+    navAbout: "О платформе",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -296,6 +319,65 @@ export const DICT: Record<Lang, Dict> = {
       "Public Trust DAO — общественное благо, не инвестиция. Всё на тестовой сети, без реальных денег.",
     contact: "Контакт",
     builtNote: "Платформа на Next.js · статическая сборка · открытый код",
+    about: {
+      back: "← На главную",
+      title: "О платформе",
+      lead: "Это рабочее приложение Public Trust DAO — общественного фонда доверия. Здесь коротко и простыми словами: что это, что важно знать прямо сейчас, с чего начать и как мы держим всё честным и без слежки.",
+      whatTitle: "Что это за приложение",
+      what: [
+        "Через платформу люди просят помощь, видят открытый журнал решений, голосуют наравне со всеми, проверяют состояние общей казны и подтверждают, что за участником стоит один настоящий живой человек.",
+        "Фонд помогает людям в беде по честному порядку: сначала самые срочные нужды. Деньги не выдаются на руки, а оплачивают нужду напрямую — например, аренду арендодателю, лекарство аптеке.",
+        "Это общественное благо, а не вложение денег: здесь не обещают доход, нет пирамиды и нет платы за привлечение людей.",
+      ],
+      nowTitle: "Что важно знать прямо сейчас",
+      nowNote:
+        "Платформа работает в тестовом режиме. Всё на тестовой сети, реальных денег нет. Экраны показывают примеры и собирают ваши заявки, голоса и памятки как проверяемые черновики прямо в вашем браузере — ничего не уходит на сторонние серверы. Настоящие заявки, голоса и выплаты включатся, когда контракты развернут в тестовой сети и проверят.",
+      startTitle: "С чего начать",
+      start: [
+        "Просто посмотреть можно без всякой проверки: откройте открытый журнал и окно казны — там видно все решения и состояние фонда.",
+        "Не уверены, что вам нужно? На экране «Проверка личности» выберите действие — и увидите, нужна ли для него проверка и какая.",
+        "Чтобы войти и в будущем голосовать или получать помощь как один человек, подключите кошелёк — это ничего не списывает.",
+        "Нужна помощь — заполните спокойную анонимную заявку. Хотите участвовать в решениях — загляните в голосование.",
+      ],
+      honestTitle: "Честно и без слежки",
+      honest: [
+        "Никаких сторонних счётчиков, рекламы и слежки — мы не следим за вами.",
+        "Шрифты системные, ничего не подгружается с чужих серверов; всё, что собирают экраны, остаётся в вашем браузере.",
+        "Весь код открыт — его может прочитать каждый; версии всех частей зафиксированы, чтобы сборка была честной и предсказуемой.",
+        "Каждое решение фонда записано в открытый журнал, и любой может его проверить.",
+      ],
+      faqTitle: "Частые вопросы",
+      faq: [
+        {
+          q: "Это вложение денег? Можно на этом заработать?",
+          a: "Нет. Это общественное благо, а не вложение. Здесь не обещают доход и не дают заработать на участии. Средства идут на помощь людям, а не возвращаются «с прибылью».",
+        },
+        {
+          q: "Это пирамида? Платят ли за то, что я приведу людей?",
+          a: "Нет. За привлечение людей не платят ничего — это прямо запрещено правилами фонда. Никаких рефералов и бонусов за приглашённых.",
+        },
+        {
+          q: "Кто распоряжается деньгами?",
+          a: "Никто в одиночку. Деньги двигаются только по открытому голосованию и через общий кошелёк, которым управляют сразу несколько хранителей (трое из пяти). Каждое движение видно в открытом журнале.",
+        },
+        {
+          q: "Нужно ли давать паспорт, фото или личные данные?",
+          a: "Нет. Заявка анонимна, лица в базу не собираются. Чтобы голосовать или получать помощь, нужно подтвердить, что вы живой и один человек, — но это можно сделать и без камеры, через поручительство живых людей.",
+        },
+        {
+          q: "Сколько это стоит мне?",
+          a: "Ничего. Пользоваться платформой бесплатно. Сейчас всё работает в тестовой сети, без реальных денег.",
+        },
+        {
+          q: "Это уже работает по-настоящему?",
+          a: "Пока нет. Сейчас платформа в тестовом режиме: экраны показывают примеры и собирают черновики в вашем браузере. Настоящие заявки, голоса и выплаты включатся, когда контракты развернут в тестовой сети и проверят.",
+        },
+      ],
+      linksTitle: "Где проверить",
+      constitutionLink: "Конституция фонда (главный закон проекта)",
+      registryLink: "Открытый журнал решений (репозиторий)",
+      siteLink: "О фонде — главный сайт",
+    },
     wallet: {
       back: "← На главную",
       title: "Подключить кошелёк",
@@ -631,6 +713,7 @@ export const DICT: Record<Lang, Dict> = {
     ctaSite: "About the fund (main site)",
     navLabel: "Platform screens",
     navHome: "Home",
+    navAbout: "About",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -682,6 +765,65 @@ export const DICT: Record<Lang, Dict> = {
       "Public Trust DAO — a public good, not an investment. Everything is on a test network, with no real money.",
     contact: "Contact",
     builtNote: "Platform on Next.js · static export · open source",
+    about: {
+      back: "← Back to home",
+      title: "About the platform",
+      lead: "This is the working application of Public Trust DAO — a public trust fund. Here, briefly and in plain words: what it is, what's important to know right now, where to start, and how we keep everything honest and free of surveillance.",
+      whatTitle: "What this application is",
+      what: [
+        "Through the platform, people ask for help, see the open record of decisions, vote as equals, check the state of the shared treasury, and confirm that there is one real, living person behind a participant.",
+        "The fund helps people in need in a fair order: the most urgent needs first. Money is not handed out as cash — it pays the need directly, for example rent to the landlord, medicine to the pharmacy.",
+        "This is a public good, not an investment: no promised returns, no pyramid, and no payment for bringing in people.",
+      ],
+      nowTitle: "What's important to know right now",
+      nowNote:
+        "The platform runs in test mode. Everything is on a test network, with no real money. Screens show examples and build your applications, votes, and notes as verifiable drafts right in your browser — nothing is sent to outside servers. Real applications, votes, and payouts switch on once the contracts are deployed to a test network and checked.",
+      startTitle: "Where to start",
+      start: [
+        "You can just look around with no check at all: open the open record and the treasury window — they show every decision and the state of the fund.",
+        "Not sure what you need? On the 'Identity check' screen, pick an action — and you'll see whether a check is needed and which.",
+        "To sign in and, in the future, vote or receive help as a single person, connect a wallet — it takes nothing from you.",
+        "Need help — fill in the calm, anonymous application. Want to take part in decisions — look into voting.",
+      ],
+      honestTitle: "Honest and without surveillance",
+      honest: [
+        "No third-party counters, ads, or tracking — we do not surveil you.",
+        "Fonts are system fonts, nothing loads from other people's servers; everything the screens collect stays in your browser.",
+        "All code is open — anyone can read it; the versions of every part are pinned so the build is honest and predictable.",
+        "Every decision of the fund is written to the open record, and anyone can check it.",
+      ],
+      faqTitle: "Frequently asked questions",
+      faq: [
+        {
+          q: "Is this an investment? Can I earn money from it?",
+          a: "No. This is a public good, not an investment. No returns are promised and there is no earning from taking part. Funds go to helping people, not back 'with a profit'.",
+        },
+        {
+          q: "Is this a pyramid? Are people paid for bringing in others?",
+          a: "No. Bringing in people is paid nothing — it is directly forbidden by the fund's rules. No referrals and no bonuses for invitees.",
+        },
+        {
+          q: "Who controls the money?",
+          a: "No one alone. Money moves only by an open vote and through a shared wallet run by several guardians at once (three of five). Every movement is visible in the open record.",
+        },
+        {
+          q: "Do I have to give a passport, photo, or personal data?",
+          a: "No. The application is anonymous, and faces are not collected into a database. To vote or receive help you confirm you are a living, single person — but that can be done even without a camera, through vouching by living people.",
+        },
+        {
+          q: "How much does it cost me?",
+          a: "Nothing. Using the platform is free. Right now everything runs on a test network, with no real money.",
+        },
+        {
+          q: "Is it already working for real?",
+          a: "Not yet. The platform is in test mode: screens show examples and build drafts in your browser. Real applications, votes, and payouts switch on once the contracts are deployed to a test network and checked.",
+        },
+      ],
+      linksTitle: "Where to check",
+      constitutionLink: "The fund's constitution (the project's main law)",
+      registryLink: "Open record of decisions (repository)",
+      siteLink: "About the fund — main site",
+    },
     wallet: {
       back: "← Back to home",
       title: "Connect a wallet",

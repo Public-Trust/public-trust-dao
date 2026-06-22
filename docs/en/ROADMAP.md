@@ -170,6 +170,10 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     current section is highlighted (`aria-current`); short labels reuse the screen list
     from `lib/i18n.ts` (RU↔EN), no new dependencies. Seven screens tied into one
     coherent app. `PTD-0082`. TESTNET-ONLY.
+  - [x] "About the platform" page (session 86): `platform/app/about/page.tsx` — a single
+    entry page in plain words (what it is, what to know right now, where to start, honest
+    and without surveillance, FAQ); added to the header menu and footer, RU↔EN; content
+    drawn from already-adopted materials with no new promises. `PTD-0083`. TESTNET-ONLY.
   - [ ] Wire up platform publishing to GitHub Pages during migration from `web/`.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not

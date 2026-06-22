@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useI18n } from "@/components/Providers";
 
 export function SiteFooter() {
@@ -9,6 +10,9 @@ export function SiteFooter() {
     <footer className="site-footer">
       <div className="container">
         <p className="footer-note">{t.footerNote}</p>
+        <p className="footer-meta">
+          <Link href="/about/">{t.navAbout}</Link>
+        </p>
         <p className="footer-meta">
           <span>{t.builtNote}</span>
           <span className="dot" aria-hidden="true">

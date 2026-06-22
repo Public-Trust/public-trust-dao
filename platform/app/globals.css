@@ -746,6 +746,26 @@ h3 {
   color: var(--text-soft);
   font-size: 0.9rem;
 }
+
+/* Частые вопросы (страница «О платформе») */
+.faq-list {
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.faq-item {
+  border-left: 4px solid var(--border);
+  padding-left: 12px;
+}
+.faq-item dt {
+  font-weight: 600;
+}
+.faq-item dd {
+  margin: 4px 0 0;
+  max-width: 64ch;
+  color: var(--text-soft);
+}
 .split-row-main {
   display: flex;
   flex-wrap: wrap;

@@ -19,6 +19,7 @@ export function SiteHeader() {
   // Постоянное меню платформы: главная + готовые экраны (у которых есть адрес).
   const navItems = [
     { label: t.navHome, href: "/" },
+    { label: t.navAbout, href: "/about/" },
     ...t.screens
       .filter((s) => s.href)
       .map((s) => ({ label: s.short ?? s.title, href: s.href as string })),
