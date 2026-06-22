@@ -1,3 +1,5 @@
+[Русский] · [English](en/ANTI-ABUSE.md)
+
 # АНТИЗЛОУПОТРЕБЛЕНИЕ — PUBLIC TRUST DAO
 
 > Нормативный документ. Производный от [`CONSTITUTION.md`](CONSTITUTION.md)

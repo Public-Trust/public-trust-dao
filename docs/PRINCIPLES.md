@@ -1,3 +1,5 @@
+[Русский] · [English](en/PRINCIPLES.md)
+
 # ПРИНЦИПЫ И ЗАПРЕТЫ — PUBLIC TRUST DAO
 
 > Нормативный документ. Производный от [`CONSTITUTION.md`](CONSTITUTION.md) и

@@ -1,3 +1,5 @@
+[Русский] · [English](README.en.md)
+
 # Public Trust DAO
 
 **Открытая, децентрализованная система взаимопомощи и общественных благ.**
@@ -15,6 +17,7 @@ Public Trust DAO обеспечивает людям базовую безопа
 - [`docs/PRINCIPLES.md`](docs/PRINCIPLES.md) — принципы и конституционные запреты (буквально).
 - [`docs/PRIORITIES.md`](docs/PRIORITIES.md) — приоритет справедливого распределения (спецификация).
 - [`docs/ANTI-ABUSE.md`](docs/ANTI-ABUSE.md) — механизмы защиты от злоупотреблений (спецификация).
+- [`docs/ESCROW-TARGETED-DISBURSEMENT.md`](docs/ESCROW-TARGETED-DISBURSEMENT.md) — модель целевого расхода помощи и escrow (как помощь доходит до цели, а не на руки).
 - [`LAUNCH.md`](LAUNCH.md) — техническое задание на построение инфраструктуры.
 - `contracts/` — смарт-контракты (TESTNET first).
 - `web/` — публичный сайт (GitHub Pages).
