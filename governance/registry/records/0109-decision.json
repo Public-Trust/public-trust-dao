@@ -1,0 +1,19 @@
+{
+  "seq": 109,
+  "id": "PTD-0109",
+  "type": "decision",
+  "timestamp": "2026-06-23T03:00:00Z",
+  "actor": "builder-agent",
+  "summary": "Documentation AI-агент: новая мягкая проверка mirror-doc-coverage — обратная к mirror-doc-link. Набор экранов-зеркал платформы задаёт витрина «Разобраться, как устроен фонд» (t.learn в platform/lib/i18n.ts) — это пересказы простыми словами нормативных документов из docs/. Проверка mirror-doc-link сверяет КАЖДЫЙ экран из карты MIRROR_DOCS со своим первоисточником; но если завести новый экран-зеркало (добавить в t.learn), а в карту MIRROR_DOCS внести забыть — mirror-doc-link молча его пропустит, и пересказ останется без сверки с нормой. Новая проверка ловит такой пропуск: каждый адрес из t.learn должен быть ключом MIRROR_DOCS, иначе предупреждение. Проверка МЯГКАЯ (warn): сигналит, не роняет вердикт и пульс (ст. 3 проверяемость, ст. 6 понятность, развитие PTD-0107). Нет файла lib/i18n.ts или список не распарсился → молчит (pass). Точная, без ложных тревог: на реальном репо все 11 экранов витрины (manifesto/constitution/governance/priorities/rewards/safeguards/work/accountability/direct-help/support/glossary) есть в карте → mirror-doc-coverage pass. Без зависимостей (переиспользует parse_i18n_hrefs). Вердикт green 3/3 (мягкая не роняет), warnings 9 без изменений. +3 тест-сценария (test_documentation 96/96 зелёный). Таблицы проверок README агента (+EN) и шапка-список проверок дополнены. Закрывает P3-идею роадмапа «карта MIRROR_DOCS ничего не пропускает» (предложена сессией 110). TESTNET-ONLY, агент ничего не двигает и ничем не владеет (ст. 9).",
+  "refs": [
+    "ai-agents/documentation_agent.py",
+    "ai-agents/test_documentation.py",
+    "ai-agents/README.md",
+    "ai-agents/README.en.md",
+    "platform/lib/i18n.ts",
+    "docs/ROADMAP.md"
+  ],
+  "payload": {},
+  "prev_hash": "3a7580bfe0d7b244971ce171dc7117d6ecb4d0ee9cdf358d436acb1adaef06b5",
+  "hash": "7facce1d7a15845535bd5658960027419c852022a62907bf68d430015853721d"
+}

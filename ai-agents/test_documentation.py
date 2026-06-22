@@ -699,6 +699,66 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # --- Мягкая проверка mirror-doc-coverage: t.learn ⊆ MIRROR_DOCS -------------
+    # Логика (обратная к mirror-doc-link): набор экранов-зеркал задаёт витрина
+    # t.learn в lib/i18n.ts. Если завели новый экран-объяснение (добавили в t.learn),
+    # но в карту MIRROR_DOCS внести забыли — mirror-doc-link его молча пропустит.
+    # mirror-doc-coverage это ловит ПРЕДУПРЕЖДЕНИЕМ (warn), вердикт не роняет (soft).
+
+    # 32a. Корректная платформа (t.learn = manifesto/governance, оба в карте) → pass.
+    print("\n[мягкая проверка: t.learn целиком в MIRROR_DOCS → mirror-doc-coverage pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        code, report = run_agent(tmp)
+        check("mirror-doc-coverage == pass",
+              status_of(report, "mirror-doc-coverage") == "pass")
+        check("mirror-doc-coverage помечена soft",
+              _is_soft(report, "mirror-doc-coverage"))
+        check("вердикт green / exit=0", report.get("verdict") == "green" and code == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 32b. В t.learn появился экран, которого нет в MIRROR_DOCS → coverage warn.
+    print("\n[мягкая проверка: новый экран в t.learn без MIRROR_DOCS → mirror-doc-coverage warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        broken = with_platform({
+            "platform/lib/i18n.ts": (
+                "export const ru = {\n"
+                "  screens: [\n"
+                '    { title: "Заявка", href: "/apply/" },\n'
+                '    { title: "Голос", href: "/voting/" },\n'
+                "  ],\n"
+                "  learn: [\n"
+                '    { title: "Манифест", href: "/manifesto/" },\n'
+                '    { title: "Как решаем", href: "/governance/" },\n'
+                '    { title: "Новое объяснение", href: "/newscreen/" },\n'  # не в MIRROR_DOCS
+                "  ],\n"
+                "};\n"
+            ),
+        })
+        make_repo(tmp, broken)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-coverage == warn для экрана вне MIRROR_DOCS",
+              status_of(report, "mirror-doc-coverage") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 32c. Без файла i18n платформы — проверять нечего → pass, без тревог.
+    print("\n[мягкая проверка: без lib/i18n.ts mirror-doc-coverage молчит (pass)]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, GOOD_FILES)  # платформы вообще нет
+        code, report = run_agent(tmp)
+        check("mirror-doc-coverage == pass (нет i18n → нечего сверять)",
+              status_of(report, "mirror-doc-coverage") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     # --- Мягкая проверка see-also-symmetric: связь «См. также» взаимна ----------
     # Логика: если экран A ведёт на B в RELATED, человек ждёт обратный путь B→A.
     # Односторонняя связь ПРЕДУПРЕЖДАЕТ (warn), вердикт не роняет (soft). Несимметрия

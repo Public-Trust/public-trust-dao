@@ -42,6 +42,9 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • mirror-doc-link   → экран-зеркало платформы ссылается на свой док в docs/ .... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран-пересказ нормативного документа не ставит
      ссылку на первоисточник — зеркало нельзя сверить с нормой; PTD-0040)
+  • mirror-doc-coverage → каждый экран из витрины t.learn есть в карте MIRROR_DOCS . ст. 3/6
+    (МЯГКАЯ, обратная к mirror-doc-link: предупреждает, если завели новый экран-
+     зеркало, но в MIRROR_DOCS внести забыли — его пересказ не сверяется; PTD-0109)
   • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
      односторонняя связь оставляет человека без обратного пути; PTD-0106)
@@ -903,6 +906,39 @@ def check_mirror_doc_link(root):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_mirror_doc_complete(root):
+    """МЯГКАЯ: каждый экран-объяснение из витрины t.learn зарегистрирован в MIRROR_DOCS.
+
+    Обратная к `mirror-doc-link`. Набор экранов-зеркал задаётся витриной
+    «Разобраться, как устроен фонд» (`t.learn` в `lib/i18n.ts`) — это и есть
+    пересказы нормативных документов простыми словами. `mirror-doc-link` сверяет
+    КАЖДЫЙ экран из карты `MIRROR_DOCS` со своим первоисточником. Но если заведут
+    новый экран-зеркало (добавят его в `t.learn`), а в `MIRROR_DOCS` внести забудут —
+    `mirror-doc-link` молча его пропустит, и пересказ останется без проверки на
+    сверку с нормой. Эта проверка ловит такой пропуск: каждый адрес из `t.learn`
+    должен быть ключом `MIRROR_DOCS` (warn, не блок — ст. 3/6, PTD-0109). Если файла
+    `lib/i18n.ts` нет (мини-репозиторий в тесте) или список не распарсился — проверять
+    нечего → pass.
+    """
+    if not os.path.exists(os.path.join(root, I18N_TS)):
+        return "pass", []
+    learn = parse_i18n_hrefs(read_text(root, I18N_TS), "learn")
+    if not learn:
+        return "pass", []
+    violations = []
+    for href in sorted(learn):
+        slug = href.strip("/")
+        if slug not in MIRROR_DOCS:
+            violations.append({
+                "record": f"{I18N_TS} → t.learn",
+                "problem": (f"экран-объяснение «{href}» есть в витрине «Разобраться, "
+                            "как устроен фонд», но не зарегистрирован в карте "
+                            "MIRROR_DOCS (documentation_agent.py) — его пересказ не "
+                            "сверяется с первоисточником (mirror-doc-link его пропустит)"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 def check_see_also_symmetric(root):
     """МЯГКАЯ: связь «См. также» между экранами-объяснениями взаимна.
 
@@ -1012,6 +1048,13 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "mirror-doc-coverage",
+        "title": "Каждый экран-объяснение из витрины t.learn зарегистрирован в карте MIRROR_DOCS",
+        "guards": "ст. 3/6 — новый экран-зеркало не останется без сверки с первоисточником (обратная к mirror-doc-link, PTD-0109); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_complete",
+        "soft": True,
+    },
+    {
         "key": "see-also-symmetric",
         "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
         "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
@@ -1043,6 +1086,7 @@ def run(root):
     seealso_t_status, seealso_t_v = check_see_also_targets(root)
     seealso_p_status, seealso_p_v = check_see_also_present(root)
     mirror_status, mirror_v = check_mirror_doc_link(root)
+    mirror_cov_status, mirror_cov_v = check_mirror_doc_complete(root)
     seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
@@ -1057,6 +1101,7 @@ def run(root):
         "seealso_targets": (seealso_t_status, seealso_t_v),
         "seealso_present": (seealso_p_status, seealso_p_v),
         "mirror_doc_link": (mirror_status, mirror_v),
+        "mirror_doc_complete": (mirror_cov_status, mirror_cov_v),
         "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 

@@ -515,16 +515,32 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   allowed proof-of-personhood methods and calls `Reputation.mint` only when
   `verified ∧ unique (nullifier unused)`; the method allow-list is under `Timelock`.
   Grounds "uniqueness ≠ power" in code (proposed session 44).
-- [ ] **Documentation agent: the `MIRROR_DOCS` map misses nothing** — the reverse of
-  `mirror-doc-link`: a soft check that if `platform/app/<slug>/page.tsx` links to a normative
-  doc in `docs/` but `<slug>` is absent from the `MIRROR_DOCS` map, warn — so the map does not
-  fall behind when a new mirror screen is added (extension of `PTD-0107`, proposed session 110).
-  A warning, not a block.
+- [x] **Documentation agent: the `MIRROR_DOCS` map misses nothing** — the reverse of
+  `mirror-doc-link`: a soft check that a new mirror screen is not left without verification
+  against its source if it is forgotten in the map (extension of `PTD-0107`, proposed session
+  110). **Done (session 112):** the `mirror-doc-coverage` check in `documentation_agent.py`.
+  The set of mirror screens is defined by the "Understand how the fund works" showcase
+  (`t.learn` in `platform/lib/i18n.ts`) — every href there must be a key of the `MIRROR_DOCS`
+  map; add a new screen to `t.learn` but forget the map → a soft warning (verdict green),
+  because `mirror-doc-link` would otherwise silently skip it. Precise, no false alarms: on the
+  real repo all 11 showcase screens are in the map → pass. Reuses `parse_i18n_hrefs` (no
+  dependencies). +3 test scenarios (96/96), the agent README tables (+EN) updated. `PTD-0109`.
+  TESTNET-ONLY.
 - [ ] **Documentation agent: a mirror screen and its doc link both ways** — a soft check of
   the two-way link: a normative doc `docs/X.md` that has a mirror screen carries a back-link to
   its platform screen (so a reader of the document can reach its plain-language retelling, not
   only the other way around). Extension of the "mirror screen" device; a warning, not a block
   (proposed session 110).
+- [ ] **Documentation agent: every `MIRROR_DOCS` key appears in the `t.learn` showcase** —
+  the soft sibling of `mirror-doc-coverage` in the opposite direction: if a screen is in the
+  `MIRROR_DOCS` map but its href is absent from `t.learn` (`lib/i18n.ts`), it is not shown in
+  the "Understand how the fund works" showcase — a person can't reach it from the home page.
+  A warning, not a block (extension of `PTD-0109`, proposed session 112).
+- [ ] **Documentation agent: a `MIRROR_DOCS` key points to an existing doc** — a soft check
+  that every path value of the `MIRROR_DOCS` map (`docs/X.md`) actually exists in the repo
+  (and hasn't "drifted" when a normative document is renamed). The map is hard-coded today —
+  a typo/rename would silently void `mirror-doc-link`. A warning, not a block (proposed
+  session 112).
 - [x] **Identity-verification terms in `GLOSSARY.md`** (+RU) — add in plain words:
   "proof-of-personhood", "zero-knowledge / proof without disclosure", "nullifier",
   "liveness", "vouching (web-of-trust)" — each linking to `IDENTITY-VERIFICATION.md`
