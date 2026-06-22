@@ -204,6 +204,15 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     without breaking the live site. Ready up-to-the-button: the operator only has to
     enable Pages once (Source: GitHub Actions), after which the platform is live at
     `.../app/`. `PTD-0089`. Closes the last sub-item of the INBOX #34 series.
+  - [x] Explainer screen "Help and thanks for work" (session 93):
+    `platform/app/rewards/` — an in-app mirror of the normative `docs/REWARDS-MODEL.md`
+    (the "mirror screen" pattern, like priorities↔PRIORITIES and glossary↔GLOSSARY):
+    in plain words — reserve first, the larger share of the remainder always goes to
+    help, thanks for work under a one-third ceiling; three streams (help paid straight
+    to the provider / work / volunteering); the shares are moved only by a vote; every
+    payout is checked by ≥2 independent people + the "Fairness"/"Audit" AI; hard limits
+    (help matters more than reward, no referrals/pyramid). RU↔EN text in `lib/i18n.ts`
+    (`RewardsDict`), added to the menu, no new dependencies. `PTD-0090`. TESTNET-ONLY.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,
@@ -1378,3 +1387,4 @@ To keep self-development transparent, we record the origin of ideas.
 | “What the app remembers about you” screen (done) / “erase my data” button right on the Voting and Identity screens linking to “My data” / export all drafts as one file (a backup for the person) | agent | 88 |
 | "Take a copy" of your data as one file (done) / upgrade Next from 15.1.6 to a patched version (security advisory CVE-2025-66478) / show the "take a copy" button even when the list is empty (an honest empty template file) | agent | 90 |
 | "Order of help" screen (done) / Documentation agent: soft check "an in-app mirror screen in platform/app isn't stale vs its normative doc" (priorities↔PRIORITIES, glossary↔GLOSSARY) / link the "Treasury window" screen to "Order of help" (help pools ↔ who comes first) | agent | 91 |
+| "Help and thanks for work" screen (done) / link the "Treasury window" screen to "Help & reward" (help pool / thanks pool ↔ how money is split) / link the "Apply for help" screen to "Help & reward" (where need payment comes from) / mirror screen for PROOF-OF-CONTRIBUTION "How the fund creates honest work" | agent | 93 |

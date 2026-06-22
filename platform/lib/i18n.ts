@@ -236,6 +236,29 @@ export type PrioritiesDict = {
   sourceLink: string;
 };
 
+export type RewardsDict = {
+  back: string;
+  title: string;
+  lead: string;
+  keyTitle: string; // «Главное — простыми словами»
+  key: string[];
+  ruleTitle: string;
+  rule: string; // главное правило: сначала нужда, потом благодарность за труд
+  streamsTitle: string;
+  streamsHint: string;
+  // Три отдельных потока денег: помощь / работа / волонтёрство.
+  streams: { name: string; text: string }[];
+  adaptiveTitle: string;
+  adaptive: string[];
+  checkTitle: string;
+  check: string[];
+  limitTitle: string;
+  limitNote: string; // граница: помощь важнее, без рефералов/пирамиды
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -307,6 +330,7 @@ export type Dict = {
   navGlossary: string;
   navMyData: string;
   navPriorities: string;
+  navRewards: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -321,6 +345,7 @@ export type Dict = {
   about: AboutDict;
   glossary: GlossaryDict;
   priorities: PrioritiesDict;
+  rewards: RewardsDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -353,6 +378,7 @@ export const DICT: Record<Lang, Dict> = {
     navGlossary: "Словарь",
     navMyData: "Мои данные",
     navPriorities: "Порядок помощи",
+    navRewards: "Помощь и награда",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -724,6 +750,56 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Где это записано",
       sourceNote: "Этот экран — зеркало нормативного документа фонда «В каком порядке фонд помогает». Порядок вытекает из конституции (статья 5 «справедливое распределение») и одинаков для всех.",
       sourceLink: "Открыть документ «Порядок помощи» →",
+    },
+    rewards: {
+      back: "← На главную",
+      title: "Как фонд делит деньги: помощь и благодарность за труд",
+      lead: "Представьте общий кошелёк, в который складываются пожертвования. Этот экран простыми словами объясняет, сколько из него идёт людям в беде, а сколько — в благодарность тем, кто эту помощь делает возможной.",
+      keyTitle: "Главное — простыми словами",
+      key: [
+        "Сначала откладываем неприкосновенный запас — «подушку» на уже начатую помощь, чтобы её точно довели до конца, и на непредвиденное.",
+        "Из остатка большая часть всегда идёт тем, кому нужнее всего: спасти жизнь, не дать стать бездомным, лечить, накормить.",
+        "Меньшая часть — это «спасибо» тем, кто делает помощь возможной: пишет код, проверяет заявки, мирит спорящих, волонтёрит.",
+        "Когда денег мало — почти всё уходит на помощь, а «спасибо» символическое. Когда денег больше — шире и помощь, и благодарность. Но благодарность за труд никогда не больше трети распределяемых денег.",
+        "Платим не жёсткие суммы, а в разумных рамках — сколько реально стоит закрыть нужду или по справедливости стоит сделанная работа.",
+        "Каждую выплату проверяют минимум два независимых человека (никто не одобряет сам себе), плюс ИИ-помощники пересчитывают и сверяют. Всё видно в открытом журнале, любое решение можно оспорить.",
+      ],
+      ruleTitle: "Главное правило, из которого всё вытекает",
+      rule: "Сначала — нужда. Потом — благодарность за труд, который эту нужду закрывает. Фонд существует ради нуждающихся, а не ради зарплат.",
+      streamsTitle: "Три отдельных потока денег",
+      streamsHint: "Это три разных вида выплат. Их нельзя смешивать — у каждого своя цель, свои доказательства и свои границы.",
+      streams: [
+        {
+          name: "Помощь нуждающимся",
+          text: "Людям, которым нужна поддержка, — на закрытие проверенной нужды: жильё, лечение, питание. Оплата идёт напрямую поставщику (например, аренда — арендодателю), а не деньгами на руки. Это важнее обоих видов благодарности.",
+        },
+        {
+          name: "Благодарность за работу",
+          text: "Тем, кто делает реальный труд: код, операционные дела, медиация, проверки, аудит. Оплата за подтверждённый объём работы, в разумных рамках.",
+        },
+        {
+          name: "Благодарность за волонтёрство",
+          text: "Волонтёрам за разовую нерегулярную помощь — чаще это признание и знак благодарности, иногда небольшая выплата.",
+        },
+      ],
+      adaptiveTitle: "Сколько на что — зависит от запаса фонда",
+      adaptive: [
+        "Чем меньше в казне денег, тем большая доля идёт на саму помощь, а благодарность за труд становится символической.",
+        "Чем больше у фонда запас, тем шире помощь и заметнее благодарность — но под жёстким потолком: на благодарность за труд никогда не уходит больше трети распределяемых денег.",
+        "Эти доли не крутит кто-то вручную — их меняет только общее голосование, с задержкой на проверку. Так нельзя втихую перенаправить деньги от помощи к выплатам.",
+      ],
+      checkTitle: "Как проверяют каждую выплату",
+      check: [
+        "Нужны доказательства: для помощи — кейс и счёт поставщика, для работы — сделанный результат, для волонтёрства — свидетельство.",
+        "Проверяют минимум два независимых человека, и никто не одобряет выплату сам себе.",
+        "ИИ-помощники «Справедливость» и «Аудит» пересчитывают суммы и сверяют их с открытым журналом и казной.",
+        "Каждое начисление — это запись в открытом журнале, его можно воспроизвести и проверить, а при несогласии — оспорить.",
+      ],
+      limitTitle: "Жёсткие границы",
+      limitNote: "Помощь людям всегда важнее любой благодарности за труд. Вознаграждение никогда не зависит от того, скольких людей ты привёл, — рефералов и пирамиды здесь нет. Репутация — лишь вспомогательная добавка к месту в разумных рамках, её нельзя купить.",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд делит деньги: помощь и вознаграждение». Правила вытекают из конституции (статья 5 «справедливое распределение», статья 6 «вознаграждение») и одинаковы для всех. Всё пока на тестовой сети, без реальных денег.",
+      sourceLink: "Открыть документ «Помощь и вознаграждение» →",
     },
     notFound: {
       code: "Страница не найдена",
@@ -1115,6 +1191,7 @@ export const DICT: Record<Lang, Dict> = {
     navGlossary: "Glossary",
     navMyData: "My data",
     navPriorities: "Order of help",
+    navRewards: "Help & reward",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -1486,6 +1563,56 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Where this is written down",
       sourceNote: "This screen mirrors the fund's normative document “The order in which the fund helps”. The order follows from the constitution (article 5, “fair distribution”) and is the same for everyone.",
       sourceLink: "Open the “Order of help” document →",
+    },
+    rewards: {
+      back: "← Home",
+      title: "How the fund divides money: help and thanks for work",
+      lead: "Picture a shared wallet that donations go into. This screen explains, in plain words, how much of it goes to people in trouble and how much goes as thanks to those who make that help possible.",
+      keyTitle: "The main points — in plain words",
+      key: [
+        "First we set aside an untouchable reserve — a cushion for help already underway, so it is always carried through, and for the unexpected.",
+        "Of what remains, the larger share always goes to those who need it most: saving a life, keeping someone off the street, treatment, food.",
+        "A smaller share is a “thank you” to those who make help possible: people who write code, check applications, mediate disputes, volunteer.",
+        "When money is scarce, almost all of it goes to help and the “thank you” is symbolic. When there is more, both the help and the thanks grow — but thanks for work is never more than a third of the money being shared out.",
+        "We don't pay fixed sums, but within reasonable bounds — what it actually costs to meet the need, or what the work is fairly worth.",
+        "Every payout is checked by at least two independent people (no one approves their own), plus AI helpers recompute and cross-check. Everything is visible in the open log, and any decision can be disputed.",
+      ],
+      ruleTitle: "The main rule everything follows from",
+      rule: "Need first. Then thanks for the work that meets that need. The fund exists for people in need, not for salaries.",
+      streamsTitle: "Three separate streams of money",
+      streamsHint: "These are three different kinds of payout. They must not be mixed — each has its own purpose, its own evidence and its own limits.",
+      streams: [
+        {
+          name: "Help for those in need",
+          text: "For people who need support — to meet a verified need: housing, treatment, food. Payment goes straight to the provider (rent to the landlord, for example), not as cash in hand. This matters more than either kind of thanks.",
+        },
+        {
+          name: "Thanks for work",
+          text: "For those who do real work: code, operations, mediation, reviews, audit. Paid for a confirmed amount of work, within reasonable bounds.",
+        },
+        {
+          name: "Thanks for volunteering",
+          text: "For volunteers who give one-off, irregular help — most often this is recognition and a token of thanks, sometimes a small payout.",
+        },
+      ],
+      adaptiveTitle: "How much goes where depends on the fund's reserves",
+      adaptive: [
+        "The less money there is in the treasury, the larger the share that goes to help itself, and thanks for work becomes symbolic.",
+        "The more the fund has in reserve, the wider the help and the more visible the thanks — but under a hard ceiling: thanks for work never takes more than a third of the money being shared out.",
+        "No one turns these shares by hand — only a community vote changes them, with a delay for review. So money cannot be quietly redirected from help to payouts.",
+      ],
+      checkTitle: "How every payout is checked",
+      check: [
+        "Evidence is required: for help — a case and the provider's invoice; for work — the delivered result; for volunteering — a witness.",
+        "At least two independent people check it, and no one approves their own payout.",
+        "The “Fairness” and “Audit” AI helpers recompute the sums and reconcile them against the open log and the treasury.",
+        "Every allocation is an entry in the open log — it can be reproduced and checked, and disputed if you disagree.",
+      ],
+      limitTitle: "Hard limits",
+      limitNote: "Help for people always matters more than any thanks for work. Reward never depends on how many people you brought in — there are no referrals and no pyramid here. Reputation is only a supporting add-on to your place within reasonable bounds, and it cannot be bought.",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund's normative document “How the fund divides money: help and reward”. The rules follow from the constitution (article 5 “fair distribution”, article 6 “reward”) and are the same for everyone. Everything is still on a test network, with no real money.",
+      sourceLink: "Open the “Help and reward” document →",
     },
     notFound: {
       code: "Page not found",
