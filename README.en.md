@@ -18,6 +18,7 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`docs/en/PRIORITIES.md`](docs/en/PRIORITIES.md) — the priority of fair distribution (specification).
 - [`docs/en/ANTI-ABUSE.md`](docs/en/ANTI-ABUSE.md) — anti-abuse protection mechanisms (specification).
 - [`docs/en/ESCROW-TARGETED-DISBURSEMENT.md`](docs/en/ESCROW-TARGETED-DISBURSEMENT.md) — the targeted-use / escrow model (how aid reaches its purpose instead of going cash-in-hand).
+- [`docs/en/PRODUCT-INTERFACES.md`](docs/en/PRODUCT-INTERFACES.md) — product form and interface roadmap (web dApp → Telegram bot → mobile app).
 - [`LAUNCH.md`](LAUNCH.md) — technical specification for building the infrastructure.
 - `contracts/` — smart contracts (TESTNET first).
 - `web/` — public website (GitHub Pages).

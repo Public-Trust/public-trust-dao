@@ -18,6 +18,7 @@ Public Trust DAO обеспечивает людям базовую безопа
 - [`docs/PRIORITIES.md`](docs/PRIORITIES.md) — приоритет справедливого распределения (спецификация).
 - [`docs/ANTI-ABUSE.md`](docs/ANTI-ABUSE.md) — механизмы защиты от злоупотреблений (спецификация).
 - [`docs/ESCROW-TARGETED-DISBURSEMENT.md`](docs/ESCROW-TARGETED-DISBURSEMENT.md) — модель целевого расхода помощи и escrow (как помощь доходит до цели, а не на руки).
+- [`docs/PRODUCT-INTERFACES.md`](docs/PRODUCT-INTERFACES.md) — продуктовый вид и очередь интерфейсов (web-dApp → Telegram-бот → мобильное приложение).
 - [`LAUNCH.md`](LAUNCH.md) — техническое задание на построение инфраструктуры.
 - `contracts/` — смарт-контракты (TESTNET first).
 - `web/` — публичный сайт (GitHub Pages).

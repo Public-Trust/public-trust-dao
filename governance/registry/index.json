@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 3,
-  "head_hash": "abf5baab5b4f93f962658b742299e51996d53b7a43dbafd36998485464ae1e9b",
+  "count": 4,
+  "head_hash": "46d8754aac099f2e0ae37a07fb7d59b2daa1b72090d178d0f2a9663401d48bb9",
   "entries": [
     {
       "seq": 0,
@@ -30,6 +30,15 @@
       "summary": "[ПРИМЕР] Поэтапная тестовая выплата (testnet), приоритет 2, этап 1/3",
       "hash": "abf5baab5b4f93f962658b742299e51996d53b7a43dbafd36998485464ae1e9b",
       "file": "records/0002-example-disbursement.json"
+    },
+    {
+      "seq": 3,
+      "id": "PTD-0003",
+      "type": "decision",
+      "timestamp": "2026-06-22T05:00:00Z",
+      "summary": "Продуктовый вид и очередь интерфейсов: web-dApp → Telegram-бот → мобильное приложение",
+      "hash": "46d8754aac099f2e0ae37a07fb7d59b2daa1b72090d178d0f2a9663401d48bb9",
+      "file": "records/0003-product-interfaces.json"
     }
   ]
 }
