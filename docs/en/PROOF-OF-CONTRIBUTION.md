@@ -21,6 +21,9 @@
 > for the "Fairness", "Audit", "Reputation" AI helpers (Stage 6). The document itself
 > moves no funds.
 >
+> Unfamiliar technical words from this document are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Money and aid" group.
+>
 > Registered as a decision in the public registry:
 > [`governance/registry/`](../../governance/registry/) (record `PTD-0039`).
 >

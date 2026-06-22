@@ -17,6 +17,9 @@
 > The document controls no money itself — it describes the rules for future
 > smart-contract programs (Stage 5) and for the "Fairness" and "Audit" AI helpers.
 >
+> Unfamiliar technical words from this document are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Money and aid" group.
+>
 > Registered as a decision in the public registry:
 > [`governance/registry/`](../../governance/registry/) (record `PTD-0038`).
 >

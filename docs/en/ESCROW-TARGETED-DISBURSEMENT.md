@@ -21,6 +21,9 @@
 > funds only after an independent code review, separate consent and under a shared
 > wallet where any payout needs the signatures of at least 3 of 5 living guardians
 > (article 4.4).
+>
+> Unfamiliar technical words from this document are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Money and aid" group.
 
 ---
 

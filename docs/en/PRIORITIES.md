@@ -7,6 +7,9 @@
 > **whose hardship do we cover first**. The document follows from the
 > [constitution](CONSTITUTION.md) (Article 5, "fair distribution") and the
 > [manifesto](MANIFESTO.md).
+>
+> Unfamiliar technical words from this document are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Money and aid" group.
 
 ## The main idea — in plain words
 

@@ -18,6 +18,9 @@
 > **take effect only after a community vote** (art. 10) — here they are framed as a
 > proposal, not as an already-adopted change.
 >
+> Unfamiliar technical words from this document are explained in plain language in the
+> [glossary](GLOSSARY.md) — the "Governance and voting" group.
+>
 > Registered as a decision in the public registry:
 > [`governance/registry/`](../../governance/registry/) (records `PTD-0007`, `PTD-0042`).
 

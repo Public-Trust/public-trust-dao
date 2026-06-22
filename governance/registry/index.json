@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 54,
-  "head_hash": "0bc4ad3c64b4051c6042d0483c4349fea25a2687d273683ac254cb5573cf4d2e",
+  "count": 55,
+  "head_hash": "3613b048f3d4bd563219c5c6aaa4e46faa1db044deec7e54be06937e18a41fb3",
   "entries": [
     {
       "seq": 0,
@@ -489,6 +489,15 @@
       "summary": "INBOX #22 — раздел «Защита на будущее (в т.ч. от квантовых компьютеров)» в SECURITY.md (+EN): не тащить PQC в контракты сейчас, а заложить фундамент — сменность алгоритмов (crypto-agility), только факты/отпечатки on-chain, ключи у человека, готовность к NIST PQC; простым языком, термины в техраздел.",
       "hash": "0bc4ad3c64b4051c6042d0483c4349fea25a2687d273683ac254cb5573cf4d2e",
       "file": "records/0053-future-proofing-quantum.json"
+    },
+    {
+      "seq": 54,
+      "id": "PTD-0054",
+      "type": "decision",
+      "timestamp": "2026-06-22T11:35:21Z",
+      "summary": "P3 (понятный язык) — в шапку шести нормативных доков (GOVERNANCE/ANTI-ABUSE/REWARDS-MODEL/PROOF-OF-CONTRIBUTION/ESCROW/PRIORITIES, RU+EN) добавлен указатель на глоссарий с конкретной группой; непонятный термин теперь в один клик от человеческого объяснения (PTD-0040, ст. 3/6). Смысл доков не изменён.",
+      "hash": "3613b048f3d4bd563219c5c6aaa4e46faa1db044deec7e54be06937e18a41fb3",
+      "file": "records/0054-glossary-pointer-in-headers.json"
     }
   ]
 }

@@ -1,0 +1,46 @@
+{
+  "seq": 54,
+  "id": "PTD-0054",
+  "type": "decision",
+  "timestamp": "2026-06-22T11:35:21Z",
+  "actor": "builder-agent",
+  "summary": "P3 (понятный язык) — в шапку шести нормативных доков (GOVERNANCE/ANTI-ABUSE/REWARDS-MODEL/PROOF-OF-CONTRIBUTION/ESCROW/PRIORITIES, RU+EN) добавлен указатель на глоссарий с конкретной группой; непонятный термин теперь в один клик от человеческого объяснения (PTD-0040, ст. 3/6). Смысл доков не изменён.",
+  "refs": [
+    "docs/GOVERNANCE.md",
+    "docs/ANTI-ABUSE.md",
+    "docs/REWARDS-MODEL.md",
+    "docs/PROOF-OF-CONTRIBUTION.md",
+    "docs/ESCROW-TARGETED-DISBURSEMENT.md",
+    "docs/PRIORITIES.md",
+    "docs/GLOSSARY.md"
+  ],
+  "payload": {
+    "decision": "P3 (понятный язык) — в шапку шести нормативных доков добавлен указатель на глоссарий. В каждом из GOVERNANCE / ANTI-ABUSE / REWARDS-MODEL / PROOF-OF-CONTRIBUTION / ESCROW-TARGETED-DISBURSEMENT / PRIORITIES (RU и EN-зеркало) во вводном блокноте добавлена строка «Непонятные технические слова из этого документа объяснены простым языком в [глоссарии](GLOSSARY.md) — группа «…»» с указанием конкретной группы глоссария (Управление и голосование / Безопасность и техника / Деньги и помощь). Смысл документов не изменён — добавлена только навигационная подсказка к человеческому объяснению терминов.",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9). Верхний P3 (контракт PersonhoodVerifier) недоступен — диск хоста заполнен (~0,9 ГБ свободно), contracts/node_modules отсутствует, hardhat/npm не прогнать. Взят следующий завершаемый pure-doc пункт ROADMAP «Ссылка на глоссарий в шапке нормативных доков». Прямо служит правилу понятного языка (PTD-0040, конституция ст. 3 «понятность» / ст. 6 «объяснимость»): теперь непонятный термин в любом нормативном документе — в один клик от человеческого объяснения в GLOSSARY.md, как уже сделано в IDENTITY-VERIFICATION.md (PTD-0050/PTD-0051). Связь двусторонняя: глоссарий ведёт на документы, документы — на глоссарий.",
+    "deliverables": [
+      "docs/GOVERNANCE.md (+EN) — указатель на глоссарий, группа «Управление и голосование»",
+      "docs/ANTI-ABUSE.md (+EN) — указатель на глоссарий, группа «Безопасность и техника»",
+      "docs/REWARDS-MODEL.md (+EN) — указатель на глоссарий, группа «Деньги и помощь»",
+      "docs/PROOF-OF-CONTRIBUTION.md (+EN) — указатель на глоссарий, группа «Деньги и помощь»",
+      "docs/ESCROW-TARGETED-DISBURSEMENT.md (+EN) — указатель на глоссарий, группа «Деньги и помощь»",
+      "docs/PRIORITIES.md (+EN) — указатель на глоссарий, группа «Деньги и помощь»",
+      "governance/ipfs/manifest.json — пересобран (изменились нормативные доки), verify=OK",
+      "governance/registry/ — запись PTD-0054 (type=decision)"
+    ],
+    "rails": [
+      "Только документация; код/средства/ключи/контракты не затронуты",
+      "Двуязычность RU↔EN в одном коммите; названия групп указателя точно совпадают с заголовками групп GLOSSARY.md (RU/EN)",
+      "Смысл нормативных документов не изменён — добавлена только навигационная строка",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) не тронут"
+    ],
+    "status": "adopted",
+    "spec": "docs/GLOSSARY.md",
+    "verification": "Documentation-агент 3/3 (bilingual-pairs/language-switcher/link-integrity — все ссылки GLOSSARY.md резолвятся); run_all --with-tests: агенты 8/8, тесты 11/11; IPFS verify=OK",
+    "advances_roadmap": [
+      "Ссылка на глоссарий в шапке нормативных доков"
+    ]
+  },
+  "prev_hash": "0bc4ad3c64b4051c6042d0483c4349fea25a2687d273683ac254cb5573cf4d2e",
+  "hash": "3613b048f3d4bd563219c5c6aaa4e46faa1db044deec7e54be06937e18a41fb3"
+}

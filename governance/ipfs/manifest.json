@@ -9,11 +9,11 @@
       "single_block": true
     },
     {
-      "bytes": 11110,
-      "cid": "bafkreibue7e6pmysfbhujbg3qfhkmr4ou6cimnchxyxzne33ueg45nr2li",
+      "bytes": 11355,
+      "cid": "bafkreih4i33lqnzwncxykh6ukyosvhfvgkozrmzi5ed3pvq2owwmodjvzy",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ANTI-ABUSE.md",
-      "sha256": "3427c9e7b312284f4484db814ea6478ea784863447be2f96937ba10dceb63a5a",
+      "sha256": "fc46f6b8373668af851fd4561d2a9cb5329d98b328e907b7d61a75acc70d35ce",
       "single_block": true
     },
     {
@@ -33,11 +33,11 @@
       "single_block": true
     },
     {
-      "bytes": 18581,
-      "cid": "bafkreiewm73civbbcprmwhqcqoytzo3ggym3fqnrebmgzkifsiol6casuu",
+      "bytes": 18812,
+      "cid": "bafkreihkfbm6xwdrusryztznol3qjavip5s5eoesw7sj2rzhp3c56frrny",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ESCROW-TARGETED-DISBURSEMENT.md",
-      "sha256": "9667f624542113e2cb1e0283b13cbb663619b2c1b120586ca905921cbf0812a5",
+      "sha256": "ea2859ebd871a4a38ccf2d72f70482a87f65d23892b7e49d47277ec5df16316e",
       "single_block": true
     },
     {
@@ -49,11 +49,11 @@
       "single_block": true
     },
     {
-      "bytes": 30922,
-      "cid": "bafkreigai47axviwyfx3kyzfc7ima6tq4nfesx4xswvrk34rqp4ft53d6a",
+      "bytes": 31171,
+      "cid": "bafkreic55yzk77s3vzt5cnj6yjqgev4xrhmnasb23grwu4zvlavwykzo2e",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/GOVERNANCE.md",
-      "sha256": "c0473e0bd516c16fb5632517d0c07a70e34a495f9795ab156f9183f859f763f0",
+      "sha256": "5dee32affe5bae67d1353ec26062579789d8d0483ad9a36a7335582b6c2b2ed1",
       "single_block": true
     },
     {
@@ -89,11 +89,11 @@
       "single_block": true
     },
     {
-      "bytes": 8629,
-      "cid": "bafkreiel7oa3uf7p53invyozqyk6gppimqzq62vbrbcdhdetr6accylwum",
+      "bytes": 8860,
+      "cid": "bafkreic4tm63622r4wguya5x2isk7zivpawkdll45xsisair6sprgzb4mu",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/PRIORITIES.md",
-      "sha256": "8bfb81ba17efeed0dae1d98615e33de864330f6aa18844338c938f80216176a3",
+      "sha256": "5c9b3dbf6b51e58d4c03b7d224afe515782ca1ad7cede4890111f49f13643c65",
       "single_block": true
     },
     {
@@ -113,27 +113,27 @@
       "single_block": true
     },
     {
-      "bytes": 33896,
-      "cid": "bafkreicsecso73ty2spwrqyqoag5deufv6fhxopwnyryayqdfiwdswo7xm",
+      "bytes": 34127,
+      "cid": "bafkreib5peycjwtu7ybemw6fhondvvpfeag6vxvibxuzjtvoegcrycnhj4",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/PROOF-OF-CONTRIBUTION.md",
-      "sha256": "5220a4efee78d49f68c310700dd19285af8a7bb9f66e238062032a2c3959dfbb",
+      "sha256": "3d793024da74fe02465bc53b9a3ad5e5200deadea80de994ceae21851c09a74f",
       "single_block": true
     },
     {
-      "bytes": 29855,
-      "cid": "bafkreibclsann37ywr2q5sl6ph2twnaunu2rxuirdnszfec245dkp45iiy",
+      "bytes": 30086,
+      "cid": "bafkreiafcdfhjy27ctdov2z5uk2ppkgpmhhxiq6bh6nyiclpp6b2jsbwie",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/REWARDS-MODEL.md",
-      "sha256": "225c80d6eff8b4750ec97e79f53b34146d351bd1111b6592905ae746a7f3a846",
+      "sha256": "0510ca74e35f14c6eaeb3da2b4f7a8cf61cf7443c13f9b84096f7f83a4c83641",
       "single_block": true
     },
     {
-      "bytes": 102736,
-      "cid": "bafkreielqtj5pzmlu2n63xfmg2u6sun7geqy25s46wrsfgpkpx2otffwei",
+      "bytes": 106894,
+      "cid": "bafkreig45zl52qojj7ylckidhcph7wi4nhdcvnvz5sahcm6ftaf73sr5hq",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ROADMAP.md",
-      "sha256": "8b84d3d7e58ba69beddcac36a9e951bf31218d765cf5a32299ea7df4e994b622",
+      "sha256": "dcee57dd41c94ff0b12903389e7fd91c69c62ab6b9ec807133c5980bfdca3d3c",
       "single_block": true
     },
     {
@@ -145,16 +145,16 @@
       "single_block": true
     },
     {
-      "bytes": 45012,
-      "cid": "bafkreibpkosldfra3tk52pl2p7g5som335mlver4qkxyud3e4o5cchml4u",
+      "bytes": 45765,
+      "cid": "bafkreicvpgu5iri2ehxkwqu7ob5bhthixixzvucfrscq5bebvrd63fvmci",
       "cid_kind": "raw-leaf-v1",
       "path": "governance/registry/index.json",
-      "sha256": "2f53a4b19620dcd5dd3d7a7fcdd9399bdf58ba923c82af8a0f64e3ba211d8be5",
+      "sha256": "5579a9d4451a21eeab429f707a13cce8ba2f9ad0458c850e8481ac47ed96ac12",
       "single_block": true
     }
   ],
   "kind": "ipfs-content-manifest",
-  "manifest_fingerprint_sha256": "a672591fa06e1752605387150b4c59e20218f55c8001c448931fdd919f63caee",
+  "manifest_fingerprint_sha256": "d7ea7d32736ca8ac2d0f365adae240ea429a245400c0427f8e674f443cc8181a",
   "project": "Public Trust DAO",
   "spec": "CIDv1, codec=raw(0x55), multihash=sha2-256, multibase=base32. Эквивалент `ipfs add --cid-version=1 --raw-leaves=true` для одноблочных файлов (<=256 KiB). Вычисляется и проверяется из содержимого, без аккаунта пиннера.",
   "verify": "python3 scripts/ipfs_manifest.py verify",

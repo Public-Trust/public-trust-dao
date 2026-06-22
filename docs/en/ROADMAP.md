@@ -286,9 +286,14 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] **GitHub label catalog `.github/labels.yml`** — a single set of labels
   (`bug`, `idea`, `governance`, `safety`, …) referenced by the issue forms, so
   label colors/descriptions are reproducible and not set up by hand (proposed session 37).
-- [ ] **Glossary link in the header of normative docs** — add a link to
-  [`GLOSSARY.md`](GLOSSARY.md) to each doc's "Derived from …" line, so an unfamiliar
-  term is one click away from any document (proposed in session 36).
+- [x] **Glossary link in the header of normative docs** — add a link to
+  [`GLOSSARY.md`](GLOSSARY.md) to each doc's header, so an unfamiliar term is one
+  click away from any document (proposed in session 36). → Done (session 57): a
+  pointer "Unfamiliar technical words … are explained in plain language in the
+  [glossary](GLOSSARY.md) — the "…" group" with the exact group name was added to the
+  headers of six normative docs (GOVERNANCE / ANTI-ABUSE / REWARDS-MODEL /
+  PROOF-OF-CONTRIBUTION / ESCROW-TARGETED-DISBURSEMENT / PRIORITIES, RU + EN);
+  `PTD-0054`. The link to the glossary is now two-way for all normative docs.
 - [ ] **Documentation agent: a soft "term is defined" check** — a light dictionary
   linter that, for a list of key terms (DAO/escrow/multisig/…), checks the project
   has an entry in `GLOSSARY.md`; non-blocking, just a warning, so the glossary does
@@ -474,16 +479,32 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   → Done (session 55): Stage 6 marked complete (8/8) with the Mediator module filled in;
   the P3 bank gained the identity/glossary/meta items; the "Done" section gained
   `PTD-0050`/`PTD-0051`; `PTD-0052`.
-- [ ] **Glossary link in the header of ALL normative docs** (generalization) — now that
-  the pattern is done on `IDENTITY-VERIFICATION.md`, add the same short pointer
-  "unfamiliar word → [`GLOSSARY.md`](GLOSSARY.md)" to the header of the remaining public
-  docs (`GOVERNANCE`, `ANTI-ABUSE`, `REWARDS-MODEL`, `PROOF-OF-CONTRIBUTION`, `ESCROW`,
-  `PRIORITIES`) — so the glossary is one click away from any document (proposed session
-  54; continuation of the P3 "glossary link in doc headers").
+- [x] **Glossary link in the header of ALL normative docs** (generalization) — add the
+  same short pointer "unfamiliar word → [`GLOSSARY.md`](GLOSSARY.md)" to the header of
+  the remaining public docs (`GOVERNANCE`, `ANTI-ABUSE`, `REWARDS-MODEL`,
+  `PROOF-OF-CONTRIBUTION`, `ESCROW`, `PRIORITIES`), so the glossary is one click away
+  from any document (proposed session 54). → Done (session 57), `PTD-0054` (the same
+  work that closed "Glossary link in the header of normative docs" above): the pointer
+  with the exact group name was added to all six docs (RU + EN).
+- [ ] **Glossary pointer in the header of the remaining public docs** — extend the same
+  navigation pointer to the non-technical but still term-bearing docs (`SUPPORT-MODEL`,
+  `ACCOUNTABILITY`, `SECURITY`, `PRINCIPLES`, `CONSTITUTION`), so the "term one click
+  from its explanation" rule holds uniformly across the whole corpus (proposed session
+  57; continuation of the P3 "glossary link").
 
 ---
 
 ## Done
+
+- **PTD-0054 (session 57):** P3 (plain language) — **glossary pointer in the header of
+  six normative docs.** A line "Unfamiliar technical words … are explained in plain
+  language in the [`GLOSSARY.md`](GLOSSARY.md) — the "…" group" with the exact group
+  name (Governance and voting / Safety and technology / Money and aid) was added to the
+  headers of `GOVERNANCE` / `ANTI-ABUSE` / `REWARDS-MODEL` / `PROOF-OF-CONTRIBUTION` /
+  `ESCROW-TARGETED-DISBURSEMENT` / `PRIORITIES` (RU + EN). An unfamiliar term is now one
+  click from its plain-language explanation; the link to the glossary is two-way. The
+  meaning of the docs is unchanged. Documentation 3/3, run_all 8/8 + tests 11/11, IPFS
+  verify=OK (19), registry 55. Closed two P3 bank items (base + generalization).
 
 - **PTD-0053 (session 56):** INBOX #22 (operator request) — **"Future-proofing
   (including against quantum computers)" in [`SECURITY.en.md`](../../SECURITY.en.md)
