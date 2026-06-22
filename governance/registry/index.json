@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 59,
-  "head_hash": "cbfd89cc82a5686f44ff9f2200eeba490e159ca33e613e725f637535701a9213",
+  "count": 60,
+  "head_hash": "74a8d12e3e9baef0612925f4199d6bdd652b3a38d136a5329686404828877968",
   "entries": [
     {
       "seq": 0,
@@ -534,6 +534,15 @@
       "summary": "Documentation-агент: мягкая проверка «термин определён» (glossary-coverage) — ключевые техтермины должны иметь статью в глоссарии (RU+EN), предупреждает, но не роняет вердикт",
       "hash": "cbfd89cc82a5686f44ff9f2200eeba490e159ca33e613e725f637535701a9213",
       "file": "records/0058-documentation-glossary-coverage.json"
+    },
+    {
+      "seq": 59,
+      "id": "PTD-0059",
+      "type": "decision",
+      "timestamp": "2026-06-22T12:16:47Z",
+      "summary": "Documentation-агент: мягкая проверка «нет мёртвых статей глоссария» (glossary-no-dead) — у каждой статьи глоссария термин должен реально использоваться в документах; предупреждает, но не роняет вердикт; обратная к glossary-coverage",
+      "hash": "74a8d12e3e9baef0612925f4199d6bdd652b3a38d136a5329686404828877968",
+      "file": "records/0059-documentation-glossary-no-dead.json"
     }
   ]
 }

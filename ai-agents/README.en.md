@@ -249,10 +249,14 @@ git-tracked `.md` files (over what is actually published):
 | `language-switcher` | the top of the doc has a correct `[Русский]·[English]` switcher pointing to the paired file | Art. 6 — availability in both languages |
 | `link-integrity` | every relative link in `.md` resolves to an existing file/directory | Art. 3 — verifiability; a doc with no broken links is actually readable |
 | `glossary-coverage` *(soft)* | key technical terms (DAO, escrow, multisig, …) have an entry in the glossary (RU+EN) | Art. 3/6 — clarity/explainability (`PTD-0040`) |
+| `glossary-no-dead` *(soft)* | every glossary entry's term is actually used in at least one normative document (inverse of `glossary-coverage`) | Art. 3/6 — clarity/explainability (`PTD-0040`) |
 
-> The `glossary-coverage` check is **soft**: it only warns (so the glossary does
-> not fall behind the documents) and **never turns the verdict red** — green stays
-> green. The number of warnings is shown in the report (`warnings` field).
+> The `glossary-coverage` and `glossary-no-dead` checks are **soft**: they only warn
+> (so the glossary neither falls behind the documents nor grows stale) and **never
+> turn the verdict red** — green stays green. The number of warnings is shown in the
+> report (`warnings` field). `glossary-no-dead` is deliberately conservative (a term
+> is searched by many keys: the main phrase, parenthetical variants, individual
+> significant words) — it would rather stay silent than raise a false alarm.
 
 **Pairing rule** (derived from the path, not hardcoded per file):
 `docs/NAME.md` ↔ `docs/en/NAME.md`; `<dir>/README.md` ↔ `<dir>/README.en.md`;

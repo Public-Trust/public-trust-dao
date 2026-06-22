@@ -24,6 +24,9 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • glossary-coverage → ключевые термины проекта описаны в глоссарии ........ ст. 3/6
     (МЯГКАЯ проверка: только предупреждает, не роняет вердикт — чтобы глоссарий
      не отставал от документов; PTD-0040)
+  • glossary-no-dead  → у каждой статьи глоссария термин реально используется . ст. 3/6
+    (МЯГКАЯ, обратная к coverage: предупреждает, если статья есть, а сам термин
+     нигде в документах не встречается — глоссарий «оброс» лишним; PTD-0040)
 
 Правило пар (выводится из пути, а не зашито пофайлово):
   docs/NAME.md            ↔ docs/en/NAME.md
@@ -316,6 +319,105 @@ def check_glossary_coverage(root, existing):
     return ("pass" if not violations else "warn"), violations
 
 
+# Разделители альтернативных написаний внутри заголовка статьи: запятая, слэш,
+# точка с запятой, тире-разделитель, союзы «and»/«и»/«&». По ним заголовок дробится
+# на ключи поиска (например «Testnet and Mainnet» → «testnet» + «mainnet»).
+SPLIT_KEYS_RE = re.compile(r"[,/;]|\s—\s|\s-\s|\s(?:and|и|&)\s")
+# Скобочная часть заголовка: «(multisig)», «(proof-of-personhood)» и т.п.
+PAREN_RE = re.compile(r"\(([^)]*)\)")
+# Кавычки-ёлочки и обычные — внутри заголовка считаем разделителями (а не частью
+# термина): `"NOT an investment"` → ключ «not an investment».
+QUOTES_RE = re.compile(r"[\"«»“”]")
+# Короткие служебные слова — НЕ ключи (иначе ловили бы совпадения на «and»/«для»).
+WORD_STOP = {
+    "this", "that", "from", "with", "есть", "быть", "либо", "также", "когда",
+    "чтобы", "своей", "этот", "или", "для", "без", "как", "что", "при", "над",
+    "под", "and", "the", "not", "for",
+}
+# Заголовок статьи глоссария = строка ЦЕЛИКОМ из жирного термина (а не выделение
+# **жирным** внутри абзаца). Берём только полностью-жирные строки, дальше ещё
+# отфильтруем по завершающей точке (см. glossary_article_headings).
+ARTICLE_HEAD_LINE_RE = re.compile(r"^\*\*(.+)\*\*\s*$", re.MULTILINE)
+
+
+def glossary_article_headings(text):
+    """Внутренности заголовков статей глоссария (без обрамляющих **).
+
+    Статья — это строка, состоящая ЦЕЛИКОМ из жирного термина и заканчивающаяся
+    точкой (точка может стоять под закрывающей кавычкой: `vote."`). Обычное
+    выделение **жирным** в теле абзаца сюда НЕ попадает: после него либо идёт текст
+    (строка не заканчивается на **), либо нет завершающей точки.
+    """
+    heads = []
+    for inner in ARTICLE_HEAD_LINE_RE.findall(text):
+        tail = inner.rstrip().rstrip("\"»'").rstrip()
+        if tail.endswith("."):
+            heads.append(inner)
+    return heads
+
+
+def article_title(inner):
+    """Человекочитаемый заголовок статьи: содержимое заголовка без завершающей точки."""
+    return inner.strip().rstrip(".").strip()
+
+
+def article_search_keys(inner):
+    """Ключи для поиска термина статьи в корпусе документов.
+
+    Намеренно ГЕНЕРОЗНО: основной термин (до первой скобки) + все альтернативы из
+    скобок (по разделителям) + отдельные значимые слова основного термина (пословный
+    фолбэк для многословных заголовков вроде «Liveness check»). Чем больше ключей,
+    тем КОНСЕРВАТИВНЕЕ проверка: статья объявляется «мёртвой», только если НИ ОДИН
+    ключ не встречается в корпусе. Это мягкая проверка — лучше промолчать, чем дать
+    ложную тревогу.
+    """
+    norm = QUOTES_RE.sub(" ", article_title(inner))
+    raw = set()
+    # альтернативные написания из скобок
+    for paren in PAREN_RE.findall(norm):
+        raw.update(SPLIT_KEYS_RE.split(paren))
+    # основной термин — всё до скобок (как фраза целиком и по разделителям)
+    primary = re.sub(r"\(.*", "", norm)
+    raw.add(primary)
+    raw.update(SPLIT_KEYS_RE.split(primary))
+    keys = set()
+    for k in raw:
+        k = re.sub(r"\s+", " ", k.strip().strip("«».,—-").strip()).lower()
+        if len(k) >= 3:  # отбрасываем мусорные обрезки
+            keys.add(k)
+    # пословный фолбэк: длинное значимое слово основного термина — тоже ключ.
+    for w in re.split(r"[\s.,/;]+", primary.lower()):
+        w = w.strip("«».,—-()")
+        if len(w) >= 4 and w not in WORD_STOP:
+            keys.add(w)
+    return keys
+
+
+def check_glossary_no_dead(root, existing, corpus_docs):
+    """МЯГКАЯ проверка (обратная к coverage): у каждой статьи глоссария термин
+    реально встречается хотя бы в одном нормативном документе.
+
+    Если термин статьи не найден НИГДЕ в корпусе — глоссарий «оброс» лишней статьёй
+    (предупреждение, не блокирует). Корпус — все публичные доки, кроме самих
+    глоссариев. Если глоссария нет (мини-репозиторий в тесте) — проверять нечего → pass.
+    """
+    glossaries = [g for g in (GLOSSARY_RU, GLOSSARY_EN) if g in existing]
+    if not glossaries:
+        return "pass", []
+    corpus = "\n".join(read_text(root, d) for d in corpus_docs).lower()
+    violations = []
+    for gloss in glossaries:
+        for inner in glossary_article_headings(read_text(root, gloss)):
+            keys = article_search_keys(inner)
+            if keys and not any(k in corpus for k in keys):
+                violations.append({
+                    "record": gloss,
+                    "problem": (f"статья «{article_title(inner)}»: термин не встречается "
+                                "ни в одном нормативном документе — глоссарий мог обрасти лишним"),
+                })
+    return ("pass" if not violations else "warn"), violations
+
+
 CHECKS = [
     {
         "key": "bilingual-pairs",
@@ -342,6 +444,13 @@ CHECKS = [
         "fn": "coverage",
         "soft": True,
     },
+    {
+        "key": "glossary-no-dead",
+        "title": "У каждой статьи глоссария термин реально используется в документах",
+        "guards": "ст. 3/6 — понятность/объяснимость (PTD-0040); МЯГКАЯ, обратная к coverage — предупреждает, не блокирует",
+        "fn": "nodead",
+        "soft": True,
+    },
 ]
 
 
@@ -356,12 +465,16 @@ def run(root):
     switch_status, switch_v = check_language_switcher(root, public_docs, existing)
     links_status, links_v = check_link_integrity(root, all_md)
     cov_status, cov_v = check_glossary_coverage(root, existing)
+    # Корпус для «мёртвых статей» — публичные доки минус сами глоссарии.
+    corpus_docs = [p for p in public_docs if p not in (GLOSSARY_RU, GLOSSARY_EN)]
+    nodead_status, nodead_v = check_glossary_no_dead(root, existing, corpus_docs)
 
     results = {
         "pairs": (pairs_status, pairs_v),
         "switcher": (switch_status, switch_v),
         "links": (links_status, links_v),
         "coverage": (cov_status, cov_v),
+        "nodead": (nodead_status, nodead_v),
     }
 
     checks = []

@@ -216,6 +216,53 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # 13. Мягкая проверка «нет мёртвых статей»: статья глоссария, чей термин не
+    #     встречается НИГДЕ в корпусе → ПРЕДУПРЕЖДАЕТ, но НЕ роняет вердикт.
+    dead_article = dict(GOOD_FILES)
+    dead_article["docs/GLOSSARY.md"] = (
+        "[Русский] · [English](en/GLOSSARY.md)\n\n# Глоссарий\n\n"
+        "**Квантовая запутанность (quantum entanglement).**\n"
+        "Термин, которого нет ни в одном документе.\n"
+    )
+    dead_article["docs/en/GLOSSARY.md"] = (
+        "[Русский](../GLOSSARY.md) · [English]\n\n# Glossary\n\n"
+        "**Quantum entanglement.**\nA term used nowhere.\n"
+    )
+    print("\n[мягкая проверка: мёртвая статья глоссария предупреждает, но НЕ роняет вердикт]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, dead_article)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("glossary-no-dead == warn для мёртвой статьи",
+              status_of(report, "glossary-no-dead") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+        check("проверка помечена soft", _is_soft(report, "glossary-no-dead"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 14. Живая статья (термин встречается в корпусе) → glossary-no-dead pass.
+    #     «docs» есть в ссылках README → термин используется → не мёртвая.
+    live_article = dict(GOOD_FILES)
+    live_article["docs/GLOSSARY.md"] = (
+        "[Русский] · [English](en/GLOSSARY.md)\n\n# Глоссарий\n\n"
+        "**Документация (docs).**\nТо, что лежит в каталоге docs.\n"
+    )
+    live_article["docs/en/GLOSSARY.md"] = (
+        "[Русский](../GLOSSARY.md) · [English]\n\n# Glossary\n\n"
+        "**Documentation (docs).**\nWhat lives under docs.\n"
+    )
+    print("\n[мягкая проверка: живая статья (термин используется) не предупреждает]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, live_article)
+        code, report = run_agent(tmp)
+        check("glossary-no-dead == pass для живой статьи",
+              status_of(report, "glossary-no-dead") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 
