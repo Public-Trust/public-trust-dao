@@ -416,6 +416,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0039 (session 42):** INBOX #18 (operator) — **[`PROOF-OF-CONTRIBUTION.md`](PROOF-OF-CONTRIBUTION.md) (+RU)**,
+  proof of contribution and escrow contracts. The fund creates paid work THROUGH helping
+  people; the central problem is proof of execution (**the oracle problem**). Architecture:
+  a task with acceptance criteria (bounty/milestone) + escrow locks the reward at assignment;
+  proof in three layers (recipient signature + artifact hashes in IPFS, file private +
+  auto-verification of on-chain work merge/tests); collective validation (≥N independent,
+  worker≠validator) + Fairness/Audit AI (anomaly detection) + **validators STAKE reputation**
+  (fraud let through → you lose it) + dispute window/mediation; `release` only when
+  confirm∧≥N validators∧expired window, all in registry+on-chain; anti-fraud (anti-Sybil
+  against "volunteer=needy" collusion, limits, random re-checks, need outranks reward).
+  Honest about the oracle weak spot: start small, scale by trust. `IContributionEscrow`
+  sketch for Stage 5. Documentation/Guardian/Audit green, IPFS rebuilt (17). `PTD-0039`.
+  TESTNET-ONLY.
 - **PTD-0038 (session 41):** INBOX #17 (operator) — **[`REWARDS-MODEL.md`](REWARDS-MODEL.md) (+RU)**,
   the base **adaptive parametric** reward-and-distribution model. (1) Adaptivity:
   distributable budget `D = balance − buffer B_min`; treasury health index `h∈[0,1]`;

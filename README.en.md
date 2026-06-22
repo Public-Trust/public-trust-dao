@@ -32,6 +32,7 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`docs/en/GOVERNANCE.md`](docs/en/GOVERNANCE.md) — governance course: the voice of every verified human (Governor), the multisig as executor/emergency, Sybil resistance without power concentration.
 - [`docs/en/SUPPORT-MODEL.md`](docs/en/SUPPORT-MODEL.md) — how the project accepts support: through the system itself (transparent multisig treasury + registry), with no separate "Donate" button; a real-money address only after launch and an audit.
 - [`docs/en/REWARDS-MODEL.md`](docs/en/REWARDS-MODEL.md) — the adaptive parametric reward-and-distribution model: three separate streams (aid / work / volunteering), the reward share grows with treasury health under a hard ceiling (aid always ≥ 70%), coefficients governed by vote, validation and verifiability.
+- [`docs/en/PROOF-OF-CONTRIBUTION.md`](docs/en/PROOF-OF-CONTRIBUTION.md) — proof of contribution and escrow contracts: the fund creates paid work through helping people; how a contract provably confirms execution (recipient signature + artifact hashes + independent validators staking reputation) before paying; honest about the oracle problem.
 - [`LAUNCH.md`](LAUNCH.md) — technical specification for building the infrastructure.
 - [`contracts/`](contracts/) — smart contracts (TESTNET first). Stage 5, skeleton:
   [`Treasury.sol`](contracts/contracts/Treasury.sol) — base treasury layer (release
