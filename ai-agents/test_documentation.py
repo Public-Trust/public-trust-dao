@@ -82,6 +82,13 @@ def status_of(report, key):
     return None
 
 
+def _is_soft(report, key):
+    for c in report.get("checks", []):
+        if c["key"] == key:
+            return c.get("soft") is True
+    return False
+
+
 def scenario(title, files, expect_green, expect_fail_key=None):
     print(f"\n[{title}]")
     tmp = tempfile.mkdtemp(prefix="doc-test-")
@@ -171,6 +178,43 @@ def main():
     scenario("обычный GUIDE.md без пары ловится",
              add("GUIDE.md", "[Русский] · [English](GUIDE.en.md)\n\n# Гайд\n"),
              expect_green=False, expect_fail_key="bilingual-pairs")
+
+    # 11. Мягкая проверка глоссария: неполный глоссарий ПРЕДУПРЕЖДАЕТ, но НЕ роняет
+    #     вердикт (это ключевое свойство soft-проверки).
+    glossary_partial = dict(GOOD_FILES)
+    glossary_partial["docs/GLOSSARY.md"] = (
+        "[Русский] · [English](en/GLOSSARY.md)\n\n# Глоссарий\n\n"
+        "**DAO (ДАО).**\nОпределение.\n"  # есть только один ключевой термин
+    )
+    glossary_partial["docs/en/GLOSSARY.md"] = (
+        "[Русский](../GLOSSARY.md) · [English]\n\n# Glossary\n\n"
+        "**DAO (decentralized autonomous organization).**\nDefinition.\n"
+    )
+    print("\n[мягкая проверка: неполный глоссарий предупреждает, но НЕ роняет вердикт]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, glossary_partial)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("glossary-coverage == warn при неполном глоссарии",
+              status_of(report, "glossary-coverage") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+        check("проверка помечена soft", _is_soft(report, "glossary-coverage"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 12. Без глоссария вовсе — мягкая проверка молчит (pass), вердикт green.
+    print("\n[мягкая проверка: без глоссария не предупреждает (нечего линтовать)]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, dict(GOOD_FILES))
+        code, report = run_agent(tmp)
+        check("glossary-coverage == pass без глоссария",
+              status_of(report, "glossary-coverage") == "pass")
+        check("предупреждений нет", report.get("warnings", 0) == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1

@@ -248,6 +248,11 @@ git-tracked `.md` files (over what is actually published):
 | `bilingual-pairs` | every public doc has an RU↔EN counterpart (pairing rule from the path) | Art. 6 — openness/clarity; "all documentation is bilingual" |
 | `language-switcher` | the top of the doc has a correct `[Русский]·[English]` switcher pointing to the paired file | Art. 6 — availability in both languages |
 | `link-integrity` | every relative link in `.md` resolves to an existing file/directory | Art. 3 — verifiability; a doc with no broken links is actually readable |
+| `glossary-coverage` *(soft)* | key technical terms (DAO, escrow, multisig, …) have an entry in the glossary (RU+EN) | Art. 3/6 — clarity/explainability (`PTD-0040`) |
+
+> The `glossary-coverage` check is **soft**: it only warns (so the glossary does
+> not fall behind the documents) and **never turns the verdict red** — green stays
+> green. The number of warnings is shown in the report (`warnings` field).
 
 **Pairing rule** (derived from the path, not hardcoded per file):
 `docs/NAME.md` ↔ `docs/en/NAME.md`; `<dir>/README.md` ↔ `<dir>/README.en.md`;

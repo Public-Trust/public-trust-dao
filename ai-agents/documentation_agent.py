@@ -21,6 +21,9 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • bilingual-pairs   → у каждого публичного дока есть пара RU↔EN ........... ст. 6
   • language-switcher → вверху дока корректный переключатель [RU]·[EN] ...... ст. 6
   • link-integrity    → все относительные ссылки в .md ведут к чему-то ...... ст. 3
+  • glossary-coverage → ключевые термины проекта описаны в глоссарии ........ ст. 3/6
+    (МЯГКАЯ проверка: только предупреждает, не роняет вердикт — чтобы глоссарий
+     не отставал от документов; PTD-0040)
 
 Правило пар (выводится из пути, а не зашито пофайлово):
   docs/NAME.md            ↔ docs/en/NAME.md
@@ -80,6 +83,51 @@ EXTERNAL_PREFIXES = ("http://", "https://", "mailto:", "//", "#")
 # Огороженные блоки кода ```...``` вырезаем перед извлечением ссылок — там
 # может быть `](` внутри примеров, не являющийся ссылкой.
 FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+
+# Глоссарий проекта (RU-оригинал и EN-зеркало). На нём держится мягкая проверка
+# «термин определён»: правило понятного языка (PTD-0040, ст. 3/6) требует, чтобы
+# непонятные технические слова были объяснены простыми словами именно здесь.
+GLOSSARY_RU = "docs/GLOSSARY.md"
+GLOSSARY_EN = "docs/en/GLOSSARY.md"
+
+# Жирный заголовок статьи глоссария: строка, начинающаяся с **...** (термин).
+BOLD_HEAD_RE = re.compile(r"^\*\*.+?\*\*", re.MULTILINE)
+
+# Ключевые технические термины, которые проект ОБЯЗУЕТСЯ объяснять простым языком
+# в глоссарии (ст. 3 «понятность», ст. 6 «объяснимость», правило PTD-0040). Для
+# каждого — как он выглядит в статье глоссария на RU и на EN (подстрока в жирном
+# заголовке, регистр игнорируется). Если статьи нет — мягкое предупреждение, чтобы
+# глоссарий не отставал от документов. Список заведомо консервативный (только то,
+# что реально встречается в нормативных документах) — расширяется по мере роста
+# корпуса, отдельным решением.
+KEY_TERMS = [
+    {"id": "DAO", "ru": "dao", "en": "dao"},
+    {"id": "escrow / целевой расход", "ru": "escrow", "en": "escrow"},
+    {"id": "мультисиг (multisig)", "ru": "мультисиг", "en": "multisig"},
+    {"id": "казна (treasury)", "ru": "казна", "en": "treasury"},
+    {"id": "хранитель (guardian)", "ru": "хранитель", "en": "guardian"},
+    {"id": "кворум (quorum)", "ru": "кворум", "en": "quorum"},
+    {"id": "предложение (proposal)", "ru": "предложение", "en": "proposal"},
+    {"id": "Snapshot", "ru": "snapshot", "en": "snapshot"},
+    {"id": "Timelock", "ru": "timelock", "en": "timelock"},
+    {"id": "Governor", "ru": "governor", "en": "governor"},
+    {"id": "governance", "ru": "governance", "en": "governance"},
+    {"id": "репутация (reputation)", "ru": "репутация", "en": "reputation"},
+    {"id": "soulbound-бейдж", "ru": "soulbound", "en": "soulbound"},
+    {"id": "защита от Сивиллы (Sybil)", "ru": "сивилл", "en": "sybil"},
+    {"id": "IPFS", "ru": "ipfs", "en": "ipfs"},
+    {"id": "CID", "ru": "cid", "en": "cid"},
+    {"id": "hash-chain", "ru": "hash-chain", "en": "hash-chain"},
+    {"id": "смарт-контракт (smart contract)", "ru": "смарт-контракт", "en": "smart contract"},
+    {"id": "testnet / mainnet", "ru": "testnet", "en": "testnet"},
+    {"id": "приватный ключ (private key)", "ru": "приватный ключ", "en": "private key"},
+    {"id": "аудит (audit)", "ru": "аудит", "en": "audit"},
+    {"id": "реестр решений (registry)", "ru": "реестр", "en": "registry"},
+    {"id": "рельсы (guardrails)", "ru": "рельсы", "en": "guardrails"},
+    {"id": "апелляция (appeal)", "ru": "апелляция", "en": "appeal"},
+    {"id": "поэтапные выплаты (staged payments)", "ru": "поэтапные выплаты", "en": "staged payments"},
+    {"id": "поставщик (provider)", "ru": "поставщик", "en": "provider"},
+]
 
 
 def git_tracked_md(root):
@@ -236,6 +284,38 @@ def check_link_integrity(root, all_docs):
     return ("pass" if not violations else "fail"), violations
 
 
+def glossary_headings_blob(text):
+    """Склеивает жирные заголовки статей глоссария в один blob (нижний регистр)."""
+    return "\n".join(BOLD_HEAD_RE.findall(text)).lower()
+
+
+def check_glossary_coverage(root, existing):
+    """МЯГКАЯ проверка: ключевой технический термин имеет статью в глоссарии (RU+EN).
+
+    Не блокирует (статус pass/warn, в вердикт не входит) — только предупреждает,
+    чтобы глоссарий не отставал от документов (ст. 3/6, правило PTD-0040). Если
+    глоссария нет (например, мини-репозиторий в тесте) — проверять нечего → pass.
+    """
+    if GLOSSARY_RU not in existing or GLOSSARY_EN not in existing:
+        return "pass", []
+    ru_blob = glossary_headings_blob(read_text(root, GLOSSARY_RU))
+    en_blob = glossary_headings_blob(read_text(root, GLOSSARY_EN))
+    violations = []
+    for term in KEY_TERMS:
+        missing = []
+        if term["ru"] not in ru_blob:
+            missing.append("RU")
+        if term["en"] not in en_blob:
+            missing.append("EN")
+        if missing:
+            violations.append({
+                "record": GLOSSARY_RU if "RU" in missing else GLOSSARY_EN,
+                "problem": (f"ключевой термин «{term['id']}» не описан в глоссарии "
+                            f"({', '.join(missing)}) — глоссарий отстаёт от документов"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 CHECKS = [
     {
         "key": "bilingual-pairs",
@@ -255,6 +335,13 @@ CHECKS = [
         "guards": "ст. 3 — проверяемость; документ без битых ссылок реально читаем и проверяем",
         "fn": "links",
     },
+    {
+        "key": "glossary-coverage",
+        "title": "Ключевые технические термины описаны в глоссарии (RU+EN)",
+        "guards": "ст. 3/6 — понятность/объяснимость (PTD-0040); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "coverage",
+        "soft": True,
+    },
 ]
 
 
@@ -268,11 +355,13 @@ def run(root):
     pairs_status, pairs_v = check_bilingual_pairs(root, public_docs, existing)
     switch_status, switch_v = check_language_switcher(root, public_docs, existing)
     links_status, links_v = check_link_integrity(root, all_md)
+    cov_status, cov_v = check_glossary_coverage(root, existing)
 
     results = {
         "pairs": (pairs_status, pairs_v),
         "switcher": (switch_status, switch_v),
         "links": (links_status, links_v),
+        "coverage": (cov_status, cov_v),
     }
 
     checks = []
@@ -283,17 +372,23 @@ def run(root):
             "title": spec["title"],
             "guards": spec["guards"],
             "status": status,
+            "soft": spec.get("soft", False),
             "violations": violations,
         })
 
-    all_pass = all(c["status"] == "pass" for c in checks)
-    passed = sum(1 for c in checks if c["status"] == "pass")
+    # Вердикт — ТОЛЬКО по блокирующим проверкам. Мягкие (soft) проверки лишь
+    # предупреждают: они не делают вердикт «красным» и не меняют код возврата.
+    blocking = [c for c in checks if not c["soft"]]
+    all_pass = all(c["status"] == "pass" for c in blocking)
+    passed = sum(1 for c in blocking if c["status"] == "pass")
+    warnings = sum(len(c["violations"]) for c in checks if c["soft"])
     return {
         "agent": "documentation",
         "role": "служебный модуль, не орган власти (Конституция, ст. 9)",
         "verdict": "green" if all_pass else "red",
         "passed": passed,
-        "total": len(checks),
+        "total": len(blocking),
+        "warnings": warnings,
         "md_files_total": len(all_md),
         "public_docs_checked": len(public_docs),
         "single_lang_skipped": sorted(SINGLE_LANG & existing),
@@ -330,15 +425,21 @@ def main(argv):
     print(f"Публичных доков проверено (двуязычность): {report['public_docs_checked']}")
     print(f"Одноязычных служебных пропущено: {len(report['single_lang_skipped'])}")
     for c in report["checks"]:
-        mark = {"pass": "✓", "fail": "✗", "error": "⚠"}[c["status"]]
-        print(f"\n{mark} [{c['key']}] {c['title']}")
+        mark = {"pass": "✓", "fail": "✗", "error": "⚠", "warn": "⚠"}[c["status"]]
+        soft = "  (мягкая — не влияет на вердикт)" if c.get("soft") else ""
+        print(f"\n{mark} [{c['key']}] {c['title']}{soft}")
         print(f"    защищает: {c['guards']}")
         for v in c["violations"]:
             print(f"    | {v['record']}: {v['problem']}")
     print("\n" + "-" * 70)
     verdict = "ЗЕЛЁНО ✓" if all_pass else "КРАСНО ✗"
-    print(f"ИТОГ: {verdict}  ({report['passed']}/{report['total']} проверок прошли)")
+    warn_n = report.get("warnings", 0)
+    warn_note = f"; предупреждений (мягких): {warn_n}" if warn_n else ""
+    print(f"ИТОГ: {verdict}  ({report['passed']}/{report['total']} блокирующих проверок прошли{warn_note})")
     print("-" * 70)
+    if warn_n:
+        print("Есть мягкие предупреждения (глоссарий отстаёт от документов): это")
+        print("повод дополнить глоссарий, но НЕ ошибка — вердикт остаётся прежним.")
     if not all_pass:
         print("Documentation нашёл расхождение в документации (нет пары / битый")
         print("переключатель / битая ссылка). Это сигнал сообществу, а не действие:")

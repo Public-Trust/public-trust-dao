@@ -283,6 +283,10 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   attack, proof-of-personhood, liveness, web-of-trust, zero-knowledge, nullifier) at
   first mention link to [`GLOSSARY.md`](GLOSSARY.md) + a glossary pointer in the header;
   RU↔EN, `PTD-0051`.
+- [ ] **Documentation agent: a soft "no dead glossary entries" check** — the
+  inverse of `glossary-coverage`: warn if an entry exists in `GLOSSARY.md` but the
+  term itself appears nowhere in the normative documents (the glossary has grown
+  stale extras). Also soft, non-blocking (proposed session 61, extends `PTD-0058`).
 - [ ] **GitHub label catalog `.github/labels.yml`** — a single set of labels
   (`bug`, `idea`, `governance`, `safety`, …) referenced by the issue forms, so
   label colors/descriptions are reproducible and not set up by hand (proposed session 37).
@@ -294,10 +298,14 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   headers of six normative docs (GOVERNANCE / ANTI-ABUSE / REWARDS-MODEL /
   PROOF-OF-CONTRIBUTION / ESCROW-TARGETED-DISBURSEMENT / PRIORITIES, RU + EN);
   `PTD-0054`. The link to the glossary is now two-way for all normative docs.
-- [ ] **Documentation agent: a soft "term is defined" check** — a light dictionary
+- [x] **Documentation agent: a soft "term is defined" check** — a light dictionary
   linter that, for a list of key terms (DAO/escrow/multisig/…), checks the project
   has an entry in `GLOSSARY.md`; non-blocking, just a warning, so the glossary does
-  not fall behind the documents (proposed in session 36).
+  not fall behind the documents (proposed in session 36). **Done (session 61):** the
+  `glossary-coverage` check in `documentation_agent.py` (`soft=True`, a 26-term
+  `KEY_TERMS` list, RU+EN; the verdict/`passed`/`total` count only the blocking
+  checks, a `warnings` field was added); 2 new test scenarios (23/23); the check
+  table in the agent README (+EN). `PTD-0058`.
 - [x] **SECURITY.md (+EN)** — canonical security policy file (GitHub recognizes it
   and shows a "Report a vulnerability" button): where and how to report a rails/contract
   flaw, what's in scope (testnet only), what we do NOT promise (no real-money bounty

@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 58,
-  "head_hash": "4be7d29c6ba1b0ce3fec7d464ea6dc5173c7dfec35df5bfd1f0081e82a99b85b",
+  "count": 59,
+  "head_hash": "cbfd89cc82a5686f44ff9f2200eeba490e159ca33e613e725f637535701a9213",
   "entries": [
     {
       "seq": 0,
@@ -525,6 +525,15 @@
       "summary": "Этап 6 — у стража структуры пятая проверка «ci-calls-run-all»: краснеет, если CI-воркфлоу не зовёт run_all.py --with-tests (агенты в обход, без тест-инвариантов или воркфлоу нет). Закрыт последний обход покрытия — на уровне самого CI, а не только списков AGENTS/TESTS.",
       "hash": "4be7d29c6ba1b0ce3fec7d464ea6dc5173c7dfec35df5bfd1f0081e82a99b85b",
       "file": "records/0057-structure-guard-ci-calls-run-all.json"
+    },
+    {
+      "seq": 58,
+      "id": "PTD-0058",
+      "type": "decision",
+      "timestamp": "2026-06-22T12:04:17Z",
+      "summary": "Documentation-агент: мягкая проверка «термин определён» (glossary-coverage) — ключевые техтермины должны иметь статью в глоссарии (RU+EN), предупреждает, но не роняет вердикт",
+      "hash": "cbfd89cc82a5686f44ff9f2200eeba490e159ca33e613e725f637535701a9213",
+      "file": "records/0058-documentation-glossary-coverage.json"
     }
   ]
 }

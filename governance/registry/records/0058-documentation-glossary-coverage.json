@@ -1,0 +1,37 @@
+{
+  "seq": 58,
+  "id": "PTD-0058",
+  "type": "decision",
+  "timestamp": "2026-06-22T12:04:17Z",
+  "actor": "builder-agent",
+  "summary": "Documentation-агент: мягкая проверка «термин определён» (glossary-coverage) — ключевые техтермины должны иметь статью в глоссарии (RU+EN), предупреждает, но не роняет вердикт",
+  "refs": [
+    "ai-agents/documentation_agent.py",
+    "ai-agents/test_documentation.py",
+    "ai-agents/README.md"
+  ],
+  "payload": {
+    "decision": "Documentation-агент получил мягкую (не блокирующую) проверку «термин определён» — glossary-coverage. Для списка ключевых технических терминов (DAO, escrow, мультисиг, казна, хранитель, кворум, Snapshot, Timelock, Governor, репутация, soulbound, защита от Сивиллы, IPFS, CID, hash-chain, смарт-контракт, testnet/mainnet, приватный ключ, аудит, реестр, рельсы, апелляция, поэтапные выплаты, поставщик и др.) агент проверяет, что у каждого есть статья в глоссарии — и в RU (docs/GLOSSARY.md), и в EN (docs/en/GLOSSARY.md). Если статьи нет — это предупреждение (поле warnings в отчёте), а НЕ ошибка: вердикт остаётся прежним, код возврата не меняется. Цель — чтобы глоссарий не отставал от документов.",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9). Верхний P3 (контракт PersonhoodVerifier) и контрактная часть Этапа 5 недоступны: диск хоста заполнен (~0,9 ГБ свободно), contracts/node_modules отсутствует, hardhat/npm не прогнать. Взят верхний доступный pure-Python пункт банка идей ROADMAP «Documentation-агент: мягкая проверка „термин определён“» (предложен сессией 36). Прямо служит правилу понятного языка (PTD-0040, конституция ст. 3 «понятность» / ст. 6 «объяснимость»): машинно следит, чтобы технические термины из документов имели человеческое объяснение в глоссарии на обоих языках. Мягкость намеренная — список терминов растёт постепенно, и автор не должен спотыкаться о красный CI, лишь видеть подсказку.",
+    "deliverables": [
+      "ai-agents/documentation_agent.py — новая проверка check_glossary_coverage (soft=True), список KEY_TERMS (RU+EN-подстроки), разбор жирных заголовков глоссария; вердикт и passed/total считаются ТОЛЬКО по блокирующим проверкам, добавлено поле warnings; человекочитаемый вывод помечает мягкую проверку и печатает число предупреждений",
+      "ai-agents/test_documentation.py — 2 новых сценария (6 проверок): неполный глоссарий → coverage=warn, но вердикт остаётся green/exit=0 и проверка помечена soft; без глоссария → coverage=pass, предупреждений нет. Всего 23/23",
+      "ai-agents/README.md (+EN README.en.md) — строка glossary-coverage в таблице проверок Documentation + пояснение про мягкость (не роняет вердикт)"
+    ],
+    "rails": [
+      "Только код агента/тест/доки; средства/ключи/контракты не затронуты",
+      "Проверка НЕ блокирующая — не может сломать зелёный CI задним числом",
+      "Двуязычность RU↔EN: README обновлён в обе стороны в одном коммите; KEY_TERMS проверяет оба глоссария",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) не тронут"
+    ],
+    "status": "adopted",
+    "spec": "ai-agents/documentation_agent.py",
+    "verification": "documentation_agent на реальном репо: green, 3/3 блокирующих, glossary-coverage soft=pass, warnings=0; test_documentation.py 23/23; run_all --with-tests: агенты 8/8, тесты 11/11",
+    "advances_roadmap": [
+      "Documentation-агент: мягкая проверка «термин определён»"
+    ]
+  },
+  "prev_hash": "4be7d29c6ba1b0ce3fec7d464ea6dc5173c7dfec35df5bfd1f0081e82a99b85b",
+  "hash": "cbfd89cc82a5686f44ff9f2200eeba490e159ca33e613e725f637535701a9213"
+}
