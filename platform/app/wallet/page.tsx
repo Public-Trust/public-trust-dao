@@ -52,7 +52,9 @@ export default function WalletPage() {
   // Реакция на смену счёта/сети прямо в кошельке.
   useEffect(() => {
     const provider = getProvider();
-    if (!provider?.on || !provider.removeListener) return;
+    const on = provider?.on;
+    const removeListener = provider?.removeListener;
+    if (!on || !removeListener) return;
     const onAccounts = (...args: unknown[]) => {
       const accounts = Array.isArray(args[0]) ? (args[0] as string[]) : [];
       if (accounts.length > 0) {
@@ -66,11 +68,11 @@ export default function WalletPage() {
     const onChain = (...args: unknown[]) => {
       setChainId(typeof args[0] === "string" ? args[0] : null);
     };
-    provider.on("accountsChanged", onAccounts);
-    provider.on("chainChanged", onChain);
+    on("accountsChanged", onAccounts);
+    on("chainChanged", onChain);
     return () => {
-      provider.removeListener?.("accountsChanged", onAccounts);
-      provider.removeListener?.("chainChanged", onChain);
+      removeListener("accountsChanged", onAccounts);
+      removeListener("chainChanged", onChain);
     };
   }, []);
 
