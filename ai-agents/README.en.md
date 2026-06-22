@@ -36,7 +36,7 @@ This sets hard boundaries for EVERY agent in this directory:
 | Agent | Purpose | Status |
 |-------|---------|--------|
 | **Audit** | Verifies integrity and transparency: registry (hash-chain), IPFS manifest, Safe/Snapshot configs, contract tests. One "green/red" for the governance layer. | ✅ scaffold (`audit_agent.py`) |
-| **Guardian** | Watches the safety rails: no private keys/secrets in the repo, no mainnet/real funds, no TESTNET-first violations. | ⏳ planned |
+| **Guardian** | Watches the safety rails: no private keys/secrets in the repo, no mainnet/real funds, no TESTNET-first violations. | ✅ scaffold (`guardian_agent.py`) |
 | **Fairness** | Checks fairness of distribution per [`PRIORITIES.md`](../docs/en/PRIORITIES.md): is priority respected, is there bias/discrimination. | ⏳ planned |
 | **Reputation** | Computes/validates voting weights per [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3: "1 person = 1 vote", soulbound, "uniqueness ≠ power". | ⏳ planned |
 | **Housing** | Domain helper for housing cases (escrow paying the provider directly per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)). | ⏳ planned |
@@ -78,6 +78,39 @@ agent fixes nothing and controls nothing; the community decides.
 
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs the
 base audit on every push/PR — a public guarantee of governance-layer integrity.
+
+## Guardian agent — what it does and how to run it
+
+`guardian_agent.py` is a dedicated, explicit **safety-rails scanner across the whole
+repository tree** (not a single config, as `safe_config.py`/`snapshot_config.py` do).
+It walks the git-tracked files (what is actually published) and checks:
+
+| Check | What it catches | Protects |
+|-------|-----------------|----------|
+| `secrets-tracked` | a committed secret/key (`.env`, `*.key`, `*.pem`, `keystore/`, `wallet*.json`, `*_private*`, pulse-state files) | rail "secrets never in the repo" |
+| `gitignore-guards` | whether `.gitignore` covers `.env` and `logs/` (pulse state) | rail "secrets not in the repo"; pulse is untouchable |
+| `no-mainnet` | a mainnet `chain_id` in any JSON config | rail TESTNET-first |
+| `no-key-material` | private keys in text (64-hex outside hash fields; assigning `private key`/`mnemonic`/`seed` a real value) | Art. 2/4 — no owner holding a key to real money |
+
+To avoid false positives on the registry's and manifest's legitimate `sha256`/CID
+values, a 64-hex token counts as a key **only outside** hash fields
+(`hash`/`prev_hash`/`sha256`/…), and environment references
+(`process.env.PRIVATE_KEY`) are not treated as a leak.
+
+```bash
+python3 ai-agents/guardian_agent.py          # human-readable report
+python3 ai-agents/guardian_agent.py --json    # machine-readable (for CI/other agents)
+```
+
+Exit code `0` — rails intact; `1` — a violation found (this is a **signal**, not an action).
+
+A **test invariant** [`test_guardian.py`](test_guardian.py) proves Guardian works rather
+than being "green by default": for every violation (committed `.env`/key, mainnet
+`chain_id`, a 64-hex key, a secret assignment, a leaky `.gitignore`) the agent must
+return "red", while a clean tree with real sha256 hashes stays "green".
+
+CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
+the Guardian test invariant + Guardian itself on every push/PR.
 
 ## Rails (for all agents in this directory)
 

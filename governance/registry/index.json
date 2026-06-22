@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 22,
-  "head_hash": "a63a41e0839a8a645099a6c46db1e356eeebf3f9cc0ba8c6daf394d1f6ad3de0",
+  "count": 23,
+  "head_hash": "5a78a12fd1954f848d66adb17bc6ab4f61d5799f6f559ae05259c0e74a8d1fa8",
   "entries": [
     {
       "seq": 0,
@@ -201,6 +201,15 @@
       "summary": "Этап 6 (AI-агенты), модуль 1/8: каркас ai-agents/ + Audit-агент. audit_agent.py объединяет 4 рельс-валидатора (registry/ipfs/safe/snapshot) в один аудит-прогон, привязывает каждую проверку к статье конституции (ст.3/2/4), опция --with-contracts (тесты контрактов, ст.4/7); вывод человекочитаемый и --json; код 0/1. Двуязычный README описывает все 8 агентов по ст.9.2 и рельсы (read-only, находка=сигнал не действие). CI ai-agents.yml на push/PR. «До зелёного»: 4/4 базовый, 5/5 с контрактами (54 теста). Пойман и устранён рассинхрон IPFS-манифеста. TESTNET-ONLY.",
       "hash": "a63a41e0839a8a645099a6c46db1e356eeebf3f9cc0ba8c6daf394d1f6ad3de0",
       "file": "records/0021-decision.json"
+    },
+    {
+      "seq": 22,
+      "id": "PTD-0022",
+      "type": "decision",
+      "timestamp": "2026-06-22T09:40:00Z",
+      "summary": "Этап 6 (AI-агенты), модуль 2/8: Guardian-агент. guardian_agent.py — отдельный явный сканер рельс безопасности по ВСЕМУ дереву репо (git-отслеживаемые файлы): secrets-tracked (нет закоммиченных секретов/ключей/состояния пульса), gitignore-guards (.gitignore прикрывает .env/logs/), no-mainnet (нет mainnet chain_id в JSON), no-key-material (нет приватных ключей в тексте: 64-hex вне хэш-полей + присваивание секрета). Без ложных срабатываний на sha256/CID. Тест-инвариант test_guardian.py (14/14) доказывает «красное ловится, зелёное не ложно-падает». CI расширен (Audit + тест Guardian + Guardian). TESTNET-ONLY.",
+      "hash": "5a78a12fd1954f848d66adb17bc6ab4f61d5799f6f559ae05259c0e74a8d1fa8",
+      "file": "records/0022-decision.json"
     }
   ]
 }

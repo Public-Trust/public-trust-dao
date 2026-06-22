@@ -134,8 +134,13 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     [`ai-agents.yml`](../../.github/workflows/ai-agents.yml). "To green": 4/4 base,
     5/5 with contracts (54 tests). `PTD-0021`. Also realizes the "one governance
     validator in CI" idea. TESTNET-ONLY.
-  - [ ] Module 2/8: **Guardian** — safety rails (no keys/secrets/mainnet/real funds
-    in the repo) as an explicit standalone agent.
+  - [x] Module 2/8 (session 25): **Guardian** [`guardian_agent.py`](../../ai-agents/guardian_agent.py)
+    — an explicit safety-rails scanner across the WHOLE repo tree (git-tracked files):
+    no committed secrets/keys (`secrets-tracked`), `.gitignore` covers `.env`/`logs/`
+    (`gitignore-guards`), no mainnet `chain_id` (`no-mainnet`), no private keys in text
+    (`no-key-material`, 64-hex outside hash fields + secret assignment). A test invariant
+    [`test_guardian.py`](../../ai-agents/test_guardian.py) (14/14) proves "red is really
+    caught, green doesn't false-fail". CI extended. `PTD-0022`.
   - [ ] Modules 3–8: Fairness / Reputation / Housing / Governance / Mediator /
     Documentation — one at a time, "to green".
 
@@ -200,17 +205,39 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] Test invariant for the Audit agent: feed it a "broken" governance artifact
   (broken chain / manifest drift) and check it returns "red" — so the audit itself is
   provably working, not "green by default" (session 24).
-- [ ] Guardian agent: an explicit repo-wide safety-rail scanner (no 64-hex keys /
+- [x] Guardian agent: an explicit repo-wide safety-rail scanner (no 64-hex keys /
   `mnemonic` / `seed`, no mainnet chain_id, `.env` not staged) — reuse and generalize
   the checks from `safe_config.py`/`snapshot_config.py` (session 24).
+  → Realized (session 25): [`guardian_agent.py`](../../ai-agents/guardian_agent.py) +
+  test invariant [`test_guardian.py`](../../ai-agents/test_guardian.py), `PTD-0022`.
 - [ ] Documentation agent: an RU↔EN bilingual linter (an RU doc ↔ its EN mirror
   changed together) + relative-link integrity — also closes the P2 item "automatic
   bilingual check in CI" (session 24).
+- [ ] Meta-agent "run all": a single `ai-agents/run_all.py` entry point that runs every
+  ready agent (Audit + Guardian + …) in sequence and folds their reports into one
+  "green/red" for the whole project (session 25).
+- [ ] Guardian: a `pre-commit` hook/instruction — a local hook that runs Guardian
+  before a commit so a secret never reaches the index in the first place (session 25).
+- [ ] Extend Guardian with URL-rail checks: no "yield promises"/"investment"/"guarantee"
+  in public texts (the literal constitutional prohibitions of PRINCIPLES.md) — a light
+  lexical linter for the landing/README (session 25).
 
 ---
 
 ## Done
 
+- **PTD-0022 (session 25):** Stage 6 (AI agents), module 2/8 — **the Guardian agent**.
+  [`guardian_agent.py`](../../ai-agents/guardian_agent.py) is a dedicated, explicit
+  safety-rails scanner across the WHOLE repo tree (over git-tracked files):
+  `secrets-tracked` (no committed secrets/keys/pulse-state), `gitignore-guards`
+  (`.gitignore` covers `.env`/`logs/`), `no-mainnet` (no mainnet `chain_id` in JSON),
+  `no-key-material` (no private keys in text: 64-hex outside hash fields + `private
+  key`/`mnemonic`/`seed` assignment). No false positives on the registry's and
+  manifest's legitimate sha256/CID (64-hex counts as a key only outside hash fields).
+  A **test invariant** [`test_guardian.py`](../../ai-agents/test_guardian.py) (14/14)
+  on a throwaway git repo proves "red is really caught, green doesn't false-fail". CI
+  [`ai-agents.yml`](../../.github/workflows/ai-agents.yml) extended (Audit + Guardian
+  test + Guardian). `PTD-0022`. TESTNET-ONLY. Next — modules 3–8 (Fairness / Reputation / …).
 - **PTD-0021 (session 24):** Stage 6 (AI agents), module 1/8 — **the
   [`ai-agents/`](../../ai-agents/) scaffold + the first working agent Audit**. The
   README (RU/EN) fixes the Art. 9 principle "AI serves, does not rule" and the
@@ -326,3 +353,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Landing page in web / media kit / press page | agent | 9 |
 | Snapshot proposal templates / one governance validator in CI | agent | 18 |
 | Audit test invariant / Guardian agent / Documentation agent (bilingual) | agent | 24 |
+| Meta-agent "run all" / pre-commit hook / lexical prohibitions linter | agent | 25 |
