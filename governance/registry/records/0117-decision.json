@@ -1,0 +1,17 @@
+{
+  "seq": 117,
+  "id": "PTD-0117",
+  "type": "decision",
+  "timestamp": "2026-06-22T20:24:57Z",
+  "actor": "builder-agent",
+  "summary": "Documentation-агент: новая мягкая проверка mirror-doc-learn-slug — каждый адрес витрины «Разобраться, как устроен фонд» (t.learn в platform/lib/i18n.ts) записан как валидный слаг ровно /<строчные-с-дефисами>/ (ведущий и хвостовой слэш, между ними только a-z, цифры и одиночные дефисы). Парная к mirror-doc-slug (PTD-0114) с другой стороны: тот следит за формой КЛЮЧА карты MIRROR_DOCS, а эта — за формой самого адреса витрины. Кривой адрес витрины (/Manifesto/, /direct help/, без ведущего/хвостового слэша) тихо рассинхронит её с картой, а mirror-doc-slug этого не ловит (он смотрит только ключи). МЯГКАЯ (warn, вердикт green не роняет), нет файла i18n.ts → молчит. На реальном репозитории зелёная (11 адресов витрины чисты). +4 тест-сценария (177/177), run_all 8/8 + страж 11/11. ст. 3/6 — проверяемость/понятность. TESTNET-ONLY.",
+  "refs": [
+    "ai-agents/documentation_agent.py",
+    "ai-agents/test_documentation.py",
+    "ai-agents/README.md",
+    "ai-agents/README.en.md"
+  ],
+  "payload": {},
+  "prev_hash": "84e8a50d2d251f78d1bf78895c0f03fde69298df9256cf68e3d7efc7806281ba",
+  "hash": "bcfdf2ccae7cb8cf0fa1ded086609505d7cde9f7979e467df166efc05605272e"
+}

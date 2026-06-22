@@ -437,6 +437,15 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
+- [ ] **Documentation agent: a `t.learn` showcase address matches a `MIRROR_DOCS` key**
+  — the next step after `mirror-doc-slug` (key is a slug) and `mirror-doc-learn-slug`
+  (showcase address is a slug): both sides are now individually valid in form, but
+  nothing checks that the set of showcase addresses and the set of map keys are the
+  SAME set of slugs (today a mismatch is only caught indirectly by
+  `mirror-doc-coverage`/`mirror-doc-showcase` via page existence). A direct soft
+  comparison "showcase slugs == map slugs" would explain a desync in one line
+  (proposed session 119, extension of `PTD-0117`). A warning, not a block.
+
 - [x] **Cross-screen "see also" links between the platform's mirror screens** — the
   series of screens (`manifesto`, `constitution`, `governance`, `priorities`, `rewards`,
   `safeguards`, `work`, `accountability`, `direct-help`, `support`, `glossary`) is closed
@@ -598,13 +607,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   `docs/en/X.md` (or points to it in the screen's EN version) — so an English-speaking person can
   reach the English norm from the plain-language retelling, not just the Russian one. Builds on
   `mirror-doc-bilingual`. A warning, not a block (proposed session 115).
-- [ ] **Documentation agent: a `t.learn` showcase href is a valid slug** — the mirror of
+- [x] **Documentation agent: a `t.learn` showcase href is a valid slug** — the mirror of
   `mirror-doc-slug` from the other side: every `href` in the "Understand how the fund works"
   showcase (`lib/i18n.ts`) has the exact form `/<lower-case-with-dashes>/` (leading and trailing
   slash, the same slug between them as the map key). Today the slug is only checked on the
   `MIRROR_DOCS` key; a malformed `href` in the showcase itself (`/Manifesto/`, `/direct help/`)
   would desync it from the map just the same, but nothing catches it. A warning, not a block
-  (extension of `PTD-0114`, proposed session 117).
+  (extension of `PTD-0114`, proposed session 117). **Done (session 119):** the
+  `mirror-doc-learn-slug` check in `documentation_agent.py` — for each `t.learn` showcase address
+  (via `parse_i18n_hrefs`): leading and trailing slash, with `^[a-z0-9]+(?:-[a-z0-9]+)*$` between
+  them; every deviation is named precisely (uppercase / space / extra slash / missing
+  leading/trailing). No `i18n.ts` → stays silent (pass). Green on the real repo (all 11 showcase
+  addresses are clean). +4 test scenarios (177/177), run_all 8/8 + structure guard 11/11, Guardian
+  4/4. Agent README tables (+RU) updated. `PTD-0117`. TESTNET-ONLY.
 - [x] **Identity-verification terms in `GLOSSARY.md`** (+RU) — add in plain words:
   "proof-of-personhood", "zero-knowledge / proof without disclosure", "nullifier",
   "liveness", "vouching (web-of-trust)" — each linking to `IDENTITY-VERIFICATION.md`

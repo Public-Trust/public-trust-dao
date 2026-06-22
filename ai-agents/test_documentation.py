@@ -1104,6 +1104,88 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # --- Мягкая проверка mirror-doc-learn-slug: адрес витрины t.learn — слаг ----
+    # Парная к mirror-doc-slug с другой стороны: форму проверяем не у КЛЮЧА карты, а
+    # у самого адреса витрины «Разобраться, как устроен фонд» (t.learn в i18n.ts).
+
+    # 50. mirror-doc-learn-slug: чистые адреса витрины → pass.
+    print("\n[мягкая проверка: чистые адреса t.learn → mirror-doc-learn-slug pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, {"platform/lib/i18n.ts": (
+            "export const ru = {\n"
+            "  learn: [\n"
+            '    { title: "Манифест", href: "/manifesto/" },\n'
+            '    { title: "Прямая помощь", href: "/direct-help/" },\n'
+            '    { title: "Правило 42", href: "/rule-42/" },\n'
+            "  ],\n"
+            "};\n"
+        )})
+        st, viol = doc.check_mirror_doc_learn_slug(tmp)
+        check("mirror-doc-learn-slug == pass на чистых адресах", st == "pass")
+        check("нарушений нет (learn-slug)", viol == [])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 51. mirror-doc-learn-slug: кривые адреса витрины → warn, каждый пойман.
+    print("\n[мягкая проверка: кривые адреса t.learn → mirror-doc-learn-slug warn]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, {"platform/lib/i18n.ts": (
+            "export const ru = {\n"
+            "  learn: [\n"
+            '    { title: "M", href: "/Manifesto/" },\n'    # заглавная
+            '    { title: "D", href: "/direct help/" },\n'  # пробел
+            '    { title: "X", href: "/a/b/" },\n'          # лишний слэш внутри
+            '    { title: "L", href: "manifesto/" },\n'     # нет ведущего слэша
+            '    { title: "T", href: "/trail" },\n'         # нет хвостового слэша
+            '    { title: "ok", href: "/ok-slug/" },\n'     # чистый — не в счёт
+            "  ],\n"
+            "};\n"
+        )})
+        st, viol = doc.check_mirror_doc_learn_slug(tmp)
+        check("mirror-doc-learn-slug == warn при кривых адресах", st == "warn")
+        check("поймано ровно 5 кривых адресов (чистый /ok-slug/ не в счёт)", len(viol) == 5)
+        check("чистый адрес /ok-slug/ не помечен",
+              all("/ok-slug/" not in v["record"] for v in viol))
+        by_rec = {v["record"]: v["problem"] for v in viol}
+        joined = " ".join(by_rec.values())
+        check("заглавная названа", any("/Manifesto/" in r and "регистр" in p
+              for r, p in by_rec.items()))
+        check("пробел назван", any("/direct help/" in r and "пробел" in p
+              for r, p in by_rec.items()))
+        check("лишний слэш назван", any("/a/b/" in r and "слэш" in p
+              for r, p in by_rec.items()))
+        check("нет ведущего слэша назван", "ведущего слэша" in joined)
+        check("нет хвостового слэша назван", "хвостового слэша" in joined)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 52. mirror-doc-learn-slug: реальная платформа чиста → pass + soft в отчёте.
+    print("\n[мягкая проверка: дефолтная витрина — адреса-слаги → pass + soft в отчёте]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        code, report = run_agent(tmp)
+        check("вердикт green / exit=0 (learn-slug)",
+              report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-learn-slug присутствует и pass",
+              status_of(report, "mirror-doc-learn-slug") == "pass")
+        check("mirror-doc-learn-slug помечена soft",
+              _is_soft(report, "mirror-doc-learn-slug"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 53. mirror-doc-learn-slug: нет файла i18n.ts → молчим (pass).
+    print("\n[мягкая проверка: нет i18n.ts → mirror-doc-learn-slug pass (молчит)]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, {"docs/X.md": "# X\n"})
+        st, viol = doc.check_mirror_doc_learn_slug(tmp)
+        check("mirror-doc-learn-slug == pass без i18n.ts", st == "pass" and viol == [])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 

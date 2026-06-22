@@ -14,7 +14,7 @@ This is the project's history as one list: what was decided and done, and when. 
 - **The feed is generated mechanically** from [`governance/registry/index.json`](governance/registry/index.json) — nothing is written by hand.
 - **Entry text is verbatim from the registry,** which is kept in Russian as the source language; so the wording of each line below mirrors the canonical Russian record.
 
-Total entries: **117**. Current record fingerprint: `84e8a50d2d251f78d1bf78895c0f03fde69298df9256cf68e3d7efc7806281ba`.
+Total entries: **118**. Current record fingerprint: `bcfdf2ccae7cb8cf0fa1ded086609505d7cde9f7979e467df166efc05605272e`.
 
 ---
 
@@ -31,6 +31,7 @@ Total entries: **117**. Current record fingerprint: `84e8a50d2d251f78d1bf78895c0
 
 ## 2026-06-22
 
+- **PTD-0117** (decision) — Documentation-агент: новая мягкая проверка mirror-doc-learn-slug. [Full entry](governance/registry/records/0117-decision.json)
 - **PTD-0116** (decision) — Витрина web/ ведёт на платформу. [Full entry](governance/registry/records/0116-decision.json)
 - **PTD-0115** (decision) — Страж (Guardian): убрана ложная тревога проверки no-key-material на русском отпечатке журнала в CHANGELOG. После ввода ленты изменений (PTD-0113) строка CHANGELOG.md «Текущий…. [Full entry](governance/registry/records/0115-decision.json)
 - **PTD-0114** (decision) — Documentation-агент: новая мягкая проверка mirror-doc-slug. [Full entry](governance/registry/records/0114-decision.json)

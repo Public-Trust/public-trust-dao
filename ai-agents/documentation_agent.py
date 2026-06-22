@@ -70,6 +70,11 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
     (МЯГКАЯ: предупреждает, если ключ записан не как «<строчные-с-дефисами>»
      (заглавные, пробел, слэш) — он перестаёт быть рабочим адресом /<ключ>/ и
      тихо рассинхронит карту с витриной t.learn; PTD-0114)
+  • mirror-doc-learn-slug → адрес витрины t.learn — валидный слаг /<...>/ ........ ст. 3/6
+    (МЯГКАЯ: парная к mirror-doc-slug с другой стороны — предупреждает, если адрес
+     самой витрины записан не как «/<строчные-с-дефисами>/» (заглавные, пробел,
+     лишний слэш, без ведущего/хвостового) — он тихо рассинхронит витрину с картой
+     MIRROR_DOCS, а mirror-doc-slug смотрит только ключи; PTD-0117)
   • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
      односторонняя связь оставляет человека без обратного пути; PTD-0106)
@@ -1223,6 +1228,60 @@ def check_mirror_doc_slug(mirror_docs=MIRROR_DOCS):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_mirror_doc_learn_slug(root):
+    """МЯГКАЯ: каждый адрес витрины t.learn — валидный слаг ровно «/<строчные-с-дефисами>/».
+
+    `mirror-doc-slug` следит за формой КЛЮЧА карты `MIRROR_DOCS`. Но та же форма
+    нужна и с другой стороны — у самих адресов витрины «Разобраться, как устроен
+    фонд» (`t.learn` в `lib/i18n.ts`): они должны совпадать с ключами карты, чтобы
+    парные проверки (`mirror-doc-coverage`/`mirror-doc-showcase`) сравнивали строки
+    и не находили ложных расхождений. Если адрес записать «по-человечески» — с
+    заглавной, пробелом, лишним слэшем или без ведущего/хвостового слэша
+    (`/Manifesto/`, `/direct help/`, `manifesto/`) — он тихо рассинхронит витрину с
+    картой, а `mirror-doc-slug` (он смотрит только ключи) этого не поймает. Эта
+    проверка следит за самой формой адреса: ведущий и хвостовой слэш, а между ними —
+    только строчные латинские буквы, цифры и одиночные дефисы (без двойных и без
+    дефиса по краям). Любое отклонение — предупреждение (warn, не блок — ст. 3/6,
+    PTD-0117). Нет файла i18n.ts → молчим (pass).
+    """
+    if not os.path.exists(os.path.join(root, I18N_TS)):
+        return "pass", []
+    violations = []
+    for href in sorted(parse_i18n_hrefs(read_text(root, I18N_TS), "learn")):
+        problems = []
+        if not href.startswith("/"):
+            problems.append("нет ведущего слэша «/»")
+        if not href.endswith("/"):
+            problems.append("нет хвостового слэша «/»")
+        inner = href[1:] if href.startswith("/") else href
+        inner = inner[:-1] if inner.endswith("/") else inner
+        if not inner:
+            problems.append("пустой адрес — между слэшами ничего нет")
+        else:
+            if inner != inner.lower():
+                problems.append("заглавные буквы (адрес платформы — в нижнем регистре)")
+            if " " in inner:
+                problems.append("пробел внутри адреса")
+            if "/" in inner:
+                problems.append("лишний слэш «/» внутри (адрес витрины — один уровень)")
+            if not MIRROR_DOC_SLUG_RE.match(inner):
+                problems.append(
+                    "форма не «/<строчные-с-дефисами>/» (только a-z, цифры и одиночные "
+                    "дефисы, без ведущего/хвостового и двойных дефисов)")
+        if problems:
+            seen = []
+            for p in problems:
+                if p not in seen:
+                    seen.append(p)
+            violations.append({
+                "record": f"{I18N_TS} → t.learn «{href}»",
+                "problem": (f"адрес витрины «{href}» не годится как слаг-адрес экрана "
+                            f"/<...>/: {'; '.join(seen)} — витрина тихо "
+                            "рассинхронится с картой MIRROR_DOCS"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 def check_see_also_symmetric(root):
     """МЯГКАЯ: связь «См. также» между экранами-объяснениями взаимна.
 
@@ -1388,6 +1447,13 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "mirror-doc-learn-slug",
+        "title": "Каждый адрес витрины t.learn — валидный слаг /<строчные-с-дефисами>/",
+        "guards": "ст. 3/6 — адрес витрины годится как слаг-адрес экрана и не рассинхронит её с картой MIRROR_DOCS (PTD-0117); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_learn_slug",
+        "soft": True,
+    },
+    {
         "key": "see-also-symmetric",
         "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
         "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
@@ -1427,6 +1493,7 @@ def run(root):
     mirror_norm_status, mirror_norm_v = check_mirror_doc_normalized()
     mirror_bil_status, mirror_bil_v = check_mirror_doc_bilingual(root)
     mirror_slug_status, mirror_slug_v = check_mirror_doc_slug()
+    mirror_lslug_status, mirror_lslug_v = check_mirror_doc_learn_slug(root)
     seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
@@ -1449,6 +1516,7 @@ def run(root):
         "mirror_doc_normalized": (mirror_norm_status, mirror_norm_v),
         "mirror_doc_bilingual": (mirror_bil_status, mirror_bil_v),
         "mirror_doc_slug": (mirror_slug_status, mirror_slug_v),
+        "mirror_doc_learn_slug": (mirror_lslug_status, mirror_lslug_v),
         "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 
