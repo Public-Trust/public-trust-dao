@@ -35,6 +35,41 @@ export type WalletDict = {
   testnetUnknown: string;
 };
 
+export type ApplyDict = {
+  back: string;
+  title: string;
+  lead: string;
+  privacyTitle: string;
+  privacy: string[];
+  formTitle: string;
+  priorityLabel: string;
+  priorityHint: string;
+  priorityChoose: string;
+  priorityLabels: Record<string, string>;
+  needLabel: string;
+  needHint: string;
+  needPlaceholder: string;
+  spendLabel: string;
+  spendHint: string;
+  spendPlaceholder: string;
+  amountLabel: string;
+  amountHint: string;
+  amountPlaceholder: string;
+  personalDataWarn: string;
+  priorityRequired: string;
+  needRequired: string;
+  spendRequired: string;
+  submit: string;
+  draftTitle: string;
+  draftLead: string;
+  copy: string;
+  copied: string;
+  download: string;
+  startOver: string;
+  howTitle: string;
+  how: string[];
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -60,6 +95,7 @@ export type Dict = {
   contact: string;
   builtNote: string;
   wallet: WalletDict;
+  apply: ApplyDict;
 };
 
 export const DICT: Record<Lang, Dict> = {
@@ -93,6 +129,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Подать заявку на помощь",
         text: "Спокойная форма без лишних личных данных. Помощь идёт по честному порядку: сначала самые срочные нужды.",
+        href: "/apply/",
       },
       {
         title: "Открытый журнал",
@@ -157,6 +194,60 @@ export const DICT: Record<Lang, Dict> = {
       testnetUnknown:
         "Сеть не распознана. Фонд работает в тестовой сети — при необходимости переключите кошелёк.",
     },
+    apply: {
+      back: "← На главную",
+      title: "Подать заявку на помощь",
+      lead: "Это спокойная форма для просьбы о помощи. Заявка анонимна — личные данные вносить не нужно. Помощь идёт по честному порядку: сначала самые срочные беды. Пока приложение работает в тестовом режиме: форма собирает черновик заявки в вашем браузере, ничего не уходит на сторонние серверы.",
+      privacyTitle: "Что НЕ нужно писать в заявке",
+      privacy: [
+        "Не нужно настоящее имя, адрес, телефон, почту или номера документов.",
+        "Не нужны фотографии и сканы — фонд не собирает лица и документы в базу.",
+        "Опишите беду своими словами: что случилось и какая помощь нужна. Этого достаточно, чтобы решение приняли честно.",
+      ],
+      formTitle: "Заявка",
+      priorityLabel: "Какая это беда",
+      priorityHint: "Выберите, к чему ближе всего ваша ситуация. От этого зависит, насколько срочно её рассмотрят.",
+      priorityChoose: "— выберите —",
+      priorityLabels: {
+        life_threat: "1 · Угроза жизни",
+        housing_loss: "2 · Угроза остаться без жилья",
+        medical: "3 · Здоровье и лечение",
+        food: "4 · Еда",
+        children: "5 · Дети",
+        elderly: "6 · Пожилые люди",
+        disability: "7 · Люди с инвалидностью",
+        self_reliance: "8 · Встать на ноги",
+        education: "9 · Учёба",
+        public_good: "10 · Долгая польза для всех",
+      },
+      needLabel: "Что случилось и какая помощь нужна",
+      needHint: "Своими словами, без личных данных. Коротко и по делу.",
+      needPlaceholder: "Например: после пожара нет где жить, нужно временное жильё на месяц.",
+      spendLabel: "На что именно пойдут средства",
+      spendHint: "Фонд не выдаёт деньги на руки, а оплачивает нужду напрямую (например, аренду — арендодателю, лекарство — аптеке). Напишите, что нужно оплатить.",
+      spendPlaceholder: "Например: оплата аренды комнаты за один месяц напрямую арендодателю.",
+      amountLabel: "Примерная сумма (необязательно)",
+      amountHint: "Если знаете — укажите приблизительно. Все суммы пока в тестовой сети, без реальных денег.",
+      amountPlaceholder: "Например: около 300 (тестовые единицы)",
+      personalDataWarn: "Похоже, в тексте остались личные данные (телефон, почта или номер документа). Заявка анонимна — пожалуйста, уберите их. Подать всё равно можно.",
+      priorityRequired: "Пожалуйста, выберите, какая это беда.",
+      needRequired: "Пожалуйста, опишите, что случилось и какая помощь нужна.",
+      spendRequired: "Пожалуйста, напишите, на что именно пойдут средства.",
+      submit: "Собрать черновик заявки",
+      draftTitle: "Черновик заявки готов",
+      draftLead: "Вот ваша анонимная заявка простой проверяемой записью. Реальная подача появится, когда контракты запустят в тестовой сети. Пока вы можете скопировать или сохранить черновик.",
+      copy: "Скопировать",
+      copied: "Скопировано",
+      download: "Сохранить файлом",
+      startOver: "Заполнить заново",
+      howTitle: "Что будет дальше",
+      how: [
+        "Срочную беду рассматривают первой, но проверку это не отменяет.",
+        "Деньги идут по частям, с лимитами, а каждую выплату проверяют несколько независимых людей.",
+        "Очередь зависит только от тяжести беды, а не от того, кто человек: происхождение, статус и репутация на очередь не влияют.",
+        "Любое решение по заявке попадёт в открытый журнал — его можно будет посмотреть и проверить.",
+      ],
+    },
   },
   en: {
     htmlLang: "en",
@@ -188,6 +279,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Apply for help",
         text: "A calm form with no unnecessary personal data. Help follows a fair order: the most urgent needs first.",
+        href: "/apply/",
       },
       {
         title: "Open record",
@@ -251,6 +343,60 @@ export const DICT: Record<Lang, Dict> = {
         "A main network with real money is currently selected. The fund works only on a test network — no real funds are used. Please switch your wallet to a test network.",
       testnetUnknown:
         "The network is not recognised. The fund works on a test network — switch your wallet if needed.",
+    },
+    apply: {
+      back: "← Back to home",
+      title: "Apply for help",
+      lead: "This is a calm form to ask for help. The application is anonymous — no personal data is needed. Help follows a fair order: the most urgent needs first. For now the app runs in test mode: the form builds a draft application in your browser, and nothing is sent to outside servers.",
+      privacyTitle: "What you should NOT write in the application",
+      privacy: [
+        "No real name, address, phone, email, or document numbers.",
+        "No photos or scans — the fund does not collect faces or documents into a database.",
+        "Describe the situation in your own words: what happened and what help you need. That is enough for a fair decision.",
+      ],
+      formTitle: "Application",
+      priorityLabel: "What kind of need is this",
+      priorityHint: "Choose what your situation is closest to. This sets how urgently it is reviewed.",
+      priorityChoose: "— choose —",
+      priorityLabels: {
+        life_threat: "1 · Threat to life",
+        housing_loss: "2 · Threat of losing housing",
+        medical: "3 · Health and treatment",
+        food: "4 · Food",
+        children: "5 · Children",
+        elderly: "6 · Elderly people",
+        disability: "7 · People with disabilities",
+        self_reliance: "8 · Getting back on one's feet",
+        education: "9 · Learning",
+        public_good: "10 · Long-term benefit for everyone",
+      },
+      needLabel: "What happened and what help is needed",
+      needHint: "In your own words, without personal data. Short and to the point.",
+      needPlaceholder: "For example: after a fire there is nowhere to live, temporary housing is needed for a month.",
+      spendLabel: "What exactly the funds will pay for",
+      spendHint: "The fund does not hand out cash — it pays the need directly (for example, rent to the landlord, medicine to the pharmacy). Write what needs to be paid.",
+      spendPlaceholder: "For example: one month of room rent paid directly to the landlord.",
+      amountLabel: "Approximate amount (optional)",
+      amountHint: "If you know it — give a rough figure. All amounts are on a test network for now, with no real money.",
+      amountPlaceholder: "For example: about 300 (test units)",
+      personalDataWarn: "It looks like the text still contains personal data (a phone, email, or document number). The application is anonymous — please remove it. You can still submit.",
+      priorityRequired: "Please choose what kind of need this is.",
+      needRequired: "Please describe what happened and what help is needed.",
+      spendRequired: "Please write what exactly the funds will pay for.",
+      submit: "Build application draft",
+      draftTitle: "Application draft is ready",
+      draftLead: "Here is your anonymous application as a simple, verifiable record. Real submission becomes available once the contracts run on a test network. For now you can copy or save the draft.",
+      copy: "Copy",
+      copied: "Copied",
+      download: "Save as file",
+      startOver: "Fill in again",
+      howTitle: "What happens next",
+      how: [
+        "An urgent need is reviewed first, but that does not skip the checks.",
+        "Money is released in parts, with limits, and every payment is reviewed by several independent people.",
+        "The queue depends only on the severity of the need, not on who the person is: origin, status, and reputation do not move the queue.",
+        "Any decision on the application goes into the open record — it can be viewed and checked.",
+      ],
     },
   },
 };

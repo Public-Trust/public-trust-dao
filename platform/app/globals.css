@@ -402,6 +402,70 @@ h3 {
   font-weight: 700;
 }
 
+/* Форма заявки на помощь */
+.apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  max-width: 640px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-weight: 700;
+}
+.field-hint {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--text-soft);
+}
+.field input,
+.field select,
+.field textarea {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 11px 13px;
+  width: 100%;
+  margin-top: 4px;
+}
+.field textarea {
+  resize: vertical;
+  min-height: 84px;
+}
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--accent);
+}
+
+/* Готовый черновик заявки */
+.draft-card {
+  max-width: 720px;
+}
+.draft-json {
+  margin: 0;
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+}
+.draft-card .cta-row {
+  margin-top: 4px;
+}
+
 /* Прозрачность */
 .transparency {
   padding: 8px 0 48px;

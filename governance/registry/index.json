@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 77,
-  "head_hash": "1cff71cc9da55ff3df775bf3a7ed6537c17c8cc98f5cff3a0b989041c0ba8548",
+  "count": 78,
+  "head_hash": "a4e433a4daeea926d0c3219ec811b762a517270b8763c005c491273a7bec9d9c",
   "entries": [
     {
       "seq": 0,
@@ -696,6 +696,15 @@
       "summary": "Второй экран платформы: «Подключить кошелёк» (platform/app/wallet/) — подключение кошелька по EIP-1193 без сторонних web3-библиотек, понятное объяснение, показ публичного адреса и сети, отключение, предупреждение при основной сети; блокчейн-слой lib/wallet.ts отделён от UI; карточка на главной стала рабочей",
       "hash": "1cff71cc9da55ff3df775bf3a7ed6537c17c8cc98f5cff3a0b989041c0ba8548",
       "file": "records/0076-decision.json"
+    },
+    {
+      "seq": 77,
+      "id": "PTD-0077",
+      "type": "decision",
+      "timestamp": "2026-06-22T18:55:00Z",
+      "summary": "Третий экран платформы: «Подать заявку на помощь» (platform/app/apply/) — анонимная форма простым языком по порядку важности нужд (PRIORITIES) с обязательным целевым расходом (ESCROW); собирает проверяемый черновик заявки в браузере (копировать/сохранить), мягкая защита приватности; слой данных lib/application.ts отделён от UI; карточка на главной стала рабочей",
+      "hash": "a4e433a4daeea926d0c3219ec811b762a517270b8763c005c491273a7bec9d9c",
+      "file": "records/0077-decision.json"
     }
   ]
 }
