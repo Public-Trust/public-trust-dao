@@ -198,7 +198,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     Side effect: the platform lockfile (`platform/package-lock.json`) is committed for
     the first time — the supply-chain rail from INBOX #34. Built to green (typecheck OK,
     `next build` 13/13, export OK). `PTD-0087`. TESTNET-ONLY.
-  - [ ] Wire up platform publishing to GitHub Pages during migration from `web/`.
+  - [x] Wire up platform publishing to GitHub Pages (session 92): `pages.yml`
+    deploys both layers in one pass — the `web/` showcase at the site root and the
+    `platform/` app (Next.js static export, `basePath=/<repo>/app`) under `app/` —
+    without breaking the live site. Ready up-to-the-button: the operator only has to
+    enable Pages once (Source: GitHub Actions), after which the platform is live at
+    `.../app/`. `PTD-0089`. Closes the last sub-item of the INBOX #34 series.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,

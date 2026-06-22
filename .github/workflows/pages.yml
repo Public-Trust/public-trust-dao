@@ -1,15 +1,24 @@
 name: Deploy public site to GitHub Pages
 
-# Деплоит статический сайт из /web в GitHub Pages.
+# Простыми словами: этот процесс собирает и публикует ВЕСЬ публичный сайт фонда
+# на бесплатном GitHub Pages — двумя слоями за один деплой:
+#   • витрина-лендинг (папка web/) — по корневому адресу проекта;
+#   • полноценная платформа на Next.js (папка platform/) — по адресу .../app/.
+# Так оператор может вживую посмотреть платформу, НЕ ломая живую витрину: они
+# едут вместе, каждая по своему адресу.
+#
 # Источник Pages в настройках репозитория должен быть выставлен на "GitHub Actions"
 # (Settings → Pages → Build and deployment → Source: GitHub Actions) — это
 # единоразовое действие оператора, см. PROGRESS.md → «НУЖНО ОТ ОПЕРАТОРА».
+# До этого действия процесс собирает артефакт, но публичная ссылка не активируется.
 
 on:
   push:
     branches: [main]
     paths:
       - 'web/**'
+      - 'platform/**'
+      - 'governance/registry/**'
       - 'governance/status/run_all_status.json'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
@@ -24,6 +33,10 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# Рельса прозрачности: Next.js не шлёт анонимную статистику наружу.
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -37,17 +50,49 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Кладём канонический статус-артефакт в публикуемую папку, чтобы «живой
-      # светофор» читал его тем же origin. Единый источник истины остаётся в
-      # governance/status/ — копия делается на лету, в репозиторий web/status.json
-      # не коммитится.
-      - name: Copy status artifact into site
-        run: cp governance/status/run_all_status.json web/status.json
+      - name: Поставить Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
-      - name: Upload site artifact (web/)
+      - name: Обновить снимок открытого журнала из реестра
+        # Экран «Открытый журнал» читает снимок реестра, который едет вместе с
+        # платформой (ничего не подгружается со стороны — прозрачность). Пересобираем
+        # его из governance/registry/, чтобы публикация отражала реестр на этот момент.
+        run: python3 scripts/sync_journal.py
+
+      - name: Установить зависимости платформы
+        working-directory: platform
+        # npm install (а не npm ci): lock-файл платформы пока не зафиксирован
+        # локально (диск хоста был занят) — детерминизм держат точные версии в
+        # package.json. Тот же приём, что в проверочном процессе platform.yml.
+        run: npm install --no-audit --no-fund
+
+      - name: Собрать платформу (статический экспорт) под адрес .../app/
+        working-directory: platform
+        # basePath = /<имя-репозитория>/app — платформа живёт по подпути app/ внутри
+        # проектного сайта GitHub Pages (.../<repo>/app/). Имя репозитория берём
+        # динамически, чтобы тот же процесс работал и при переименовании/форке.
+        env:
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}/app
+        run: npm run build
+
+      - name: Собрать единую публикуемую папку (_site)
+        # Витрина web/ ложится в корень сайта, платформа — в подпапку app/.
+        # Канонический статус-артефакт кладём рядом, чтобы «живой светофор» читал
+        # его тем же origin (в репозиторий status.json не коммитится).
+        run: |
+          rm -rf _site
+          mkdir -p _site
+          cp -r web/. _site/
+          cp governance/status/run_all_status.json _site/status.json
+          mkdir -p _site/app
+          cp -r platform/out/. _site/app/
+
+      - name: Upload site artifact (_site)
         uses: actions/upload-pages-artifact@v3
         with:
-          path: web
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
