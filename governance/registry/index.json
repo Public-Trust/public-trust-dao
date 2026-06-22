@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 11,
-  "head_hash": "53854852b2f1d21b9a741f2f5f1584327817628aef94fd745394b8ccc0fca0ea",
+  "count": 12,
+  "head_hash": "e4f1c8bdbc6e1f34b970e09a798fdfe71f589dda339e6bea31c524603c035b9e",
   "entries": [
     {
       "seq": 0,
@@ -102,6 +102,15 @@
       "summary": "Errata к PTD-0009: написание имени автора исправлено «Фёдор»→«Федор» (через «е»), «Fyodor»→«Fedor» — по указанию оператора. Реестр append-only: PTD-0009 не переписан, исправление отдельной записью. Документы приведены к «Федор Григорьев / Fedor Grigoriev».",
       "hash": "53854852b2f1d21b9a741f2f5f1584327817628aef94fd745394b8ccc0fca0ea",
       "file": "records/0010-correct-author-spelling.json"
+    },
+    {
+      "seq": 11,
+      "id": "PTD-0011",
+      "type": "decision",
+      "timestamp": "2026-06-22T05:20:00Z",
+      "summary": "Почта проекта (INBOX #7): варианты, инструкция оператору, имена, подпись и шаблоны ответов RU/EN — docs/EMAIL-SETUP.md (+EN)",
+      "hash": "e4f1c8bdbc6e1f34b970e09a798fdfe71f589dda339e6bea31c524603c035b9e",
+      "file": "records/0011-project-email-setup.json"
     }
   ]
 }

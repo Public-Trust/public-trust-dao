@@ -94,8 +94,9 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   announcement post, a FAQ "this is a public good, NOT an investment". Prepared by
   the agent; publishing done by the operator. → Done (session 9),
   [`PROMOTION.md`](PROMOTION.md), `PTD-0006`.
-- [ ] **Project email (INBOX #7):** instructions for the operator — domain+mail
+- [x] **Project email (INBOX #7):** instructions for the operator — domain+mail
   options (ProtonMail/own domain), texts. Registration done by the operator.
+  → Done (session 14), [`EMAIL-SETUP.md`](EMAIL-SETUP.md), `PTD-0011`.
 - [ ] **Testnet wallet + Safe (INBOX #10):** describe/create a test wallet and a
   Safe for the test treasury (no real money or private keys in the repo), document
   addresses openly.
@@ -132,6 +133,12 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0011 (session 14):** project email [`EMAIL-SETUP.md`](EMAIL-SETUP.md)
+  (+EN) — option comparison (own domain / ProtonMail / Gmail) with a recommendation,
+  addresses/aliases, step-by-step operator guide (Proton quick start + own domain
+  with MX/SPF/DKIM/DMARC), signature boilerplate, reply templates RU/EN.
+  "Ready-to-click" draft: the operator registers the box and stores the password.
+  Closes INBOX #7.
 - **PTD-0006 (session 9):** promotion materials [`PROMOTION.md`](PROMOTION.md)
   (+EN) — message rails, boilerplate+disclaimer, landing copy, pitch RU/EN (3
   formats), announcement post (Telegram + Twitter/X), FAQ "public good, NOT an
