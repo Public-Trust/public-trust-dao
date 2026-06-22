@@ -356,6 +356,26 @@ export type EscrowDict = {
   sourceLink: string;
 };
 
+export type ConstitutionDict = {
+  back: string;
+  title: string;
+  lead: string;
+  topTitle: string; // высший закон одной мыслью
+  topNote: string;
+  articlesTitle: string;
+  articlesHint: string;
+  // 10 статей конституции, каждая пересказана простыми словами.
+  articles: { name: string; text: string }[];
+  coreTitle: string; // неизменяемое ядро
+  coreHint: string;
+  core: string[];
+  limitTitle: string;
+  limitNote: string;
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -432,6 +452,7 @@ export type Dict = {
   navWork: string;
   navAccountability: string;
   navDirectHelp: string;
+  navConstitution: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -451,6 +472,7 @@ export type Dict = {
   work: WorkDict;
   accountability: AccountabilityDict;
   escrow: EscrowDict;
+  constitution: ConstitutionDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -488,6 +510,7 @@ export const DICT: Record<Lang, Dict> = {
     navWork: "Оплачиваемая работа",
     navAccountability: "Всё под подписью",
     navDirectHelp: "Оплата напрямую",
+    navConstitution: "Конституция",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -1085,6 +1108,70 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд оплачивает нужду напрямую». Принцип опирается на конституцию (статьи 4, 5, 7), порядок помощи и правила защиты от обмана. Это описание правил для будущих программ-контрактов выплат и для ИИ-помощников «Аудит», «Хранитель», «Справедливость». Всё пока на тестовой сети, без реальных денег.",
       sourceLink: "Открыть документ «Как фонд оплачивает нужду напрямую» →",
     },
+    constitution: {
+      back: "← На главную",
+      title: "Конституция фонда — простыми словами",
+      lead: "Конституция — это главный закон фонда, его опора и ориентир. Здесь все 10 статей пересказаны обычными человеческими словами: чем фонд является, чего он не делает никогда и кто за что отвечает. Точные формулировки — в самом документе, а этот экран помогает понять суть без юридического и технического языка.",
+      topTitle: "Главное одной мыслью",
+      topNote: "Это высший закон фонда. Любая программа-контракт, любой ИИ-помощник, любое голосование и любой публичный текст обязаны ему подчиняться. Если что-то противоречит конституции — главной остаётся конституция.",
+      articlesTitle: "Десять статей — по-человечески",
+      articlesHint: "Слева — о чём статья, справа — что она означает простыми словами.",
+      articles: [
+        {
+          name: "1. Чем является фонд",
+          text: "Открытая система взаимопомощи и общественного блага. Её цель — дать людям базовую безопасность, достоинство, жильё, еду, лечение, образование и силы снова встать на ноги и помогать другим. Это не вложение денег, не пирамида и не способ заработать.",
+        },
+        {
+          name: "2. У фонда нет владельца",
+          text: "Никто не владеет фондом и никто не получает выгоду навсегда. Основатель — обычный участник наравне со всеми. Ни человек, ни компания, ни государство, ни ИИ не могут единолично распоряжаться деньгами или решениями.",
+        },
+        {
+          name: "3. Открытость и проверяемость",
+          text: "Все документы открыты, все решения объясняются, все операции публикуются, все изменения сохраняются. Записи ведутся так, чтобы их нельзя было потихоньку переписать задним числом.",
+        },
+        {
+          name: "4. Как хранится казна",
+          text: "Деньги живут в блокчейне под общим кошельком — чтобы что-то отправить, нужно несколько подписей хранителей (минимум 3 из 5). Реальные деньги заходят только после независимой проверки безопасности, отдельного согласия и перевода под общий кошелёк живых людей. До этого — только тестовая сеть.",
+        },
+        {
+          name: "5. Справедливая помощь",
+          text: "Помощь идёт по честному порядку: первыми — самые срочные нужды. Помощь должна возвращать человеку самостоятельность, а не привязывать его. Достоинство есть у каждого, независимо от дохода, происхождения, возраста, здоровья и положения.",
+        },
+        {
+          name: "6. Награда за полезный труд",
+          text: "Фонд может благодарить за общественно полезную работу — помощь людям, волонтёрство, развитие проекта, обучение. Но награда НИКОГДА не зависит от того, привёл ли человек новых участников.",
+        },
+        {
+          name: "7. Защита от злоупотреблений",
+          text: "Действуют поэтапные выплаты, лимиты, коллективная проверка, открытые отчёты, аудит и апелляции. Система устроена так, чтобы честность была выгоднее обмана.",
+        },
+        {
+          name: "8. Запреты",
+          text: "Конституционные запреты обязательны буквально — во всём коде, во всех ИИ-помощниках и во всех публичных текстах: не обещать доход, не строить пирамиду, не платить за привлечение людей, не прятать операции, не давать кому-то единоличную власть.",
+        },
+        {
+          name: "9. Роль искусственного интеллекта",
+          text: "ИИ не имеет власти и не владеет деньгами. ИИ-помощники (Хранитель, Аудит, Справедливость и другие) — служебные инструменты, которые помогают соблюдать конституцию, а не органы власти.",
+        },
+        {
+          name: "10. Как менять конституцию",
+          text: "Менять конституцию можно только открыто, через общее решение сообщества и с объяснением причин — тихо и в одиночку этого сделать нельзя.",
+        },
+      ],
+      coreTitle: "Что нельзя отменить никогда",
+      coreHint: "Есть неизменяемое ядро: даже общим голосованием его нельзя отменить или обойти.",
+      core: [
+        "Статья 1: фонд — это общественное благо и взаимопомощь, а не способ заработать.",
+        "Статья 2: у фонда нет владельца, никто не распоряжается им единолично.",
+        "Статья 3: всё открыто, объяснено и проверяемо.",
+        "Пункт 6.2: за полезный труд благодарят, но никогда не платят за «приведённых» людей.",
+      ],
+      limitTitle: "Конституция действует уже сейчас",
+      limitNote: "Это не обещание на будущее: конституции уже подчиняются каждый экран этой платформы, каждый нормативный документ и каждый ИИ-помощник. Пока всё на тестовой сети, без реальных денег — реальные средства заходят только после независимого аудита и согласия живых хранителей (минимум 3 подписи из 5).",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Конституция». Здесь — пересказ простыми словами; точные формулировки и нумерация статей живут в самом документе. Конституция — главный ориентир проекта: ей подчиняются программы-контракты, ИИ-помощники, управление и публичные тексты.",
+      sourceLink: "Открыть полный документ «Конституция» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -1481,6 +1568,7 @@ export const DICT: Record<Lang, Dict> = {
     navWork: "Paid work",
     navAccountability: "Signed & traceable",
     navDirectHelp: "Direct payment",
+    navConstitution: "Constitution",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -2077,6 +2165,70 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Where this is written down",
       sourceNote: "This screen mirrors the fund's normative document “How the fund pays for a need directly”. The principle rests on the constitution (articles 4, 5, 7), the order of help, and the rules against fraud. It describes the rules for the future payout contracts and for the AI helpers “Audit”, “Guardian”, and “Fairness”. Everything is still on a test network, with no real money.",
       sourceLink: "Open the “How the fund pays for a need directly” document →",
+    },
+    constitution: {
+      back: "← Back to home",
+      title: "The fund's constitution — in plain words",
+      lead: "The constitution is the fund's highest law, its backbone and its compass. Here all 10 articles are retold in ordinary human words: what the fund is, what it never does, and who is responsible for what. The exact wording is in the document itself; this screen helps you grasp the meaning without legal or technical language.",
+      topTitle: "The main point in one thought",
+      topNote: "This is the fund's highest law. Every smart contract, every AI helper, every vote, and every public text must obey it. If anything contradicts the constitution, the constitution prevails.",
+      articlesTitle: "Ten articles — in human terms",
+      articlesHint: "On the left — what the article is about; on the right — what it means in plain words.",
+      articles: [
+        {
+          name: "1. What the fund is",
+          text: "An open system of mutual help and public good. Its goal is to give people basic safety, dignity, housing, food, healthcare, education, and the strength to stand on their own feet again and help others. It is not an investment, not a pyramid, and not a way to make money.",
+        },
+        {
+          name: "2. The fund has no owner",
+          text: "No one owns the fund and no one benefits from it forever. The founder is an ordinary participant, equal to everyone else. No person, company, state, or AI can single-handedly control the money or the decisions.",
+        },
+        {
+          name: "3. Openness and verifiability",
+          text: "All documents are open, all decisions are explained, all operations are published, all changes are kept. Records are kept so that they cannot be quietly rewritten after the fact.",
+        },
+        {
+          name: "4. How the treasury is held",
+          text: "The money lives on the blockchain under a shared wallet — sending anything requires several keepers' signatures (at least 3 of 5). Real money enters only after an independent security review, a separate consent, and a transfer under the shared wallet of living people. Until then — test network only.",
+        },
+        {
+          name: "5. Fair distribution",
+          text: "Help follows an honest order: the most urgent needs come first. Help must restore a person's independence, not bind them to dependence. Everyone has dignity, regardless of income, origin, age, health, or status.",
+        },
+        {
+          name: "6. Reward for useful work",
+          text: "The fund may thank people for socially useful work — helping others, volunteering, developing the project, teaching. But a reward NEVER depends on whether a person brought in new participants.",
+        },
+        {
+          name: "7. Protection from abuse",
+          text: "Staged payouts, limits, collective review, open reports, audits, and appeals are in force. The system is built so that honesty pays off better than fraud.",
+        },
+        {
+          name: "8. Prohibitions",
+          text: "The constitutional prohibitions are binding literally — in all code, in all AI helpers, and in all public texts: do not promise income, do not build a pyramid, do not pay for recruiting people, do not hide operations, do not give anyone sole power.",
+        },
+        {
+          name: "9. The role of artificial intelligence",
+          text: "AI has no power and owns no money. The AI helpers (Guardian, Audit, Fairness, and others) are service tools that help uphold the constitution, not organs of power.",
+        },
+        {
+          name: "10. How the constitution is changed",
+          text: "The constitution can be changed only openly, through a shared decision of the community and with the reasons explained — it cannot be done quietly or alone.",
+        },
+      ],
+      coreTitle: "What can never be undone",
+      coreHint: "There is an unchangeable core: even a shared vote cannot repeal it or work around it.",
+      core: [
+        "Article 1: the fund is a public good and mutual help, not a way to make money.",
+        "Article 2: the fund has no owner; no one controls it single-handedly.",
+        "Article 3: everything is open, explained, and verifiable.",
+        "Clause 6.2: useful work is thanked, but recruiting people is never paid for.",
+      ],
+      limitTitle: "The constitution is already in force",
+      limitNote: "This is not a promise for the future: every screen of this platform, every normative document, and every AI helper already obeys the constitution. Everything is still on a test network, with no real money — real funds enter only after an independent audit and the consent of living keepers (at least 3 signatures out of 5).",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund's normative document “Constitution”. This is a retelling in plain words; the exact wording and article numbering live in the document itself. The constitution is the project's north star: smart contracts, AI helpers, governance, and public texts all obey it.",
+      sourceLink: "Open the full “Constitution” document →",
     },
     notFound: {
       code: "Page not found",

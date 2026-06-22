@@ -263,6 +263,17 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     boundary "payment of a need, NOT an investment; no one moves money alone". RU↔EN text in
     `lib/i18n.ts` (`EscrowDict`), added to the menu and linked from the "Apply for help" screen,
     no new dependencies. Rests on constitution art. 4/5/7. `PTD-0096`. TESTNET-ONLY.
+  - [x] Screen "The fund's constitution — in plain words" (session 101):
+    `platform/app/constitution/` — an in-app mirror of the normative
+    `docs/CONSTITUTION.md` (the "mirror screen" pattern, like priorities↔PRIORITIES,
+    rewards↔REWARDS-MODEL, safeguards↔ANTI-ABUSE, work↔PROOF-OF-CONTRIBUTION,
+    accountability↔ACCOUNTABILITY, direct-help↔ESCROW and glossary↔GLOSSARY): the
+    project's north star is now explained inside the platform, not just via an external
+    GitHub link. The main point (highest law, everything obeys it); all 10 articles retold
+    in human words; an "unchangeable core" block (articles 1, 2, 3 and clause 6.2 cannot be
+    repealed even by a vote); the boundary "already in force, all on a test network with no
+    real money". RU↔EN text in `lib/i18n.ts` (`ConstitutionDict`), added to the menu after
+    "About", no new dependencies. Rests on constitution art. 1–10. `PTD-0098`. TESTNET-ONLY.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,
