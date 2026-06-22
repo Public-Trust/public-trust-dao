@@ -4,6 +4,8 @@
 // Переключатель языка в шапке выбирает нужный набор. Технических терминов в
 // основном тексте нет — это требование понятного языка (решение PTD-0040).
 
+import type { ProposalStatus, VoteChoice } from "@/lib/voting";
+
 export type Lang = "ru" | "en";
 
 export const LANGS: Lang[] = ["ru", "en"];
@@ -93,6 +95,33 @@ export type JournalDict = {
   verifyLink: string;
 };
 
+export type VotingDict = {
+  back: string;
+  title: string;
+  lead: string;
+  demoNote: string;
+  howTitle: string;
+  how: string[];
+  proposalsTitle: string;
+  statusLabels: Record<ProposalStatus, string>;
+  choiceLabels: Record<VoteChoice, string>;
+  proposals: Record<string, { title: string; summary: string }>;
+  peopleLabel: string;
+  closedNote: string;
+  yourVoteTitle: string;
+  votePrompt: string;
+  voted: string;
+  weightNote: string;
+  ballotLead: string;
+  copy: string;
+  copied: string;
+  download: string;
+  changeVote: string;
+  finalTitle: string;
+  final: string[];
+  verifyLink: string;
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -120,6 +149,7 @@ export type Dict = {
   wallet: WalletDict;
   apply: ApplyDict;
   journal: JournalDict;
+  voting: VotingDict;
 };
 
 export const DICT: Record<Lang, Dict> = {
@@ -163,6 +193,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Голосование",
         text: "Один человек — один голос. Голос не покупается и не продаётся.",
+        href: "/voting/",
       },
       {
         title: "Окно казны",
@@ -310,6 +341,68 @@ export const DICT: Record<Lang, Dict> = {
       ],
       verifyLink: "Открытый журнал и инструмент проверки (репозиторий)",
     },
+    voting: {
+      back: "← На главную",
+      title: "Голосование",
+      lead: "Здесь решают сами люди. Главное правило: один человек — один голос. Голос нельзя купить за деньги и нельзя продать — голос каждого весит одинаково. Любой участник может предложить решение, а сообщество голосует «за» или «против».",
+      demoNote:
+        "Пока умные контракты не запущены в тестовой сети, ниже — показательные предложения (примеры). Ваш голос собирается как проверяемый черновик прямо в браузере: ничего не уходит на сторонние серверы и пока не попадает в блокчейн.",
+      howTitle: "Как устроено голосование простыми словами",
+      how: [
+        "Один человек — один голос. Право голоса даёт подтверждённая уникальность живого человека, а не количество денег на счету.",
+        "Любой участник может предложить решение. Чтобы оно прошло, нужно, чтобы проголосовало достаточно людей и большинство было «за».",
+        "Прошедшее решение казна исполняет сама — но с задержкой на проверку. В это окно можно заметить и остановить явно вредное или «угнанное» решение, пока деньги ещё не ушли.",
+        "Деньгами не распоряжается ни один человек: хранители лишь технически проводят уже принятое решение и могут нажать «паузу» при явной поломке — направить деньги по своему желанию они не могут.",
+      ],
+      proposalsTitle: "Предложения",
+      statusLabels: {
+        open: "Идёт голосование",
+        timelock: "Принято — идёт проверка",
+        passed: "Принято и исполнено",
+        rejected: "Отклонено",
+      },
+      choiceLabels: {
+        for: "За",
+        against: "Против",
+        abstain: "Воздержаться",
+      },
+      proposals: {
+        "demo-1": {
+          title: "Пример: помощь семье после пожара",
+          summary:
+            "Оплатить напрямую арендодателю временное жильё на один месяц для семьи, потерявшей дом при пожаре. Деньги не выдаются на руки — оплачивается нужда напрямую (целевой расход).",
+        },
+        "demo-2": {
+          title: "Пример: настройка доли на помощь при малой казне",
+          summary:
+            "Когда в казне мало средств, направлять на прямую помощь людям не меньше 70%, а награды за работу держать минимальными. Изменение настройки — голосованием, с задержкой на проверку.",
+        },
+        "demo-3": {
+          title: "Пример: единоразовая крупная выплата без проверки",
+          summary:
+            "Предложение выдать крупную сумму одному получателю сразу и без независимой проверки. Отклонено: противоречит правилам — выплаты идут по частям, с лимитами и независимой проверкой.",
+        },
+      },
+      peopleLabel: "чел.",
+      closedNote: "Голосование по этому предложению уже завершено — показан итог.",
+      yourVoteTitle: "Ваш голос",
+      votePrompt: "Как вы голосуете по этому предложению?",
+      voted: "Ваш голос учтён — он весит ровно один, как у каждого.",
+      weightNote: "Вес вашего голоса: 1 (один человек — один голос).",
+      ballotLead:
+        "Вот ваш голос простой проверяемой записью. Настоящая подача появится, когда контракты запустят в тестовой сети. Пока вы можете скопировать или сохранить черновик.",
+      copy: "Скопировать",
+      copied: "Скопировано",
+      download: "Сохранить файлом",
+      changeVote: "Изменить голос",
+      finalTitle: "Что будет, когда заработает по-настоящему",
+      final: [
+        "Голосовать сможет каждый, чья реальность и уникальность подтверждена, — без сбора лиц в базу и без слежки.",
+        "Каждый голос и каждый итог попадут в открытый журнал и будут закреплены отпечатком — подменить нельзя.",
+        "Принятое решение исполнит сама казна по правилам, с задержкой на проверку; ни один человек не сможет направить деньги в обход голосования.",
+      ],
+      verifyLink: "Как устроено управление (документ GOVERNANCE)",
+    },
   },
   en: {
     htmlLang: "en",
@@ -351,6 +444,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Voting",
         text: "One person, one vote. A vote cannot be bought or sold.",
+        href: "/voting/",
       },
       {
         title: "Treasury window",
@@ -497,6 +591,68 @@ export const DICT: Record<Lang, Dict> = {
         "Until the contracts run on a test network, important fingerprints will also be anchored on the blockchain — then tampering becomes impossible to hide at all.",
       ],
       verifyLink: "Open journal and verification tool (repository)",
+    },
+    voting: {
+      back: "← Back to home",
+      title: "Voting",
+      lead: "Here the people decide for themselves. The core rule: one person, one vote. A vote cannot be bought with money and cannot be sold — everyone's vote weighs the same. Any member can propose a decision, and the community votes 'for' or 'against'.",
+      demoNote:
+        "Until the smart contracts run on a test network, the items below are demonstration proposals (examples). Your vote is built as a verifiable draft right in your browser: nothing is sent to outside servers and nothing goes on-chain yet.",
+      howTitle: "How voting works, in plain words",
+      how: [
+        "One person, one vote. The right to vote comes from a confirmed, unique living person — not from how much money is in an account.",
+        "Any member can propose a decision. For it to pass, enough people must vote and the majority must be 'for'.",
+        "A passed decision is executed by the treasury itself — but with a delay for review. In that window a clearly harmful or 'hijacked' decision can be spotted and stopped before money moves.",
+        "No single person controls the money: keepers only technically carry out an already-passed decision and can hit 'pause' on a clear malfunction — they cannot direct funds wherever they wish.",
+      ],
+      proposalsTitle: "Proposals",
+      statusLabels: {
+        open: "Voting open",
+        timelock: "Passed — under review",
+        passed: "Passed and executed",
+        rejected: "Rejected",
+      },
+      choiceLabels: {
+        for: "For",
+        against: "Against",
+        abstain: "Abstain",
+      },
+      proposals: {
+        "demo-1": {
+          title: "Example: help for a family after a fire",
+          summary:
+            "Pay one month of temporary housing directly to the landlord for a family that lost their home in a fire. No cash is handed out — the need is paid directly (targeted spend).",
+        },
+        "demo-2": {
+          title: "Example: setting the help share when the treasury is low",
+          summary:
+            "When the treasury is low, direct at least 70% to helping people directly and keep work rewards minimal. Changing the setting is done by vote, with a delay for review.",
+        },
+        "demo-3": {
+          title: "Example: a one-off large payment with no review",
+          summary:
+            "A proposal to pay a large sum to a single recipient at once and without independent review. Rejected: it breaks the rules — payments go out in parts, with limits and independent review.",
+        },
+      },
+      peopleLabel: "ppl",
+      closedNote: "Voting on this proposal has already ended — the result is shown.",
+      yourVoteTitle: "Your vote",
+      votePrompt: "How do you vote on this proposal?",
+      voted: "Your vote is counted — it weighs exactly one, like everyone's.",
+      weightNote: "Your vote weight: 1 (one person, one vote).",
+      ballotLead:
+        "Here is your vote as a simple, verifiable record. Real submission becomes available once the contracts run on a test network. For now you can copy or save the draft.",
+      copy: "Copy",
+      copied: "Copied",
+      download: "Save as file",
+      changeVote: "Change vote",
+      finalTitle: "What happens when it works for real",
+      final: [
+        "Everyone whose reality and uniqueness is confirmed will be able to vote — without collecting faces into a database and without surveillance.",
+        "Every vote and every result will go into the open record and be anchored by a fingerprint — no tampering possible.",
+        "A passed decision is executed by the treasury itself by the rules, with a delay for review; no single person can route money around the vote.",
+      ],
+      verifyLink: "How governance works (GOVERNANCE document)",
     },
   },
 };

@@ -534,6 +534,108 @@ h3 {
   font-size: 0.86rem;
 }
 
+/* Голосование */
+.badge--warn {
+  background: var(--note-bg);
+  border-color: var(--note-border);
+  color: var(--note-text);
+}
+.proposal-list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.proposal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 18px 20px;
+}
+.proposal-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.proposal-total {
+  margin-left: auto;
+  font-size: 0.88rem;
+  color: var(--text-soft);
+}
+.proposal-title {
+  margin: 0 0 6px;
+  font-size: 1.15rem;
+}
+.proposal-summary {
+  margin: 0 0 14px;
+  color: var(--text);
+  max-width: 70ch;
+}
+.tally {
+  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tally-row {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  align-items: center;
+  gap: 12px;
+}
+.tally-row dt {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+.tally-row dd {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tally-bar {
+  flex: 1 1 auto;
+  height: 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.tally-fill {
+  display: block;
+  height: 100%;
+  background: var(--text-soft);
+  border-radius: 999px;
+}
+.tally-row--for .tally-fill {
+  background: var(--accent);
+}
+.tally-row--abstain .tally-fill {
+  background: var(--border);
+}
+.tally-num {
+  flex: 0 0 auto;
+  font-size: 0.86rem;
+  color: var(--text-soft);
+  white-space: nowrap;
+}
+.your-vote {
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vote-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 /* Прозрачность */
 .transparency {
   padding: 8px 0 48px;

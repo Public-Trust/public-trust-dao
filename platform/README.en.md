@@ -38,8 +38,14 @@ same code can run as a server by turning off static export.
   fingerprint is shown, and each record links to its full file in the repository.
   The data travels with the platform as a snapshot of the open registry
   (`lib/journal-data.json`) — nothing is loaded from outside.
+- **Voting** (`/voting/`) — the core rule in plain words: one person, one vote; a
+  vote cannot be bought or sold. A list of proposals; on an open one you can vote
+  "For" / "Against" / "Abstain", and a vote always weighs one. Until the contracts
+  run on a test network, the vote is built as a verifiable draft right in the
+  browser (copy/save/change) and kept only with the person; the proposals shown are
+  demonstrations, and nothing leaves the browser.
 
-Next in line: voting → treasury window → identity check.
+Next in line: treasury window → identity check.
 
 ## Transparency rails (followed literally)
 
@@ -87,9 +93,10 @@ platform/
     wallet/       the "Connect a wallet" screen
     apply/        the "Apply for help" screen
     journal/      the "Open record" screen
+    voting/       the "Voting" screen
   components/     shared UI parts (header, footer, language/theme provider)
   lib/            bilingual texts (i18n) and data layers (wallet.ts, application.ts,
-                  journal.ts) + a snapshot of the registry (journal-data.json)
+                  journal.ts, voting.ts) + a snapshot of the registry (journal-data.json)
   next.config.mjs build settings (static export)
   package.json    dependencies (exact versions)
 ```
