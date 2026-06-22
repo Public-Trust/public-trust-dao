@@ -56,12 +56,16 @@ def _run_all(agent_scripts, test_files):
 
 
 def _write_workflow(repo_root, run_line="python3 ai-agents/run_all.py --with-tests",
-                    push_paths=("ai-agents/**",), pull_request_paths=("ai-agents/**",)):
+                    push_paths=("ai-agents/**",), pull_request_paths=("ai-agents/**",),
+                    test_line="python3 ai-agents/test_run_all.py"):
     """Кладёт .github/workflows/ai-agents.yml с заданной командой запуска и триггер-путями.
 
     push_paths/pull_request_paths управляют блоками `on.*.paths` (для проверки
     trigger-paths-include-agents); None означает «блок триггера вовсе отсутствует».
-    По умолчанию оба блока содержат ai-agents/** и воркфлоу зелёный по обеим проверкам."""
+    test_line — отдельный шаг прогона test_run_all.py (для проверки
+    ci-runs-test-run-all); None означает «этого шага нет». По умолчанию оба блока
+    содержат ai-agents/**, есть и шаг test_run_all.py, и run_all --with-tests —
+    воркфлоу зелёный по всем трём CI-проверкам."""
     wf_dir = os.path.join(repo_root, ".github", "workflows")
     os.makedirs(wf_dir, exist_ok=True)
     parts = ["on:\n"]
@@ -71,7 +75,10 @@ def _write_workflow(repo_root, run_line="python3 ai-agents/run_all.py --with-tes
     if pull_request_paths is not None:
         parts.append("  pull_request:\n    paths:\n")
         parts += ['      - "{}"\n'.format(p) for p in pull_request_paths]
-    parts.append("jobs:\n  agents:\n    steps:\n      - run: {}\n".format(run_line))
+    parts.append("jobs:\n  agents:\n    steps:\n")
+    if test_line is not None:
+        parts.append("      - run: {}\n".format(test_line))
+    parts.append("      - run: {}\n".format(run_line))
     with open(os.path.join(wf_dir, "ai-agents.yml"), "w", encoding="utf-8") as fh:
         fh.write("".join(parts))
 
@@ -91,7 +98,7 @@ with tempfile.TemporaryDirectory() as repo:
     _write_workflow(repo)
     rep = structure_guard.run(d)
     check("вердикт зелёный", rep["verdict"] == "green")
-    check("все 6 проверок прошли", rep["passed"] == rep["total"] == 6)
+    check("все 7 проверок прошли", rep["passed"] == rep["total"] == 7)
     check("агент с импортом из solidity_scan НЕ краснит sol-проверку",
           _status(rep, "sol-parsing-centralized") == "pass")
     check("run_all покрывает агента и тесты → run-all-covers-all зелёная",
@@ -100,6 +107,8 @@ with tempfile.TemporaryDirectory() as repo:
           _status(rep, "ci-calls-run-all") == "pass")
     check("триггер-пути содержат ai-agents/** → trigger-paths-include-agents зелёная",
           _status(rep, "trigger-paths-include-agents") == "pass")
+    check("воркфлоу зовёт test_run_all.py → ci-runs-test-run-all зелёная",
+          _status(rep, "ci-runs-test-run-all") == "pass")
 
 # --- Агент не включён в AGENTS run_all: красное на run-all-covers-all -----
 print("агент в обход run_all:")
@@ -226,6 +235,8 @@ with tempfile.TemporaryDirectory() as repo:
     check("ci-calls-run-all провалена (нет воркфлоу)", _status(rep, "ci-calls-run-all") == "fail")
     check("trigger-paths-include-agents провалена (нет воркфлоу)",
           _status(rep, "trigger-paths-include-agents") == "fail")
+    check("ci-runs-test-run-all провалена (нет воркфлоу)",
+          _status(rep, "ci-runs-test-run-all") == "fail")
 
 # Воркфлоу есть, но run_all не зовёт вовсе (отдельные agent-команды) → красное.
 print("воркфлоу зовёт агентов в обход run_all:")
@@ -324,11 +335,41 @@ with tempfile.TemporaryDirectory() as repo:
     check("trigger-paths-include-agents зелёная (ai-agents/** есть в обоих)",
           _status(rep, "trigger-paths-include-agents") == "pass")
 
+# --- Проверка ci-runs-test-run-all: воркфлоу обязан звать test_run_all.py --
+# Воркфлоу зовёт run_all --with-tests, но НЕ зовёт test_run_all.py → красное.
+print("воркфлоу не зовёт test_run_all.py:")
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_workflow(repo, "python3 ai-agents/run_all.py --with-tests", test_line=None)
+    rep = structure_guard.run(d)
+    check("вердикт красный", rep["verdict"] == "red")
+    check("ci-runs-test-run-all провалена (нет шага test_run_all.py)",
+          _status(rep, "ci-runs-test-run-all") == "fail")
+    check("ci-calls-run-all остаётся зелёной (run_all --with-tests на месте)",
+          _status(rep, "ci-calls-run-all") == "pass")
+
+# Воркфлоу зовёт и test_run_all.py, и run_all --with-tests → обе CI-проверки зелёные.
+print("воркфлоу зовёт и test_run_all.py, и run_all --with-tests:")
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_workflow(repo)  # дефолт: оба шага присутствуют
+    rep = structure_guard.run(d)
+    check("ci-runs-test-run-all зелёная", _status(rep, "ci-runs-test-run-all") == "pass")
+    check("ci-calls-run-all зелёная", _status(rep, "ci-calls-run-all") == "pass")
+
 # --- Сторож-регресс: настоящий каталог ai-agents/ сейчас зелёный ----------
 print("настоящий каталог ai-agents/:")
 real = structure_guard.run()
 check("реальный репозиторий: вердикт зелёный", real["verdict"] == "green")
-check("реальный репозиторий: 6/6 проверок прошли", real["passed"] == real["total"] == 6)
+check("реальный репозиторий: 7/7 проверок прошли", real["passed"] == real["total"] == 7)
 
 # --- Итог ----------------------------------------------------------------
 print()

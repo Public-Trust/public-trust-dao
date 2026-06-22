@@ -1,0 +1,37 @@
+{
+  "seq": 61,
+  "id": "PTD-0061",
+  "type": "decision",
+  "timestamp": "2026-06-22T12:34:43Z",
+  "actor": "builder-agent",
+  "summary": "Страж структуры: седьмая проверка ci-runs-test-run-all — CI-воркфлоу обязан прогонять тест-инвариант мета-агента test_run_all.py отдельным шагом, доказывая исправность сведения run_all (красное→красное); достраивает защиту покрытия от обхода до самого верха",
+  "refs": [
+    "ai-agents/structure_guard.py",
+    "ai-agents/test_structure_guard.py",
+    "ai-agents/README.md"
+  ],
+  "payload": {
+    "decision": "Страж структуры (structure_guard.py) получил седьмую проверку ci-runs-test-run-all: CI-воркфлоу (.github/workflows/ai-agents.yml) обязан отдельным шагом прогонять тест-инвариант мета-агента test_run_all.py, а не только run_all.py --with-tests. Проверка #4 (ci-calls-run-all) стережёт, что воркфлоу зовёт run_all всех агентов и их тесты; но сам мета-агент СВОДИТ частные «красное» в общий вердикт, и эта сводка могла бы тихо сломаться (рапортовать «зелено» при красном агенте). Что сводка исправна — доказывает собственный тест-инвариант run_all (test_run_all.py). Если воркфлоу его не запускает, поломку сведения никто не поймает. Проверка читает сам воркфлоу и требует строку test_run_all.py (через \\btest_run_all\\.py\\b, что не путается с вызовом самого run_all.py).",
+    "rationale": "INBOX оператора пуст → режим саморазвития (INBOX #9). Контрактная часть Этапа 5 и верхний P3 (PersonhoodVerifier) недоступны: диск хоста заполнен (~0,9 ГБ свободно, df 100%), contracts/node_modules отсутствует, hardhat/npm не прогнать. Взят верхний доступный pure-Python пункт ROADMAP «Страж структуры: воркфлоу ai-agents.yml зовёт и test_run_all.py» (предложен сессией 63 как продолжение trigger-paths-include-agents/PTD-0060). Достраивает защиту покрытия от обхода до самого верха: списки AGENTS/TESTS (run-all-covers-all, PTD-0049) → вызов мета-агента в CI (ci-calls-run-all, PTD-0057) → срабатывание воркфлоу на правку агента (trigger-paths-include-agents, PTD-0060) → прогон собственного тест-инварианта мета-агента, доказывающего исправность сведения (ci-runs-test-run-all). Служит ст. 3 (открытость/проверяемость): не только всё прогоняется, но и доказано, что сводка «красное→красное» исправна.",
+    "deliverables": [
+      "ai-agents/structure_guard.py — новая проверка check_ci_runs_test_run_all (читает воркфлоу, требует строку test_run_all.py через \\btest_run_all\\.py\\b; отсутствие воркфлоу = нарушение); запись в CHECKS (ключ ci-runs-test-run-all) и в докстринг (пункт 6)",
+      "ai-agents/test_structure_guard.py — _write_workflow расширен параметром test_line (None = шага test_run_all.py нет; по умолчанию воркфлоу содержит оба шага); 3 новых сценария: воркфлоу без шага test_run_all.py → fail (а ci-calls-run-all остаётся pass), воркфлоу с обоими шагами → обе CI-проверки pass, нет воркфлоу → ci-runs-test-run-all fail; счётчики 6→7; реальный репозиторий 7/7; всего 50/50",
+      "ai-agents/README.md (+EN README.en.md) — добавлена строка таблицы ci-runs-test-run-all; обновлён абзац тест-инварианта (43/43 → 50/50) и список отравленных сценариев"
+    ],
+    "rails": [
+      "Только код стража/тест/доки; средства/ключи/контракты не затронуты",
+      "Read-only служебный модуль (ст. 9): находка = сигнал сообществу, ничего не правит",
+      "Двуязычность RU↔EN: README обновлён в обе стороны в одном коммите",
+      "TESTNET-first: реальных средств/сетей не касается",
+      "Пульс (loop.sh/report.sh/сервис/.env/logs) и сам воркфлоу не тронуты"
+    ],
+    "status": "adopted",
+    "spec": "ai-agents/structure_guard.py",
+    "verification": "structure_guard на реальном репо: ЗЕЛЁНО 7/7 (включая ci-runs-test-run-all, реальный воркфлоу прогоняет test_run_all.py отдельным шагом); test_structure_guard.py 50/50; run_all --with-tests: агенты 8/8, тесты 11/11",
+    "advances_roadmap": [
+      "Страж структуры: воркфлоу ai-agents.yml зовёт и test_run_all.py"
+    ]
+  },
+  "prev_hash": "e9dda1f66027ddacfbac2c0da6c682f4abbc3e7a63189fc3ac96a17abdecac5e",
+  "hash": "1664ee951744c1f9dd32b6c5db665a1837fa16663ab760d24459c7d0dd5a8ec4"
+}

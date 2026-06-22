@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 61,
-  "head_hash": "e9dda1f66027ddacfbac2c0da6c682f4abbc3e7a63189fc3ac96a17abdecac5e",
+  "count": 62,
+  "head_hash": "1664ee951744c1f9dd32b6c5db665a1837fa16663ab760d24459c7d0dd5a8ec4",
   "entries": [
     {
       "seq": 0,
@@ -552,6 +552,15 @@
       "summary": "Страж структуры: шестая проверка trigger-paths-include-agents — триггеры CI-воркфлоу (on.push.paths/pull_request.paths) обязаны содержать ai-agents/**, иначе правка агента не запустит CI; замыкает защиту покрытия от обхода (после run-all-covers-all и ci-calls-run-all)",
       "hash": "e9dda1f66027ddacfbac2c0da6c682f4abbc3e7a63189fc3ac96a17abdecac5e",
       "file": "records/0060-structure-guard-trigger-paths.json"
+    },
+    {
+      "seq": 61,
+      "id": "PTD-0061",
+      "type": "decision",
+      "timestamp": "2026-06-22T12:34:43Z",
+      "summary": "Страж структуры: седьмая проверка ci-runs-test-run-all — CI-воркфлоу обязан прогонять тест-инвариант мета-агента test_run_all.py отдельным шагом, доказывая исправность сведения run_all (красное→красное); достраивает защиту покрытия от обхода до самого верха",
+      "hash": "1664ee951744c1f9dd32b6c5db665a1837fa16663ab760d24459c7d0dd5a8ec4",
+      "file": "records/0061-structure-guard-ci-runs-test-run-all.json"
     }
   ]
 }

@@ -438,11 +438,21 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   guard green 6/6, `PTD-0060`. Closed coverage-bypass protection at every level (lists →
   CI call → trigger firing). Also caught up the agent README (RU/EN): the lagging
   `ci-calls-run-all` row + the new row.
-- [ ] **Structure-guard: workflow `ai-agents.yml` also calls `test_run_all.py`** — add a
+- [x] **Structure-guard: workflow `ai-agents.yml` also calls `test_run_all.py`** — add a
   check that a separate workflow step runs the meta-agent's test invariant
   `test_run_all.py` (not only `run_all.py --with-tests`) — it proves the "red → red"
   reduction itself works; right now this relies on workflow discipline (proposed in
   session 63; follow-up to `trigger-paths-include-agents`).
+  → Done (session 64) via the seventh `ci-runs-test-run-all` check of
+  [`structure_guard.py`](../../ai-agents/structure_guard.py): reads the workflow and turns
+  red if it does not run `test_run_all.py` as a separate step. `test_structure_guard.py`
+  50/50, guard green 7/7, `PTD-0061`. Completed coverage-bypass protection all the way up
+  (lists → CI call → trigger firing → running the reduction's own test invariant).
+- [ ] **Structure-guard: workflow checked for CI-step completeness** — generalize
+  `ci-calls-run-all`/`ci-runs-test-run-all`: instead of one check per command, keep a
+  single list of "required workflow commands" in the guard and turn red if any is missing
+  — so a newly required CI step cannot be forgotten, without multiplying near-identical
+  checks (proposed in session 64).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -534,6 +544,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 ---
 
 ## Done
+
+- **PTD-0061 (session 64):** P3 (Stage 6 quality) — **structure-guard: seventh
+  `ci-runs-test-run-all` check.** The CI workflow must run the meta-agent's own test
+  invariant `test_run_all.py` as a separate step, not only `run_all.py --with-tests`:
+  `run_all` itself *reduces* per-agent "red" into one verdict, and that reduction could
+  silently break (report "green" with a red agent) — only `test_run_all.py` proves it
+  works. Without a dedicated step nobody would catch a broken reduction. Completed
+  coverage-bypass protection all the way up: `AGENTS`/`TESTS` lists (PTD-0049) → `run_all`
+  call in CI (PTD-0057) → trigger firing (PTD-0060) → running the reduction's test
+  invariant (PTD-0061). `test_structure_guard.py` 50/50, guard 7/7, run_all 8/8 + tests
+  11/11, IPFS verify=OK (19), registry 62. Agent README (RU/EN): new table row, counter
+  43/43 → 50/50.
 
 - **PTD-0060 (session 63):** P3 (Stage 6 quality) — **structure-guard: sixth
   `trigger-paths-include-agents` check.** The CI workflow trigger blocks
