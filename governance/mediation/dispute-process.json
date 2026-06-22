@@ -1,0 +1,83 @@
+{
+  "version": "0.1.0-testnet",
+  "kind": "dispute-appeal-process",
+  "role": "Mediator структурирует споры и апелляции; РЕШАЮТ ЛЮДИ (Конституция ст. 9).",
+  "spec": "docs/ANTI-ABUSE.md",
+  "off_chain_signaling": true,
+  "sanctions": [
+    {
+      "key": "disbursement-rejection",
+      "title": "Отказ в выплате/помощи",
+      "source": "docs/ANTI-ABUSE.md",
+      "appealable": true,
+      "issued_by": "disbursement-reviewers",
+      "appeal_entry": "intake"
+    },
+    {
+      "key": "reputation-sanction",
+      "title": "Снижение репутации за нарушение",
+      "source": "docs/ANTI-ABUSE.md",
+      "appealable": true,
+      "issued_by": "reputation-process",
+      "appeal_entry": "intake"
+    },
+    {
+      "key": "temporary-freeze",
+      "title": "Временная заморозка выплат при подозрении",
+      "source": "docs/ANTI-ABUSE.md",
+      "appealable": true,
+      "issued_by": "guardian-council",
+      "appeal_entry": "intake"
+    },
+    {
+      "key": "exclusion",
+      "title": "Исключение участника за грубые/повторные нарушения",
+      "source": "docs/ANTI-ABUSE.md",
+      "appealable": true,
+      "issued_by": "guardian-council",
+      "appeal_entry": "intake"
+    }
+  ],
+  "stages": [
+    {
+      "key": "intake",
+      "title": "Приём и структурирование обращения",
+      "initial": true,
+      "role": "structure",
+      "decider": "mediator-agent",
+      "deadline_seconds": 259200,
+      "next": ["review"]
+    },
+    {
+      "key": "review",
+      "title": "Независимое коллективное рассмотрение",
+      "role": "decide",
+      "decider": "independent-reviewers",
+      "min_deciders": 2,
+      "deadline_seconds": 604800,
+      "next": ["resolved", "escalation"]
+    },
+    {
+      "key": "escalation",
+      "title": "Эскалация к совету хранителей (мультисиг)",
+      "role": "decide",
+      "decider": "guardian-council",
+      "min_deciders": 3,
+      "deadline_seconds": 1209600,
+      "next": ["resolved"]
+    },
+    {
+      "key": "resolved",
+      "title": "Решение зафиксировано в публичном реестре",
+      "terminal": true,
+      "role": "record"
+    }
+  ],
+  "links": {
+    "anti_abuse": "docs/ANTI-ABUSE.md",
+    "constitution": "docs/CONSTITUTION.md",
+    "priorities": "docs/PRIORITIES.md",
+    "registry": "governance/registry/README.md",
+    "readme": "governance/mediation/README.md"
+  }
+}

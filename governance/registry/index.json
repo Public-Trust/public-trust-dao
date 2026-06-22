@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 28,
-  "head_hash": "43c27e02e3def694cf547cffe6d35459c89a30c92457c8c10db4943959b6aa1c",
+  "count": 29,
+  "head_hash": "9c11fe28202602487eaaa2f55361c11702f938ade1e1c93154382f99e2b19887",
   "entries": [
     {
       "seq": 0,
@@ -255,6 +255,15 @@
       "summary": "Этап 6 (AI-агенты), модуль 7/8: Governance-агент. governance_agent.py — read-only проверка жизненного цикла предложения в конфигах управления (Snapshot space.json + Safe safe.config.json): 1ч=1голос/срок/off-chain-сигнал/привязка к конституции/мультисиг 3-из-5; НЕ голосует. Тест-инвариант test_governance.py (26/26). CI расширен. TESTNET-ONLY.",
       "hash": "43c27e02e3def694cf547cffe6d35459c89a30c92457c8c10db4943959b6aa1c",
       "file": "records/0027-governance-agent.json"
+    },
+    {
+      "seq": 28,
+      "id": "PTD-0028",
+      "type": "decision",
+      "timestamp": "2026-06-22T12:20:00Z",
+      "summary": "Этап 6 (AI-агенты), модуль 8/8 — последний: Mediator-агент. mediator_agent.py — read-only проверка процесса споров/апелляций (governance/mediation/dispute-process.json): обжалуемость каждой санкции, спор решают люди (≥2) не ИИ/один, независимость (не автор санкции), корректный жизненный цикл, конечные сроки; СТРУКТУРИРУЕТ, НЕ решает. Тест-инвариант test_mediator.py (26/26). CI расширен. Этим закрыт каркас всех 8 AI-агентов (8/8). TESTNET-ONLY.",
+      "hash": "9c11fe28202602487eaaa2f55361c11702f938ade1e1c93154382f99e2b19887",
+      "file": "records/0028-mediator-agent.json"
     }
   ]
 }

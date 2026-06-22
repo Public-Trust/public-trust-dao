@@ -41,7 +41,7 @@ This sets hard boundaries for EVERY agent in this directory:
 | **Reputation** | Computes/validates voting weights per [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3: "1 person = 1 vote", soulbound, "uniqueness ≠ power". | ✅ scaffold (`reputation_agent.py`) |
 | **Housing** | Domain helper for housing cases (escrow paying the provider directly per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)). | ✅ scaffold (`housing_agent.py`) |
 | **Governance** | Helps with the proposal lifecycle (format, quorum, timing, ties to the constitution); does not vote itself. | ✅ framework (`governance_agent.py`) |
-| **Mediator** | Assists with disputes/appeals per [`ANTI-ABUSE.md`](../docs/en/ANTI-ABUSE.md) — structures, does not decide. | ⏳ planned |
+| **Mediator** | Structures disputes/appeals per [`ANTI-ABUSE.md`](../docs/en/ANTI-ABUSE.md) §6 (appealability of sanctions, people decide, independence, deadlines) — structures, **does not decide**. | ✅ scaffold (`mediator_agent.py`) |
 | **Documentation** | Watches RU↔EN bilinguality (a pair + a language switcher for every public doc) and the integrity of relative links across all `.md`. | ✅ scaffold (`documentation_agent.py`) |
 
 We build them one by one, "to green", with no token stubs. The scaffold opens with
@@ -178,7 +178,7 @@ mentions inside comments).
 
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
 Guardian (+test) + Fairness (+test) + Reputation (+test) + Housing (+test) +
-Documentation (+test) + Governance (+test) on every push/PR.
+Documentation (+test) + Governance (+test) + Mediator (+test) on every push/PR.
 
 ## Housing agent — what it does and how to run it
 
@@ -309,6 +309,48 @@ norms, a multisig threshold `=1` or `=owner count`, a broken link, a missing
 `space.json` altogether) the agent must return "red", and on correct configs —
 "green" with no false positives (26/26). CI runs Governance (+test) in the same
 workflow.
+
+## Mediator agent — what it does and how to run it
+
+`mediator_agent.py` turns the **right to appeal** (mechanism #6 "Appeals" of
+[`ANTI-ABUSE.md`](../docs/en/ANTI-ABUSE.md)) into a machine check: so the transparent
+path to contest a rejection/sanction does not stay a slogan and cannot drift away
+from the constitution silently. Read-only over the process artifact
+[`governance/mediation/dispute-process.json`](../governance/mediation/dispute-process.json),
+no network. **The Mediator structures the dispute but NEVER decides it** (art. 9.2):
+independent people decide; the agent only checks the shape of the process and reports.
+
+| Check | What it requires | What it guards |
+|-------|------------------|----------------|
+| `appeal-for-every-sanction` | every canonical sanction (rejection, reputation, freeze, exclusion) has an appeal to an existing stage | §6 — a transparent path to contest a rejection/sanction |
+| `mediator-not-decider` | deciding stages are run by people (`min_deciders` ≥2), not AI/mediator/automation and not one person | art. 9.2 + §3 — the AI is not an organ of power; a collective decides |
+| `independent-review` | the first deciding stage from the entry has `decider` ≠ the sanction's `issued_by` | §3 — independence; you cannot review your own decision |
+| `valid-lifecycle` | exactly one start, a terminal exists, transitions resolve, no dead ends/orphans, all reachable | art. 3 — verifiability: a coherent state machine |
+| `bounded-timelines` | every non-terminal stage has `deadline_seconds` > 0 | art. 3 + §6 — an appeal never hangs forever |
+| `process-links` | every `docs/`-/`governance/` link in the process resolves to an existing file | art. 3 — tied to real norms |
+
+**Lifecycle** (artifact): `intake` (intake, structured by the Mediator) → `review`
+(≥2 independent reviewers decide) → `escalation` (guardian council ≥3) → `resolved`
+(terminal, recorded in the registry). Deciding rests only with people and only
+collectively; the Mediator agent is allowed solely on non-deciding stages.
+
+```bash
+python3 ai-agents/mediator_agent.py          # human-readable report
+python3 ai-agents/mediator_agent.py --json    # machine-readable (for CI/other agents)
+```
+
+Exit code `0` — the appeal process is consistent with the constitution; `1` — a
+discrepancy was found (a **signal** to the community, not an action: the agent does
+not edit the process or decide disputes).
+
+The **invariant test** [`test_mediator.py`](test_mediator.py) proves that Mediator
+works rather than being "green by default": for every deviation (a non-appealable/
+missing sanction, an `appeal_entry` to nowhere, a dispute decided by AI or one
+person, self-review `decider==issued_by`, a dead end/nonexistent transition/no
+terminal/two start stages, a zero deadline, a broken link, a missing
+`dispute-process.json` altogether) the agent must return "red", and on a correct
+process — "green" with no false positives (26/26). CI runs Mediator (+test) in the
+same workflow. **This closes the scaffold of all eight AI agents (8/8).**
 
 ## Rails (for all agents in this directory)
 
