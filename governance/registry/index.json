@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 53,
-  "head_hash": "e94eb95ca0e721ed384c64b740aaff7d45fa52e2c9a650caefe8fb4beed0e515",
+  "count": 54,
+  "head_hash": "0bc4ad3c64b4051c6042d0483c4349fea25a2687d273683ac254cb5573cf4d2e",
   "entries": [
     {
       "seq": 0,
@@ -480,6 +480,15 @@
       "summary": "P3 (синхронизация RU↔EN) — догнан EN-зеркало docs/en/ROADMAP.md: P0 Этап 6 отмечен завершённым (8/8) с модулем Mediator (PTD-0028), P3-банк дополнен отсутствовавшими идентификационными/глоссарными/мета-пунктами, раздел «Сделано» — записями PTD-0050/0051/0052. Восстановлена содержательная двуязычная синхронность роадмапа.",
       "hash": "e94eb95ca0e721ed384c64b740aaff7d45fa52e2c9a650caefe8fb4beed0e515",
       "file": "records/0052-decision.json"
+    },
+    {
+      "seq": 53,
+      "id": "PTD-0053",
+      "type": "decision",
+      "timestamp": "2026-06-22T16:30:00Z",
+      "summary": "INBOX #22 — раздел «Защита на будущее (в т.ч. от квантовых компьютеров)» в SECURITY.md (+EN): не тащить PQC в контракты сейчас, а заложить фундамент — сменность алгоритмов (crypto-agility), только факты/отпечатки on-chain, ключи у человека, готовность к NIST PQC; простым языком, термины в техраздел.",
+      "hash": "0bc4ad3c64b4051c6042d0483c4349fea25a2687d273683ac254cb5573cf4d2e",
+      "file": "records/0053-future-proofing-quantum.json"
     }
   ]
 }

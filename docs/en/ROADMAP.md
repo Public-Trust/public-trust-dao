@@ -485,6 +485,21 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0053 (session 56):** INBOX #22 (operator request) — **"Future-proofing
+  (including against quantum computers)" in [`SECURITY.en.md`](../../SECURITY.en.md)
+  (+ RU).** Plain language (rule `PTD-0040`) + a "for developers" technical section.
+  Stance: do NOT bring PQC into the smart contracts now, but lay the foundation —
+  **crypto-agility (swappable algorithms)**, only facts/fingerprints on-chain (defuses
+  "harvest-now-decrypt-later"), keys held by the person, readiness for NIST PQC
+  (ML-KEM/Kyber, ML-DSA/Dilithium, SPHINCS+), follow Ethereum/Polygon. A dedicated
+  **"Protecting the fund's money (treasury)"** subsection per the operator's
+  clarification: 3-of-5 multisig, treasury "migration" to a quantum-resistant wallet
+  (the main hook), rotating/revoking guardian keys without losing funds, a cold reserve;
+  honest about priority — protecting the money today = audit + multisig + key hygiene,
+  quantum resistance is a "future" layer with no launch delay. Recorded in the registry
+  (54 records, verify=green), IPFS verify=OK, Documentation 3/3, run_all 8/8 + tests
+  11/11. TESTNET-ONLY.
+
 - **PTD-0052 (session 55):** P3 (plain language / bilingual sync) — **caught up the EN
   mirror [`docs/en/ROADMAP.md`](ROADMAP.md)**. The RU roadmap had run ahead while the EN
   one drifted: P0 Stage 6 still showed the Mediator module open (RU had it 8/8 complete),

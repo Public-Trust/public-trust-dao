@@ -121,6 +121,112 @@ as you:
   applicants or participants;
 - give reasonable time to fix before public disclosure.
 
+## Future-proofing (including against future quantum computers)
+
+**In plain words.** Today's locks (the digital signatures used to confirm payments
+and identity) are sound. But one day very powerful "quantum" computers may appear
+that could, in theory, pick some of these locks. There is no real threat yet —
+specialists estimate it is years away. But attackers have a "harvest now, decrypt
+later" trick (hoarding other people's data now to crack it later, once the
+hardware allows). So it is reasonable to prepare now — **without harming the
+launch**.
+
+Our stance is honest and free of hype: we do **not** drag heavy
+"quantum-resistant" cryptography into the smart contracts right now (on a
+blockchain it is still immature, expensive, and would stall the launch with no
+real benefit). Instead we **lay the foundation** so the switch is easy when the
+time comes:
+
+1. **Swappable locks (the main thing in our power).** We design the system so the
+   signature/encryption method can be replaced in the future without rebuilding
+   the whole project — like changing a lock without breaking the door. This is the
+   most important decision, and it is entirely up to us.
+2. **Nothing secret on the blockchain — only facts and fingerprints.** We already
+   do this: personal data never goes on-chain (see
+   ["Identity verification without surveillance"](docs/en/IDENTITY-VERIFICATION.md)
+   and ["Signed and traceable"](docs/en/ACCOUNTABILITY.md)). With no secrets in
+   the public chain, there is almost nothing to crack later — the "harvest now,
+   decrypt later" trick is largely defused.
+3. **Today — modern strong standards, keys held by the person.** The key stays
+   with its owner (on a hardware wallet where possible) and can always be rotated.
+   The fewer of other people's secrets the fund holds, the less there is to lose.
+4. **For our own parts — prepare the migration in advance.** Where the stack is
+   entirely ours (data storage, correspondence with applicants), we can migrate to
+   quantum-resistant standards ourselves once they mature. Where we depend on
+   someone else's network (Ethereum/Polygon), we move with it: when they enable
+   protection, so do we.
+5. **Watch and switch when it matures.** This is a living task: track the readiness
+   of the standards and what the networks do, and switch on time — not earlier (so
+   as not to stall the launch) and not later (so as not to fall behind).
+
+In short: **the point is flexibility, not a race.** We build so that swapping a
+lock is easy, and we keep only non-secret things in the public chain.
+
+### Protecting the fund's money (the treasury) — what actually guards the funds
+
+This is the main reason the section exists: how the **shared wallet's money** is
+protected — both today and against future quantum computers.
+
+- **Several keys held by different people (3-of-5 multisig).** Moving funds
+  requires signatures from several independent guardians, not one. A single stolen
+  or cracked key decides nothing — you would have to compromise several people at
+  once. That raises the bar both today and in a quantum future (cracking one key
+  is far easier than several at once). See [`governance/safe/`](governance/safe/)
+  (the 3-of-5 Safe mock-up).
+- **The ability to "migrate" the treasury (the main future-proofing hook).** We
+  design the treasury so the funds can be moved to a new, quantum-resistant wallet
+  or contract once the network offers such signatures. The money is **not locked**
+  into a scheme that cannot be upgraded; a migration path is provided in advance.
+  Upgradeability matters more than today's specific algorithm.
+- **Rotating and revoking guardian keys without losing funds.** If a guardian's
+  key is compromised or a person leaves, their signature can be replaced/revoked
+  while the money stays put. The set of signers changes; the treasury does not.
+- **A cold reserve.** The bulk of the money sits in "cold" (offline) storage, with
+  only a working minimum on the "hot" address for current disbursements. The less
+  often the main public key appears on the network, the smaller the surface for a
+  future attack.
+- **Follow the network.** When Ethereum/Polygon enable quantum-resistant
+  signatures and smart accounts, we migrate the treasury onto them. Until then —
+  multisig, key hygiene, cold reserve.
+
+**Honest about priority.** The quantum threat is years away. The real threats to
+the money **today** are code bugs, key theft, and social engineering. So protecting
+the funds means, first of all, **an independent contract audit + a 3-of-5 multisig
++ key hygiene** — and quantum resistance is a "future" layer delivered through
+swappability and migration that **does not delay the launch**. Related to
+[the constitution, art. 4 (treasury)](docs/en/CONSTITUTION.md),
+[the support model](docs/en/SUPPORT-MODEL.md), and
+[targeted disbursement](docs/en/ESCROW-TARGETED-DISBURSEMENT.md).
+
+<details>
+<summary><b>Technical section — for developers</b></summary>
+
+- **Crypto-agility as a mandatory design requirement.** Signature and hash
+  algorithms are not hard-wired: abstract them behind an interface/scheme version
+  so they can be replaced without migrating the entire state. For future on-chain
+  parts — bake in a signature-scheme version field and an upgrade path via a vote +
+  Timelock (like any `parameter-change`), not a hardcode.
+- **"Harvest-now, decrypt-later" threat model.** Mitigated because on-chain we
+  publish only predicates/hashes/nullifiers, not ciphertexts with private payloads.
+  Long-lived secrets never enter the public immutable layer.
+- **Target standards (NIST PQC), once mature for our stack:** ML-KEM (Kyber) for
+  key exchange, ML-DSA (Dilithium) and SPHINCS+ for signatures. Hash functions
+  (SHA-2/256, used by the registry and the IPFS manifest) are Grover-resistant at
+  current lengths — the priority for replacement is asymmetric signatures, not
+  hashes.
+- **Dependence on L1/L2.** We do not change Ethereum/Polygon transaction
+  signatures (ECDSA/EdDSA) — that is up to the networks themselves; our path is a
+  wallet abstraction layer and readiness to accept PQC signatures once the network
+  supports them (e.g. via account abstraction). Until then — hardware wallets, key
+  rotation, minimal secrets held by the fund.
+- **Where this already holds:** [`docs/en/IDENTITY-VERIFICATION.md`](docs/en/IDENTITY-VERIFICATION.md)
+  (only facts/ZK on-chain), [`docs/en/ACCOUNTABILITY.md`](docs/en/ACCOUNTABILITY.md)
+  (on-chain — only a fingerprint, not PII), [`docs/en/GOVERNANCE.md`](docs/en/GOVERNANCE.md)
+  (any setting change goes through a vote + Timelock, which is exactly the path for
+  enabling a new signature scheme).
+
+</details>
+
 ## Constitutional security rails
 
 These rails are honored literally and machine-checked (Guardian agent + CI):
