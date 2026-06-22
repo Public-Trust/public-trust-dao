@@ -1,0 +1,29 @@
+name: Проверка целостности реестра
+
+# Гарантия прозрачности: на каждый push/PR проверяем, что публичный реестр
+# решений не подделан — схема, hash-chain и index.json должны сходиться.
+on:
+  push:
+    paths:
+      - "governance/registry/**"
+      - "scripts/registry.py"
+      - ".github/workflows/registry.yml"
+  pull_request:
+    paths:
+      - "governance/registry/**"
+      - "scripts/registry.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Проверить целостность реестра (verify)
+        run: python3 scripts/registry.py verify

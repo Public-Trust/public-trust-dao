@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://public-trust.github.io/public-trust-dao/schema/disbursement.schema.json",
+  "title": "Public Trust DAO — payload записи type=disbursement",
+  "description": "Полезная нагрузка записи о распределении средств. Отражает конституционные требования: приоритет нужды (PRIORITIES.md), поэтапные выплаты, лимиты, коллективную проверку и апелляции (ANTI-ABUSE.md). НЕ содержит персональных данных заявителя — только псевдонимный case_id и проверяемые ссылки.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["case_id", "priority_level", "amount", "asset", "network", "stage", "approvals", "checks"],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Псевдонимный идентификатор обращения (без персональных данных)."
+    },
+    "priority_level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Уровень приоритета нужды 1..10 (меньше = выше), см. docs/PRIORITIES.md."
+    },
+    "amount": {
+      "type": "string",
+      "pattern": "^[0-9]+(\\.[0-9]+)?$",
+      "description": "Сумма этого этапа выплаты (строкой, чтобы не терять точность)."
+    },
+    "asset": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Тикер актива (тестовая сеть на этапе разработки)."
+    },
+    "network": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Сеть, напр. polygon-amoy (testnet). Mainnet — только после аудита+мультисиг."
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["index", "of"],
+      "description": "Поэтапная выплата: этап index из of (ANTI-ABUSE: дробление снижает риск).",
+      "properties": {
+        "index": { "type": "integer", "minimum": 1 },
+        "of": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "approvals": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" },
+      "description": "Подтверждения коллективной проверки (хранители/агенты/Snapshot)."
+    },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["limit_ok", "collective_review", "appeal_window_days"],
+      "description": "Флаги антизлоупотребления, см. docs/ANTI-ABUSE.md.",
+      "properties": {
+        "limit_ok": { "type": "boolean", "description": "Лимиты соблюдены." },
+        "collective_review": { "type": "boolean", "description": "Прошла коллективная проверка." },
+        "appeal_window_days": { "type": "integer", "minimum": 0, "description": "Окно апелляции, дней." }
+      }
+    },
+    "tx": {
+      "type": "string",
+      "description": "Хеш транзакции (когда выплата проведена on-chain)."
+    }
+  }
+}

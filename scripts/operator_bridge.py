@@ -69,6 +69,14 @@ def http(method, params, timeout):
         return json.load(r)
 
 
+def typing():
+    """Индикатор «печатает…» — живой чат вместо служебных сообщений."""
+    try:
+        http("sendChatAction", {"chat_id": CHAT, "action": "typing"}, 15)
+    except Exception:
+        pass
+
+
 def send(text):
     text = text or "(пустой ответ)"
     # Telegram лимит 4096 — режем на куски
@@ -81,15 +89,12 @@ def send(text):
 
 
 def now():
-    return datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def run_turn(text):
-    """Запустить claude-турн с памятью диалога. Возвращает (result, session_id)."""
-    sid = None
-    if os.path.exists(SID_F):
-        sid = open(SID_F).read().strip() or None
-    cmd = ["claude", "-p", text,
+def _invoke(prompt, sid):
+    """Один вызов claude. Возвращает (ok, result_or_err, session_id)."""
+    cmd = ["claude", "-p", prompt,
            "--output-format", "json",
            "--permission-mode", "bypassPermissions",
            "--model", MODEL,
@@ -100,18 +105,43 @@ def run_turn(text):
     try:
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=TURN_TIMEOUT)
     except subprocess.TimeoutExpired:
-        return ("⏳ Думал дольше лимита и прервался. Переформулируй или спроси короче.", sid)
-    out = p.stdout.strip()
+        return (False, "__timeout__", sid)
+    out = (p.stdout or "").strip()
     try:
         d = json.loads(out)
-        res = d.get("result") or "(нет ответа)"
-        new_sid = d.get("session_id")
+        if d.get("is_error"):
+            return (False, (d.get("result") or "")[:500], sid)
+        return (True, d.get("result") or "(нет ответа)", d.get("session_id") or sid)
+    except Exception:
+        return (False, (out or p.stderr or "")[-500:], sid)
+
+
+def run_turn(text):
+    """claude-турн с памятью диалога (--resume). При потере сессии — свежий старт."""
+    # Рамка: сообщение оператора НИКОГДА не начинается с '/', иначе claude примет
+    # его за свою slash-команду. Заодно даёт агенту контекст роли реплики.
+    prompt = "Сообщение от оператора в Telegram-чате — ответь ему:\n\n" + text
+    sid = None
+    if os.path.exists(SID_F):
+        sid = open(SID_F).read().strip() or None
+
+    ok, res, new_sid = _invoke(prompt, sid)
+    # сессия истекла/не найдена → ретрай без --resume (новый диалог)
+    if not ok and sid and ("No conversation found" in res or "session" in res.lower()):
+        print("[bridge] resume потерян, новый диалог", flush=True)
+        try:
+            os.remove(SID_F)
+        except OSError:
+            pass
+        ok, res, new_sid = _invoke(prompt, None)
+
+    if ok:
         if new_sid:
             open(SID_F, "w").write(new_sid)
-        return (res, new_sid or sid)
-    except Exception:
-        tail = (out or p.stderr or "")[-500:]
-        return (f"⚠️ Не разобрал ответ движка. rc={p.returncode}. Хвост: {tail}", sid)
+        return (res, new_sid)
+    if res == "__timeout__":
+        return ("⏳ Думал дольше лимита и прервался. Спроси короче/конкретнее.", sid)
+    return (f"⚠️ Сбой движка. Хвост: {res}", sid)
 
 
 def git_persist(ts, op_text, reply):
@@ -155,7 +185,7 @@ def main():
                 continue
             ts = now()
             print(f"[bridge] {ts} op: {text[:80]}", flush=True)
-            send("…думаю")
+            typing()
             reply, _ = run_turn(text)
             send(reply)
             git_persist(ts, text, reply)

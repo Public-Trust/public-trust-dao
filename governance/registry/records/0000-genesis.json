@@ -1,0 +1,21 @@
+{
+  "seq": 0,
+  "id": "PTD-0000",
+  "type": "genesis",
+  "timestamp": "2026-06-22T00:00:00Z",
+  "actor": "builder-agent (bootstrap)",
+  "summary": "Открытие публичного реестра решений Public Trust DAO",
+  "refs": [
+    "docs/CONSTITUTION.md",
+    "docs/MANIFESTO.md"
+  ],
+  "payload": {
+    "chain": {
+      "hash": "sha256",
+      "canonical": "JSON sort_keys, separators=(\",\",\":\"), UTF-8, поле hash исключается"
+    },
+    "note": "Начало публичного реестра решений Public Trust DAO. Все последующие записи криптографически сцеплены с этой."
+  },
+  "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "hash": "97635b4f16f69ef5fed4de38cf1972483cf524c0508749deb7527796350cac28"
+}

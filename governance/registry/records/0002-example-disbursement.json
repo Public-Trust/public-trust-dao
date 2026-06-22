@@ -1,0 +1,37 @@
+{
+  "seq": 2,
+  "id": "PTD-0002",
+  "type": "disbursement",
+  "timestamp": "2026-06-22T02:00:00Z",
+  "actor": "fairness-ai + keeper-quorum",
+  "summary": "[ПРИМЕР] Поэтапная тестовая выплата (testnet), приоритет 2, этап 1/3",
+  "refs": [
+    "docs/PRIORITIES.md",
+    "docs/ANTI-ABUSE.md",
+    "schema/disbursement.schema.json"
+  ],
+  "payload": {
+    "case_id": "DEMO-CASE-0001",
+    "priority_level": 2,
+    "amount": "100.00",
+    "asset": "TEST-MATIC",
+    "network": "polygon-amoy",
+    "stage": {
+      "index": 1,
+      "of": 3
+    },
+    "approvals": [
+      "guardian-ai:ok",
+      "keeper-quorum:3of5",
+      "snapshot:demo"
+    ],
+    "checks": {
+      "limit_ok": true,
+      "collective_review": true,
+      "appeal_window_days": 7
+    },
+    "example": true
+  },
+  "prev_hash": "0b799cbb494ff284f2541d3e14530688308d06384504920e0c813aa531a4783a",
+  "hash": "abf5baab5b4f93f962658b742299e51996d53b7a43dbafd36998485464ae1e9b"
+}

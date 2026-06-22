@@ -1,0 +1,20 @@
+{
+  "seq": 1,
+  "id": "PTD-0001",
+  "type": "decision",
+  "timestamp": "2026-06-22T01:00:00Z",
+  "actor": "builder-agent",
+  "summary": "[ПРИМЕР] Принятие регламента публичного реестра решений",
+  "refs": [
+    "governance/registry/README.md",
+    "docs/PRINCIPLES.md"
+  ],
+  "payload": {
+    "decision": "Принять регламент публичного реестра решений как стандарт прозрачности Этапа 3.",
+    "rationale": "Неизменяемость записей и проверяемость — конституционные принципы; hash-chain делает подмену истории заметной до внедрения IPFS-пиннинга.",
+    "status": "adopted",
+    "example": true
+  },
+  "prev_hash": "97635b4f16f69ef5fed4de38cf1972483cf524c0508749deb7527796350cac28",
+  "hash": "0b799cbb494ff284f2541d3e14530688308d06384504920e0c813aa531a4783a"
+}
