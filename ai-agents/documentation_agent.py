@@ -42,6 +42,9 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • mirror-doc-link   → экран-зеркало платформы ссылается на свой док в docs/ .... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран-пересказ нормативного документа не ставит
      ссылку на первоисточник — зеркало нельзя сверить с нормой; PTD-0040)
+  • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
+    (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
+     односторонняя связь оставляет человека без обратного пути; PTD-0106)
 
 Правило пар (выводится из пути, а не зашито пофайлово):
   docs/NAME.md            ↔ docs/en/NAME.md
@@ -900,6 +903,39 @@ def check_mirror_doc_link(root):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_see_also_symmetric(root):
+    """МЯГКАЯ: связь «См. также» между экранами-объяснениями взаимна.
+
+    Карта `RELATED` в `SeeAlso.tsx` связывает экраны-объяснения друг с другом. Если
+    экран A ведёт «См. также» на экран B, человек ждёт, что и с B сможет вернуться к
+    A — иначе попадает в тупик без обратного пути. Проверка ищет односторонние связи:
+    A→B есть, B→A нет. Несимметрия — НЕ ошибка (иногда так и задумано: например,
+    словарь ссылается на всех, но не все на словарь), поэтому только предупреждение
+    (warn, не блок — ст. 3/6, PTD-0106). Касается лишь `RELATED` (объяснение↔
+    объяснение); `RELATED_ACTIONS` (объяснение→рабочий экран) по смыслу односторонняя
+    и сюда не входит. Если файла нет (мини-репозиторий в тесте) или карта пуста —
+    проверять нечего → pass.
+    """
+    if not os.path.exists(os.path.join(root, SEEALSO_TSX)):
+        return "pass", []
+    related = parse_seealso_map(read_text(root, SEEALSO_TSX), "RELATED")
+    if not related:
+        return "pass", []
+    violations = []
+    for src in sorted(related):
+        for dst in related[src]:
+            # B упоминает A обратно? Если у B вообще нет записи в карте или в его
+            # списке нет A — связь односторонняя.
+            if src not in related.get(dst, []):
+                violations.append({
+                    "record": f"{SEEALSO_TSX} → RELATED[{dst}]",
+                    "problem": (f"экран «{src}» ведёт «См. также» на «{dst}», но «{dst}» "
+                                f"не ведёт обратно на «{src}» — связь односторонняя, "
+                                "человек попадает в тупик без обратного пути"),
+                })
+    return ("pass" if not violations else "warn"), violations
+
+
 CHECKS = [
     {
         "key": "bilingual-pairs",
@@ -975,6 +1011,13 @@ CHECKS = [
         "fn": "mirror_doc_link",
         "soft": True,
     },
+    {
+        "key": "see-also-symmetric",
+        "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
+        "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "seealso_symmetric",
+        "soft": True,
+    },
 ]
 
 
@@ -1000,6 +1043,7 @@ def run(root):
     seealso_t_status, seealso_t_v = check_see_also_targets(root)
     seealso_p_status, seealso_p_v = check_see_also_present(root)
     mirror_status, mirror_v = check_mirror_doc_link(root)
+    seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
         "pairs": (pairs_status, pairs_v),
@@ -1013,6 +1057,7 @@ def run(root):
         "seealso_targets": (seealso_t_status, seealso_t_v),
         "seealso_present": (seealso_p_status, seealso_p_v),
         "mirror_doc_link": (mirror_status, mirror_v),
+        "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 
     checks = []

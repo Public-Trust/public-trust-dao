@@ -256,6 +256,7 @@ git-tracked `.md` files (over what is actually published):
 | `see-also-targets` *(soft)* | every address in the platform's "See also" maps (`RELATED`/`RELATED_ACTIONS` in `SeeAlso.tsx`) exists in the `i18n` texts (`t.learn`/`t.screens`) — a cross-link won't silently break when a screen is renamed | Art. 3/6 — verifiability/clarity (`PTD-0105`) |
 | `see-also-present` *(soft)* | every screen that is a source in a "See also" map actually renders the `<SeeAlso/>` component in its `page.tsx` (the cross-link block won't silently disappear) | Art. 3/6 — verifiability/clarity (`PTD-0104`) |
 | `mirror-doc-link` *(soft)* | every platform "mirror" screen (a plain-language retelling of a normative doc) links to its source in `docs/` — the retelling can be checked against the norm, the mirror won't drift away from the document | Art. 3/6 — verifiability/clarity (`PTD-0040`) |
+| `see-also-symmetric` *(soft)* | the "See also" link between explanation screens is mutual: if screen A points to B in `RELATED`, then B points back to A — a person always has a return path, no dead ends. Asymmetry is allowed (hubs like the glossary / "How we decide"), so it only warns | Art. 3/6 — verifiability/clarity (`PTD-0106`) |
 
 > The `glossary-coverage` and `glossary-no-dead` checks are **soft**: they only warn
 > (so the glossary neither falls behind the documents nor grows stale) and **never

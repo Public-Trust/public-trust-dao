@@ -699,6 +699,83 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # --- Мягкая проверка see-also-symmetric: связь «См. также» взаимна ----------
+    # Логика: если экран A ведёт на B в RELATED, человек ждёт обратный путь B→A.
+    # Односторонняя связь ПРЕДУПРЕЖДАЕТ (warn), вердикт не роняет (soft). Несимметрия
+    # допустима (хабы), поэтому только сигнал. Касается лишь RELATED (объяснение↔
+    # объяснение); RELATED_ACTIONS односторонняя по смыслу и не проверяется.
+
+    # 33. Симметричная карта RELATED → see-also-symmetric pass, soft, без тревог.
+    print("\n[мягкая проверка: симметричная карта «См. также» → see-also-symmetric pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        code, report = run_agent(tmp)
+        check("see-also-symmetric == pass", status_of(report, "see-also-symmetric") == "pass")
+        check("see-also-symmetric помечена soft", _is_soft(report, "see-also-symmetric"))
+        check("вердикт green / exit=0", report.get("verdict") == "green" and code == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 34. Односторонняя связь A→B без B→A → see-also-symmetric warn, вердикт green.
+    print("\n[мягкая проверка: односторонняя связь «См. также» → see-also-symmetric warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        broken = with_platform({
+            "platform/components/SeeAlso.tsx": (
+                "const RELATED: Record<string, string[]> = {\n"
+                '  "/manifesto/": ["/governance/"],\n'  # ведёт на governance
+                '  "/governance/": [],\n'               # а обратно — нет
+                "};\n"
+                "const RELATED_ACTIONS: Record<string, string[]> = {\n"
+                "};\n"
+                "export default function SeeAlso() { return null; }\n"
+            ),
+        })
+        make_repo(tmp, broken)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("see-also-symmetric == warn для односторонней связи",
+              status_of(report, "see-also-symmetric") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 35. RELATED_ACTIONS односторонняя — это норма, симметрию не нарушает.
+    print("\n[мягкая проверка: односторонняя RELATED_ACTIONS не считается несимметрией]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        ok = with_platform({
+            "platform/components/SeeAlso.tsx": (
+                "const RELATED: Record<string, string[]> = {\n"
+                '  "/manifesto/": ["/governance/"],\n'
+                '  "/governance/": ["/manifesto/"],\n'   # RELATED симметрична
+                "};\n"
+                "const RELATED_ACTIONS: Record<string, string[]> = {\n"
+                '  "/governance/": ["/voting/"],\n'      # действие односторонне — это норма
+                "};\n"
+                "export default function SeeAlso() { return null; }\n"
+            ),
+        })
+        make_repo(tmp, ok)
+        code, report = run_agent(tmp)
+        check("see-also-symmetric == pass (действия не считаются)",
+              status_of(report, "see-also-symmetric") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 36. Без файлов платформы — проверка молчит (pass), вердикт green.
+    print("\n[мягкая проверка: без платформы see-also-symmetric не предупреждает]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, dict(GOOD_FILES))
+        code, report = run_agent(tmp)
+        check("see-also-symmetric == pass без платформы",
+              status_of(report, "see-also-symmetric") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 

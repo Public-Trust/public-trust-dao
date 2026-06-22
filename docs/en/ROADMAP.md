@@ -957,17 +957,31 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   longest common substring), so a human immediately sees what the section was renamed
   to. Stays a soft hint, not a block (proposed session 97).
 
-- [ ] **Documentation agent: "See also" is mutually symmetric** — a soft check that if
+- [x] **Documentation agent: "See also" is mutually symmetric** — a soft check that if
   screen A links to screen B under "See also", then B mentions A too (the `RELATED` map in
   `SeeAlso.tsx` is symmetric). Asymmetry isn't an error (sometimes intentional), so warning
   only; helps spot one-way links where a person hits a dead end with no way back (extends
   `PTD-0106`, proposed session 109).
+  **Done (session 111):** the `see-also-symmetric` check in `documentation_agent.py` —
+  scans `RELATED` for one-way links (A→B exists, B→A doesn't) and warns per link; only
+  `RELATED` (explanation↔explanation), `RELATED_ACTIONS` is one-way by design and excluded.
+  Soft (warn): does not drop the verdict. On the real repo it signals 9 one-way links —
+  expected: `governance` and `glossary` are intentional hubs, the rest is acceptable
+  curation; the content map is left as-is, the value is catching NEW accidental dead ends
+  going forward. +4 test scenarios (89/89), run_all 8/8. Agent README tables (+EN) updated.
+  `PTD-0108`. TESTNET-ONLY.
 
 - [ ] **Documentation agent: every working platform screen has a `page.tsx`** — a soft check
   that every address in `t.screens`/`t.learn` (`lib/i18n.ts`) maps to a real
   `platform/app/<slug>/page.tsx` directory. `see-also-targets` checks the reverse (map
   addresses exist in i18n); this closes the other side: a screen promised in the menu/showcase
   actually exists rather than 404-ing (extends `PTD-0106`, proposed session 109).
+
+- [ ] **Documentation agent: every explanation screen has at least one incoming "See also"
+  link** — a soft check that no explanation screen is an "island": at least one other screen's
+  `RELATED` points to it (or it is intentionally reachable only from the menu, like the
+  glossary). Complements `see-also-symmetric`: that one catches one-way links, this one catches
+  screens you can't reach by cross-navigation at all (extends `PTD-0108`, proposed session 111).
 
 ---
 
