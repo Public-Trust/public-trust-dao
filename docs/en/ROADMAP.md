@@ -223,6 +223,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     about reputation (only a support, can't be bought, doesn't depend on "bring a friend",
     no power over money). RU↔EN text in `lib/i18n.ts` (`SafeguardsDict`), added to the
     menu, no new dependencies. Rests on constitution art. 7. `PTD-0091`. TESTNET-ONLY.
+  - [x] Explainer screen "How the fund creates paid work — and honestly checks it was
+    done" (session 95): `platform/app/work/` — an in-app mirror of the normative
+    `docs/PROOF-OF-CONTRIBUTION.md` (the "mirror screen" pattern, like priorities↔PRIORITIES,
+    rewards↔REWARDS-MODEL, safeguards↔ANTI-ABUSE and glossary↔GLOSSARY): in plain words —
+    the main idea "the fund does not only hand out aid, it creates honest work around it;
+    work is paid, but not on word"; the key trust question; 6 "main points" (money frozen
+    for the task in advance / received only on proof / reviewers risk their own name /
+    dispute window / everything in the open / aid first, reward second); two work formats
+    (one-off task / staged); three pillars of proof (confirmation from whom it was done for
+    + traces as fingerprints without publishing files + a check by several independent
+    people); honest about the oracle weak spot; hard limits. RU↔EN text in `lib/i18n.ts`
+    (`WorkDict`), added to the menu, no new dependencies. Rests on constitution art. 5/6/7.
+    `PTD-0092`. TESTNET-ONLY.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,

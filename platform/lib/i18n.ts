@@ -281,6 +281,32 @@ export type SafeguardsDict = {
   sourceLink: string;
 };
 
+export type WorkDict = {
+  back: string;
+  title: string;
+  lead: string;
+  mainIdeaTitle: string;
+  mainIdea: string; // главная мысль одной строкой
+  questionTitle: string;
+  question: string; // ключевой вопрос доверия
+  keyTitle: string; // «Главное — простыми словами»
+  key: string[];
+  formatsTitle: string;
+  formatsHint: string;
+  // Два формата работы: разовая задача и этапная работа.
+  formats: { name: string; text: string }[];
+  proofTitle: string;
+  proofHint: string;
+  proof: string[]; // три опоры доказательства
+  honestTitle: string;
+  honestNote: string; // честно о слабом месте оракула
+  limitTitle: string;
+  limitNote: string; // граница: сначала помощь, потом награда
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -354,6 +380,7 @@ export type Dict = {
   navPriorities: string;
   navRewards: string;
   navSafeguards: string;
+  navWork: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -370,6 +397,7 @@ export type Dict = {
   priorities: PrioritiesDict;
   rewards: RewardsDict;
   safeguards: SafeguardsDict;
+  work: WorkDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -404,6 +432,7 @@ export const DICT: Record<Lang, Dict> = {
     navPriorities: "Порядок помощи",
     navRewards: "Помощь и награда",
     navSafeguards: "Защита от обмана",
+    navWork: "Оплачиваемая работа",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -868,6 +897,50 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд защищён от обмана и воровства». Правила опираются на конституцию (статья 7 «защита от злоупотреблений»). Всё пока на тестовой сети, без реальных денег: настоящие средства фонд начнёт распределять только после независимой проверки кода и под общим кошельком (минимум 3 подписи из 5 хранителей).",
       sourceLink: "Открыть документ «Защита от обмана и воровства» →",
     },
+    work: {
+      back: "← На главную",
+      title: "Как фонд создаёт оплачиваемую работу — и честно проверяет, что она сделана",
+      lead: "Помощь людям сама рождает работу: кто-то проверяет заявку, договаривается с поставщиком, перевозит, чинит, пишет код, мирит спорящих. Эта работа может быть оплачиваемой. Этот экран простыми словами объясняет, как фонд создаёт честные рабочие места вокруг помощи — и как убеждается, что работа реально сделана, прежде чем за неё заплатить.",
+      mainIdeaTitle: "Главная мысль одной строкой",
+      mainIdea: "Фонд не только раздаёт помощь — он создаёт честную работу вокруг этой помощи. За работу платят, но не на слово.",
+      questionTitle: "Главный вопрос доверия",
+      question: "Как убедиться, что работа действительно сделана в реальной жизни, прежде чем за неё заплатить? Фонд решает это не доверием на слово, а сочетанием доказательств и проверок — об этом ниже.",
+      keyTitle: "Главное — простыми словами",
+      key: [
+        "Деньги заранее откладываются под задачу. Когда человеку поручают работу, вознаграждение сразу резервируется и замораживается — исполнитель видит, что деньги реально есть и отложены именно под его задачу, а фонд видит, что они не уйдут без подтверждения.",
+        "Чтобы их получить, надо доказать, что работа сделана — не на слово. Нужно подтверждение от того, для кого делали работу, следы работы (фото, чеки, документы — видны как «отпечаток», но не публикуются) и проверка нескольких независимых людей.",
+        "Проверяющие рискуют своим. Кто одобрил работу — ставит на кон своё доброе имя: прозевал обман — теряет доверие. Так «поставить галочку не глядя» становится по-настоящему рискованным.",
+        "Есть время оспорить любую выплату. После проверки открыт срок, в который каждый может оспорить выплату с обоснованием. Спор разбирают люди, а не машина.",
+        "Всё на виду. Любой может пересчитать: кто, за что и сколько получил. Каждая выплата записана в открытый журнал и совпадает с записью в блокчейне.",
+        "Сначала помощь, потом вознаграждение. Помощь нуждающимся всегда в приоритете над оплатой работы — зарплата не встаёт в очередь впереди нужды.",
+      ],
+      formatsTitle: "Что считается «работой»",
+      formatsHint: "Каждая оплачиваемая работа оформляется как задача с понятными условиями приёмки — никаких «заплатим, если понравится». Два формата:",
+      formats: [
+        {
+          name: "Разовая задача",
+          text: "Одна задача с заранее объявленной вилкой вознаграждения и чёткими условиями «сделано». Для дискретной работы: починить, перевезти, перевести документ, закрыть задачу в коде.",
+        },
+        {
+          name: "Этапная работа",
+          text: "Крупная работа, разбитая на этапы; вознаграждение дробится по этапам. Для длительной: разработка модуля, операционное ведение направления.",
+        },
+      ],
+      proofTitle: "Доказательство выполнения — три опоры, не «на слово»",
+      proofHint: "Факт выполнения подтверждается сочетанием доказательств. Чем больше денег и чем ближе работа к реальной жизни, тем больше опор требуется.",
+      proof: [
+        "Подтверждение от того, для кого сделана работа. Если работу сделали для конкретного человека (привезли лекарство, помогли с переездом), он подтверждает: «да, мне это сделали».",
+        "Следы работы. Фото, чеки, документы или результат в коде — они хранятся как «отпечаток» (видно, что они есть и не подменены), но сами файлы не публикуются и не уходят наружу.",
+        "Проверка нескольких независимых людей. Исполнитель не проверяет сам себя; результат подтверждают несколько независимых проверяющих, а ИИ-помощники «Справедливость» и «Аудит» ищут странности.",
+      ],
+      honestTitle: "Честно о слабом месте",
+      honestNote: "На 100% проверить реальный мир машиной нельзя, и мы не делаем вид, что у нас «идеальный детектор правды». Поэтому защита строится вокруг этой слабости: много независимых сигналов сразу, репутация как ставка честности, старт с малых сумм и строгой проверки — а доверие и размеры растут постепенно.",
+      limitTitle: "Жёсткие границы",
+      limitNote: "Помощь нуждающимся всегда важнее оплаты работы. Вознаграждение никогда не зависит от того, скольких людей ты привёл, — рефералов и пирамиды здесь нет. Деньги разблокируются только при выполнении условия: подтверждение того, для кого сделана работа, плюс проверка нескольких людей, плюс истёкший срок на спор.",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд создаёт оплачиваемую работу — и честно проверяет, что она сделана». Правила опираются на конституцию (статья 5 «справедливое распределение», статья 6 «вознаграждение за вклад», статья 7 «защита от злоупотреблений»). Всё пока на тестовой сети, без реальных денег: начинаем с малых сумм и строгой проверки.",
+      sourceLink: "Открыть документ «Как фонд создаёт оплачиваемую работу» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -1260,6 +1333,7 @@ export const DICT: Record<Lang, Dict> = {
     navPriorities: "Order of help",
     navRewards: "Help & reward",
     navSafeguards: "Anti-fraud",
+    navWork: "Paid work",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -1723,6 +1797,50 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Where this is written down",
       sourceNote: "This screen mirrors the fund's normative document “How the fund is protected from fraud and theft”. The rules rest on the constitution (article 7, “protection from abuse”). Everything is still on a test network, without real money: the fund will only start distributing real funds after an independent code review and under a shared wallet (at least 3 signatures out of 5 guardians).",
       sourceLink: "Open the “Protection from fraud and theft” document →",
+    },
+    work: {
+      back: "← Home",
+      title: "How the fund creates paid work — and honestly checks it was done",
+      lead: "Helping people creates work in itself: someone reviews the request, arranges things with a provider, drives a delivery, repairs, writes code, mediates a dispute. This work can be paid. This screen explains, in plain words, how the fund creates honest jobs around aid — and how it makes sure the work was actually done before paying for it.",
+      mainIdeaTitle: "The main idea in one line",
+      mainIdea: "The fund does not only hand out aid — it creates honest work around that aid. Work is paid, but not on word.",
+      questionTitle: "The key trust question",
+      question: "How do we make sure the work was actually done in real life before paying for it? The fund handles this not by trusting your word, but by a combination of evidence and checks — see below.",
+      keyTitle: "The main points — in plain words",
+      key: [
+        "The money is set aside for the task in advance. When a person is given work, the reward is reserved and frozen at once — the worker sees the money really exists and is set aside for their task, and the fund sees it will not move without confirmation.",
+        "To receive it, you must prove the work was done — not on word. You need a confirmation from the person the work was done for, traces of the work (photos, receipts, documents — visible as a “fingerprint” but not published), and a check by several independent people.",
+        "The reviewers risk something of their own. Whoever approved the work puts their good name on the line: miss a fraud and you lose trust. This turns “ticking the box without looking” into a real risk.",
+        "There is time to challenge any payout. After the check there is a period in which anyone can challenge the payout with a reason. Disputes are settled by people, not a machine.",
+        "Everything is in the open. Anyone can recompute who got paid, for what, and how much. Every payout is recorded in the open journal and matches the blockchain record.",
+        "Aid first, reward second. Aid to those in need always outranks paying for work — a salary does not queue ahead of need.",
+      ],
+      formatsTitle: "What counts as “work”",
+      formatsHint: "Every paid job is framed as a task with clear acceptance terms — no “we'll pay if we like it”. Two formats:",
+      formats: [
+        {
+          name: "One-off task",
+          text: "One task with a pre-announced reward range and clear “done” terms. For discrete work: repair, transport, translate a document, close a code issue.",
+        },
+        {
+          name: "Staged work",
+          text: "Large work split into stages; the reward is split per stage. For long-running work: developing a module, operationally running a direction.",
+        },
+      ],
+      proofTitle: "Proof of completion — three pillars, not “on word”",
+      proofHint: "Completion is confirmed by a combination of evidence. The more money, and the closer the work is to real life, the more pillars are required.",
+      proof: [
+        "Confirmation from the person the work was done for. If the work was done for a specific person (delivered medicine, helped with a move), they confirm: “yes, this was done for me”.",
+        "Traces of the work. Photos, receipts, documents, or a result in code — kept as a “fingerprint” (you can see they exist and were not swapped), but the files themselves are not published and do not leave the device.",
+        "A check by several independent people. The worker does not check themselves; the result is confirmed by several independent reviewers, while the “Fairness” and “Audit” AI helpers look for anomalies.",
+      ],
+      honestTitle: "Honest about the weak spot",
+      honestNote: "A machine cannot verify the real world 100%, and we do not pretend to have a “perfect truth detector”. So protection is built around this weakness: many independent signals at once, reputation as a stake of honesty, a start with small amounts and strict checks — with trust and sizes growing gradually.",
+      limitTitle: "Hard limits",
+      limitNote: "Aid to those in need always matters more than paying for work. Reward never depends on how many people you brought in — there are no referrals and no pyramid here. Money is unlocked only when the condition is met: confirmation from the person the work was done for, plus a check by several people, plus an expired dispute window.",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund's normative document “How the fund creates paid work — and honestly checks it was done”. The rules rest on the constitution (article 5 “fair distribution”, article 6 “reward for contribution”, article 7 “protection from abuse”). Everything is still on a test network, with no real money: we start with small amounts and strict checks.",
+      sourceLink: "Open the “How the fund creates paid work” document →",
     },
     notFound: {
       code: "Page not found",
