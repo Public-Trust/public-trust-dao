@@ -145,7 +145,16 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
     (нет персональных данных). Тест-инвариант [`test_fairness.py`](../ai-agents/test_fairness.py)
     (17/17). Побочно исправлен латентный баг Guardian (ложно краснел на собственном
     `test_guardian.py`) — CI `ai-agents` снова зелёный. `PTD-0023`.
-  - [ ] Модули 4–8: Reputation / Housing / Governance / Mediator /
+  - [x] Модуль 4/8 (сессия 27): **Reputation** [`reputation_agent.py`](../ai-agents/reputation_agent.py)
+    — read-only статический разбор `contracts/contracts/Reputation.sol` и
+    `governance/snapshot/space.json`: доказывает «1 человек = 1 голос» по
+    [`GOVERNANCE.md`](GOVERNANCE.md) §2–§3 В КОДЕ — `soulbound` (нет функций
+    перевода), `bounded-weight` (вес 0 / `1 + min(points, cap)`, коридор [1..1+cap]),
+    `no-funds` (слой репутации не двигает средства), `roles-separated` (verifier
+    выдаёт/отзывает бейдж, governor правит параметры), `off-chain-equal` (Snapshot =
+    равный `ticket` value=1, не плутократия). Тест-инвариант
+    [`test_reputation.py`](../ai-agents/test_reputation.py) (17/17). `PTD-0024`.
+  - [ ] Модули 5–8: Housing / Governance / Mediator /
     Documentation — по одному «до зелёного».
 
 ### P1 — материалы и инфраструктура (часть — из INBOX)
@@ -233,11 +242,40 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 - [ ] Fairness: проверка согласованности `category` ↔ `priority_level` (например,
   `housing` обычно не ниже уровня «угроза потери жилья») — мягкое предупреждение,
   не блокирующее, чтобы ловить очевидные перекосы категоризации (сессия 26).
+- [ ] Reputation-агент: распространить статический разбор «1 человек = 1 голос» на
+  `Governor.sol` (вес голоса берётся из `Reputation.votingUnits`, а не из баланса;
+  порог внесения предложения равный, не денежный) — замкнуть проверку всей цепочки
+  голоса, а не только бейджа (сессия 27).
+- [ ] Reputation-агент: сверять `reputationCap` в `scripts/deploy.js`/конфиге деплоя
+  с разумным потолком (например, ≤ небольшого N), чтобы множитель за вклад не мог
+  тихо превратиться в новую элиту через слишком высокий cap (сессия 27).
+- [ ] Лёгкий Solidity-инвариант-сканер как переиспользуемый модуль: вынести из
+  Reputation-агента вырезание комментариев + извлечение тела функции по балансу
+  скобок в общий `ai-agents/solidity_scan.py` — пригодится будущим агентам по
+  контрактам (Governance/Audit) (сессия 27).
 
 ---
 
 ## Сделано
 
+- **PTD-0024 (сессия 27):** Этап 6 (AI-агенты), модуль 4/8 — **Reputation-агент**.
+  [`reputation_agent.py`](../ai-agents/reputation_agent.py) — служебный read-only
+  агент: статически разбирает ончейн-контракт репутации
+  [`Reputation.sol`](../contracts/contracts/Reputation.sol) и офчейн-настройки
+  [`space.json`](../governance/snapshot/space.json) и доказывает, что модель
+  «1 человек = 1 голос» ([`GOVERNANCE.md`](GOVERNANCE.md) §2–§3) сохранена В КОДЕ:
+  `soulbound` (у бейджа нет функций перевода — голос не продать), `bounded-weight`
+  (`votingUnits`: не участник → 0, участник → `1 + min(points, cap)`, коридор
+  [1..1+cap] — власть денег невозможна), `no-funds` (слой репутации не двигает
+  средства — «уникальность ≠ власть»), `roles-separated` (verifier подтверждает
+  уникальность, governor правит параметры; роли не смешаны), `off-chain-equal`
+  (стратегия Snapshot = равный `ticket` value=1, не плутократия по балансу; допуск
+  только участникам). Вывод человекочитаемый и `--json`; код 0/1; «красный» =
+  сигнал. **Тест-инвариант** [`test_reputation.py`](../ai-agents/test_reputation.py)
+  (17/17) доказывает «красное ловится, зелёное не ложно-падает» (включая отсев
+  упоминаний в комментариях Solidity). CI
+  [`ai-agents.yml`](../.github/workflows/ai-agents.yml) расширен. `PTD-0024`.
+  TESTNET-ONLY. Дальше — модули 5–8 (Housing / Governance / Mediator / Documentation).
 - **PTD-0023 (сессия 26):** Этап 6 (AI-агенты), модуль 3/8 — **Fairness-агент**.
   [`fairness_agent.py`](../ai-agents/fairness_agent.py) — служебный read-only агент:
   проходит по записям публичного реестра типа `disbursement` и проверяет КАЖДУЮ
@@ -381,3 +419,4 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 | Тест-инвариант Audit / Guardian-агент / Documentation-агент (двуязычность) | агент | 24 |
 | Мета-агент «прогнать всех» / pre-commit-хук / лексический линтер запретов | агент | 25 |
 | Тест-инвариант «выплата ↔ запись реестра» / самопроверка агентов в CI / Reputation-агент | агент | 26 |
+| Reputation на Governor.sol / проверка cap деплоя / общий solidity_scan.py | агент | 27 |

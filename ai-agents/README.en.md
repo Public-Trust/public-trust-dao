@@ -38,7 +38,7 @@ This sets hard boundaries for EVERY agent in this directory:
 | **Audit** | Verifies integrity and transparency: registry (hash-chain), IPFS manifest, Safe/Snapshot configs, contract tests. One "green/red" for the governance layer. | ✅ scaffold (`audit_agent.py`) |
 | **Guardian** | Watches the safety rails: no private keys/secrets in the repo, no mainnet/real funds, no TESTNET-first violations. | ✅ scaffold (`guardian_agent.py`) |
 | **Fairness** | Checks fairness of distribution per [`PRIORITIES.md`](../docs/en/PRIORITIES.md): priority respected, limits/collective review/staging/privacy. | ✅ scaffold (`fairness_agent.py`) |
-| **Reputation** | Computes/validates voting weights per [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3: "1 person = 1 vote", soulbound, "uniqueness ≠ power". | ⏳ planned |
+| **Reputation** | Computes/validates voting weights per [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3: "1 person = 1 vote", soulbound, "uniqueness ≠ power". | ✅ scaffold (`reputation_agent.py`) |
 | **Housing** | Domain helper for housing cases (escrow paying the provider directly per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)). | ⏳ planned |
 | **Governance** | Helps with the proposal lifecycle (format, quorum, timing, ties to the constitution); does not vote itself. | ⏳ planned |
 | **Mediator** | Assists with disputes/appeals per [`ANTI-ABUSE.md`](../docs/en/ANTI-ABUSE.md) — structures, does not decide. | ⏳ planned |
@@ -144,6 +144,40 @@ record) the agent must return "red", while a valid payment and an empty registry
 
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
 Guardian (+test) + Fairness (+test) on every push/PR.
+
+## Reputation agent — what it does and how to run it
+
+`reputation_agent.py` is a read-only static analysis: it proves the
+"1 person = 1 vote" model is preserved **in code**
+([`contracts/contracts/Reputation.sol`](../contracts/contracts/Reputation.sol)) and
+**in the voting settings** ([`governance/snapshot/space.json`](../governance/snapshot/space.json)),
+not just "on paper" per [`docs/GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3.
+
+| Check | What it requires | Protects |
+|-------|------------------|----------|
+| `soulbound` | the badge has no transfer functions (`transfer`/`approve`/…) — the vote is non-transferable | Art. 2 / §2 — voting right is not for sale and cannot be bought up |
+| `bounded-weight` | `votingUnits`: non-member → 0; member → `1 + min(points, cap)`, corridor `[1..1+cap]` | Art. 2 / §2 — power of money is impossible (prohibition #5) |
+| `no-funds` | the reputation layer moves no funds (`payable`/`.transfer`/`.call{value}`/…) | Art. 9 / §3 — "uniqueness ≠ power" |
+| `roles-separated` | `verifier` only mints/revokes the badge; `governor` only changes parameters; roles not mixed | §3 — whoever confirms a person does not run governance |
+| `off-chain-equal` | the Snapshot strategy is the equal `ticket` value=1 (not balance-weighted plutocracy), members-only voting | Art. 2 / §2,§4 — the off-chain signal is also "1 person = 1 vote" |
+
+```bash
+python3 ai-agents/reputation_agent.py          # human-readable report
+python3 ai-agents/reputation_agent.py --json    # machine-readable (for CI/other agents)
+```
+
+Exit code `0` — the voting model is intact; `1` — a threat was found (this is a
+**signal** to the community, not an action: the agent fixes nothing and controls nothing).
+
+A **test invariant** [`test_reputation.py`](test_reputation.py) proves Reputation works
+rather than being "green by default": for every threat (a transfer function added, weight
+without a cap / by balance, the contract moving funds, mixed roles, a plutocratic Snapshot
+strategy, `ticket` value≠1, non-members allowed to vote) the agent must return "red", while
+a correct contract+settings stay "green" with no false positives (including ignoring
+mentions inside comments).
+
+CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
+Guardian (+test) + Fairness (+test) + Reputation (+test) on every push/PR.
 
 ## Rails (for all agents in this directory)
 

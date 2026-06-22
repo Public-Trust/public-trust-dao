@@ -151,7 +151,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     [`test_fairness.py`](../../ai-agents/test_fairness.py) (17/17). As a side effect a
     latent Guardian bug was fixed (it false-flagged its own `test_guardian.py`) — the
     `ai-agents` CI is green again. `PTD-0023`.
-  - [ ] Modules 4–8: Reputation / Housing / Governance / Mediator /
+  - [x] Module 4/8 (session 27): **Reputation** [`reputation_agent.py`](../../ai-agents/reputation_agent.py)
+    — a read-only static analysis of `contracts/contracts/Reputation.sol` and
+    `governance/snapshot/space.json`: it proves "1 person = 1 vote" per
+    [`GOVERNANCE.md`](GOVERNANCE.md) §2–§3 IN CODE — `soulbound` (no transfer
+    functions), `bounded-weight` (weight 0 / `1 + min(points, cap)`, corridor
+    [1..1+cap]), `no-funds` (the reputation layer moves no funds), `roles-separated`
+    (verifier mints/revokes the badge, governor changes parameters), `off-chain-equal`
+    (Snapshot = equal `ticket` value=1, not plutocracy). Test invariant
+    [`test_reputation.py`](../../ai-agents/test_reputation.py) (17/17). `PTD-0024`.
+  - [ ] Modules 5–8: Housing / Governance / Mediator /
     Documentation — one at a time, "to green".
 
 ### P1 — materials and infrastructure (partly from INBOX)
@@ -240,11 +249,38 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] Fairness: check `category` ↔ `priority_level` consistency (e.g. `housing` should
   usually not sit below the "housing-loss threat" level) — a soft, non-blocking warning
   to catch obvious categorization skew (session 26).
+- [ ] Reputation agent: extend the static "1 person = 1 vote" analysis to `Governor.sol`
+  (vote weight comes from `Reputation.votingUnits`, not from balance; the proposal
+  threshold is equal, not monetary) — close the check over the whole voting chain, not
+  just the badge (session 27).
+- [ ] Reputation agent: cross-check `reputationCap` in `scripts/deploy.js`/the deploy
+  config against a sane ceiling (e.g. ≤ a small N), so the contribution multiplier cannot
+  quietly turn into a new elite via too high a cap (session 27).
+- [ ] A reusable lightweight Solidity-invariant scanner module: extract comment stripping
+  + brace-balanced function-body extraction from the Reputation agent into a shared
+  `ai-agents/solidity_scan.py` — useful for future contract agents (Governance/Audit) (session 27).
 
 ---
 
 ## Done
 
+- **PTD-0024 (session 27):** Stage 6 (AI agents), module 4/8 — **the Reputation agent**.
+  [`reputation_agent.py`](../../ai-agents/reputation_agent.py) is a service read-only
+  agent: it statically analyzes the on-chain reputation contract
+  [`Reputation.sol`](../../contracts/contracts/Reputation.sol) and the off-chain settings
+  [`space.json`](../../governance/snapshot/space.json) and proves the "1 person = 1 vote"
+  model ([`GOVERNANCE.md`](GOVERNANCE.md) §2–§3) is preserved IN CODE: `soulbound` (the
+  badge has no transfer functions — the vote can't be sold), `bounded-weight`
+  (`votingUnits`: non-member → 0, member → `1 + min(points, cap)`, corridor [1..1+cap] —
+  power of money is impossible), `no-funds` (the reputation layer moves no funds —
+  "uniqueness ≠ power"), `roles-separated` (verifier confirms uniqueness, governor changes
+  parameters; roles not mixed), `off-chain-equal` (the Snapshot strategy is the equal
+  `ticket` value=1, not balance plutocracy; members-only voting). Human-readable and
+  `--json` output; exit 0/1; "red" = a signal. A **test invariant**
+  [`test_reputation.py`](../../ai-agents/test_reputation.py) (17/17) proves "red is caught,
+  green doesn't false-fail" (including ignoring mentions in Solidity comments). CI
+  [`ai-agents.yml`](../../.github/workflows/ai-agents.yml) extended. `PTD-0024`.
+  TESTNET-ONLY. Next — modules 5–8 (Housing / Governance / Mediator / Documentation).
 - **PTD-0023 (session 26):** Stage 6 (AI agents), module 3/8 — **the Fairness agent**.
   [`fairness_agent.py`](../../ai-agents/fairness_agent.py) is a service read-only agent:
   it walks the public registry records of type `disbursement` and checks EVERY payment
@@ -391,3 +427,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Audit test invariant / Guardian agent / Documentation agent (bilingual) | agent | 24 |
 | Meta-agent "run all" / pre-commit hook / lexical prohibitions linter | agent | 25 |
 | "Payment ↔ registry record" invariant / agent self-test in CI / Reputation agent | agent | 26 |
+| Reputation on Governor.sol / deploy cap check / shared solidity_scan.py | agent | 27 |

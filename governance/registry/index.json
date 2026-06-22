@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 24,
-  "head_hash": "4af5655195ed2ffde056d4b1a77e29dc7a1d267f3fce98b96e985499366dce7f",
+  "count": 25,
+  "head_hash": "8968e6d3d6a589cdbde9593486830e9292cae709844603027a868e9c7c7b79cb",
   "entries": [
     {
       "seq": 0,
@@ -219,6 +219,15 @@
       "summary": "Этап 6 (AI-агенты), модуль 3/8: Fairness-агент. fairness_agent.py — read-only проверка справедливости распределения над disbursement-записями реестра по PRIORITIES.md/ANTI-ABUSE.md: priority-valid/safeguards/collective-review/staged-payments/applicant-privacy; шкала приоритетов читается прямо из PRIORITIES.md. Тест-инвариант test_fairness.py (17/17). Побочно исправлен латентный Guardian-баг (ложно краснел на собственном test_guardian.py) — CI ai-agents снова зелёный. CI расширен. TESTNET-ONLY.",
       "hash": "4af5655195ed2ffde056d4b1a77e29dc7a1d267f3fce98b96e985499366dce7f",
       "file": "records/0023-decision.json"
+    },
+    {
+      "seq": 24,
+      "id": "PTD-0024",
+      "type": "decision",
+      "timestamp": "2026-06-22T10:10:00Z",
+      "summary": "Этап 6 (AI-агенты), модуль 4/8: Reputation-агент. reputation_agent.py — read-only статический разбор Reputation.sol + space.json, доказывает «1 человек = 1 голос» в коде (soulbound/bounded-weight/no-funds/roles-separated/off-chain-equal) по GOVERNANCE.md §2-§3. Тест-инвариант test_reputation.py (17/17). CI расширен. TESTNET-ONLY.",
+      "hash": "8968e6d3d6a589cdbde9593486830e9292cae709844603027a868e9c7c7b79cb",
+      "file": "records/0024-decision.json"
     }
   ]
 }

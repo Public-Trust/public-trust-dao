@@ -38,7 +38,7 @@
 | **Audit** | Проверяет целостность и прозрачность: реестр (hash-chain), IPFS-манифест, конфиги Safe/Snapshot, тесты контрактов. Единый «зелёный/красный» governance-слоя. | ✅ каркас (`audit_agent.py`) |
 | **Guardian** | Следит за рельсами безопасности: нет приватных ключей/секретов в репо, нет mainnet/реальных средств, нет нарушений TESTNET-first. | ✅ каркас (`guardian_agent.py`) |
 | **Fairness** | Проверяет справедливость распределения по [`PRIORITIES.md`](../docs/PRIORITIES.md): соблюдён ли приоритет, лимиты/коллективная проверка/поэтапность/приватность. | ✅ каркас (`fairness_agent.py`) |
-| **Reputation** | Считает/валидирует веса голоса по [`GOVERNANCE.md`](../docs/GOVERNANCE.md) §2–§3: «1 человек = 1 голос», soulbound, «уникальность ≠ власть». | ⏳ план |
+| **Reputation** | Считает/валидирует веса голоса по [`GOVERNANCE.md`](../docs/GOVERNANCE.md) §2–§3: «1 человек = 1 голос», soulbound, «уникальность ≠ власть». | ✅ каркас (`reputation_agent.py`) |
 | **Housing** | Профильный помощник по жилищным кейсам (escrow прямой оплаты поставщику по [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/ESCROW-TARGETED-DISBURSEMENT.md)). | ⏳ план |
 | **Governance** | Помогает с жизненным циклом предложений (формат, кворум, сроки, привязка к конституции), не голосует сам. | ⏳ план |
 | **Mediator** | Помогает в спорах/апелляциях по [`ANTI-ABUSE.md`](../docs/ANTI-ABUSE.md) — структурирует, не решает. | ⏳ план |
@@ -143,6 +143,39 @@ python3 ai-agents/fairness_agent.py --json    # машиночитаемый (д
 
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) на каждый
 push/PR прогоняет Audit + Guardian (+тест) + Fairness (+тест).
+
+## Reputation-агент — что делает и как запустить
+
+`reputation_agent.py` — read-only статический разбор: доказывает, что модель
+«1 человек = 1 голос» сохранена **в коде** ([`contracts/contracts/Reputation.sol`](../contracts/contracts/Reputation.sol))
+и **в настройках голосования** ([`governance/snapshot/space.json`](../governance/snapshot/space.json)),
+а не только «на словах» по [`docs/GOVERNANCE.md`](../docs/GOVERNANCE.md) §2–§3.
+
+| Проверка | Что требует | Защищает |
+|----------|-------------|----------|
+| `soulbound` | у бейджа нет функций перевода (`transfer`/`approve`/…) — голос непередаваем | ст. 2 / §2 — право голоса не продаётся и не скупается |
+| `bounded-weight` | `votingUnits`: не участник → 0; участник → `1 + min(points, cap)`, коридор `[1..1+cap]` | ст. 2 / §2 — власть денег невозможна (запрет №5) |
+| `no-funds` | слой репутации не двигает средства (`payable`/`.transfer`/`.call{value}`/…) | ст. 9 / §3 — «уникальность ≠ власть» |
+| `roles-separated` | `verifier` только mint/revoke бейджа; `governor` только параметры; роли не смешаны | §3 — кто подтверждает человека, тот не правит управление |
+| `off-chain-equal` | стратегия Snapshot = равный `ticket` value=1 (не плутократия по балансу), допуск только участникам | ст. 2 / §2,§4 — офчейн-сигнал тоже «1 человек = 1 голос» |
+
+```bash
+python3 ai-agents/reputation_agent.py          # человекочитаемый отчёт
+python3 ai-agents/reputation_agent.py --json    # машиночитаемый (для CI/других агентов)
+```
+
+Код возврата `0` — модель голоса цела; `1` — найдена угроза (это **сигнал**
+сообществу, не действие: агент ничего не исправляет и не распоряжается).
+
+**Тест-инвариант** [`test_reputation.py`](test_reputation.py) доказывает, что
+Reputation работает, а не «зелёный по умолчанию»: на каждую угрозу (добавлена
+функция перевода, вес без потолка/по балансу, контракт двигает средства, смешение
+ролей, плутократическая стратегия Snapshot, `ticket` value≠1, допуск не только
+участникам) агент обязан вернуть «красный», а на корректных контракте+настройках —
+«зелёный» без ложных срабатываний (включая отсев упоминаний в комментариях).
+
+CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) на каждый
+push/PR прогоняет Audit + Guardian (+тест) + Fairness (+тест) + Reputation (+тест).
 
 ## Рельсы (для всех агентов этого каталога)
 
