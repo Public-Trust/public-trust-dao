@@ -1,0 +1,35 @@
+{
+  "seq": 44,
+  "id": "PTD-0044",
+  "type": "decision",
+  "timestamp": "2026-06-22T10:45:00Z",
+  "actor": "builder-agent",
+  "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/ESCROW-TARGETED-DISBURSEMENT.md (+EN) переписан по образцу REWARDS-MODEL/GOVERNANCE/ANTI-ABUSE — ведущий раздел «Главное простыми словами» («не даём деньги — оплачиваем нужду» + три способа), жаргон (escrow, earmarked transfer, verified-receipt, state machine, circuit breaker, Solidity-эскиз) вынесен в «Технический раздел — для разработчиков». Смысл модели не изменён. INBOX #19 остаётся открытым.",
+  "refs": [
+    "docs/ESCROW-TARGETED-DISBURSEMENT.md",
+    "docs/en/ESCROW-TARGETED-DISBURSEMENT.md",
+    "comms/INBOX.md"
+  ],
+  "payload": {
+    "decision": "INBOX #19 (понятный язык везде) — продолжение прохода: docs/ESCROW-TARGETED-DISBURSEMENT.md (+ EN docs/en/ESCROW-TARGETED-DISBURSEMENT.md) переписан по образцу REWARDS-MODEL/GOVERNANCE/ANTI-ABUSE. Человеческий заголовок «Как фонд оплачивает нужду напрямую — чтобы помощь точно дошла», ведущий раздел «Главное — простыми словами» (главная мысль «мы не даём деньги — мы оплачиваем нужду, и каждый может это проверить» + 5 пунктов + «три способа оплатить нужду» обычными словами). Жаргон вынесен в «Технический раздел — для разработчиков»: escrow, earmarked transfer, verified-receipt, whitelist, state machine, circuit breaker, events, Solidity-эскиз ITargetedDisbursement, схема реестра. Смысл модели целевого расхода не изменён. INBOX #19 остаётся открытым (следующие кандидаты: PROOF-OF-CONTRIBUTION, PRIORITIES).",
+    "rationale": "Открытый пункт оператора INBOX #19 — высший приоритет. ESCROW-TARGETED-DISBURSEMENT.md был нормативным документом без ведущего объяснения простыми словами и с английским жаргоном в основном тексте (escrow, earmarked transfer, verified-receipt, state machine, circuit breaker, Solidity-псевдокод), что противоречит конституции (ст. 3 «понятность», ст. 6 «объяснимость»). Переписан по уже зарегистрированному сквозному правилу PTD-0040 и образцу REWARDS-MODEL (PTD-0038)/GOVERNANCE (PTD-0042)/ANTI-ABUSE (PTD-0043): сначала простыми словами, техника ниже. Содержательная модель (оплата напрямую поставщику, не на руки; три способа; поэтапные транши; возврат в казну; приватность операции а не человека; коллективная проверка; стоп-кран) сохранена без изменений.",
+    "deliverables": [
+      "docs/ESCROW-TARGETED-DISBURSEMENT.md — переписан по-человечески: ведущий раздел «Главное — простыми словами», «три способа оплатить нужду» обычными словами, привязка к правилам, что открыто/что приватно, открытые вопросы; вся техника (модели A/B/C, state machine, Solidity-эскиз, схема реестра) в «Техническом разделе — для разработчиков»",
+      "docs/en/ESCROW-TARGETED-DISBURSEMENT.md — EN-зеркало по той же структуре (plain words first, Technical section for developers)",
+      "governance/ipfs/manifest.json — пересобран (документ изменён), verify=OK",
+      "governance/registry/ — запись PTD-0044 (type=decision)"
+    ],
+    "rails": [
+      "Понятность как конституционное требование (ст. 3/6): человеку — простой язык, разработчику — техраздел; смысл модели целевого расхода не изменён",
+      "Жаргон убран из основного текста: escrow → оплата с временной заморозкой; earmarked transfer → прямая оплата проверенному поставщику; verified-receipt → оплата вне сети с доказательством; whitelist → список проверенных поставщиков; circuit breaker → стоп-кран; events → публичные записи",
+      "Содержательные рельсы не тронуты: не даём деньги на руки, оплачиваем нужду напрямую поставщику; поэтапные транши; возврат в казну при срыве; приватность операции, не человека; коллективная проверка; никто не одобряет себе; стоп-кран без права вывода; TESTNET-first, реальные средства только после аудита",
+      "Двуязычность RU↔EN в одном коммите",
+      "INBOX #19 остаётся открытым: проход продолжается, следующие кандидаты — PROOF-OF-CONTRIBUTION, PRIORITIES"
+    ],
+    "status": "adopted",
+    "spec": "docs/ESCROW-TARGETED-DISBURSEMENT.md",
+    "advances_inbox": 19
+  },
+  "prev_hash": "5264e164d69c7f1249a08247f2a1483c1c5a048e3315041de2fb065723d8973b",
+  "hash": "37906ade14c45abe3981d36d18e2ad88c16632e285fa6fcd428292087df1d190"
+}

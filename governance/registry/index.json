@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 44,
-  "head_hash": "5264e164d69c7f1249a08247f2a1483c1c5a048e3315041de2fb065723d8973b",
+  "count": 45,
+  "head_hash": "37906ade14c45abe3981d36d18e2ad88c16632e285fa6fcd428292087df1d190",
   "entries": [
     {
       "seq": 0,
@@ -399,6 +399,15 @@
       "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/ANTI-ABUSE.md (+EN) переписан по образцу REWARDS-MODEL/GOVERNANCE — ведущий раздел «Главное простыми словами» (быть честным выгоднее обмана + 9 опор + репутация), жаргон (multisig, circuit breaker, events, Audit/Guardian/Fairness AI) вынесен в «Технический раздел — для разработчиков». Смысл защиты не изменён. INBOX #19 остаётся открытым.",
       "hash": "5264e164d69c7f1249a08247f2a1483c1c5a048e3315041de2fb065723d8973b",
       "file": "records/0043-decision.json"
+    },
+    {
+      "seq": 44,
+      "id": "PTD-0044",
+      "type": "decision",
+      "timestamp": "2026-06-22T10:45:00Z",
+      "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/ESCROW-TARGETED-DISBURSEMENT.md (+EN) переписан по образцу REWARDS-MODEL/GOVERNANCE/ANTI-ABUSE — ведущий раздел «Главное простыми словами» («не даём деньги — оплачиваем нужду» + три способа), жаргон (escrow, earmarked transfer, verified-receipt, state machine, circuit breaker, Solidity-эскиз) вынесен в «Технический раздел — для разработчиков». Смысл модели не изменён. INBOX #19 остаётся открытым.",
+      "hash": "37906ade14c45abe3981d36d18e2ad88c16632e285fa6fcd428292087df1d190",
+      "file": "records/0044-decision.json"
     }
   ]
 }
