@@ -104,8 +104,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
       [1..1+cap]), no transfer functions (non-transferable by design), the `verifier`
       mints/revokes the badge, the `governor` sets parameters, no role moves funds;
       11 tests "to green" (35/35 with Treasury+Disbursement). `PTD-0018`.
-    - [ ] Part 3b: `Governor` (proposals/quorum/tally over `Reputation.votingUnits`)
-      + `Timelock` (execution delay; the Timelock is the `executor` of treasury/escrow).
+    - [x] Part 3b (session 22): [`Governor.sol`](../../contracts/contracts/Governor.sol)
+      + [`Timelock.sol`](../../contracts/contracts/Timelock.sol) per [`GOVERNANCE.md`](GOVERNANCE.md)
+      §4–§7: direct voting (weight from `Reputation.votingUnits`, quorum/period/public
+      tally), execution ONLY through the `Timelock` (the Governor never moves funds),
+      the `guardian` = emergency veto (`cancel`), the `admin` = a one-off bootstrap
+      (`renounceAdmin`), parameters changed by vote only; 15 tests "to green" (50/50
+      with all contracts). `PTD-0019`.
+  - [ ] Part 3c: a deploy/wiring script for the whole contour (Reputation→Timelock→
+    Treasury/Disbursement→Governor, role wiring, `renounceAdmin`) + an integration
+    scenario "request → vote → pay the provider".
   - [ ] Part 4: a public testnet run (network to be agreed with the operator).
 - [ ] **Stage 6 — AI agents (skeleton):** in `ai-agents/` describe and set up the
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
@@ -174,6 +182,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0019 (session 22):** Stage 5 (Smart contracts), part 3b — the
+  [`Governor.sol`](../../contracts/contracts/Governor.sol) + [`Timelock.sol`](../../contracts/contracts/Timelock.sol)
+  contracts per [`GOVERNANCE.md`](GOVERNANCE.md) §4–§7. Direct voting by verified
+  members: `propose`/`castVote`/`queue`/`execute`, vote weight from
+  `Reputation.votingUnits` (one-person-one-vote, not plutocracy), quorum/period, a
+  public deterministic tally. A passed decision is executed **only through the
+  `Timelock`** (a mandatory delay = an audit/appeal window; the Governor never moves
+  funds itself — the treasury does, on the Timelock's order). The `guardian` =
+  emergency veto (`cancel`), the `admin` = a one-off bootstrap (`renounceAdmin`);
+  parameters and roles change by vote only (`onlyTimelock`/`onlySelf`). 15 tests "to
+  green", including the full cycle "proposal → vote → Timelock → pay the provider"
+  (50/50 with all contracts). TESTNET-ONLY. Next — part 3c (wiring) and part 4 (testnet deploy).
 - **PTD-0018 (session 21):** Stage 5 (Smart contracts), part 3a — the
   [`Reputation.sol`](../../contracts/contracts/Reputation.sol) contract: a
   non-transferable (soulbound) verified-member badge per [`GOVERNANCE.md`](GOVERNANCE.md)

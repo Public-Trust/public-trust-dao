@@ -21,6 +21,8 @@ Derived from the normative documents:
 | [`Treasury.sol`](contracts/Treasury.sol) | Base treasury layer: holds test funds, releases them **only** through the `executor` (multisig/Timelock), per-release cap, emergency pause, an event on every movement. | skeleton + tests ✅ |
 | [`Disbursement.sol`](contracts/Disbursement.sol) | Targeted aid escrow: locks funds per case and releases them **strictly to the service provider's address** (`open`/`release`/`refund`/`pause`). "We don't hand out cash — we pay the need." `refund` returns the remainder to the treasury. | skeleton + tests ✅ |
 | [`Reputation.sol`](contracts/Reputation.sol) | Non-transferable (soulbound) verified-member badge: one-person-one-vote, `votingUnits` = 1 + a capped multiplier. `verifier` mints/revokes the badge (uniqueness), `governor` sets parameters (power). No role moves funds. | skeleton + tests ✅ |
+| [`Governor.sol`](contracts/Governor.sol) | Direct voting by verified members: `propose`/`castVote`/`queue`/`execute`. Vote weight comes from `Reputation.votingUnits` (one-person-one-vote). Quorum, period, public tally. A passed decision is executed **only through the Timelock** — the Governor never moves funds itself. | skeleton + tests ✅ |
+| [`Timelock.sol`](contracts/Timelock.sol) | Mandatory delay between "decision passed" and "treasury executed" (an audit/appeal window). `schedule`/`execute` — only the `governor` (= Governor), `cancel` — only the `guardian` (emergency veto). Set as the `executor` of `Treasury`/`Disbursement`. | skeleton + tests ✅ |
 
 ### Constitutional properties built into `Treasury` (and asserted by tests)
 
@@ -78,6 +80,28 @@ vote", "uniqueness ≠ power"):
   an event with a `registryRef`; role handover (`setVerifier`/`setGovernor`) is the
   path to decentralization (phases A→D).
 
+### Constitutional properties built into `Governor` + `Timelock` (governance)
+
+Implements [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §4–§7 (Governor → Timelock →
+Treasury/Disbursement — direct voting executed with a mandatory delay):
+
+- **One-person-one-vote, not plutocracy (art. 2, prohibition #5):** vote weight is
+  sourced from [`Reputation.votingUnits`](contracts/Reputation.sol); a non-member can
+  neither vote nor propose. The proposal threshold is equal for all (membership),
+  **not monetary**.
+- **The Governor never moves funds itself (art. 4):** a passed decision is queued in
+  the `Timelock`, and the treasury (`Treasury`/`Disbursement`) executes only what the
+  `Timelock` forwards after a passed vote. `execute` before the delay is impossible.
+- **The delay = an audit/appeal/veto window** ([`ANTI-ABUSE`](../docs/en/ANTI-ABUSE.md)):
+  a mandatory `minDelay` pause sits between "passed" and "executed"; within it the
+  `guardian` can emergency-cancel an operation (`cancel`) — **a veto, not control of funds**.
+- **Role separation:** the `governor` (= the Governor contract) schedules/executes;
+  the `guardian` only emergency-cancels; the `admin` is a one-off bootstrap configurator
+  that **must renounce** (`renounceAdmin`); no role moves the treasury.
+- **Parameters — by vote only (§6, path A→D):** period/quorum/delay and role changes
+  after renounce are changed **only through the mechanism itself** (`onlyTimelock`/
+  `onlySelf`), never around it. Quorum and majority tallies are public and deterministic.
+
 ## Run (locally, no network, no money)
 
 ```bash
@@ -102,6 +126,10 @@ in [`hardhat.config.js`](hardhat.config.js); the operator supplies keys via
   (`open`/`release`/`refund`/`pause`, pay the provider directly) — **done** (skeleton + tests).
 - ✅ `Reputation` — a non-transferable (soulbound) verified-member badge
   (one-person-one-vote, `votingUnits` with a capped multiplier) — **done** (skeleton + tests).
-- `Governance` — Governor → Timelock (one-person-one-vote, [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md));
-  vote weight sourced from `Reputation.votingUnits`; the Timelock is the `executor` of treasury/escrow.
+- ✅ `Governor` + `Timelock` — direct voting with a mandatory execution delay
+  ([`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §4–§7); vote weight from `Reputation.votingUnits`;
+  the `Timelock` is set as the `executor` of `Treasury`/`Disbursement` — **done** (skeleton + tests).
+- **Wiring the whole contour (part 3c):** a deploy/wiring script for all contracts
+  together (Reputation→Timelock→Treasury/Disbursement→Governor, role wiring,
+  `renounceAdmin`) + an integration scenario "request → vote → pay the provider".
 - A public testnet run once the network is agreed with the operator.

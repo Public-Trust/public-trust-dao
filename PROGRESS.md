@@ -428,23 +428,48 @@
     (RU/EN) обновлены (Reputation в таблице + раздел свойств + «следующие шаги»). ROADMAP
     (RU/EN) обновлён (часть 3a `[x]`, добавлена часть 3b, в «Сделано»). DECISIONS обновлён.
 
+- **2026-06-22 (сессия 22, ROADMAP P0 — Этап 5 Смарт-контракты, часть 3b ✅):**
+  - **Контракты управления** `contracts/contracts/Governor.sol` + `Timelock.sol` —
+    замыкают он-чейн контур по `docs/GOVERNANCE.md` §4–§7: Governor → Timelock →
+    Treasury/Disbursement. `Governor`: `propose` (только верифицированный участник —
+    равный порог-антиспам, не деньги), `castVote` (вес из `Reputation.votingUnits` —
+    «1 человек = 1 голос», не плутократия), `state` (кворум за+воздержался + большинство
+    за, публичный детерминированный подсчёт), `queue`→`Timelock.schedule`,
+    `execute`→`Timelock.execute`. **Governor сам средства не двигает** — двигает казна
+    по приказу Timelock после прошедшего голосования (ст. 4).
+  - `Timelock`: обязательная задержка `minDelay` (окно на аудит/апелляцию/вето).
+    `schedule`/`execute` — только `governor` (= контракт Governor); `cancel` — только
+    `guardian` (**аварийное вето, не распоряжение средствами**, §5); `admin` — разовый
+    bootstrap-конфигуратор (нужен, т.к. адрес Governor известен лишь после деплоя) и
+    обязан вызвать `renounceAdmin`; после renounce роли и `minDelay` меняются только
+    самим Timelock'ом (`onlySelf` = голосованием). Параметры Governor — `onlyTimelock`.
+    Reentrancy-guard, события + eta.
+  - **Тесты «до зелёного»** `contracts/test/Governance.test.js` — 15/15 (только участник
+    вносит/голосует; вес=1 при cap=0; нельзя дважды/вне окна; кворум и большинство;
+    **полный цикл «предложение → голос → Timelock → выплата поставщику»**; нельзя
+    исполнить раньше срока; guardian-вето; разделение ролей; параметры только
+    голосованием; cancel автором). **Суммарно 50/50**; CI на in-process сети (TESTNET-ONLY).
+  - **Зарегистрировано: `PTD-0019`** (`records/0019-decision.json`, type=decision).
+    verify=зелёный, 20 записей. **IPFS-манифест пересобран**, verify=OK. Контракты-README
+    (RU/EN) обновлены (Governor+Timelock в таблице + раздел свойств + «следующие шаги»).
+    ROADMAP (RU/EN) обновлён (часть 3b `[x]`, добавлена часть 3c, в «Сделано»). DECISIONS обновлён.
+
 ## СЛЕДУЮЩИЙ ШАГ
 
 **INBOX пуст — режим саморазвития.** Берём верхний открытый пункт `docs/ROADMAP.md`.
 Этап 5: часть 1 (`Treasury`, с.19), часть 2 (`Disbursement`, с.20), часть 3a
-(`Reputation`, с.21) готовы. Следующий шаг — **Этап 5, часть 3b: `Governor` +
-`Timelock`** по `docs/GOVERNANCE.md` §4: `Governor` (предложения/кворум/сроки/
-подсчёт), вес голоса берётся из `Reputation.votingUnits` (готов в этой сессии);
-`Timelock` — обязательная задержка между «решение принято» и «казна исполнила», и
-именно `Timelock` назначается `executor`'ом у `Treasury`/`Disbursement` (исполняет
-волю голосования, а мультисиг 3-из-5 сводится к аварийной паузе). Тесты «до зелёного»:
-предложение проходит → Timelock-задержка → исполняет release/open на казне; не-участник
-не голосует; кворум; нельзя исполнить раньше задержки. Можно переиспользовать минимальный
-Governor/Timelock без внешних зависимостей (как и прочие контракты — без OpenZeppelin,
-чтобы verify шёл детерминированно), либо рассмотреть OZ Governor (тогда добавить в
-package.json). **Только testnet/локально** (рельс TESTNET-FIRST, ст. 4.4). Затем часть 4
-(прогон на публичном testnet — сеть согласовать с оператором). Не трогать пульс/секреты
-(loop.sh, report.sh, operator_bridge.py, .env, logs/).
+(`Reputation`, с.21), часть 3b (`Governor`+`Timelock`, с.22) готовы — **весь он-чейн
+контур управления собран и покрыт тестами 50/50**. Следующий шаг — **Этап 5, часть 3c:
+сборка контура целиком**: Hardhat-скрипт деплоя/проводки всех контрактов вместе
+(`Reputation`→`Timelock`→`Treasury`/`Disbursement`→`Governor`: `Timelock` как
+`executor` казны/escrow, `Governor` как `governor` Timelock + `renounceAdmin`,
+`Reputation.governor`=`Timelock`) + интеграционный сценарий «заявка-кейс →
+голосование → Timelock → целевая выплата поставщику» одним прогоном
+(`contracts/scripts/deploy.js` + тест-сценарий). **Только testnet/локально** (рельс
+TESTNET-FIRST, ст. 4.4). Затем часть 4 (прогон на публичном testnet — сеть согласовать
+с оператором). Альтернатива из ROADMAP P0 — Этап 6 (каркас AI-агентов, начать с
+Audit-агента, гоняющего `registry.py verify` + `ipfs_manifest.py verify`). Не трогать
+пульс/секреты (loop.sh, report.sh, operator_bridge.py, .env, logs/).
 
 Контекст по **Этапу 4 (Governance)** — готов, для справки:
 - Snapshot (off-chain голос): `governance/snapshot/` — макет + валидатор + CI готовы

@@ -102,8 +102,16 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
       коридоре [1..1+cap]), нет функций перевода (непередаваем by design), `verifier`
       выдаёт/отзывает бейдж, `governor` правит параметры, ни одна роль не двигает
       средства; 11 тестов «до зелёного» (35/35 с Treasury+Disbursement). `PTD-0018`.
-    - [ ] Часть 3b: `Governor` (предложения/кворум/подсчёт по `Reputation.votingUnits`)
-      + `Timelock` (задержка исполнения; Timelock = `executor` казны/escrow).
+    - [x] Часть 3b (сессия 22): [`Governor.sol`](../contracts/contracts/Governor.sol)
+      + [`Timelock.sol`](../contracts/contracts/Timelock.sol) по [`GOVERNANCE.md`](GOVERNANCE.md)
+      §4–§7: прямое голосование (вес из `Reputation.votingUnits`, кворум/срок/публичный
+      подсчёт), исполнение ТОЛЬКО через `Timelock` (Governor средства не двигает),
+      `guardian` = аварийное вето (`cancel`), `admin` = разовый bootstrap (`renounceAdmin`),
+      параметры только голосованием; 15 тестов «до зелёного» (50/50 со всеми
+      контрактами). `PTD-0019`.
+  - [ ] Часть 3c: скрипт деплоя/проводки контура целиком (Reputation→Timelock→
+    Treasury/Disbursement→Governor, проводка ролей, `renounceAdmin`) +
+    интеграционный сценарий «заявка → голос → выплата поставщику».
   - [ ] Часть 4: прогон на публичном testnet (сеть согласовать с оператором).
 - [ ] **Этап 6 — AI-агенты (каркас):** в `ai-agents/` описать и завести модули
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
@@ -171,6 +179,19 @@ INBOX пуст?  →  взять верхний открытый пункт ROAD
 
 ## Сделано
 
+- **PTD-0019 (сессия 22):** Этап 5 (Смарт-контракты), часть 3b — контракты
+  [`Governor.sol`](../contracts/contracts/Governor.sol) + [`Timelock.sol`](../contracts/contracts/Timelock.sol)
+  по [`GOVERNANCE.md`](GOVERNANCE.md) §4–§7. Прямое голосование верифицированных
+  участников: `propose`/`castVote`/`queue`/`execute`, вес голоса из
+  `Reputation.votingUnits` («1 человек = 1 голос», не плутократия), кворум/срок,
+  публичный детерминированный подсчёт. Принятое решение исполняется **только через
+  `Timelock`** (обязательная задержка = окно на аудит/апелляцию; Governor сам
+  средства не двигает — двигает казна по приказу Timelock). `guardian` = аварийное
+  вето (`cancel`), `admin` = разовый bootstrap (`renounceAdmin`); параметры и роли
+  меняются только голосованием (`onlyTimelock`/`onlySelf`). 15 тестов «до зелёного»,
+  включая полный цикл «предложение → голос → Timelock → выплата поставщику» (50/50
+  со всеми контрактами). TESTNET-ONLY. Дальше — часть 3c (сборка контура) и часть 4
+  (testnet-деплой).
 - **PTD-0018 (сессия 21):** Этап 5 (Смарт-контракты), часть 3a — контракт
   [`Reputation.sol`](../contracts/contracts/Reputation.sol): непередаваемый
   (soulbound) бейдж верифицированного участника по [`GOVERNANCE.md`](GOVERNANCE.md)

@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 19,
-  "head_hash": "158d7667ed34794a67648bf1e3fe79c44cd8ec558109ea5b9fb2506f697f7555",
+  "count": 20,
+  "head_hash": "f79a41cee3f328773f74f31e38651d0431a3341c279bce93f491b3c5340f1cdc",
   "entries": [
     {
       "seq": 0,
@@ -174,6 +174,15 @@
       "summary": "Этап 5 (Смарт-контракты, часть 3a): контракт Reputation.sol — непередаваемый (soulbound) бейдж верифицированного участника (1 человек = 1 голос; votingUnits = 1 + min(points, cap), вес в коридоре [1..1+cap]; нет функций перевода — непередаваем by design; verifier выдаёт/отзывает бейдж, governor правит параметры, ни одна роль не двигает средства) с тестами «до зелёного» 11/11 (35/35 с Treasury и Disbursement). По docs/GOVERNANCE.md §2–§3. TESTNET-ONLY, без реальных средств/ключей.",
       "hash": "158d7667ed34794a67648bf1e3fe79c44cd8ec558109ea5b9fb2506f697f7555",
       "file": "records/0018-decision.json"
+    },
+    {
+      "seq": 19,
+      "id": "PTD-0019",
+      "type": "decision",
+      "timestamp": "2026-06-22T07:40:00Z",
+      "summary": "Этап 5 (Смарт-контракты, часть 3b): контракты Governor.sol + Timelock.sol — прямое голосование верифицированных участников (1 человек = 1 голос из Reputation) с обязательной задержкой исполнения и аварийным вето guardian; принятое решение исполняется только через Timelock (Governor средства не двигает); параметры меняются только голосованием. Тесты «до зелёного» 15 (50/50 со всеми контрактами). По docs/GOVERNANCE.md §4–§7. TESTNET-ONLY, без реальных средств/ключей.",
+      "hash": "f79a41cee3f328773f74f31e38651d0431a3341c279bce93f491b3c5340f1cdc",
+      "file": "records/0019-decision.json"
     }
   ]
 }
