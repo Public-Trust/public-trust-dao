@@ -33,6 +33,14 @@
       "single_block": true
     },
     {
+      "bytes": 18850,
+      "cid": "bafkreiamg2ju63gzsvzxifoitbjq7ntha325aclteqfvdqjwv3ljjdvzca",
+      "cid_kind": "raw-leaf-v1",
+      "path": "docs/GLOSSARY.md",
+      "sha256": "0c36934f6cd995737415c898530fb66706f5d00973240b51c136aed6948eb910",
+      "single_block": true
+    },
+    {
       "bytes": 23891,
       "cid": "bafkreibtgwi76gwnojsg3i2d4yvnz3qgwnl5for7r3uin2hiv575irnapa",
       "cid_kind": "raw-leaf-v1",
@@ -89,11 +97,11 @@
       "single_block": true
     },
     {
-      "bytes": 69827,
-      "cid": "bafkreidffio5rlivfhnay6nhg4jgffjs66tvx4czrglsevnzq5hgv3h2le",
+      "bytes": 73715,
+      "cid": "bafkreigg22t23anbjvo65x27bcbrhvk3oatjpvcntnxet4e4jz2zt2tp5u",
       "cid_kind": "raw-leaf-v1",
       "path": "docs/ROADMAP.md",
-      "sha256": "652a1dd8ad1529da0c79a73712629532f7a75bf05989972255b9874e6aecfa59",
+      "sha256": "c6d6a7ad81a14d5deedf5f088313d55b702697d44d9b6e49f09c4e7599ea6fed",
       "single_block": true
     },
     {
@@ -105,16 +113,16 @@
       "single_block": true
     },
     {
-      "bytes": 24282,
-      "cid": "bafkreihb4y2npgznhbnyrxj5k4vp7tpoiuhuze3xwjjsdsishytohkk2ta",
+      "bytes": 26029,
+      "cid": "bafkreiaxn4nqfx4mzpy2hjvoglirmrf5kscpl76fxbytboepiea2lbh4rm",
       "cid_kind": "raw-leaf-v1",
       "path": "governance/registry/index.json",
-      "sha256": "e1e634d79b2d385b88dd3d572affcdee450f4c9377b25321c9123e26e3a95a98",
+      "sha256": "176f1b02df8ccbf1a3a6ae32d11644bd5484f5ffc5b87130b88f4101a584fc8b",
       "single_block": true
     }
   ],
   "kind": "ipfs-content-manifest",
-  "manifest_fingerprint_sha256": "d1c4708af602f02977e0fc6838aec16344686a72468887b3570f77d53f1f0f14",
+  "manifest_fingerprint_sha256": "5bc706d3a4e1514613c7325ee7a88e2ea6a7b5fcd545171a928aad88e5326f5f",
   "project": "Public Trust DAO",
   "spec": "CIDv1, codec=raw(0x55), multihash=sha2-256, multibase=base32. Эквивалент `ipfs add --cid-version=1 --raw-leaves=true` для одноблочных файлов (<=256 KiB). Вычисляется и проверяется из содержимого, без аккаунта пиннера.",
   "verify": "python3 scripts/ipfs_manifest.py verify",

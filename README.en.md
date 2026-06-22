@@ -23,6 +23,7 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`REPO-STRUCTURE.en.md`](REPO-STRUCTURE.en.md) — repository map: what lives where and where to put new things.
 - [`CONTRIBUTING.en.md`](CONTRIBUTING.en.md) — how to contribute: issues/PRs/governance proposals, contribution rails, code of conduct (contribution ≠ power over the treasury).
 - [`CODE_OF_CONDUCT.en.md`](CODE_OF_CONDUCT.en.md) — code of conduct (canonical file): human dignity, unacceptable behavior, breaking the safety rails = breaking the code.
+- [`docs/en/GLOSSARY.md`](docs/en/GLOSSARY.md) — glossary of key terms in plain language (DAO, escrow, multisig, registry, distribution priority, etc.), RU/EN — so the documents are understandable beyond technical people.
 - [`docs/en/ROADMAP.md`](docs/en/ROADMAP.md) — roadmap and self-development mechanism (living, prioritized list of ideas/tasks).
 - [`docs/en/PROMOTION.md`](docs/en/PROMOTION.md) — promotion materials: landing copy, pitch (RU/EN), announcement post, FAQ "public good, NOT an investment".
 - [`docs/en/EMAIL-SETUP.md`](docs/en/EMAIL-SETUP.md) — project email: options, operator guide, signature and reply templates (RU/EN).

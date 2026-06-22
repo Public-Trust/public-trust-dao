@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 33,
-  "head_hash": "a43dcdcbd5b0fd48b15ce7829e2949c0d58d718fdbb45fe42b15c1a530920118",
+  "count": 34,
+  "head_hash": "c601fd56eb65828c576911798a13f43d76af688853f54fb0b3a073404796e49e",
   "entries": [
     {
       "seq": 0,
@@ -300,6 +300,15 @@
       "summary": "P2 ROADMAP — CODE_OF_CONDUCT.md (+ EN): канонический кодекс поведения (GitHub Community). Вынесен из CONTRIBUTING в полный файл: стандарты, приватность заявителей/подопечных, КОНСТИТУЦИОННЫЕ РЕЛЬСЫ КАК ЧАСТЬ ПОВЕДЕНИЯ (нарушение рельс безопасности = нарушение кодекса), каналы сообщения и эскалация людьми (не агентом, ст. 9), апелляция (ANTI-ABUSE), атрибуция Contributor Covenant 2.1. Documentation-агент зелёный, run_all 8/8. TESTNET-ONLY.",
       "hash": "a43dcdcbd5b0fd48b15ce7829e2949c0d58d718fdbb45fe42b15c1a530920118",
       "file": "records/0032-decision.json"
+    },
+    {
+      "seq": 33,
+      "id": "PTD-0033",
+      "type": "decision",
+      "timestamp": "2026-06-22T16:05:00Z",
+      "summary": "P2 ROADMAP — docs/GLOSSARY.md (+ EN): глоссарий ~40 ключевых терминов простым языком (DAO, escrow, мультисиг, реестр, приоритет распределения, soulbound, Timelock, IPFS/CID и др.) в 5 группах, каждый со ссылкой на нормативный док — чтобы документы были понятны не только техническим людям (ст. 3/6). Documentation-агент зелёный. TESTNET-ONLY.",
+      "hash": "c601fd56eb65828c576911798a13f43d76af688853f54fb0b3a073404796e49e",
+      "file": "records/0033-decision.json"
     }
   ]
 }

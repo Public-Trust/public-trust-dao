@@ -221,8 +221,11 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   governance proposals), a code of conduct, links to the constitution.
   → Done (session 34), [`CONTRIBUTING.en.md`](../../CONTRIBUTING.en.md), `PTD-0031`.
   Emphasis "contribution ≠ power over the treasury" (1 person = 1 vote; authorship = recognition).
-- [ ] **Glossary** of key terms (DAO, escrow, multisig, registry, distribution
+- [x] **Glossary** of key terms (DAO, escrow, multisig, registry, distribution
   priority) in plain language, RU/EN — so documents are clear to non-technical readers.
+  → Done (session 36), [`GLOSSARY.md`](GLOSSARY.md), `PTD-0033`. ~40 terms in 5
+  groups (basics / governance / money and aid / transparency / safety), each
+  linking to its normative doc; closes with "three things to keep in mind."
 - [x] **CODE_OF_CONDUCT.md (+EN)** — split the code of conduct out of CONTRIBUTING into
   a separate canonical file (GitHub recognizes and surfaces it on the "Community" page),
   linking to the constitution/principles (proposed session 34).
@@ -242,6 +245,13 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
+- [ ] **Glossary link in the header of normative docs** — add a link to
+  [`GLOSSARY.md`](GLOSSARY.md) to each doc's "Derived from …" line, so an unfamiliar
+  term is one click away from any document (proposed in session 36).
+- [ ] **Documentation agent: a soft "term is defined" check** — a light dictionary
+  linter that, for a list of key terms (DAO/escrow/multisig/…), checks the project
+  has an entry in `GLOSSARY.md`; non-blocking, just a warning, so the glossary does
+  not fall behind the documents (proposed in session 36).
 - [ ] **SECURITY.md (+EN)** — canonical security policy file (GitHub recognizes it
   and shows a "Report a vulnerability" button): where and how to report a rails/contract
   flaw, what's in scope (testnet only), what we do NOT promise (no real-money bounty
@@ -367,6 +377,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0033 (session 36):** P2 (quality/transparency) — **glossary**.
+  [`GLOSSARY.md`](GLOSSARY.md) (+ RU [`../GLOSSARY.md`](../GLOSSARY.md)) — ~40 key
+  project terms in **plain language** for non-technical readers, in 5 meaning
+  groups (basics; governance and voting; money and aid; transparency and
+  verifiability; safety and technology). Each term has a short, "for a person
+  without background" definition + a link to the normative document where it is
+  fixed (CONSTITUTION/GOVERNANCE/PRIORITIES/ANTI-ABUSE/contracts). Closes the
+  mission's "accessibility" gap: documents are clear beyond technical readers.
+  Added to the doc map of both READMEs; Documentation agent green (RU↔EN pair /
+  switcher / 0 broken links). `PTD-0033`. TESTNET-ONLY.
 - **PTD-0031 (session 34):** P2 (quality/transparency) — **CONTRIBUTING.md (+EN)**.
   [`CONTRIBUTING.md`](../../CONTRIBUTING.md) + [`CONTRIBUTING.en.md`](../../CONTRIBUTING.en.md)
   — an open entry point for an outside contributor: where to start; four ways to
@@ -625,3 +645,4 @@ To keep self-development transparent, we record the origin of ideas.
 | run_all status badge / Audit test invariant / shared agent_report.py | agent | 32 |
 | Disk cleanup (node_modules) / "all agents have invariants" standard / sol-helpers refactor | agent | 33 |
 | CONTRIBUTING (done) / CODE_OF_CONDUCT as separate file / issue+PR templates | agent | 34 |
+| Glossary (done) / glossary link in doc headers / agent term check | agent | 36 |
