@@ -24,6 +24,7 @@ export function SiteHeader() {
     { label: t.navRewards, href: "/rewards/" },
     { label: t.navSafeguards, href: "/safeguards/" },
     { label: t.navWork, href: "/work/" },
+    { label: t.navAccountability, href: "/accountability/" },
     ...t.screens
       .filter((s) => s.href)
       .map((s) => ({ label: s.short ?? s.title, href: s.href as string })),

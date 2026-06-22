@@ -145,16 +145,16 @@
       "single_block": true
     },
     {
-      "bytes": 86632,
-      "cid": "bafkreig4esylq2bejlj7lc5jjimjqo3i7qcv2adabzizfzymx3w3blcqdq",
+      "bytes": 89184,
+      "cid": "bafkreihohuo5wirby7h6h2nz5tbzfpbesvth7h2v4gl32d4xlu7b7la2ai",
       "cid_kind": "raw-leaf-v1",
       "path": "governance/registry/index.json",
-      "sha256": "dc24b0b868244ad3f58ba94a18983b68fc055d00600e5192e70cbeedb0ac501c",
+      "sha256": "ee3d1ddb2221c7cfe3e9b9ecc392bc2495667f9f55e197bd0f975d3e1fac1a02",
       "single_block": true
     }
   ],
   "kind": "ipfs-content-manifest",
-  "manifest_fingerprint_sha256": "3c7b43420f54f34aacb12a63a6fe1ba0fa9cb82c3e35f28feb97c4a69f06b6de",
+  "manifest_fingerprint_sha256": "66ec1c9f7ab3fe3aab58a7f2888b04b27d61ae2a7de9be310624fd6fdd84cb92",
   "project": "Public Trust DAO",
   "spec": "CIDv1, codec=raw(0x55), multihash=sha2-256, multibase=base32. Эквивалент `ipfs add --cid-version=1 --raw-leaves=true` для одноблочных файлов (<=256 KiB). Вычисляется и проверяется из содержимого, без аккаунта пиннера.",
   "verify": "python3 scripts/ipfs_manifest.py verify",

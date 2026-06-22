@@ -307,6 +307,31 @@ export type WorkDict = {
   sourceLink: string;
 };
 
+export type AccountabilityDict = {
+  back: string;
+  title: string;
+  lead: string;
+  mainIdeaTitle: string;
+  mainIdea: string; // главная мысль одной строкой
+  keyTitle: string; // «Главное — простыми словами»
+  key: string[];
+  levelsTitle: string;
+  levelsHint: string;
+  // Два уровня: «под подписью» и «в блокчейне».
+  levels: { name: string; text: string }[];
+  rolesTitle: string;
+  rolesHint: string;
+  // Кто за что отвечает (участник / проверяющий / ИИ / разработчик / хранитель).
+  roles: { name: string; text: string }[];
+  aiTitle: string;
+  aiNote: string; // ИИ всегда под подписью, но без власти
+  limitTitle: string;
+  limitNote: string; // граница: подпись = ответственность, не власть
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -381,6 +406,7 @@ export type Dict = {
   navRewards: string;
   navSafeguards: string;
   navWork: string;
+  navAccountability: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -398,6 +424,7 @@ export type Dict = {
   rewards: RewardsDict;
   safeguards: SafeguardsDict;
   work: WorkDict;
+  accountability: AccountabilityDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -433,6 +460,7 @@ export const DICT: Record<Lang, Dict> = {
     navRewards: "Помощь и награда",
     navSafeguards: "Защита от обмана",
     navWork: "Оплачиваемая работа",
+    navAccountability: "Всё под подписью",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -941,6 +969,50 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд создаёт оплачиваемую работу — и честно проверяет, что она сделана». Правила опираются на конституцию (статья 5 «справедливое распределение», статья 6 «вознаграждение за вклад», статья 7 «защита от злоупотреблений»). Всё пока на тестовой сети, без реальных денег: начинаем с малых сумм и строгой проверки.",
       sourceLink: "Открыть документ «Как фонд создаёт оплачиваемую работу» →",
     },
+    accountability: {
+      back: "← На главную",
+      title: "Всё под подписью и прослеживаемо",
+      lead: "В обычных фондах часто непонятно, кто принял решение и почему деньги ушли туда, куда ушли. Здесь наоборот. Этот экран простыми словами объясняет главное правило фонда: у каждого значимого действия есть автор, оно подписано и записано так, что переписать прошлое незаметно нельзя.",
+      mainIdeaTitle: "Главная мысль одной строкой",
+      mainIdea: "Видно, кто сделал; видно, что сделал; и переписать это задним числом нельзя.",
+      keyTitle: "Главное — простыми словами",
+      key: [
+        "У каждого важного действия есть имя автора. Подал заявку, проголосовал, проверил чужую работу, исполнил выплату — рядом стоит, кто это сделал. Анонимных «решений из ниоткуда» нет.",
+        "Подписано — значит под ответственностью. «Подпись» здесь не росчерк ручкой, а электронное подтверждение «да, это сделал именно я». Подделать чужую подпись нельзя, а от своей не отвертеться.",
+        "Записано так, что прошлое не перепишешь. Все решения ложатся в открытый журнал-цепочку: каждая новая запись «запечатывает» предыдущую. Поменяют старую запись задним числом — цепочка рвётся, и это сразу видно всем.",
+        "Не всё подряд идёт в блокчейн — только важное (деньги, власть, договорённости). Класть туда каждое мелкое действие нельзя: дорого, медленно и нельзя помещать личные данные. В блокчейн уходит только короткий отпечаток, а сам текст живёт в открытом журнале.",
+        "ИИ всегда под подписью — но без власти. Каждое действие ИИ-помощника подписано и в журнале, важное закрепляется отпечатком в блокчейне. Но сам ИИ деньги и власть не двигает: он проверяет, считает и советует.",
+        "Разработчики тоже под подписью. Любая правка кода подписана историей изменений. А что именно запускается в работу и какие полномочия меняются — решается голосованием и исполняется контрактом, а не тихо одним человеком.",
+      ],
+      levelsTitle: "Два уровня: «под подписью» и «в блокчейне»",
+      levelsHint: "Это легко перепутать, но это разные вещи. Всё значимое — под подписью; самое важное — ещё и в блокчейне, но туда кладём отпечаток, а не личные данные.",
+      levels: [
+        {
+          name: "Под подписью и в журнале",
+          text: "Любое значимое действие: заявки, проверки, предложения, отчёты, действия ИИ. У действия есть автор, его нельзя подделать, история не переписывается. Дёшево и быстро.",
+        },
+        {
+          name: "Закреплено в блокчейне",
+          text: "Только деньги, власть, договорённости: выплаты, голосования, изменение правил, целевая помощь. Хранится отпечаток факта (а не личные данные) плюс событие контракта. Дороже и медленнее — поэтому только для важного.",
+        },
+      ],
+      rolesTitle: "Кто за что отвечает",
+      rolesHint: "Принцип «под подписью» одинаков для всех, но проявляется по-разному. Важная граница: подпись = ответственность, а не власть над деньгами.",
+      roles: [
+        { name: "Участник", text: "Подписывает заявку на помощь, свой голос, подтверждение получения. В блокчейне закрепляется голос (вес 1) и факт договорённости о помощи." },
+        { name: "Проверяющий", text: "Подписывает заключение «работа сделана / нужда подтверждена». В блокчейне — подтверждение перед разблокировкой выплаты." },
+        { name: "ИИ-помощник", text: "Подписывает каждый свой расчёт, проверку, сигнал тревоги. В блокчейне — отпечаток важного заключения, но не само движение денег." },
+        { name: "Разработчик", text: "Подписывает каждую правку кода (история коммитов). Что развёрнуто и какие полномочия изменились — решается голосованием." },
+        { name: "Хранитель (3-из-5)", text: "Подписывает своё участие в исполнении или аварийной паузе. Исполняет волю голосования; пауза всегда публична." },
+      ],
+      aiTitle: "Действия ИИ: всегда видно, но без власти",
+      aiNote: "ИИ в фонде делает много невидимой работы — проверяет заявки, считает вознаграждения, ищет странности. Каждое его действие подписано и в журнале, важные заключения закрепляются отпечатком в блокчейне. Но сам ИИ деньги и власть не двигает: решает голосование, исполняет контракт по правилам или живой человек. Так пользу ИИ видно, а риск «машина всё решила сама» исключён (конституция, статья 9).",
+      limitTitle: "Жёсткая граница",
+      limitNote: "Подпись — это ответственность, а не власть. То, что ИИ или хранитель что-то подписал, не значит, что он распоряжается деньгами единолично. Деньги двигаются только по голосованию и через общий кошелёк (минимум 3 подписи из 5). Личные данные в блокчейн и в публичный журнал не пишутся — только отпечатки и псевдонимы.",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Всё под подписью и прослеживаемо». Принцип опирается на конституцию (статья 3 «открытость и проверяемость», статья 9 «роль ИИ — без власти», статья 2 «никто не владелец»). Несменяемость истории уже работает: открытый журнал решений устроен как цепочка с защитой от подмены. Всё пока на тестовой сети, без реальных денег.",
+      sourceLink: "Открыть документ «Всё под подписью и прослеживаемо» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -1334,6 +1406,7 @@ export const DICT: Record<Lang, Dict> = {
     navRewards: "Help & reward",
     navSafeguards: "Anti-fraud",
     navWork: "Paid work",
+    navAccountability: "Signed & traceable",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -1841,6 +1914,50 @@ export const DICT: Record<Lang, Dict> = {
       sourceTitle: "Where this is written down",
       sourceNote: "This screen mirrors the fund's normative document “How the fund creates paid work — and honestly checks it was done”. The rules rest on the constitution (article 5 “fair distribution”, article 6 “reward for contribution”, article 7 “protection from abuse”). Everything is still on a test network, with no real money: we start with small amounts and strict checks.",
       sourceLink: "Open the “How the fund creates paid work” document →",
+    },
+    accountability: {
+      back: "← Home",
+      title: "Everything is signed and traceable",
+      lead: "In ordinary funds it's often unclear who made a decision and why money went where it went. Here it's the opposite. This screen explains, in plain words, the fund's main rule: every meaningful action has an author, is signed, and is recorded so the past cannot be rewritten unnoticed.",
+      mainIdeaTitle: "The main idea in one line",
+      mainIdea: "You can see who did it; you can see what they did; and it cannot be rewritten after the fact.",
+      keyTitle: "The main points — in plain words",
+      key: [
+        "Every important action has the author's name. Submitted a request, voted, reviewed someone's work, executed a payout — it's marked who did it. There are no anonymous “decisions out of nowhere”.",
+        "Signed means accountable. A “signature” here is not a pen stroke but an electronic confirmation of “yes, I did this”. You can't forge someone else's signature, and you can't deny your own.",
+        "Recorded so the past can't be rewritten. All decisions go into an open chain-journal: each new entry “seals” the previous one. Change an old entry after the fact and the chain breaks — visible to everyone at once.",
+        "Not everything goes on the blockchain — only what matters (money, power, agreements). Putting every small action there is impossible: costly, slow, and no personal data allowed. Only a short fingerprint goes on-chain, while the text itself lives in the open journal.",
+        "AI is always signed — but holds no power. Every action of an AI helper is signed and in the journal, important ones anchored by a fingerprint on-chain. But the AI itself moves no money or power: it checks, computes, and advises.",
+        "Developers are signed too. Every code change is signed by the change history. But what exactly gets deployed and which powers change is decided by a vote and executed by a contract — not quietly by one person.",
+      ],
+      levelsTitle: "Two levels: “signed” and “on the blockchain”",
+      levelsHint: "These are easy to mix up, but they're different. Everything meaningful is signed; the most important is also on the blockchain — but we put a fingerprint there, not personal data.",
+      levels: [
+        {
+          name: "Signed and in the journal",
+          text: "Any meaningful action: requests, reviews, proposals, reports, AI actions. The action has an author, it can't be forged, history isn't rewritten. Cheap and fast.",
+        },
+        {
+          name: "Anchored on the blockchain",
+          text: "Only money, power, agreements: payouts, votes, rule changes, targeted aid. A fingerprint of the fact (not personal data) plus a contract event are stored. Costlier and slower — so only for what matters.",
+        },
+      ],
+      rolesTitle: "Who is responsible for what",
+      rolesHint: "The “signed” principle is the same for everyone, but shows up differently. The key boundary: a signature means responsibility, not power over money.",
+      roles: [
+        { name: "Participant", text: "Signs a request for help, their vote, a confirmation of receipt. On-chain: the vote (weight 1) and the fact of an aid agreement." },
+        { name: "Reviewer", text: "Signs the verdict “work done / need confirmed”. On-chain: the confirmation before a payout is unlocked." },
+        { name: "AI helper", text: "Signs each of its calculations, checks, and alerts. On-chain: a fingerprint of an important verdict — but not the money movement itself." },
+        { name: "Developer", text: "Signs every code change (commit history). What gets deployed and which powers change is decided by a vote." },
+        { name: "Guardian (3-of-5)", text: "Signs their part in execution or an emergency pause. Executes the will of the vote; a pause is always public." },
+      ],
+      aiTitle: "AI actions: always visible, but no power",
+      aiNote: "AI does a lot of invisible work in the fund — reviewing requests, computing rewards, looking for anomalies. Every action of it is signed and in the journal, important verdicts anchored by a fingerprint on-chain. But the AI itself moves no money or power: a vote decides, a contract executes by the rules, or a live person does. This makes the AI's value visible while ruling out the risk of “the machine decided everything itself” (constitution, article 9).",
+      limitTitle: "Hard boundary",
+      limitNote: "A signature is responsibility, not power. The fact that an AI or a guardian signed something does not mean they dispose of money alone. Money moves only by a vote and through the shared wallet (at least 3 signatures out of 5). Personal data is never written to the blockchain or the public journal — only fingerprints and pseudonyms.",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund's normative document “Everything is signed and traceable”. The principle rests on the constitution (article 3 “openness and verifiability”, article 9 “the role of AI — without power”, article 2 “no one owns it”). The unchangeability of history already works: the open decision journal is built as a chain protected from tampering. Everything is still on a test network, with no real money.",
+      sourceLink: "Open the “Everything is signed and traceable” document →",
     },
     notFound: {
       code: "Page not found",

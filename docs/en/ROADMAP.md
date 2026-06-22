@@ -236,6 +236,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     people); honest about the oracle weak spot; hard limits. RU↔EN text in `lib/i18n.ts`
     (`WorkDict`), added to the menu, no new dependencies. Rests on constitution art. 5/6/7.
     `PTD-0092`. TESTNET-ONLY.
+  - [x] Explainer screen "Everything is signed and traceable" (session 96):
+    `platform/app/accountability/` — an in-app mirror of the normative
+    `docs/ACCOUNTABILITY.md` (the "mirror screen" pattern, like rewards↔REWARDS-MODEL,
+    safeguards↔ANTI-ABUSE, work↔PROOF-OF-CONTRIBUTION and glossary↔GLOSSARY): in plain
+    words — the main idea "you can see who did it; you can see what they did; and it cannot
+    be rewritten after the fact"; 6 "main points" (every action has an author / signed =
+    accountable / the past can't be rewritten / only what matters goes on-chain, a
+    fingerprint not personal data / AI is signed but holds no power / developers are signed
+    too); two levels "signed" / "on the blockchain"; who is responsible for what
+    (participant/reviewer/AI/developer/guardian 3-of-5); "AI actions: always visible, but no
+    power" (art. 9); the boundary "a signature is responsibility, not power over money".
+    RU↔EN text in `lib/i18n.ts` (`AccountabilityDict`), added to the menu, no new
+    dependencies. Rests on constitution art. 2/3/9. `PTD-0093`. TESTNET-ONLY.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,
