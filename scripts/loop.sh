@@ -43,7 +43,6 @@ while true; do
   # --- рабочая сессия строителя ---------------------------------------------
   timeout "$SESSION_TIMEOUT" claude -p "$(cat BUILDER.md)" \
       --permission-mode bypassPermissions \
-      --dangerously-skip-permissions \
       --model claude-opus-4-8 \
       --allowedTools Bash Edit Write Read WebFetch WebSearch Glob Grep \
       >> "$LOG" 2>&1
