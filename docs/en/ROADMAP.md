@@ -324,18 +324,41 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] Run-All: a machine-readable status badge in `governance/` (the last
   `run_all --json` verdict saved to an artifact file) — a basis for a future public
   "status traffic light" with no external services (session 32).
-- [ ] Test invariant for Audit (`test_audit.py`) — the only agent without its own
+- [x] Test invariant for Audit (`test_audit.py`) — the only agent without its own
   invariant; feed a "broken" governance artifact and check Audit goes red (close the
   Stage-6 quality-standard gap; session 32).
+  → Done (session 33): [`test_audit.py`](../../ai-agents/test_audit.py) (9/9) —
+  run_check (pass/fail/error) + main folding + integration with the real validators on
+  poisoned temporary copies (mainnet chain_id; plutocratic strategy); added to `run_all`
+  (tests 8/8). `PTD-0030`. **All 8 agents now have invariants.**
 - [ ] A shared module `ai-agents/agent_report.py` — a single report helper
   (`{agent, verdict, passed, total, checks}` + human-readable renderer) so the eight
   agents don't duplicate the same print code and don't drift in the format `run_all`
   relies on (session 32; akin to the `solidity_scan.py` idea).
+- [ ] **Disk hygiene as a rail:** a light script/doc on how the builder agent keeps the
+  disk clean — `contracts/node_modules` (gitignored, ~300 MB) and caches must not pile
+  up; perhaps `npm ci` in CI only, cleaned locally. In session 33 the disk hit ~100%
+  full (mostly other host projects) and nearly blocked the build (proposed session 33).
+  See "NEEDED FROM THE OPERATOR".
+- [ ] **"Every agent has an invariant" as an explicit CI check:** a mini-script that
+  fails if a `*_agent.py` appears in `ai-agents/` without a paired `test_*.py` (and vice
+  versa) — so the Stage-6 quality gap (as Audit had) can never reappear unnoticed
+  (proposed session 33; akin to "agent self-test in CI").
 
 ---
 
 ## Done
 
+- **PTD-0030 (session 33):** Stage 6 (AI agents), quality standard — **the Audit test
+  invariant**. [`test_audit.py`](../../ai-agents/test_audit.py) (9/9) closes the last
+  scaffold gap: Audit was the only agent without its own invariant. It proves Audit
+  **folds the verdict honestly, not "green by default"**: `run_check` (exit0→pass /
+  exit1→fail / crashed command→error), `main` folding (any fail/error → red), and
+  integration with the REAL rail validators (`safe_config.py`/`snapshot_config.py`) on
+  poisoned TEMPORARY config copies (a Safe with a mainnet `chain_id`; a Snapshot with a
+  plutocratic strategy) → red, while staying green on the healthy repo. The real configs
+  are not modified. Added to `run_all` (TESTS) → tests 8/8. `PTD-0030`. **All eight
+  agents now have invariants.** TESTNET-ONLY.
 - **PTD-0029 (session 32):** Stage 6 (AI agents), consolidation of the 8/8 scaffold —
   **the Run-All meta-agent**. [`run_all.py`](../../ai-agents/run_all.py) — a read-only
   service meta-module (Art. 9): runs all eight agents with `--json` and folds their
@@ -568,3 +591,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Refactor shared solidity helpers (3 copies) / Housing provider-whitelist / end-to-end "record ↔ on-chain escrow" test | agent | 28 |
 | Meta-agent run_all / lexical prohibition linter for public texts / changelog from the registry | agent | 29 |
 | run_all status badge / Audit test invariant / shared agent_report.py | agent | 32 |
+| Disk cleanup (node_modules) / "all agents have invariants" standard / sol-helpers refactor | agent | 33 |

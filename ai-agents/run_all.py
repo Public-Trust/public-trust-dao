@@ -60,9 +60,9 @@ AGENTS = [
     {"key": "mediator",      "script": "mediator_agent.py",      "guards": "ст. 9.2 — процесс споров/апелляций"},
 ]
 
-# Тест-инварианты (доказывают, что красное ловится). У Audit инварианта пока нет
-# (P3-идея ROADMAP); остальные семь агентов покрыты.
+# Тест-инварианты (доказывают, что красное ловится). Покрыты все восемь агентов.
 TESTS = [
+    "test_audit.py",
     "test_guardian.py",
     "test_fairness.py",
     "test_reputation.py",

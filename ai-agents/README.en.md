@@ -82,6 +82,14 @@ agent fixes nothing and controls nothing; the community decides.
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs the
 base audit on every push/PR — a public guarantee of governance-layer integrity.
 
+A **test invariant** [`test_audit.py`](test_audit.py) proves that Audit **folds the
+verdict honestly, not "green by default"**: a check with `exit=1` yields `fail`, a
+crashed/missing command yields `error` (not a silent "pass"), and any `fail`/`error`
+turns the overall verdict `red`. Beyond synthetics it feeds the real rail validators a
+genuinely broken governance artifact (a Safe config with a mainnet `chain_id`; a
+Snapshot config with a plutocratic strategy) in a temporary copy and proves Audit
+raises it to "red", while staying "green" on the healthy repository.
+
 ## Guardian agent — what it does and how to run it
 
 `guardian_agent.py` is a dedicated, explicit **safety-rails scanner across the whole

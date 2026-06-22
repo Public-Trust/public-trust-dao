@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 30,
-  "head_hash": "64075b63fd02d408c43954024bd78dffa39f503124e6dd0eced5a14664e9c118",
+  "count": 31,
+  "head_hash": "f9d63689f7033429787ab2d13b73e5a533b8458a03f33687aacfeef8657268d4",
   "entries": [
     {
       "seq": 0,
@@ -273,6 +273,15 @@
       "summary": "Этап 6 (AI-агенты), консолидация каркаса 8/8 — мета-агент Run-All. ai-agents/run_all.py — служебный read-only мета-модуль (стандартная библиотека Python, без сети, ст. 9): запускает всех 8 агентов и сводит их --json-отчёты в один вердикт «зелёно/красно»; флаги --with-contracts/--with-tests/--json; ловит аномалии (невалидный JSON, verdict=green при exit!=0). Единая точка входа: локальный self-check одной командой, CI сжат с ~15 шагов до 2. Тест-инвариант test_run_all.py (13/13). На реальном репо: агенты 8/8, тесты 7/7. TESTNET-ONLY.",
       "hash": "64075b63fd02d408c43954024bd78dffa39f503124e6dd0eced5a14664e9c118",
       "file": "records/0029-meta-agent-run-all.json"
+    },
+    {
+      "seq": 30,
+      "id": "PTD-0030",
+      "type": "decision",
+      "timestamp": "2026-06-22T13:30:00Z",
+      "summary": "Этап 6 (AI-агенты), стандарт качества — тест-инвариант Audit. ai-agents/test_audit.py (служебный, стандартная библиотека Python, без сети, ст. 9): закрывает последний пробел каркаса 8/8 — у Audit не было своего инварианта. Доказывает, что Audit сводит вердикт честно, а не «зелёный по умолчанию»: run_check (exit0→pass / exit1→fail / упавшая команда→error); сведение main (любой fail/error→red); интеграция с НАСТОЯЩИМИ валидаторами на отравленных временных копиях (Safe с mainnet chain_id; Snapshot с плутократической стратегией)→красный, а на здоровом репо→зелёный. 9/9. Добавлен в run_all (TESTS): тесты теперь 8/8. TESTNET-ONLY.",
+      "hash": "f9d63689f7033429787ab2d13b73e5a533b8458a03f33687aacfeef8657268d4",
+      "file": "records/0030-audit-test-invariant.json"
     }
   ]
 }
