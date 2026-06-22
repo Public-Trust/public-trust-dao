@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 7,
-  "head_hash": "682e26a0438ca20a98861121aa6cfe977d0ed857743e0a22cfcd8cecc66b9699",
+  "count": 8,
+  "head_hash": "819528e1f460a2fab5f2ce058edb6051030875257bfc1573b5d473aa6d955c88",
   "entries": [
     {
       "seq": 0,
@@ -66,6 +66,15 @@
       "summary": "Материалы продвижения (INBOX #6): лендинг-копия, питч RU/EN, пост-анонс, FAQ «общественное благо, НЕ инвестиция» — docs/PROMOTION.md (+EN)",
       "hash": "682e26a0438ca20a98861121aa6cfe977d0ed857743e0a22cfcd8cecc66b9699",
       "file": "records/0006-promotion-materials.json"
+    },
+    {
+      "seq": 7,
+      "id": "PTD-0007",
+      "type": "decision",
+      "timestamp": "2026-06-22T06:05:00Z",
+      "summary": "Курс управления (INBOX): голос каждого верифицированного человека (Governor→Timelock→Treasury), мультисиг сведён к исполнителю/аварийке, анти-Сивилла без концентрации власти — docs/GOVERNANCE.md (+EN)",
+      "hash": "819528e1f460a2fab5f2ce058edb6051030875257bfc1573b5d473aa6d955c88",
+      "file": "records/0007-governance-course.json"
     }
   ]
 }

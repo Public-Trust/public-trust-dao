@@ -22,6 +22,7 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`REPO-STRUCTURE.en.md`](REPO-STRUCTURE.en.md) — repository map: what lives where and where to put new things.
 - [`docs/en/ROADMAP.md`](docs/en/ROADMAP.md) — roadmap and self-development mechanism (living, prioritized list of ideas/tasks).
 - [`docs/en/PROMOTION.md`](docs/en/PROMOTION.md) — promotion materials: landing copy, pitch (RU/EN), announcement post, FAQ "public good, NOT an investment".
+- [`docs/en/GOVERNANCE.md`](docs/en/GOVERNANCE.md) — governance course: the voice of every verified human (Governor), the multisig as executor/emergency, Sybil resistance without power concentration.
 - [`LAUNCH.md`](LAUNCH.md) — technical specification for building the infrastructure.
 - `contracts/` — smart contracts (TESTNET first).
 - `web/` — public website (GitHub Pages).

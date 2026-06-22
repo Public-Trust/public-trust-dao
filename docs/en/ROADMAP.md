@@ -66,12 +66,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P0 — main plan (LAUNCH.md stages)
 
+- [x] **Stage 4 — Governance, concept (GOVERNANCE COURSE):** target model
+  "1 human = 1 vote" (Governor → Timelock → Treasury), the multisig as
+  executor/emergency, the decentralization path, Sybil resistance without power
+  concentration, constitutional amendments as a proposal. → Done (session 10),
+  [`GOVERNANCE.md`](GOVERNANCE.md), `PTD-0007`. The base spec for parts 1–2.
 - [ ] **Stage 4 — Governance, part 1:** Snapshot space mock-up (off-chain) in
-  `governance/snapshot/` — `space.json`/README: voting strategies, quorum,
-  proposal types, link to the constitution (distribution priority, appeals).
+  `governance/snapshot/` — `space.json`/README per [`GOVERNANCE.md`](GOVERNANCE.md):
+  "1 human = 1 vote" strategy (not plutocracy), quorum, proposal types, link to the
+  constitution (distribution priority, appeals).
   Actually creating the space (ENS/domain/controller wallet) — operator request.
 - [ ] **Stage 4 — Governance, part 2:** Safe multisig mock-up, 5 guardians (3-of-5)
-  in `governance/safe/` — scheme, roles, signing policy, no real addresses.
+  in `governance/safe/` — scheme, roles (executor/emergency pause per
+  [`GOVERNANCE.md`](GOVERNANCE.md)), signing policy, no real addresses.
 - [ ] **Stage 5 — Smart contracts (skeleton):** set up `contracts/` as a project
   (Foundry/Hardhat config), skeletons for Treasury / Disbursement (per
   [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md)) /
