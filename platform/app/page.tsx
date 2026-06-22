@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useI18n } from "@/components/Providers";
 
 // Адреса наружу (тот же открытый репозиторий / главный сайт-витрина).
@@ -33,12 +34,24 @@ export default function Home() {
         <p className="lead">{t.screensLead}</p>
         <ul className="screen-grid">
           {t.screens.map((screen) => (
-            <li key={screen.title} className="screen-card">
+            <li
+              key={screen.title}
+              className={
+                screen.href ? "screen-card screen-card--ready" : "screen-card"
+              }
+            >
               <div className="screen-card-head">
                 <h3>{screen.title}</h3>
-                <span className="badge">{t.soon}</span>
+                <span className={screen.href ? "badge badge--ready" : "badge"}>
+                  {screen.href ? t.ready : t.soon}
+                </span>
               </div>
               <p>{screen.text}</p>
+              {screen.href ? (
+                <Link className="screen-card-link" href={screen.href}>
+                  {t.open} →
+                </Link>
+              ) : null}
             </li>
           ))}
         </ul>

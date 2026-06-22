@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 76,
-  "head_hash": "2eae8edc0d456321ceb52cfef2192c735b5910d1bd38935484f61aea4fc724de",
+  "count": 77,
+  "head_hash": "1cff71cc9da55ff3df775bf3a7ed6537c17c8cc98f5cff3a0b989041c0ba8548",
   "entries": [
     {
       "seq": 0,
@@ -687,6 +687,15 @@
       "summary": "Каркас публичной платформы фонда на Next.js (папка platform/): статическая сборка под бесплатный GitHub Pages с заделом под будущий сервер; первый рабочий экран (главная: миссия + дисклеймер + витрина будущих экранов), двуязычный RU<->EN, светлая/тёмная темы, доступность; сборку проверяет CI .github/workflows/platform.yml, витрина web/ остаётся живой",
       "hash": "2eae8edc0d456321ceb52cfef2192c735b5910d1bd38935484f61aea4fc724de",
       "file": "records/0075-decision.json"
+    },
+    {
+      "seq": 76,
+      "id": "PTD-0076",
+      "type": "decision",
+      "timestamp": "2026-06-22T18:10:00Z",
+      "summary": "Второй экран платформы: «Подключить кошелёк» (platform/app/wallet/) — подключение кошелька по EIP-1193 без сторонних web3-библиотек, понятное объяснение, показ публичного адреса и сети, отключение, предупреждение при основной сети; блокчейн-слой lib/wallet.ts отделён от UI; карточка на главной стала рабочей",
+      "hash": "1cff71cc9da55ff3df775bf3a7ed6537c17c8cc98f5cff3a0b989041c0ba8548",
+      "file": "records/0076-decision.json"
     }
   ]
 }

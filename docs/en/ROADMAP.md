@@ -129,7 +129,11 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     upcoming screens), bilingual RU↔EN, light/dark themes, accessibility; the build is
     verified by CI [`.github/workflows/platform.yml`](../../.github/workflows/platform.yml)
     on GitHub's servers (host disk is 100% locally). `PTD-0075`. TESTNET-ONLY.
-  - [ ] "Connect a wallet" screen (MetaMask) + a clear explanation.
+  - [x] "Connect a wallet" screen (MetaMask) + a clear explanation (session 79):
+    `platform/app/wallet/` + blockchain layer `platform/lib/wallet.ts` (EIP-1193,
+    no third-party web3 libraries) — connect, show public address and network,
+    disconnect, honest warning on a main network; the home card is now a working
+    link. `PTD-0076`. TESTNET-ONLY.
   - [ ] "Apply for help" screen (anonymous form per `PRIORITIES.md`).
   - [ ] "Open record" screen — reading registry records from `governance/registry/`.
   - [ ] "Voting" screen (one person = one vote, per `GOVERNANCE.md`).

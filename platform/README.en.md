@@ -19,6 +19,19 @@ export, `next export`) so it can be hosted for free on GitHub Pages without a
 paid server. The architecture is still complete: when a server is needed, the
 same code can run as a server by turning off static export.
 
+## Finished screens
+
+- **Home** — mission, the "public good, not an investment" disclaimer, and a
+  showcase of upcoming screens.
+- **Connect a wallet** (`/wallet/`) — a person connects a wallet (such as
+  MetaMask) with a clear explanation of what it is and why, sees their public
+  address and network, and can disconnect. No money moves when connecting; if a
+  main network with real money is selected, the screen honestly warns that the
+  fund works only on a test network.
+
+Next in line: apply for help → open record → voting → treasury window → identity
+check.
+
 ## Transparency rails (followed literally)
 
 - **No third-party trackers, ads, or analytics.** Zero requests to other
@@ -62,11 +75,18 @@ the showcase site [`web/`](../web/) to the platform.
 ```
 platform/
   app/            screens and the shared shell (layout, globals.css)
+    wallet/       the "Connect a wallet" screen
   components/     shared UI parts (header, footer, language/theme provider)
-  lib/            bilingual texts (i18n)
+  lib/            bilingual texts (i18n) and the blockchain layer (wallet.ts)
   next.config.mjs build settings (static export)
   package.json    dependencies (exact versions)
 ```
+
+**Layer separation** (groundwork for a future server): screens (`app/`) and
+shared UI (`components/`) are kept apart from data and blockchain (`lib/`). For
+example, `lib/wallet.ts` is plain wallet access via the EIP-1193 standard with no
+third-party libraries; the screen only uses it. This lets us later plug in real
+contracts or a server side without rewriting the interface.
 
 See also: [`docs/PRODUCT-INTERFACES.md`](../docs/en/PRODUCT-INTERFACES.md) — the
 order of interfaces (web → Telegram → mobile).
