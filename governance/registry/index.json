@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 31,
-  "head_hash": "f9d63689f7033429787ab2d13b73e5a533b8458a03f33687aacfeef8657268d4",
+  "count": 32,
+  "head_hash": "5474493295d4308f1c72d574466c6c8cd694bf7e33b38815ce64d19d1231fe8d",
   "entries": [
     {
       "seq": 0,
@@ -282,6 +282,15 @@
       "summary": "Этап 6 (AI-агенты), стандарт качества — тест-инвариант Audit. ai-agents/test_audit.py (служебный, стандартная библиотека Python, без сети, ст. 9): закрывает последний пробел каркаса 8/8 — у Audit не было своего инварианта. Доказывает, что Audit сводит вердикт честно, а не «зелёный по умолчанию»: run_check (exit0→pass / exit1→fail / упавшая команда→error); сведение main (любой fail/error→red); интеграция с НАСТОЯЩИМИ валидаторами на отравленных временных копиях (Safe с mainnet chain_id; Snapshot с плутократической стратегией)→красный, а на здоровом репо→зелёный. 9/9. Добавлен в run_all (TESTS): тесты теперь 8/8. TESTNET-ONLY.",
       "hash": "f9d63689f7033429787ab2d13b73e5a533b8458a03f33687aacfeef8657268d4",
       "file": "records/0030-audit-test-invariant.json"
+    },
+    {
+      "seq": 31,
+      "id": "PTD-0031",
+      "type": "decision",
+      "timestamp": "2026-06-22T13:45:00Z",
+      "summary": "P2 ROADMAP — CONTRIBUTING.md (+ EN): открытая инструкция «как участвовать» (issue/PR/предложение в governance/путь к участнику-хранителю), рельсы вклада, кодекс поведения, самопроверка целостности, лицензии. Ключевой акцент: ВКЛАД ≠ ВЛАСТЬ НАД КАЗНОЙ (1 человек = 1 голос; авторство = признание, не собственность). Documentation-агент зелёный, run_all 8/8 + тесты 8/8. TESTNET-ONLY.",
+      "hash": "5474493295d4308f1c72d574466c6c8cd694bf7e33b38815ce64d19d1231fe8d",
+      "file": "records/0031-contributing-guide.json"
     }
   ]
 }

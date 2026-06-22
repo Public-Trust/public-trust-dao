@@ -45,6 +45,7 @@ mirror this logic, plus the normative base and the autonomy loop.
 |---|---|
 | `README.md` / `README.en.md` | Entry point: mission, disclaimer (NOT an investment / NOT a pyramid), doc map, licenses. RU + EN. |
 | `AUTHORS.md` / `AUTHORS.en.md` | Authors and stewards: author/initiator Fedor Grigoriev (authorship ≠ ownership). RU + EN. |
+| `CONTRIBUTING.md` / `CONTRIBUTING.en.md` | How to contribute: issues/PRs/governance proposals, contribution rails, code of conduct (contribution ≠ power over the treasury). RU + EN. |
 | `LAUNCH.md` | Manifesto-constitution and the full stage plan (1→6). The project's north star. |
 | `BUILDER.md` | Mandate of the autonomous builder agent (session protocol, safety rails). |
 | `PROGRESS.md` | Progress log + "next step" + "needed from operator". Memory across sessions. |

@@ -217,10 +217,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P2 — quality and transparency
 
-- [ ] **CONTRIBUTING.md (+EN)** — how an outside person can participate (issues, PRs,
+- [x] **CONTRIBUTING.md (+EN)** — how an outside person can participate (issues, PRs,
   governance proposals), a code of conduct, links to the constitution.
+  → Done (session 34), [`CONTRIBUTING.en.md`](../../CONTRIBUTING.en.md), `PTD-0031`.
+  Emphasis "contribution ≠ power over the treasury" (1 person = 1 vote; authorship = recognition).
 - [ ] **Glossary** of key terms (DAO, escrow, multisig, registry, distribution
   priority) in plain language, RU/EN — so documents are clear to non-technical readers.
+- [ ] **CODE_OF_CONDUCT.md (+EN)** — split the code of conduct out of CONTRIBUTING into
+  a separate canonical file (GitHub recognizes and surfaces it on the "Community" page),
+  linking to the constitution/principles (proposed session 34).
+- [ ] **Issue/PR templates (.github/ISSUE_TEMPLATE, PULL_REQUEST_TEMPLATE)** — channel
+  contributions into the CONTRIBUTING formats (bug/idea/governance proposal; rails
+  checklist: bilingual, no secrets, TESTNET) — a "ready to click" stub for outsiders
+  (proposed session 34).
 - [ ] **"Transparency" page on the site** — gather links: registry, IPFS manifest,
   CI statuses, how to verify integrity yourself (`registry.py verify`).
 - [x] **Automated bilingual check in CI** — a linter that fails the build if an RU
@@ -349,6 +358,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0031 (session 34):** P2 (quality/transparency) — **CONTRIBUTING.md (+EN)**.
+  [`CONTRIBUTING.md`](../../CONTRIBUTING.md) + [`CONTRIBUTING.en.md`](../../CONTRIBUTING.en.md)
+  — an open entry point for an outside contributor: where to start; four ways to
+  contribute (issue; PR on a doc/code; governance proposal; path to a verified
+  participant/guardian); contribution rails (public good NOT an investment, TESTNET-first,
+  no secrets in the repo, bilingual RU↔EN in the same PR, transparency via the registry,
+  applicant privacy); a code of conduct; integrity self-check commands
+  (`registry.py verify`, `run_all.py --with-tests`); contribution licensing. The key
+  constitutional emphasis is up front — **contribution ≠ power over the treasury**
+  (distribution is governed by the constitution and "1 person = 1 vote" voting;
+  authorship = recognition, not ownership; aligned with [`AUTHORS.en.md`](../../AUTHORS.en.md)
+  and [`GOVERNANCE.md`](GOVERNANCE.md)). Added to the doc map of both READMEs and to the
+  root-files table in REPO-STRUCTURE (RU/EN). Documentation agent green (pairs/switcher/
+  links), `run_all --with-tests`: agents 8/8, tests 8/8. `PTD-0031`. TESTNET-ONLY.
 - **PTD-0030 (session 33):** Stage 6 (AI agents), quality standard — **the Audit test
   invariant**. [`test_audit.py`](../../ai-agents/test_audit.py) (9/9) closes the last
   scaffold gap: Audit was the only agent without its own invariant. It proves Audit
@@ -592,3 +615,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Meta-agent run_all / lexical prohibition linter for public texts / changelog from the registry | agent | 29 |
 | run_all status badge / Audit test invariant / shared agent_report.py | agent | 32 |
 | Disk cleanup (node_modules) / "all agents have invariants" standard / sol-helpers refactor | agent | 33 |
+| CONTRIBUTING (done) / CODE_OF_CONDUCT as separate file / issue+PR templates | agent | 34 |

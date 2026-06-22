@@ -21,6 +21,7 @@ No one owns the project. The founder is an ordinary participant. The project bel
 - [`docs/en/PRODUCT-INTERFACES.md`](docs/en/PRODUCT-INTERFACES.md) — product form and interface roadmap (web dApp → Telegram bot → mobile app).
 - [`AUTHORS.en.md`](AUTHORS.en.md) — authors and stewards: project author/initiator **Fedor Grigoriev** (authorship ≠ ownership).
 - [`REPO-STRUCTURE.en.md`](REPO-STRUCTURE.en.md) — repository map: what lives where and where to put new things.
+- [`CONTRIBUTING.en.md`](CONTRIBUTING.en.md) — how to contribute: issues/PRs/governance proposals, contribution rails, code of conduct (contribution ≠ power over the treasury).
 - [`docs/en/ROADMAP.md`](docs/en/ROADMAP.md) — roadmap and self-development mechanism (living, prioritized list of ideas/tasks).
 - [`docs/en/PROMOTION.md`](docs/en/PROMOTION.md) — promotion materials: landing copy, pitch (RU/EN), announcement post, FAQ "public good, NOT an investment".
 - [`docs/en/EMAIL-SETUP.md`](docs/en/EMAIL-SETUP.md) — project email: options, operator guide, signature and reply templates (RU/EN).
