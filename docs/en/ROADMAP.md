@@ -134,8 +134,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     no third-party web3 libraries) — connect, show public address and network,
     disconnect, honest warning on a main network; the home card is now a working
     link. `PTD-0076`. TESTNET-ONLY.
-  - [ ] "Apply for help" screen (anonymous form per `PRIORITIES.md`).
-  - [ ] "Open record" screen — reading registry records from `governance/registry/`.
+  - [x] "Apply for help" screen (session 80): `platform/app/apply/` + data layer
+    `platform/lib/application.ts` — an anonymous form per `PRIORITIES.md` with a
+    required direct-spend field (`ESCROW`), builds a verifiable draft in the
+    browser; the home card became a working link. `PTD-0077`. TESTNET-ONLY.
+  - [x] "Open record" screen (session 81): `platform/app/journal/` + data layer
+    `platform/lib/journal.ts` — a list of decisions (newest first) with a filter and
+    search, tamper protection explained, the journal fingerprint shown; data travels
+    as a snapshot of the registry (`platform/lib/journal-data.json` via
+    `scripts/sync_journal.py`, rebuilt by CI before the build) — nothing loaded from
+    outside; the home card became a working link. `PTD-0078`. TESTNET-ONLY.
   - [ ] "Voting" screen (one person = one vote, per `GOVERNANCE.md`).
   - [ ] "Treasury window" screen (read-only test treasury state).
   - [ ] "Identity check" screen by levels (per `IDENTITY-VERIFICATION.md`).

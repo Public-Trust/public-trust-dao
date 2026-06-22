@@ -70,6 +70,29 @@ export type ApplyDict = {
   how: string[];
 };
 
+export type JournalDict = {
+  back: string;
+  title: string;
+  lead: string;
+  whatTitle: string;
+  whatText: string;
+  countLabel: string;
+  headHashLabel: string;
+  headHashHint: string;
+  filterLabel: string;
+  filterAll: string;
+  typeLabels: Record<string, string>;
+  searchLabel: string;
+  searchPlaceholder: string;
+  showing: string;
+  nothingFound: string;
+  hashLabel: string;
+  viewRecord: string;
+  howTitle: string;
+  how: string[];
+  verifyLink: string;
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -96,6 +119,7 @@ export type Dict = {
   builtNote: string;
   wallet: WalletDict;
   apply: ApplyDict;
+  journal: JournalDict;
 };
 
 export const DICT: Record<Lang, Dict> = {
@@ -134,6 +158,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Открытый журнал",
         text: "Любое решение фонда можно посмотреть и проверить — ничего не спрятано.",
+        href: "/journal/",
       },
       {
         title: "Голосование",
@@ -248,6 +273,43 @@ export const DICT: Record<Lang, Dict> = {
         "Любое решение по заявке попадёт в открытый журнал — его можно будет посмотреть и проверить.",
       ],
     },
+    journal: {
+      back: "← На главную",
+      title: "Открытый журнал решений",
+      lead: "Это список всех решений фонда по порядку, новые сверху. Здесь ничего не спрятано: каждое решение видно и его можно проверить. Записи нельзя задним числом изменить или удалить — журнал устроен так, что любая подмена сразу заметна.",
+      whatTitle: "Как устроена защита от подмены простыми словами",
+      whatText:
+        "Каждая запись несёт короткий контрольный отпечаток и помнит отпечаток предыдущей — записи сцеплены в цепочку. Если кто-то изменит хотя бы одну старую запись, её отпечаток перестанет совпадать, и это сразу увидят все. Поэтому общий «отпечаток журнала» внизу — это контрольный код всего списка целиком.",
+      countLabel: "Записей в журнале",
+      headHashLabel: "Отпечаток журнала",
+      headHashHint:
+        "Контрольный код всей цепочки записей. Меняется, если подменить хоть одну запись.",
+      filterLabel: "Показать вид записей",
+      filterAll: "Все виды",
+      typeLabels: {
+        genesis: "Открытие журнала",
+        decision: "Решение",
+        disbursement: "Выплата",
+        governance: "Управление",
+        audit: "Проверка",
+        appeal: "Апелляция",
+        reputation: "Репутация",
+        note: "Заметка",
+      },
+      searchLabel: "Поиск по записям",
+      searchPlaceholder: "Например: кошелёк, выплата или PTD-0075",
+      showing: "Показано записей:",
+      nothingFound: "По запросу ничего не найдено. Попробуйте другие слова.",
+      hashLabel: "отпечаток",
+      viewRecord: "Посмотреть полную запись →",
+      howTitle: "Как это проверить самому",
+      how: [
+        "Весь журнал открыт: каждая запись — отдельный файл в общем репозитории, ссылка ведёт прямо на него.",
+        "Любой может пересчитать отпечатки и убедиться, что цепочка цела — для этого есть открытый инструмент проверки в репозитории.",
+        "Пока контракты не запущены в тестовой сети, важные отпечатки будут дополнительно закрепляться в блокчейне — тогда подмену станет невозможно скрыть совсем.",
+      ],
+      verifyLink: "Открытый журнал и инструмент проверки (репозиторий)",
+    },
   },
   en: {
     htmlLang: "en",
@@ -284,6 +346,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Open record",
         text: "Every decision of the fund can be viewed and checked — nothing is hidden.",
+        href: "/journal/",
       },
       {
         title: "Voting",
@@ -397,6 +460,43 @@ export const DICT: Record<Lang, Dict> = {
         "The queue depends only on the severity of the need, not on who the person is: origin, status, and reputation do not move the queue.",
         "Any decision on the application goes into the open record — it can be viewed and checked.",
       ],
+    },
+    journal: {
+      back: "← Back to home",
+      title: "Open record of decisions",
+      lead: "This is the list of all of the fund's decisions in order, newest first. Nothing is hidden here: every decision is visible and can be checked. Records cannot be changed or deleted after the fact — the journal is built so that any tampering shows up immediately.",
+      whatTitle: "How tamper protection works, in plain words",
+      whatText:
+        "Each record carries a short check fingerprint and remembers the fingerprint of the one before it — the records are linked into a chain. If anyone changes even a single old record, its fingerprint will no longer match, and everyone sees it at once. So the overall 'journal fingerprint' below is a check code for the whole list together.",
+      countLabel: "Records in the journal",
+      headHashLabel: "Journal fingerprint",
+      headHashHint:
+        "A check code for the entire chain of records. It changes if even one record is tampered with.",
+      filterLabel: "Show record type",
+      filterAll: "All types",
+      typeLabels: {
+        genesis: "Journal opening",
+        decision: "Decision",
+        disbursement: "Disbursement",
+        governance: "Governance",
+        audit: "Audit",
+        appeal: "Appeal",
+        reputation: "Reputation",
+        note: "Note",
+      },
+      searchLabel: "Search the records",
+      searchPlaceholder: "For example: wallet, payment, or PTD-0075",
+      showing: "Records shown:",
+      nothingFound: "Nothing matched your search. Try different words.",
+      hashLabel: "fingerprint",
+      viewRecord: "View the full record →",
+      howTitle: "How to check it yourself",
+      how: [
+        "The whole journal is open: each record is a separate file in the shared repository, and the link goes straight to it.",
+        "Anyone can recompute the fingerprints and confirm the chain is intact — there is an open verification tool in the repository for this.",
+        "Until the contracts run on a test network, important fingerprints will also be anchored on the blockchain — then tampering becomes impossible to hide at all.",
+      ],
+      verifyLink: "Open journal and verification tool (repository)",
     },
   },
 };

@@ -28,9 +28,18 @@ same code can run as a server by turning off static export.
   address and network, and can disconnect. No money moves when connecting; if a
   main network with real money is selected, the screen honestly warns that the
   fund works only on a test network.
+- **Apply for help** (`/apply/`) — a calm, anonymous form ordered by need
+  severity, with a required direct-spend field (the fund pays the need directly).
+  Until the contracts run on a test network, it builds a verifiable application
+  draft right in the browser (copy/save) — nothing is sent outside.
+- **Open record** (`/journal/`) — a list of all the fund's decisions, newest
+  first, with a filter by record type and a search. Tamper protection is
+  explained in plain words (records linked by fingerprints), the overall journal
+  fingerprint is shown, and each record links to its full file in the repository.
+  The data travels with the platform as a snapshot of the open registry
+  (`lib/journal-data.json`) — nothing is loaded from outside.
 
-Next in line: apply for help → open record → voting → treasury window → identity
-check.
+Next in line: voting → treasury window → identity check.
 
 ## Transparency rails (followed literally)
 
@@ -76,8 +85,11 @@ the showcase site [`web/`](../web/) to the platform.
 platform/
   app/            screens and the shared shell (layout, globals.css)
     wallet/       the "Connect a wallet" screen
+    apply/        the "Apply for help" screen
+    journal/      the "Open record" screen
   components/     shared UI parts (header, footer, language/theme provider)
-  lib/            bilingual texts (i18n) and the blockchain layer (wallet.ts)
+  lib/            bilingual texts (i18n) and data layers (wallet.ts, application.ts,
+                  journal.ts) + a snapshot of the registry (journal-data.json)
   next.config.mjs build settings (static export)
   package.json    dependencies (exact versions)
 ```
