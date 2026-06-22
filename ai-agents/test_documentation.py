@@ -263,6 +263,54 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # 14b. Мягкая проверка симметрии глоссария: RU и EN разошлись по числу статей
+    #      → glossary-symmetry ПРЕДУПРЕЖДАЕТ, но НЕ роняет вердикт.
+    asym = dict(GOOD_FILES)
+    asym["docs/GLOSSARY.md"] = (
+        "[Русский] · [English](en/GLOSSARY.md)\n\n# Глоссарий\n\n"
+        "**Документация (docs).**\nТо, что лежит в каталоге docs.\n\n"
+        "**Реестр (registry).**\nЖурнал решений в каталоге governance.\n"  # 2 статьи
+    )
+    asym["docs/en/GLOSSARY.md"] = (
+        "[Русский](../GLOSSARY.md) · [English]\n\n# Glossary\n\n"
+        "**Documentation (docs).**\nWhat lives under docs.\n"  # 1 статья — забыли перенести
+    )
+    print("\n[мягкая проверка: RU/EN глоссарии разошлись по объёму → warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, asym)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("glossary-symmetry == warn при разном числе статей",
+              status_of(report, "glossary-symmetry") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+        check("проверка помечена soft", _is_soft(report, "glossary-symmetry"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 14c. Симметричные глоссарии (равное число статей) → glossary-symmetry pass.
+    sym = dict(GOOD_FILES)
+    sym["docs/GLOSSARY.md"] = (
+        "[Русский] · [English](en/GLOSSARY.md)\n\n# Глоссарий\n\n"
+        "**Документация (docs).**\nТо, что лежит в каталоге docs.\n\n"
+        "**Реестр (registry).**\nЖурнал решений в каталоге governance.\n"
+    )
+    sym["docs/en/GLOSSARY.md"] = (
+        "[Русский](../GLOSSARY.md) · [English]\n\n# Glossary\n\n"
+        "**Documentation (docs).**\nWhat lives under docs.\n\n"
+        "**Registry.**\nThe decisions log under governance.\n"
+    )
+    print("\n[мягкая проверка: симметричные глоссарии (равно статей) не предупреждают]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, sym)
+        code, report = run_agent(tmp)
+        check("glossary-symmetry == pass для равного числа статей",
+              status_of(report, "glossary-symmetry") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     # 15. Мягкая проверка якорей: ссылка на несуществующий раздел того же файла
     #     → anchor-integrity ПРЕДУПРЕЖДАЕТ, но НЕ роняет вердикт.
     broken_anchor = replace(

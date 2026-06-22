@@ -30,6 +30,9 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • glossary-no-dead  → у каждой статьи глоссария термин реально используется . ст. 3/6
     (МЯГКАЯ, обратная к coverage: предупреждает, если статья есть, а сам термин
      нигде в документах не встречается — глоссарий «оброс» лишним; PTD-0040)
+  • glossary-symmetry → число статей в RU-глоссарии и EN-зеркале совпадает ..... ст. 3/6
+    (МЯГКАЯ: предупреждает, если глоссарии разъехались по объёму — статью добавили
+     в один язык, а в зеркало перенести забыли; PTD-0040)
 
 Правило пар (выводится из пути, а не зашито пофайлово):
   docs/NAME.md            ↔ docs/en/NAME.md
@@ -613,6 +616,35 @@ def check_glossary_no_dead(root, existing, corpus_docs):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_glossary_symmetry(root, existing):
+    """МЯГКАЯ проверка: число статей в RU-глоссарии и EN-зеркале совпадает.
+
+    Глоссарий ведётся параллельно на двух языках (RU↔EN). Если в одном языке статью
+    добавили, а в зеркало перенести забыли — глоссарии «разъезжаются» по объёму, и
+    одна из аудиторий молча теряет термин. Эта проверка сравнивает КОЛИЧЕСТВО статей
+    (полностью-жирные строки-заголовки, как их видит `glossary_article_headings`) в
+    `docs/GLOSSARY.md` и `docs/en/GLOSSARY.md`. Расхождение — мягкое предупреждение,
+    не блок: счёт статей — грубый индикатор (термин может законно объединять два
+    написания в один заголовок), поэтому проверка лишь сигналит «глоссарии разошлись
+    по объёму», а вердикт и пульс не роняет (ст. 3/6 — понятность/проверяемость,
+    PTD-0040). Если хотя бы одного из двух глоссариев нет (мини-репозиторий в
+    тесте) — сравнивать нечего → pass.
+    """
+    if GLOSSARY_RU not in existing or GLOSSARY_EN not in existing:
+        return "pass", []
+    ru_n = len(glossary_article_headings(read_text(root, GLOSSARY_RU)))
+    en_n = len(glossary_article_headings(read_text(root, GLOSSARY_EN)))
+    if ru_n == en_n:
+        return "pass", []
+    more, less = (GLOSSARY_RU, GLOSSARY_EN) if ru_n > en_n else (GLOSSARY_EN, GLOSSARY_RU)
+    return "warn", [{
+        "record": less,
+        "problem": (f"глоссарии разошлись по объёму: статей RU={ru_n}, EN={en_n} "
+                    f"(в «{more}» больше на {abs(ru_n - en_n)}) — перенос термина в "
+                    "зеркало мог потеряться, одна из аудиторий не видит статью"),
+    }]
+
+
 def check_constitutional_prohibitions(root, public_texts):
     """МЯГКАЯ проверка: публичные тексты не дают запрещённых обещаний.
 
@@ -688,6 +720,13 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "glossary-symmetry",
+        "title": "Число статей в RU-глоссарии и EN-зеркале совпадает",
+        "guards": "ст. 3/6 — понятность/объяснимость (PTD-0040); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "symmetry",
+        "soft": True,
+    },
+    {
         "key": "constitutional-prohibitions",
         "title": "Публичные тексты не дают запрещённых обещаний (доход/инвестиция/пирамида/рефералы)",
         "guards": "ст. 3/6 + PRINCIPLES.md «Конституционные запреты» для публичных текстов; МЯГКАЯ — предупреждает, не блокирует",
@@ -712,6 +751,7 @@ def run(root):
     # Корпус для «мёртвых статей» — публичные доки минус сами глоссарии.
     corpus_docs = [p for p in public_docs if p not in (GLOSSARY_RU, GLOSSARY_EN)]
     nodead_status, nodead_v = check_glossary_no_dead(root, existing, corpus_docs)
+    sym_status, sym_v = check_glossary_symmetry(root, existing)
     # Публичные человеко-видимые тексты = двуязычные .md + витрина web/*.html.
     public_texts = public_docs + git_tracked_web_html(root)
     prohib_status, prohib_v = check_constitutional_prohibitions(root, public_texts)
@@ -723,6 +763,7 @@ def run(root):
         "anchors": (anchors_status, anchors_v),
         "coverage": (cov_status, cov_v),
         "nodead": (nodead_status, nodead_v),
+        "symmetry": (sym_status, sym_v),
         "prohibitions": (prohib_status, prohib_v),
     }
 
