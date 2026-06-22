@@ -78,7 +78,7 @@ export default function TreasuryPage() {
         </p>
         <p className="field-hint">{tr.balanceHint}</p>
         <p className="field-hint">
-          {tr.asOfLabel}: {s.asOf} · {t.wallet.network}: {tr.unit} (testnet)
+          {tr.asOfLabel}: {s.asOf} · {t.wallet.network}: testnet · {tr.unit}
         </p>
 
         {/* Состав всей казны одной понятной полоской */}
