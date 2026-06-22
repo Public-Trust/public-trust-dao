@@ -1,0 +1,40 @@
+name: Audit AI-агент (целостность governance-слоя)
+
+# Этап 6. Audit-агент — служебный модуль (Конституция, ст. 9): на каждый push/PR
+# одной командой проверяет целостность всего governance-слоя (реестр hash-chain,
+# IPFS-манифест, конфиги Safe/Snapshot) и связывает каждую проверку со статьёй
+# конституции, которую она защищает. Нарушение целостности/рельс валит сборку.
+# Read-only: агент ничего не двигает и ничем не владеет.
+on:
+  push:
+    paths:
+      - "ai-agents/**"
+      - "scripts/registry.py"
+      - "scripts/ipfs_manifest.py"
+      - "scripts/safe_config.py"
+      - "scripts/snapshot_config.py"
+      - "governance/**"
+      - ".github/workflows/ai-agents.yml"
+  pull_request:
+    paths:
+      - "ai-agents/**"
+      - "scripts/registry.py"
+      - "scripts/ipfs_manifest.py"
+      - "scripts/safe_config.py"
+      - "scripts/snapshot_config.py"
+      - "governance/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Прогнать Audit-агента (governance-целостность)
+        run: python3 ai-agents/audit_agent.py

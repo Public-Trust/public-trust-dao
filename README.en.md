@@ -40,7 +40,10 @@ No one owns the project. The founder is an ordinary participant. The project bel
     blueprint (testnet, no real money/keys) + a rail validator.
   - [`governance/snapshot/`](governance/snapshot/) — off-chain Snapshot voting
     blueprint (one person = one vote, not plutocracy) + a rail validator.
-- `ai-agents/` — AI modules serving the mission (they hold no funds and have no power).
+- [`ai-agents/`](ai-agents/) — AI modules serving the mission (they hold no funds and
+  have no power; Art. 9). Stage 6, scaffold: the **Audit agent**
+  [`audit_agent.py`](ai-agents/audit_agent.py) — one command checks the integrity of
+  the whole governance layer (registry/IPFS/Safe/Snapshot), tied to constitution articles.
 
 ## Principles
 openness · transparency · immutability of records · no owner · distributed governance · verifiability · open source · human dignity · mutual aid · fairness · protection against abuse.

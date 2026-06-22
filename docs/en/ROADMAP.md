@@ -121,8 +121,23 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     addresses to be agreed with the operator (keys via `contracts/.env`).
 - [ ] **Stage 6 — AI agents (skeleton):** in `ai-agents/` describe and set up the
   Guardian/Audit/Fairness/Reputation/Housing/Governance/Mediator/Documentation
-  modules as helper scripts for upholding the constitution (start with one — e.g.
-  Audit, running `registry.py verify` + `ipfs_manifest.py verify`).
+  modules as helper scripts for upholding the constitution (service modules, not
+  organs of power — Art. 9; read-only with respect to funds, a finding is a signal,
+  not an action).
+  - [x] Module 1/8 (session 24): the [`ai-agents/`](../../ai-agents/) scaffold
+    (README RU/EN with the "AI serves, does not rule" principle and a table of the 8
+    agents) + the first working agent **Audit**
+    [`audit_agent.py`](../../ai-agents/audit_agent.py) — combines the 4 rail
+    validators (registry/ipfs/safe/snapshot) into a single audit run, tying each check
+    to the constitution article it protects, with a `--with-contracts` option and
+    human-readable / `--json` output; CI
+    [`ai-agents.yml`](../../.github/workflows/ai-agents.yml). "To green": 4/4 base,
+    5/5 with contracts (54 tests). `PTD-0021`. Also realizes the "one governance
+    validator in CI" idea. TESTNET-ONLY.
+  - [ ] Module 2/8: **Guardian** — safety rails (no keys/secrets/mainnet/real funds
+    in the repo) as an explicit standalone agent.
+  - [ ] Modules 3–8: Fairness / Reputation / Housing / Governance / Mediator /
+    Documentation — one at a time, "to green".
 
 ### P1 — materials and infrastructure (partly from INBOX)
 
@@ -173,19 +188,42 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] Snapshot proposal templates (RU/EN) for each `proposal_type` in
   `governance/snapshot/space.json` — a single format (context / what is proposed /
   link to the constitution / vote options) so proposals are comparable and verifiable.
-- [ ] One governance validator in CI: a single script runs `registry.py verify`
+- [x] One governance validator in CI: a single script runs `registry.py verify`
   + `ipfs_manifest.py verify` + `safe_config.py verify` + `snapshot_config.py verify`
   in one command (a convenient green/red for the whole governance layer).
+  → Realized by the Audit agent (session 24): [`ai-agents/audit_agent.py`](../../ai-agents/audit_agent.py), `PTD-0021`.
 - [ ] Test invariant "no treasury money bypasses the registry": check that every
   on-chain `Released(registryRef)` event has a record in `governance/registry/`
   (and vice versa) — tie the contract to the decision registry (proposed session 19).
 - [ ] A deploy script `contracts/scripts/deploy.js` (Hardhat) wiring the Safe
   multisig addresses as the `executor` — a "ready-to-press" testnet stub (proposed session 19).
+- [ ] Test invariant for the Audit agent: feed it a "broken" governance artifact
+  (broken chain / manifest drift) and check it returns "red" — so the audit itself is
+  provably working, not "green by default" (session 24).
+- [ ] Guardian agent: an explicit repo-wide safety-rail scanner (no 64-hex keys /
+  `mnemonic` / `seed`, no mainnet chain_id, `.env` not staged) — reuse and generalize
+  the checks from `safe_config.py`/`snapshot_config.py` (session 24).
+- [ ] Documentation agent: an RU↔EN bilingual linter (an RU doc ↔ its EN mirror
+  changed together) + relative-link integrity — also closes the P2 item "automatic
+  bilingual check in CI" (session 24).
 
 ---
 
 ## Done
 
+- **PTD-0021 (session 24):** Stage 6 (AI agents), module 1/8 — **the
+  [`ai-agents/`](../../ai-agents/) scaffold + the first working agent Audit**. The
+  README (RU/EN) fixes the Art. 9 principle "AI serves, does not rule" and the
+  boundaries for all agents (read-only with respect to funds, a finding is a signal,
+  not an action), plus a table of the eight agents.
+  [`audit_agent.py`](../../ai-agents/audit_agent.py) combines the four rail validators
+  (`registry`/`ipfs`/`safe`/`snapshot`) into a single audit run and ties each check to
+  the constitution article it protects (Art. 3/2/4); the `--with-contracts` option adds
+  the contract tests (Art. 4/7); output is human-readable and `--json`; exit code 0/1.
+  CI [`ai-agents.yml`](../../.github/workflows/ai-agents.yml) on push/PR. "To green":
+  4/4 base, 5/5 with contracts (54 tests). Also realizes the "one governance validator
+  in CI" idea. On its first run the agent caught a real IPFS-manifest drift (fixed).
+  TESTNET-ONLY. Next — module 2/8 (Guardian) and the rest.
 - **PTD-0020 (session 23):** Stage 5 (Smart contracts), part 3c — **wiring the whole
   on-chain contour**. [`contracts/scripts/deploy.js`](../../contracts/scripts/deploy.js)
   deploys five contracts and links them into a single mechanism
@@ -287,3 +325,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Treasury dashboard / request templates / changelog / reputation | agent | 8 |
 | Landing page in web / media kit / press page | agent | 9 |
 | Snapshot proposal templates / one governance validator in CI | agent | 18 |
+| Audit test invariant / Guardian agent / Documentation agent (bilingual) | agent | 24 |
