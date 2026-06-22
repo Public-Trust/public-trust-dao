@@ -48,6 +48,13 @@ def _status(report, key):
     return None
 
 
+def _run_all(agent_scripts, test_files):
+    """Минимальный run_all.py с заданными списками AGENTS/TESTS (для проверки покрытия)."""
+    agents = "".join('    {{"script": "{}"}},\n'.format(s) for s in agent_scripts)
+    tests = "".join('    "{}",\n'.format(t) for t in test_files)
+    return "AGENTS = [\n{}]\nTESTS = [\n{}]\n".format(agents, tests)
+
+
 # --- Чистый каталог: всё зелёное -----------------------------------------
 print("чистый каталог:")
 with tempfile.TemporaryDirectory() as d:
@@ -55,11 +62,60 @@ with tempfile.TemporaryDirectory() as d:
     _write(d, "test_foo.py")
     _write(d, "solidity_scan.py", "def strip_solidity_comments(s):\n    return s\n")
     _write(d, "test_solidity_scan.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py", "test_solidity_scan.py"]))
     rep = structure_guard.run(d)
     check("вердикт зелёный", rep["verdict"] == "green")
-    check("все 3 проверки прошли", rep["passed"] == rep["total"] == 3)
+    check("все 4 проверки прошли", rep["passed"] == rep["total"] == 4)
     check("агент с импортом из solidity_scan НЕ краснит sol-проверку",
           _status(rep, "sol-parsing-centralized") == "pass")
+    check("run_all покрывает агента и тесты → run-all-covers-all зелёная",
+          _status(rep, "run-all-covers-all") == "pass")
+
+# --- Агент не включён в AGENTS run_all: красное на run-all-covers-all -----
+print("агент в обход run_all:")
+with tempfile.TemporaryDirectory() as d:
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    # run_all НЕ упоминает foo_agent.py — агент прошёл бы в обход общего прогона.
+    _write(d, "run_all.py", _run_all([], ["test_foo.py"]))
+    rep = structure_guard.run(d)
+    check("вердикт красный", rep["verdict"] == "red")
+    check("run-all-covers-all провалена (агент не покрыт)",
+          _status(rep, "run-all-covers-all") == "fail")
+
+# --- Тест не включён в TESTS run_all: красное на run-all-covers-all -------
+print("тест в обход run_all:")
+with tempfile.TemporaryDirectory() as d:
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    # run_all покрывает агента, но не его тест-инвариант.
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], []))
+    rep = structure_guard.run(d)
+    check("вердикт красный", rep["verdict"] == "red")
+    check("run-all-covers-all провалена (тест не покрыт)",
+          _status(rep, "run-all-covers-all") == "fail")
+
+# --- Висячая ссылка run_all на исчезнувший файл: красное ------------------
+print("висячая ссылка run_all:")
+with tempfile.TemporaryDirectory() as d:
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    # run_all ссылается на удалённый ghost_agent.py / test_ghost.py.
+    _write(d, "run_all.py", _run_all(["foo_agent.py", "ghost_agent.py"],
+                                     ["test_foo.py", "test_ghost.py"]))
+    rep = structure_guard.run(d)
+    check("вердикт красный", rep["verdict"] == "red")
+    check("run-all-covers-all провалена (висячая ссылка)",
+          _status(rep, "run-all-covers-all") == "fail")
+
+# --- Отсутствует run_all.py: проверка неприменима, не краснит ложно -------
+print("нет run_all.py — проверка неприменима:")
+with tempfile.TemporaryDirectory() as d:
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    rep = structure_guard.run(d)
+    check("без run_all.py run-all-covers-all не краснит (нечего покрывать)",
+          _status(rep, "run-all-covers-all") == "pass")
 
 # --- Агент без парного теста: красное на agents-have-invariants ----------
 print("агент без теста:")
@@ -118,7 +174,7 @@ with tempfile.TemporaryDirectory() as d:
 print("настоящий каталог ai-agents/:")
 real = structure_guard.run()
 check("реальный репозиторий: вердикт зелёный", real["verdict"] == "green")
-check("реальный репозиторий: 3/3 проверок прошли", real["passed"] == real["total"] == 3)
+check("реальный репозиторий: 4/4 проверок прошли", real["passed"] == real["total"] == 4)
 
 # --- Итог ----------------------------------------------------------------
 print()

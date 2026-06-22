@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 49,
-  "head_hash": "c33ad8db3c9b5a15fa789a22a74a735afcc9258798c408a460a304a651ad7d64",
+  "count": 50,
+  "head_hash": "02b9070412f4bebfa6deede1946531a8d3d815d3ed0021536b29a7dcf80e7574",
   "entries": [
     {
       "seq": 0,
@@ -444,6 +444,15 @@
       "summary": "P3 (стандарты качества Этапа 6) — страж структуры ai-agents/structure_guard.py (+ тест-инвариант): у каждого *_agent.py есть парный test_*.py; нет осиротевших тестов; разбор .sol не копируется вне solidity_scan.py. Включён в run_all --with-tests → регресс валит CI. Закрывает две идеи роадмапа.",
       "hash": "c33ad8db3c9b5a15fa789a22a74a735afcc9258798c408a460a304a651ad7d64",
       "file": "records/0048-decision.json"
+    },
+    {
+      "seq": 49,
+      "id": "PTD-0049",
+      "type": "decision",
+      "timestamp": "2026-06-22T13:20:00Z",
+      "summary": "P3 (стандарты качества Этапа 6) — страж структуры расширен проверкой run-all-covers-all: ни один *_agent.py/test_*.py не заводится в обход общего прогона run_all (CI честен). Заодно закрыт пробел: test_run_all.py добавлен в TESTS (мета-агент не прогонял свой тест-инвариант). Тест 17→25, тесты run_all 10→11.",
+      "hash": "02b9070412f4bebfa6deede1946531a8d3d815d3ed0021536b29a7dcf80e7574",
+      "file": "records/0049-decision.json"
     }
   ]
 }

@@ -406,7 +406,7 @@ two steps instead of fifteen.
 
 ## Structure-Guard — keeps the directory's quality standards
 
-By Stage 6 we set two quality standards, but until now nothing guarded them
+By Stage 6 we set quality standards, but until now nothing guarded them
 automatically — they could be broken by accident and go unnoticed.
 `structure_guard.py` turns them into a machine check (Art. 9 — a service module
 that fixes nothing):
@@ -416,6 +416,7 @@ that fixes nothing):
 | `agents-have-invariants` | Every `*_agent.py` has a paired `test_<name>.py` — an agent proves it catches "red" rather than being "green by default" (this is the gap that was closed for Audit in session 33). |
 | `no-orphan-tests` | Every `test_*.py` has a source module (`<name>_agent.py` or `<name>.py`) — a test file does not linger after a rename/removal. |
 | `sol-parsing-centralized` | No `*_agent.py` keeps a local copy of the Solidity-parsing helpers (`strip_solidity_comments`/`function_body`/…) — they are imported from the shared [`solidity_scan.py`](solidity_scan.py), not duplicated (or the copies silently drift). |
+| `run-all-covers-all` | Every `*_agent.py` is in the `AGENTS` list of the meta-agent [`run_all.py`](run_all.py), and every `test_*.py` is in the `TESTS` list (and vice versa: no dangling references) — a new agent or test cannot be added bypassing the shared CI run. |
 
 ```bash
 python3 ai-agents/structure_guard.py          # human-readable report
@@ -424,9 +425,11 @@ python3 ai-agents/structure_guard.py --json    # machine-readable report
 
 The **test invariant** [`test_structure_guard.py`](test_structure_guard.py) proves
 on poisoned temporary directories (an agent without a test; an orphan test; an
-agent with a local copy of `.sol` parsing) that the guard really turns red, while a
-clean directory stays green (17/17). It is included in `run_all --with-tests`, so
-adding an agent without a test, or a copy of `.sol` parsing, turns CI red.
+agent with a local copy of `.sol` parsing; an agent/test bypassing `run_all`; a
+dangling `run_all` reference) that the guard really turns red, while a clean
+directory stays green (25/25). It is included in `run_all --with-tests`, so adding
+an agent without a test, a copy of `.sol` parsing, or an agent/test that bypasses
+the shared CI run turns it red.
 
 ## Rails (for all agents in this directory)
 

@@ -77,5 +77,5 @@ jobs:
       # видно в выводе run_all; для отладки одного агента — python3 ai-agents/<agent>.py.)
       - name: Тест-инвариант мета-агента run_all (доказать, что красное сводится в красное)
         run: python3 ai-agents/test_run_all.py
-      - name: Прогнать всех агентов через run_all (8 агентов + 10 тест-инвариантов)
+      - name: Прогнать всех агентов через run_all (8 агентов + 11 тест-инвариантов)
         run: python3 ai-agents/run_all.py --with-tests

@@ -62,8 +62,10 @@ AGENTS = [
 
 # Тест-инварианты (доказывают, что красное ловится). Покрыты все восемь агентов,
 # общий помощник разбора Solidity (`solidity_scan.py`), на который опираются
-# контрактные агенты Reputation/Housing, и страж структуры каталога
-# (`structure_guard.py`): «у каждого агента есть тест» + «разбор .sol не копируется».
+# контрактные агенты Reputation/Housing, страж структуры каталога
+# (`structure_guard.py`) и сам этот мета-агент (`run_all.py`): «у каждого агента
+# есть тест» + «разбор .sol не копируется» + «ничто не проходит в обход прогона».
+# Полнота этого списка стережётся проверкой `run-all-covers-all` в structure_guard.
 TESTS = [
     "test_audit.py",
     "test_guardian.py",
@@ -75,6 +77,7 @@ TESTS = [
     "test_mediator.py",
     "test_solidity_scan.py",
     "test_structure_guard.py",
+    "test_run_all.py",
 ]
 
 

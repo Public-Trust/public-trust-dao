@@ -358,11 +358,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   module, both agents import it; test invariant
   [`test_solidity_scan.py`](../../ai-agents/test_solidity_scan.py) (14/14), wired into
   `run_all` (tests 9/9). Agent behavior unchanged (Reputation 5/5, Housing 8/8).
-- [ ] **Structure-guard: check that `run_all` covers everyone** — extend
+- [x] **Structure-guard: check that `run_all` covers everyone** — extend
   [`structure_guard.py`](../../ai-agents/structure_guard.py) with a check that the
   `TESTS` list in `run_all.py` actually includes every existing `test_*.py` (and that
   each `AGENTS` key has an agent) — so a new agent/test cannot bypass the shared CI run
   (follow-up to the guard, session 51).
+  → Done (session 52) via the `run-all-covers-all` check of
+  [`structure_guard.py`](../../ai-agents/structure_guard.py), `PTD-0049`. Also closed a
+  real gap: `test_run_all.py` was added to `TESTS` (the meta-agent wasn't running its
+  own test invariant; tests 10→11).
+- [ ] **Structure-guard: CI actually calls `run_all`** — add a check that
+  `.github/workflows/ai-agents.yml` really runs `run_all.py --with-tests` (not separate
+  agent commands that bypass it) — so coverage can't be bypassed at the CI-workflow
+  level either, not just the `AGENTS`/`TESTS` lists (follow-up to `run-all-covers-all`,
+  session 52).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -424,6 +433,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 ---
 
 ## Done
+
+- **PTD-0049 (session 52):** P3 (Stage-6 quality standards) — **structure guard
+  extended with the `run-all-covers-all` check** in
+  [`structure_guard.py`](../../ai-agents/structure_guard.py) (test invariant 17→25).
+  A direct follow-up to PTD-0048: a fourth structural standard — every `*_agent.py`
+  must be in the `AGENTS` list of the meta-agent
+  [`run_all.py`](../../ai-agents/run_all.py), and every `test_*.py` in the `TESTS` list
+  (and vice versa: no dangling references to vanished files). So a new agent/test
+  cannot be added **bypassing the shared CI run** (`run_all --with-tests`) — otherwise
+  it would quietly go unchecked. The check parses `run_all.py` statically (as text, not
+  by executing it). **It also closed a real gap:** `test_run_all.py` existed but was NOT
+  in `TESTS` — the meta-agent did not run its own test invariant; now added (tests
+  10→11). READMEs RU/EN and the CI step updated. On the real repo the guard is 4/4
+  green; `run_all --with-tests`: agents 8/8, tests 11/11. `PTD-0049`. TESTNET-ONLY.
 
 - **PTD-0048 (session 51):** P3 (Stage-6 quality standards) — **structure guard**
   [`ai-agents/structure_guard.py`](../../ai-agents/structure_guard.py) (+ test invariant
