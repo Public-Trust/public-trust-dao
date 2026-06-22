@@ -144,9 +144,26 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     as a snapshot of the registry (`platform/lib/journal-data.json` via
     `scripts/sync_journal.py`, rebuilt by CI before the build) — nothing loaded from
     outside; the home card became a working link. `PTD-0078`. TESTNET-ONLY.
-  - [ ] "Voting" screen (one person = one vote, per `GOVERNANCE.md`).
-  - [ ] "Treasury window" screen (read-only test treasury state).
-  - [ ] "Identity check" screen by levels (per `IDENTITY-VERIFICATION.md`).
+  - [x] "Voting" screen (session 82): `platform/app/voting/` + data layer
+    `platform/lib/voting.ts` — one person, one vote (weight always 1), a vote cannot
+    be bought or sold (`GOVERNANCE.md`); demonstration proposals with clear tally
+    bars, the vote is collected as a verifiable draft ballot in the browser and kept
+    only with the person; the home card became a working link. `PTD-0079`. TESTNET-ONLY.
+  - [x] "Treasury window" screen (session 83): `platform/app/treasury/` + data layer
+    `platform/lib/treasury.ts` — read-only state of the shared treasury in plain
+    words (total / untouchable reserve / direct help ≥70% / thank-you under a cap),
+    a composition bar, a provisioning level, the latest movements; nothing can be
+    spent, data is a demonstration; the home card became a working link. `PTD-0080`.
+    TESTNET-ONLY.
+  - [x] "Identity check" screen (session 84): `platform/app/identity/` + data layer
+    `platform/lib/identity.ts` — in plain words, how the fund makes sure there is one
+    real, living person behind a participant, without surveillance and without
+    collecting faces; levels by action (browse L0 / apply L1 / vote and help L2) and
+    a choice of method (circle of acquaintances / passport of signals / liveness at an
+    external service / vouching), the boundary "uniqueness is not power," a verifiable
+    draft note in the browser with no personal data; the home card became a working
+    link. `PTD-0081`. TESTNET-ONLY.
+    **This completes the operator-planned series of value screens (INBOX #34).**
   - [ ] Wire up platform publishing to GitHub Pages during migration from `web/`.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not

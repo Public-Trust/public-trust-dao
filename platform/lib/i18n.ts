@@ -6,6 +6,11 @@
 
 import type { ProposalStatus, VoteChoice } from "@/lib/voting";
 import type { MovementKind, TreasuryCoverage } from "@/lib/treasury";
+import type {
+  IdentityAction,
+  IdentityLevel,
+  IdentityMethod,
+} from "@/lib/identity";
 
 export type Lang = "ru" | "en";
 
@@ -153,6 +158,41 @@ export type TreasuryDict = {
   verifyLink: string;
 };
 
+export type IdentityDict = {
+  back: string;
+  title: string;
+  lead: string;
+  howTitle: string;
+  how: string[];
+  levelTitle: string;
+  levelHint: string;
+  levelPrompt: string;
+  actionLabels: Record<IdentityAction, string>;
+  levelLabels: Record<IdentityLevel, string>;
+  levelMeaning: Record<IdentityLevel, string>;
+  methodTitle: string;
+  methodHint: string;
+  methodLabels: Record<IdentityMethod, string>;
+  methodText: Record<IdentityMethod, string>;
+  biometryYes: string;
+  biometryNo: string;
+  boundaryTitle: string;
+  boundaryText: string;
+  backupTitle: string;
+  backupText: string;
+  noteTitle: string;
+  demoNote: string;
+  notePrompt: string;
+  noteLead: string;
+  copy: string;
+  copied: string;
+  download: string;
+  startOver: string;
+  privacyTitle: string;
+  privacy: string[];
+  verifyLink: string;
+};
+
 export type Dict = {
   htmlLang: string;
   brand: string;
@@ -182,6 +222,7 @@ export type Dict = {
   journal: JournalDict;
   voting: VotingDict;
   treasury: TreasuryDict;
+  identity: IdentityDict;
 };
 
 export const DICT: Record<Lang, Dict> = {
@@ -235,6 +276,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Проверка личности",
         text: "Подтверждение «живой и один человек» без слежки и без сбора лиц в базу.",
+        href: "/identity/",
       },
     ],
     transparencyTitle: "Честно и без слежки",
@@ -493,6 +535,74 @@ export const DICT: Record<Lang, Dict> = {
       ],
       verifyLink: "Как казна делит средства (документ REWARDS-MODEL)",
     },
+    identity: {
+      back: "← На главную",
+      title: "Проверка личности",
+      lead: "Здесь фонд убеждается, что за участником стоит один настоящий живой человек — чтобы один человек не завёл десять аккаунтов, не накрутил голоса и не получил помощь много раз. И при этом фонд не следит за людьми и не собирает базу лиц.",
+      howTitle: "Главное — простыми словами",
+      how: [
+        "Один настоящий человек — один аккаунт. Но фонд проверяет человека, а не копит на него досье.",
+        "Фонд не хранит лица людей. Если для проверки нужно сравнить лицо — это делает отдельный сервис, а фонду приходит только ответ «да, живой и один» или «нет». Само фото у фонда не остаётся.",
+        "В открытый журнал попадает только факт «проверен как уникальный человек» — без имени, лица и адреса. Человек доказывает «я настоящий и один», не раскрывая, кто он.",
+        "Способов проверки несколько, человек выбирает сам — в том числе такие, где лицо вообще не нужно.",
+        "Всегда есть запасной путь без камеры и смартфона: человека подтверждает поручительство живых людей.",
+        "Чем больше на кону общих денег и доверия, тем строже проверка. Просто смотреть сайт — без всякой проверки.",
+      ],
+      levelTitle: "Сколько проверки нужно — зависит от того, что вы делаете",
+      levelHint: "Выберите действие — и увидите, какая проверка для него нужна. Чем безобиднее действие, тем меньше барьеров.",
+      levelPrompt: "Выберите действие выше, чтобы увидеть нужный уровень проверки.",
+      actionLabels: {
+        read: "Смотреть сайт и журнал",
+        apply: "Подать заявку на помощь",
+        vote: "Голосовать",
+        receive: "Получать помощь или выплату",
+      },
+      levelLabels: {
+        L0: "Без проверки",
+        L1: "Лёгкая проверка «живой человек»",
+        L2: "Строгая проверка уникальности",
+      },
+      levelMeaning: {
+        L0: "Смотреть сайт, открытый журнал и состояние казны можно вообще без всякой проверки — это просто чтение.",
+        L1: "Чтобы подать заявку, достаточно подтвердить, что вы живой человек, — без раскрытия личности.",
+        L2: "Чтобы голосовать или получать помощь и выплаты, нужна сильная проверка «настоящий и только один» — здесь на кону общие деньги и доверие.",
+      },
+      methodTitle: "Каким способом проверяться — выбираете сами",
+      methodHint: "Фонд не делает свою проверку лиц, а принимает несколько уже готовых способов. Выберите любой удобный — это и про удобство, и про то, чтобы не зависеть от одного поставщика.",
+      methodLabels: {
+        social: "Через круг знакомых",
+        passport: "Паспорт из множества признаков",
+        liveness: "Проверка «живости» у внешнего сервиса",
+        vouch: "Поручительство живых людей",
+      },
+      methodText: {
+        social: "Человека подтверждают уже проверенные люди, которые его знают. Лицо и документы не нужны вовсе.",
+        passport: "Человек собирает несколько независимых подтверждений, что он не бот, — и из них складывается оценка «скорее всего, живой уникальный человек». Биометрия не обязательна.",
+        liveness: "Если человек сам выбрал этот путь, проверку «живости» по лицу делает внешний сервис и возвращает фонду только ответ да/нет. Фото у фонда не оседает.",
+        vouch: "Запасной путь без камеры и смартфона: несколько проверенных участников или хранителей лично подтверждают, что человек реальный и один. Их репутация — на кону.",
+      },
+      biometryYes: "Лицо — у внешнего сервиса",
+      biometryNo: "Без биометрии",
+      boundaryTitle: "Важная граница: уникальность — это не власть",
+      boundaryText: "Проверка подтверждает только, что человек настоящий и один. Она не даёт доступа к деньгам и ничем не распоряжается. Деньги двигаются лишь по голосованию и через общий кошелёк (3 из 5 хранителей). Это два разных слоя, и они не смешиваются.",
+      backupTitle: "Запасной путь — всегда есть",
+      backupText: "Если у человека нет смартфона, интернета, документов или он просто не хочет показывать лицо — его всё равно можно подтвердить через поручительство живых людей. Без этого фонд отрезал бы как раз самых уязвимых, кому помощь нужна больше всех, — так нельзя.",
+      noteTitle: "Ваша памятка проверки",
+      demoNote: "Пока проверка не запущена в тестовой сети, экран работает как понятная заготовка: выбор остаётся проверяемой памяткой прямо в вашем браузере. Ничего не уходит наружу, лица и личные данные не собираются и не попадают в блокчейн.",
+      notePrompt: "Выберите действие и способ выше — и здесь появится памятка, которую можно скопировать или сохранить.",
+      noteLead: "Готовая памятка. В ней нет ни имени, ни лица, ни адреса — только факт «какое действие, какой уровень, какой способ». Можно скопировать или сохранить файлом.",
+      copy: "Скопировать памятку",
+      copied: "Скопировано",
+      download: "Сохранить файлом",
+      startOver: "Начать заново",
+      privacyTitle: "Что важно помнить",
+      privacy: [
+        "Фонд проверяет человека, но не собирает базу лиц — лицо нельзя сменить, как пароль, и это особо охраняемые данные.",
+        "Список допустимых способов проверки — настройка, которую сообщество меняет голосованием, если способ окажется ненадёжным или появится лучше.",
+        "Уровни строгости и сами способы — открыты и описаны в документе ниже, проверить может любой.",
+      ],
+      verifyLink: "Как устроена проверка личности (документ IDENTITY-VERIFICATION)",
+    },
   },
   en: {
     htmlLang: "en",
@@ -544,6 +654,7 @@ export const DICT: Record<Lang, Dict> = {
       {
         title: "Identity check",
         text: "Confirming 'a real, single person' without surveillance and without collecting faces into a database.",
+        href: "/identity/",
       },
     ],
     transparencyTitle: "Honest and without surveillance",
@@ -801,6 +912,74 @@ export const DICT: Record<Lang, Dict> = {
         "Every movement of funds goes into the open record and is anchored by a fingerprint — anyone can check it.",
       ],
       verifyLink: "How the treasury splits funds (REWARDS-MODEL document)",
+    },
+    identity: {
+      back: "← Home",
+      title: "Identity check",
+      lead: "Here the fund makes sure there is one real, living person behind a participant — so that one person can't open ten accounts, inflate votes, or receive help many times over. And it does so without surveilling people or collecting a database of faces.",
+      howTitle: "The main idea — in plain words",
+      how: [
+        "One real person — one account. But the fund verifies a person, it does not build a dossier on them.",
+        "The fund does not store people's faces. If a face needs to be compared, a separate service does it and returns only a 'yes, real and unique' or 'no'. The photo itself never stays with the fund.",
+        "Only the fact 'verified as a unique person' goes into the open record — no name, face, or address. A person proves 'I am real and the only one' without revealing who they are.",
+        "There are several verification methods, and the person chooses — including ones where no face is needed at all.",
+        "There is always a fallback with no camera and no smartphone: a person is confirmed by the vouching of living people.",
+        "The more shared money and trust are at stake, the stricter the check. Just browsing the site needs no check at all.",
+      ],
+      levelTitle: "How much checking is needed — depends on what you do",
+      levelHint: "Pick an action and you'll see what check it needs. The more harmless the action, the fewer barriers.",
+      levelPrompt: "Choose an action above to see the verification level it needs.",
+      actionLabels: {
+        read: "Browse the site and record",
+        apply: "Apply for help",
+        vote: "Vote",
+        receive: "Receive help or a payout",
+      },
+      levelLabels: {
+        L0: "No check",
+        L1: "Light 'a living person' check",
+        L2: "Strict uniqueness check",
+      },
+      levelMeaning: {
+        L0: "You can browse the site, the open record, and the treasury state with no check at all — it's just reading.",
+        L1: "To apply, it's enough to confirm you are a living person — without revealing your identity.",
+        L2: "To vote or to receive help and payouts, a strong 'real and the only one' check is needed — shared money and trust are at stake here.",
+      },
+      methodTitle: "Which method to use — you choose",
+      methodHint: "The fund doesn't run its own face check; it accepts several ready-made methods. Pick whichever is convenient — it's about both comfort and not depending on a single provider.",
+      methodLabels: {
+        social: "Through your circle of acquaintances",
+        passport: "A passport of many signals",
+        liveness: "A 'liveness' check by an external service",
+        vouch: "Vouching by living people",
+      },
+      methodText: {
+        social: "Already-verified people who know the person confirm them. No face and no documents are needed at all.",
+        passport: "The person gathers several independent signals that they are not a bot — and from these comes an estimate 'most likely a living, unique person'. Biometrics are not required.",
+        liveness: "If the person chooses this path, an external service does the face 'liveness' check and returns only a yes/no to the fund. The photo never stays with the fund.",
+        vouch: "A fallback with no camera or smartphone: several verified participants or guardians personally confirm that the person is real and the only one. Their reputation is at stake.",
+      },
+      biometryYes: "Face — at an external service",
+      biometryNo: "No biometrics",
+      boundaryTitle: "An important boundary: uniqueness is not power",
+      boundaryText: "The check only confirms that a person is real and the only one. It grants no access to money and directs nothing. Money moves only by a vote and through the shared wallet (3 of 5 guardians). These are two different layers, and they do not mix.",
+      backupTitle: "A fallback path always exists",
+      backupText: "If a person has no smartphone, no internet, no documents, or simply does not want to show their face — they can still be confirmed through vouching by living people. Without this, the fund would cut off precisely the most vulnerable, who need help the most — and that's not allowed.",
+      noteTitle: "Your verification note",
+      demoNote: "Until verification runs on a test network, this screen works as a clear placeholder: your choice stays as a checkable note right in your browser. Nothing leaves it, and no faces or personal data are collected or put on-chain.",
+      notePrompt: "Choose an action and a method above — and a note you can copy or save will appear here.",
+      noteLead: "Your note is ready. It carries no name, face, or address — only the fact of which action, which level, which method. You can copy it or save it as a file.",
+      copy: "Copy the note",
+      copied: "Copied",
+      download: "Save as a file",
+      startOver: "Start over",
+      privacyTitle: "Worth keeping in mind",
+      privacy: [
+        "The fund verifies a person but keeps no database of faces — a face can't be changed like a password, and it is specially protected data.",
+        "The list of accepted methods is a setting the community changes by a vote, if a method proves unreliable or a better one appears.",
+        "The strictness levels and the methods themselves are open and described in the document below — anyone can check.",
+      ],
+      verifyLink: "How identity verification works (IDENTITY-VERIFICATION document)",
     },
   },
 };

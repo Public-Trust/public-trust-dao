@@ -52,8 +52,18 @@ same code can run as a server by turning off static export.
   (incoming and targeted payments). Nothing can be spent from here; until the
   contracts run on a test network the state is a demonstration, amounts are in test
   units, and nothing is loaded from outside.
+- **Identity check** (`/identity/`) — in plain words, how the fund makes sure there
+  is one real, living person behind a participant, without surveillance and without
+  collecting faces into a database. Two layers: how much checking is needed (depends
+  on the action — browsing needs no check, applying needs a light "a living person"
+  check, voting and receiving help need a strict uniqueness check) and which method
+  to use (a circle of acquaintances with no biometrics / a passport of many signals /
+  a "liveness" check by an external service / a mandatory fallback — vouching by
+  living people). A hard boundary: "uniqueness is not power over money." Until
+  verification runs, the choice stays as a checkable note in the browser with no
+  personal data — nothing leaves it.
 
-Next in line: identity check.
+This completes the series of value screens planned by the operator (INBOX #34).
 
 ## Transparency rails (followed literally)
 
@@ -103,9 +113,10 @@ platform/
     journal/      the "Open record" screen
     voting/       the "Voting" screen
     treasury/     the "Treasury window" screen
+    identity/     the "Identity check" screen
   components/     shared UI parts (header, footer, language/theme provider)
   lib/            bilingual texts (i18n) and data layers (wallet.ts, application.ts,
-                  journal.ts, voting.ts, treasury.ts) + a snapshot of the registry (journal-data.json)
+                  journal.ts, voting.ts, treasury.ts, identity.ts) + a snapshot of the registry (journal-data.json)
   next.config.mjs build settings (static export)
   package.json    dependencies (exact versions)
 ```

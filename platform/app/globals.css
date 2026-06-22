@@ -708,6 +708,13 @@ h3 {
   color: var(--text-soft);
   font-size: 0.9rem;
 }
+.split-row-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
 .coverage-state {
   margin: 4px 0 8px;
 }
