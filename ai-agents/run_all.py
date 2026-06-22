@@ -28,8 +28,10 @@ Run-All (мета-агент) — Public Trust DAO (Этап 6, консолид
 (`structure_guard.py`) — служебный модуль качества каталога `ai-agents/`. Его
 «красное» (нарушение обязательного стандарта) валит общий вердикт наравне с
 агентами, а его МЯГКИЕ предупреждения (severity=soft: например, у шага CI нет
-человеческого имени) выводятся в сводке отдельным числом, НЕ валя сборку — чтобы
-операторская сводка их не теряла, но и не краснела из-за подсказки к читаемости.
+человеческого имени) выводятся в сводке отдельным числом И построчно (какая
+проверка, какой шаг), НЕ валя сборку — чтобы операторская сводка их не теряла,
+объясняла без отдельного запуска стража, но и не краснела из-за подсказки к
+читаемости.
 
 Флаги:
   • --with-contracts — пробросить в Audit прогон тестов смарт-контрактов (нужен Node/npm);
@@ -194,6 +196,33 @@ def run_guard():
     return result
 
 
+def guard_warning_lines(guard_result):
+    """Собирает построчные МЯГКИЕ предупреждения стража из его `checks`.
+
+    Возвращает список строк вида «[ключ-проверки] что именно» — чтобы операторская
+    сводка объясняла предупреждение без отдельного запуска `structure_guard.py`.
+    Берёт только проверки в статусе `warn` (severity=soft) и их `violations`
+    (`item`/`problem`). Пусто, если предупреждений нет, либо стража/`checks` нет."""
+    if not guard_result:
+        return []
+    lines = []
+    for c in guard_result.get("checks", []) or []:
+        if c.get("status") != "warn":
+            continue
+        key = c.get("key", "?")
+        violations = c.get("violations", []) or []
+        if not violations:
+            # Предупреждение без детализации — покажем хотя бы заголовок проверки.
+            lines.append(f"[{key}] {c.get('title', '')}".rstrip())
+            continue
+        for v in violations:
+            item = v.get("item", "?")
+            problem = v.get("problem", "")
+            detail = f"{item}: {problem}" if problem else f"{item}"
+            lines.append(f"[{key}] {detail}")
+    return lines
+
+
 def main(argv):
     parser = argparse.ArgumentParser(
         description="Мета-агент Public Trust DAO: прогнать всех восемь агентов и свести в один вердикт."
@@ -240,6 +269,7 @@ def main(argv):
         "tests_green": tests_green,
         "tests_total": len(test_results),
         "guard_warnings": guard_warnings,
+        "guard_warning_lines": guard_warning_lines(guard_result),
         "agents": agent_results,
         "tests": test_results,
         "guard": guard_result,
@@ -287,8 +317,16 @@ def main(argv):
             for line in (guard_result["output"] or "(нет вывода)").splitlines():
                 print(f"    | {line}")
         elif guard_warnings:
-            print("    | есть мягкие предупреждения (не валят сборку): подробности — "
-                  "python3 ai-agents/structure_guard.py")
+            wlines = guard_warning_lines(guard_result)
+            if wlines:
+                print("    | мягкие предупреждения (не валят сборку):")
+                for line in wlines:
+                    print(f"    |   ⚠ {line}")
+            else:
+                # Страж насчитал предупреждения, но детализации в checks нет —
+                # отсылаем к самому стражу (страховка обратной совместимости).
+                print("    | есть мягкие предупреждения (не валят сборку): подробности — "
+                      "python3 ai-agents/structure_guard.py")
 
     print("\n" + "-" * 70)
     verdict = "ЗЕЛЁНО ✓" if all_green else "КРАСНО ✗"

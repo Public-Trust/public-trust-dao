@@ -412,16 +412,19 @@ Beyond the eight agents the meta-agent also runs the **structure guard**
 line in the summary — `guard 10/10, guard soft warnings: N`. Its hard "red" (a
 breach of a required quality standard) fails the overall verdict alongside the
 agents, while its **soft warnings** (severity=soft — e.g. a CI step without a
-human-readable name) are merely surfaced as a count and do **not** fail the build:
-this way the operator's summary keeps the readability hints without turning red
-over them. If the guard is absent from the directory, the line is hidden and it
-does not affect the verdict.
+human-readable name) are surfaced as a count AND **line by line** (under the guard
+line, a list `⚠ [check] step: problem`) and do **not** fail the build: this way the
+operator's summary keeps the readability hints, explains them without a separate
+guard run, yet does not turn red over them. In `--json` the same lines live under
+the `guard_warning_lines` key. If the guard is absent from the directory, the line
+is hidden and it does not affect the verdict.
 
 The **test invariant** [`test_run_all.py`](test_run_all.py) proves the folding
 works rather than being "green by default": on fake agents (green/red/crashed/
 anomalous), fake tests and a fake guard (soft warnings do not fail, hard "red"
-fails, an absent guard is not applicable) it checks that red really folds into red
-and green does not fail falsely (21/21). CI runs `test_run_all.py` + `run_all.py
+fails, an absent guard is not applicable; the warning lines themselves are shown
+under the guard line) it checks that red really folds into red and green does not
+fail falsely (28/28). CI runs `test_run_all.py` + `run_all.py
 --with-tests` — two steps instead of fifteen.
 
 ## Structure-Guard — keeps the directory's quality standards
@@ -464,9 +467,10 @@ parsing, an agent/test that bypasses the shared CI run, dropping `ai-agents/**`
 from the workflow triggers, or removing any required workflow command turns it red.
 
 The `run_all` meta-agent now **runs the guard too** and shows it as a separate
-line in the summary: a hard "red" fails the overall verdict, while the number of
-its soft warnings appears as `guard soft warnings: N` — so the warnings are
-visible in the operator's summary without failing the build.
+line in the summary: a hard "red" fails the overall verdict, while its soft
+warnings appear as `guard soft warnings: N` and, below it, a line-by-line list
+`⚠ [check] step: problem` — so the warnings are visible and explained in the
+operator's summary without failing the build.
 
 ## Rails (for all agents in this directory)
 

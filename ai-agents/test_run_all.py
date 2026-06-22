@@ -72,12 +72,18 @@ def fake_test(exit_code):
     return f"import sys\nsys.exit({exit_code})\n"
 
 
-def fake_guard(verdict, passed, total, warnings, exit_code):
-    """Фейковый страж структуры: печатает отчёт того же вида, что structure_guard.py."""
+def fake_guard(verdict, passed, total, warnings, exit_code, checks=None):
+    """Фейковый страж структуры: печатает отчёт того же вида, что structure_guard.py.
+
+    `checks` — необязательный список проверок (как в реальном страже: dict с
+    `key`/`title`/`severity`/`status`/`violations`), чтобы тест мог проверить вывод
+    самих строк мягких предупреждений. По умолчанию пуст (поведение как раньше)."""
+    checks = checks if checks is not None else []
     return (
         "import json, sys\n"
         f"print(json.dumps({{'agent':'structure_guard','verdict':{verdict!r},"
-        f"'passed':{passed},'total':{total},'warnings':{warnings},'checks':[]}}))\n"
+        f"'passed':{passed},'total':{total},'warnings':{warnings},"
+        f"'checks':{checks!r}}}))\n"
         f"sys.exit({exit_code})\n"
     )
 
@@ -205,6 +211,43 @@ def main():
         check("страж с мягкими предупреждениями НЕ валит общий вердикт → exit 0", code == 0)
         check("сводка выводит число мягких предупреждений стража",
               "мягких предупреждений стража: 3" in out)
+
+        # Сводка показывает не только ЧИСЛО, но и сами СТРОКИ предупреждений
+        # (какая проверка, какой шаг) — чтобы объяснять без запуска стража.
+        warn_checks = [
+            {
+                "key": "ci-step-has-name",
+                "title": "У шага run: есть человеческое имя",
+                "severity": "soft", "status": "warn",
+                "violations": [{"item": "шаг #2 (run: python3 ...)",
+                                "problem": "нет name:"}],
+            },
+            {
+                "key": "agents-have-invariants",  # hard-проверка pass — не предупреждение
+                "title": "...", "severity": "hard", "status": "pass",
+                "violations": [],
+            },
+        ]
+        write(tmp, "structure_guard.py", fake_guard("green", 9, 10, 1, 0, warn_checks))
+        code, out = run_main_capture(mod, ["--with-tests"])
+        check("страж с предупреждениями+деталями НЕ валит → exit 0", code == 0)
+        check("сводка показывает сами строки предупреждений (item)",
+              "шаг #2 (run: python3 ...)" in out)
+        check("сводка показывает текст предупреждения (problem)", "нет name:" in out)
+        check("сводка привязывает предупреждение к ключу проверки",
+              "ci-step-has-name" in out)
+        check("guard_warning_lines собирает только warn-проверки (hard-pass пропущен)",
+              [l for l in mod.guard_warning_lines(mod.run_guard())
+               if "agents-have-invariants" in l] == []
+              and any("шаг #2" in l for l in mod.guard_warning_lines(mod.run_guard())))
+
+        # Предупреждения есть (warnings>0), но детализации в checks нет → откат на
+        # отсылку к стражу (обратная совместимость), сборка по-прежнему зелёная.
+        write(tmp, "structure_guard.py", fake_guard("green", 7, 10, 3, 0))
+        code, out = run_main_capture(mod, ["--with-tests"])
+        check("предупреждения без деталей → отсылка к стражу, exit 0",
+              code == 0 and "python3 ai-agents/structure_guard.py" in out)
+        check("guard_warning_lines пуст, когда checks без warn", mod.guard_warning_lines(mod.run_guard()) == [])
 
         # Hard-«красное» стража валит общий вердикт наравне с агентами.
         write(tmp, "structure_guard.py", fake_guard("red", 5, 10, 0, 1))

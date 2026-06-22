@@ -514,14 +514,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   guard is not applicable. Test invariant [`test_run_all.py`](../../ai-agents/test_run_all.py)
   13/13→21/21 (fake guard: warnings do not fail, hard-red fails, green+exit≠0 anomaly is
   red, absent guard not applicable). `PTD-0067`.
-- [ ] **`run_all` surfaces not only the count but the guard's individual soft warnings** —
+- [x] **`run_all` surfaces not only the count but the guard's individual soft warnings** —
   the summary currently prints the total; add a per-line list under the guard row (which
   check, which step) so the operator summary explains a warning without a separate
-  `structure_guard.py` run (follow-up to `PTD-0067`, session 70).
+  `structure_guard.py` run (follow-up to `PTD-0067`, session 70). → Done (session 71): the
+  helper `guard_warning_lines()` in [`run_all.py`](../../ai-agents/run_all.py) collects the
+  `warn`-status checks from `guard.checks` and their `violations` (item/problem) into lines
+  "[check] step: problem"; the human-readable guard row prints them as `⚠ [check] …` when
+  `guard_warnings>0` (falling back to the guard pointer if no detail), and `--json` gains a
+  `guard_warning_lines` key. `test_run_all.py` 21→28, `PTD-0068`.
 - [ ] **Machine-readable project "status light" from `run_all --json`** — persist the last
-  `run_all` verdict (including `guard_warnings`) to an artifact file under `governance/`, as
-  the basis for a future public status indicator with no external services (related to the
-  long-standing "badge in governance/" idea, now with the guard's warning count; session 70).
+  `run_all` verdict (including `guard_warnings` and `guard_warning_lines`) to an artifact file
+  under `governance/`, as the basis for a future public status indicator with no external
+  services (related to the long-standing "badge in governance/" idea; now that the warning
+  lines are machine-readable, the artifact can include them; sessions 70–71).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -614,6 +620,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0068 (session 71):** P3 (Stage 6 quality) — **`run_all` shows not only the COUNT but
+  the guard's individual soft-warning LINES.** Follow-up to PTD-0067 (session 70): the new
+  helper `guard_warning_lines(guard_result)` collects the `warn`-status checks (severity=soft)
+  from `guard.checks` and their `violations` (item/problem) into "[check] step: problem" lines.
+  The human-readable guard row prints them as `⚠ [check] …` when `guard_warnings>0` instead of
+  the old "details — `python3 ai-agents/structure_guard.py`" pointer (kept as a fallback when
+  `warnings>0` but `checks` carry no detail). `--json` gains a `guard_warning_lines` key — a
+  basis for a future machine-readable status light. The guard's hard "red" still fails the
+  overall verdict, soft warnings do not. `test_run_all.py` 21→28. verify green (69 records),
+  IPFS OK (19), run_all agents 8/8 tests 11/11 guard 10/10.
 - **PTD-0066 (session 69):** P3 (Stage 6 quality) — **structure-guard: tenth (third SOFT)
   `ci-step-has-body` check (a step with `- name:` has a `run:`/`uses:` body — it is not
   empty).** Follow-up to `ci-step-name-unique` (PTD-0065) toward an honest CI step map: if a

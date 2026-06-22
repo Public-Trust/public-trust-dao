@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 68,
-  "head_hash": "a424ec13d8ff8704adee870878c69a93f3d6bc93db3b6225fbd0145890ef5463",
+  "count": 69,
+  "head_hash": "93fe66a3aee381a392c9a4677d600ffa58af3d0da0c3d4376679c8f7e9f8cde2",
   "entries": [
     {
       "seq": 0,
@@ -615,6 +615,15 @@
       "summary": "Мета-агент run_all показывает мягкие предупреждения стража структуры: прогоняет structure_guard заодно и выводит отдельной графой в сводке (страж 10/10, мягких предупреждений: N); hard-red валит общий вердикт, soft-warnings только показываются числом, не валя сборку; test_run_all 13→21",
       "hash": "a424ec13d8ff8704adee870878c69a93f3d6bc93db3b6225fbd0145890ef5463",
       "file": "records/0067-decision.json"
+    },
+    {
+      "seq": 68,
+      "id": "PTD-0068",
+      "type": "decision",
+      "timestamp": "2026-06-22T13:41:51Z",
+      "summary": "Мета-агент run_all показывает не только число, но и сами строки мягких предупреждений стража структуры (какая проверка, какой шаг): помощник guard_warning_lines собирает warn-проверки и их violations; человекочитаемая сводка печатает «⚠ [проверка] шаг: проблема», в --json — ключ guard_warning_lines; test_run_all 21→28",
+      "hash": "93fe66a3aee381a392c9a4677d600ffa58af3d0da0c3d4376679c8f7e9f8cde2",
+      "file": "records/0068-decision.json"
     }
   ]
 }
