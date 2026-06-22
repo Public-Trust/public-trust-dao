@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 43,
-  "head_hash": "48498de3a798752c109dbe92ced50a56279ec56836076b19f68a3d0e72737667",
+  "count": 44,
+  "head_hash": "5264e164d69c7f1249a08247f2a1483c1c5a048e3315041de2fb065723d8973b",
   "entries": [
     {
       "seq": 0,
@@ -390,6 +390,15 @@
       "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/GOVERNANCE.md (+EN) переписан по образцу REWARDS-MODEL — ведущий раздел «Главное простыми словами», жаргон (атака Сивиллы, soulbound, плутократия, web-of-trust, Governor→Timelock) вынесен в «Технический раздел — для разработчиков». Смысл управления не изменён. INBOX #19 остаётся открытым.",
       "hash": "48498de3a798752c109dbe92ced50a56279ec56836076b19f68a3d0e72737667",
       "file": "records/0042-decision.json"
+    },
+    {
+      "seq": 43,
+      "id": "PTD-0043",
+      "type": "decision",
+      "timestamp": "2026-06-22T10:25:00Z",
+      "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/ANTI-ABUSE.md (+EN) переписан по образцу REWARDS-MODEL/GOVERNANCE — ведущий раздел «Главное простыми словами» (быть честным выгоднее обмана + 9 опор + репутация), жаргон (multisig, circuit breaker, events, Audit/Guardian/Fairness AI) вынесен в «Технический раздел — для разработчиков». Смысл защиты не изменён. INBOX #19 остаётся открытым.",
+      "hash": "5264e164d69c7f1249a08247f2a1483c1c5a048e3315041de2fb065723d8973b",
+      "file": "records/0043-decision.json"
     }
   ]
 }
