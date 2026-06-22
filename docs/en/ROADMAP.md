@@ -358,15 +358,22 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   module, both agents import it; test invariant
   [`test_solidity_scan.py`](../../ai-agents/test_solidity_scan.py) (14/14), wired into
   `run_all` (tests 9/9). Agent behavior unchanged (Reputation 5/5, Housing 8/8).
+- [ ] **Structure-guard: check that `run_all` covers everyone** — extend
+  [`structure_guard.py`](../../ai-agents/structure_guard.py) with a check that the
+  `TESTS` list in `run_all.py` actually includes every existing `test_*.py` (and that
+  each `AGENTS` key has an agent) — so a new agent/test cannot bypass the shared CI run
+  (follow-up to the guard, session 51).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
   [`solidity_scan.py`](../../ai-agents/solidity_scan.py) rather than spawn a fourth
   parsing copy (follow-up to the refactor, session 40).
-- [ ] **CI check "no `.sol` parsing copies outside `solidity_scan`"** — a tiny linter
+- [x] **CI check "no `.sol` parsing copies outside `solidity_scan`"** — a tiny linter
   that fails if an `ai-agents/*_agent.py` reintroduces a local `strip_solidity_comments`/
   `function_body` definition (instead of importing the shared module) — so the removed
   duplication cannot quietly return (akin to the "invariant standard", session 40).
+  → Done (session 51) via the `sol-parsing-centralized` check of the guard
+  [`structure_guard.py`](../../ai-agents/structure_guard.py), `PTD-0048`.
 - [ ] Housing agent: once a provider whitelist exists (open question in
   [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md) §8 — who maintains
   and verifies landlords/pharmacies), add a `provider-whitelisted` check: a housing
@@ -407,14 +414,29 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   up; perhaps `npm ci` in CI only, cleaned locally. In session 33 the disk hit ~100%
   full (mostly other host projects) and nearly blocked the build (proposed session 33).
   See "NEEDED FROM THE OPERATOR".
-- [ ] **"Every agent has an invariant" as an explicit CI check:** a mini-script that
+- [x] **"Every agent has an invariant" as an explicit CI check:** a mini-script that
   fails if a `*_agent.py` appears in `ai-agents/` without a paired `test_*.py` (and vice
   versa) — so the Stage-6 quality gap (as Audit had) can never reappear unnoticed
   (proposed session 33; akin to "agent self-test in CI").
+  → Done (session 51) via the `agents-have-invariants` + `no-orphan-tests` checks of the
+  guard [`structure_guard.py`](../../ai-agents/structure_guard.py), `PTD-0048`.
 
 ---
 
 ## Done
+
+- **PTD-0048 (session 51):** P3 (Stage-6 quality standards) — **structure guard**
+  [`ai-agents/structure_guard.py`](../../ai-agents/structure_guard.py) (+ test invariant
+  [`test_structure_guard.py`](../../ai-agents/test_structure_guard.py), 17/17). Closes two
+  open roadmap ideas at once. A service read-only module (Art. 9) looks at the
+  `ai-agents/` directory itself and guards three structural standards:
+  `agents-have-invariants` (every `*_agent.py` has a paired `test_<name>.py` — no agent is
+  "green by default"), `no-orphan-tests` (every `test_*.py` has a source module),
+  `sol-parsing-centralized` (no `*_agent.py` keeps a local copy of the `.sol`-parsing
+  helpers — they are imported from the shared
+  [`solidity_scan.py`](../../ai-agents/solidity_scan.py)). Wired into `run_all --with-tests`
+  (tests 9→10); CI turns red on regression. READMEs RU/EN updated. On the real repo the
+  guard is 3/3 green; `run_all --with-tests`: agents 8/8, tests 10/10. `PTD-0048`. TESTNET-ONLY.
 
 - **PTD-0039 (session 42):** INBOX #18 (operator) — **[`PROOF-OF-CONTRIBUTION.md`](PROOF-OF-CONTRIBUTION.md) (+RU)**,
   proof of contribution and escrow contracts. The fund creates paid work THROUGH helping

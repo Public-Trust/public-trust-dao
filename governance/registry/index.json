@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 48,
-  "head_hash": "04d42cf599ebb8595680bf45bbba58f10dc1881449b96b45439a69cf6a30314b",
+  "count": 49,
+  "head_hash": "c33ad8db3c9b5a15fa789a22a74a735afcc9258798c408a460a304a651ad7d64",
   "entries": [
     {
       "seq": 0,
@@ -435,6 +435,15 @@
       "summary": "INBOX #21 — принцип «всё под подписью и прослеживаемо»: docs/ACCOUNTABILITY.md (+EN) простым языком — у каждого значимого действия (участник/ИИ/разработчик) есть автор и подпись, история несменяема; деньги/власть/договорённости дополнительно закрепляются отпечатком в блокчейне (не PII); ИИ под подписью без власти. Предложена поправка к конституции П-4 (п. 3.4 к ст. 3) на ратификацию по ст. 10.",
       "hash": "04d42cf599ebb8595680bf45bbba58f10dc1881449b96b45439a69cf6a30314b",
       "file": "records/0047-decision.json"
+    },
+    {
+      "seq": 48,
+      "id": "PTD-0048",
+      "type": "decision",
+      "timestamp": "2026-06-22T12:35:00Z",
+      "summary": "P3 (стандарты качества Этапа 6) — страж структуры ai-agents/structure_guard.py (+ тест-инвариант): у каждого *_agent.py есть парный test_*.py; нет осиротевших тестов; разбор .sol не копируется вне solidity_scan.py. Включён в run_all --with-tests → регресс валит CI. Закрывает две идеи роадмапа.",
+      "hash": "c33ad8db3c9b5a15fa789a22a74a735afcc9258798c408a460a304a651ad7d64",
+      "file": "records/0048-decision.json"
     }
   ]
 }

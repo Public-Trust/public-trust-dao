@@ -404,6 +404,30 @@ anomalous) and fake tests it checks that red really folds into red and green doe
 not fail falsely (13/13). CI runs `test_run_all.py` + `run_all.py --with-tests` —
 two steps instead of fifteen.
 
+## Structure-Guard — keeps the directory's quality standards
+
+By Stage 6 we set two quality standards, but until now nothing guarded them
+automatically — they could be broken by accident and go unnoticed.
+`structure_guard.py` turns them into a machine check (Art. 9 — a service module
+that fixes nothing):
+
+| Check | What it guards |
+|-------|----------------|
+| `agents-have-invariants` | Every `*_agent.py` has a paired `test_<name>.py` — an agent proves it catches "red" rather than being "green by default" (this is the gap that was closed for Audit in session 33). |
+| `no-orphan-tests` | Every `test_*.py` has a source module (`<name>_agent.py` or `<name>.py`) — a test file does not linger after a rename/removal. |
+| `sol-parsing-centralized` | No `*_agent.py` keeps a local copy of the Solidity-parsing helpers (`strip_solidity_comments`/`function_body`/…) — they are imported from the shared [`solidity_scan.py`](solidity_scan.py), not duplicated (or the copies silently drift). |
+
+```bash
+python3 ai-agents/structure_guard.py          # human-readable report
+python3 ai-agents/structure_guard.py --json    # machine-readable report
+```
+
+The **test invariant** [`test_structure_guard.py`](test_structure_guard.py) proves
+on poisoned temporary directories (an agent without a test; an orphan test; an
+agent with a local copy of `.sol` parsing) that the guard really turns red, while a
+clean directory stays green (17/17). It is included in `run_all --with-tests`, so
+adding an agent without a test, or a copy of `.sol` parsing, turns CI red.
+
 ## Rails (for all agents in this directory)
 
 - No private keys/secrets/real funds; no mainnet.
