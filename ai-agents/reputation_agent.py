@@ -47,6 +47,11 @@ import os
 import re
 import sys
 
+# Общий помощник разбора Solidity (один на всех контрактных агентов — без
+# трёх расходящихся копий парсинга). Лежит рядом, в каталоге ai-agents/.
+from solidity_scan import strip_solidity_comments
+from solidity_scan import function_body as _function_body
+
 # Корень репозитория = на уровень выше каталога ai-agents/.
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -85,20 +90,6 @@ PLUTOCRATIC_STRATEGIES = {
 EQUAL_STRATEGIES = {"ticket", "one-person-one-vote"}
 
 
-def strip_solidity_comments(src):
-    """Убирает // и /* */ комментарии — чтобы не ловить упоминания в тексте.
-
-    Например, в Reputation.sol есть комментарий «У контракта НЕТ функций
-    transfer/approve/transferFrom» — без вырезания комментариев проверка
-    soulbound ложно бы краснела на собственном пояснении.
-    """
-    # Блочные комментарии.
-    src = re.sub(r"/\*.*?\*/", " ", src, flags=re.DOTALL)
-    # Строчные комментарии.
-    src = re.sub(r"//[^\n]*", " ", src)
-    return src
-
-
 # ---- Проверки. Каждая возвращает (ok: bool, findings: list[str]). ----
 
 def check_soulbound(code, _space):
@@ -112,26 +103,6 @@ def check_soulbound(code, _space):
                 "(голос можно было бы продать/скупить)"
             )
     return (not findings), findings
-
-
-def _function_body(code, fn):
-    """Возвращает тело функции fn по балансу фигурных скобок (или None).
-
-    Регуляркой `.*?` тело не вырезать: первая же внутренняя `}` (конец `if`)
-    оборвала бы захват. Поэтому считаем скобки от открывающей `{`.
-    """
-    m = re.search(r"\bfunction\s+" + re.escape(fn) + r"\s*\([^)]*\)[^{;]*\{", code)
-    if not m:
-        return None
-    i = m.end()  # позиция сразу после открывающей `{`
-    depth = 1
-    while i < len(code) and depth:
-        if code[i] == "{":
-            depth += 1
-        elif code[i] == "}":
-            depth -= 1
-        i += 1
-    return code[m.end():i - 1]
 
 
 def check_bounded_weight(code, _space):

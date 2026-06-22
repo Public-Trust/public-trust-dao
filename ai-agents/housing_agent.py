@@ -57,6 +57,12 @@ import os
 import re
 import sys
 
+# Общий помощник разбора Solidity (один на всех контрактных агентов — без
+# трёх расходящихся копий парсинга). Лежит рядом, в каталоге ai-agents/.
+from solidity_scan import strip_solidity_comments
+from solidity_scan import function_body as _function_body
+from solidity_scan import function_signature as _function_sig
+
 # Корень репозитория = на уровень выше каталога ai-agents/.
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -81,40 +87,6 @@ FUND_MOVE_PATTERNS = (
 # Валидный 20-байтовый адрес и нулевой адрес (получатель не может быть нулём).
 ADDR_RE = re.compile(r"^0x[0-9a-fA-F]{40}$")
 ZERO_ADDR = "0x" + "0" * 40
-
-
-def strip_solidity_comments(src):
-    """Убирает // и /* */ комментарии, чтобы не ловить упоминания в пояснениях."""
-    src = re.sub(r"/\*.*?\*/", " ", src, flags=re.DOTALL)
-    src = re.sub(r"//[^\n]*", " ", src)
-    return src
-
-
-def _function_sig(code, fn):
-    """Сигнатура функции fn (между именем и '{'): модификаторы + параметры, или None."""
-    m = re.search(
-        r"\bfunction\s+" + re.escape(fn) + r"\s*\(([^)]*)\)([^{;]*)\{",
-        code, flags=re.DOTALL,
-    )
-    if not m:
-        return None
-    return {"params": m.group(1), "modifiers": m.group(2)}
-
-
-def _function_body(code, fn):
-    """Тело функции fn по балансу фигурных скобок (или None)."""
-    m = re.search(r"\bfunction\s+" + re.escape(fn) + r"\s*\([^)]*\)[^{;]*\{", code)
-    if not m:
-        return None
-    i = m.end()
-    depth = 1
-    while i < len(code) and depth:
-        if code[i] == "{":
-            depth += 1
-        elif code[i] == "}":
-            depth -= 1
-        i += 1
-    return code[m.end():i - 1]
 
 
 def load_housing_priority_level(priorities_path):

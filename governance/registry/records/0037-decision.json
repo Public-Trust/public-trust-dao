@@ -1,0 +1,39 @@
+{
+  "seq": 37,
+  "id": "PTD-0037",
+  "type": "decision",
+  "timestamp": "2026-06-22T19:30:00Z",
+  "actor": "builder-agent",
+  "summary": "P3 ROADMAP — рефакторинг общих Solidity-помощников AI-агентов в единый модуль ai-agents/solidity_scan.py (без расходящихся копий парсинга в Reputation/Housing) + тест-инвариант test_solidity_scan.py (14/14), включён в run_all (тесты 9/9) и CI. Поведение агентов не изменилось. TESTNET-ONLY.",
+  "refs": [
+    "ai-agents/solidity_scan.py",
+    "ai-agents/test_solidity_scan.py",
+    "ai-agents/reputation_agent.py",
+    "ai-agents/housing_agent.py",
+    "docs/ROADMAP.md"
+  ],
+  "payload": {
+    "decision": "P3 ROADMAP (банк идей) — рефакторинг общих Solidity-помощников AI-агентов в единый модуль ai-agents/solidity_scan.py. Лёгкий текстовый разбор .sol (strip_solidity_comments, has_function, function_signature, function_body) был скопирован в двух контрактных агентах (Reputation, Housing) — копии могли тихо разойтись в логике парсинга. Вынесен в один модуль без зависимостей (только стандартная библиотека), оба агента импортируют его (Reputation: strip_solidity_comments + function_body; Housing: + function_signature). Добавлен собственный тест-инвариант ai-agents/test_solidity_scan.py (14/14): комментарии вырезаются, функция находится по ИМЕНИ а не подстроке, тело извлекается по балансу скобок (а не до первой `}`), сигнатура парсится. Тест включён в run_all (TESTS) → тесты 9/9, и в CI ai-agents.yml автоматически (run_all --with-tests).",
+    "rationale": "INBOX оператора пуст → режим саморазвития. P2 ROADMAP закрыт, из P3 закрыты SECURITY.md и Run-All. Взят явно помеченный «назрело» пункт банка идей: дублирование разбора .sol по агентам (Reputation/Housing). Открытый P0 (Этап 5 часть 4 — публичный testnet) заблокирован оператором (сеть/RPC/адреса хранителей). Один источник правды для парсинга Solidity убирает риск расхождения логики между контрактными агентами и даёт основу будущим агентам по контрактам (Governance/Audit). Поведение агентов не изменилось — Reputation 5/5, Housing 8/8, их инварианты 17/17 и 23/23 как до рефакторинга.",
+    "deliverables": [
+      "ai-agents/solidity_scan.py — общий помощник: strip_solidity_comments, has_function, function_signature, function_body (без зависимостей, ст. 9 — служебный модуль, ничего не двигает)",
+      "ai-agents/reputation_agent.py — локальные копии strip_solidity_comments/_function_body заменены импортом из solidity_scan",
+      "ai-agents/housing_agent.py — локальные копии strip_solidity_comments/_function_sig/_function_body заменены импортом из solidity_scan",
+      "ai-agents/test_solidity_scan.py — тест-инвариант (14/14): вырезание комментариев, поиск по имени, тело по балансу скобок, парс сигнатуры",
+      "ai-agents/run_all.py — test_solidity_scan.py добавлен в TESTS (тесты 9/9)",
+      ".github/workflows/ai-agents.yml — метка шага обновлена (9 тест-инвариантов; покрытие через run_all --with-tests автоматическое)"
+    ],
+    "rails": [
+      "AI служит, не правит: solidity_scan — read-only текстовый разбор, ничего не двигает и ничем не владеет (ст. 9)",
+      "поведение агентов не изменилось: Reputation 5/5, Housing 8/8; инварианты 17/17 и 23/23 — рефакторинг без регрессий",
+      "TESTNET-ONLY: ни реальных средств/ключей, ни выхода в сеть; только стандартная библиотека",
+      "качество Этапа 6: один источник правды парсинга .sol устраняет риск расхождения логики между агентами",
+      "пульс неприкосновенен: loop.sh/report.sh/.env/logs не тронуты"
+    ],
+    "status": "adopted",
+    "spec": "docs/ROADMAP.md",
+    "roadmap_item": "P3 — банк идей: рефакторинг общих solidity-помощников в ai-agents/solidity_scan.py"
+  },
+  "prev_hash": "aa18e1bd5a58feb3a9714933740b3042418308babfffddcb7d9acae4c58ba2ff",
+  "hash": "3e37169d962834b600fd4ad0e67a6d0233dd56854ce7ff8a69ed98d7feb5c522"
+}

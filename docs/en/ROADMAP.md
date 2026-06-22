@@ -334,12 +334,24 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] Reputation agent: cross-check `reputationCap` in `scripts/deploy.js`/the deploy
   config against a sane ceiling (e.g. ≤ a small N), so the contribution multiplier cannot
   quietly turn into a new elite via too high a cap (session 27).
-- [ ] A reusable lightweight Solidity-invariant scanner module: extract comment stripping
-  + brace-balanced function-body extraction from the Reputation agent into a shared
-  `ai-agents/solidity_scan.py` — useful for future contract agents (Governance/Audit) (session 27).
-  The Housing agent (session 28) duplicated the same helpers
-  (`strip_solidity_comments`/`_function_body`/`_function_sig`) — now THREE copies, the
-  refactor is overdue.
+- [x] A reusable lightweight Solidity-invariant scanner module: comment stripping
+  + brace-balanced function-body extraction were duplicated across the Reputation and
+  Housing agents — extracted into a shared
+  [`ai-agents/solidity_scan.py`](../../ai-agents/solidity_scan.py) (useful for future
+  contract agents Governance/Audit; sessions 27/31). → Done (session 40), `PTD-0037`:
+  `strip_solidity_comments`/`has_function`/`function_signature`/`function_body` in one
+  module, both agents import it; test invariant
+  [`test_solidity_scan.py`](../../ai-agents/test_solidity_scan.py) (14/14), wired into
+  `run_all` (tests 9/9). Agent behavior unchanged (Reputation 5/5, Housing 8/8).
+- [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
+  JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
+  from `Reputation.votingUnits`, not balance), reuse the shared
+  [`solidity_scan.py`](../../ai-agents/solidity_scan.py) rather than spawn a fourth
+  parsing copy (follow-up to the refactor, session 40).
+- [ ] **CI check "no `.sol` parsing copies outside `solidity_scan`"** — a tiny linter
+  that fails if an `ai-agents/*_agent.py` reintroduces a local `strip_solidity_comments`/
+  `function_body` definition (instead of importing the shared module) — so the removed
+  duplication cannot quietly return (akin to the "invariant standard", session 40).
 - [ ] Housing agent: once a provider whitelist exists (open question in
   [`ESCROW-TARGETED-DISBURSEMENT.md`](ESCROW-TARGETED-DISBURSEMENT.md) §8 — who maintains
   and verifies landlords/pharmacies), add a `provider-whitelisted` check: a housing
@@ -389,6 +401,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0037 (session 40):** P3 (idea bank) — **refactor of the shared Solidity
+  helpers of the AI agents** into a single module
+  [`ai-agents/solidity_scan.py`](../../ai-agents/solidity_scan.py). The lightweight
+  textual `.sol` parsing (`strip_solidity_comments`/`has_function`/
+  `function_signature`/`function_body`) was duplicated across the contract agents
+  (Reputation, Housing) — the copies could silently diverge. Extracted into one
+  read-only, dependency-free module (Art. 9 — a service module, it moves nothing);
+  both agents import it. Added a test invariant
+  [`test_solidity_scan.py`](../../ai-agents/test_solidity_scan.py) (14/14): comments
+  are stripped, a function is found by NAME not substring, the body is extracted by
+  brace balance (not up to the first `}`), the signature is parsed. Wired into
+  `run_all` (tests 9/9) and CI `ai-agents.yml` automatically (`run_all --with-tests`).
+  **Agent behavior unchanged:** Reputation 5/5, Housing 8/8; their invariants 17/17
+  and 23/23 as before. `PTD-0037`. TESTNET-ONLY.
 - **PTD-0036 (session 39):** P3 (quality/transparency) — **`SECURITY.md` (+EN)**,
   the canonical security policy (GitHub recognizes it, "Report a vulnerability"
   button / Security tab). What counts as a vulnerability (contracts/rails/secret

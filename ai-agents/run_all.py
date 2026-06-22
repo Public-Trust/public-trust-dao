@@ -60,7 +60,9 @@ AGENTS = [
     {"key": "mediator",      "script": "mediator_agent.py",      "guards": "ст. 9.2 — процесс споров/апелляций"},
 ]
 
-# Тест-инварианты (доказывают, что красное ловится). Покрыты все восемь агентов.
+# Тест-инварианты (доказывают, что красное ловится). Покрыты все восемь агентов
+# плюс общий помощник разбора Solidity (`solidity_scan.py`), на который опираются
+# контрактные агенты Reputation/Housing.
 TESTS = [
     "test_audit.py",
     "test_guardian.py",
@@ -70,6 +72,7 @@ TESTS = [
     "test_documentation.py",
     "test_governance.py",
     "test_mediator.py",
+    "test_solidity_scan.py",
 ]
 
 
