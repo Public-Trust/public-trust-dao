@@ -753,10 +753,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   anchors honoured); validates both same-file `#section` and cross-file
   `FILE.md#section`; a broken FILE is left to the blocking `link-integrity`. Test
   invariant grown 14→18 scenarios (38/38), green/0 warnings on the real repo. `PTD-0094`.
-- [ ] A lexical linter of constitutional prohibitions for public texts
+- [x] A lexical linter of constitutional prohibitions for public texts
   (README/web/PROMOTION): no "guaranteed returns"/"investment"/"pyramid"/"referrals"
   (the literal prohibitions of `PRINCIPLES.md`) — could become part of Documentation or
   a separate mini-agent (session 29; previously proposed as a Guardian extension).
+  **Done (session 98):** soft check `constitutional-prohibitions` in
+  `documentation_agent.py` — scans public `.md` + the `web/*.html` storefront for
+  promises of yield/profit, passive income, investment/pyramid pitches and
+  pay-to-recruit (referrals), RU and EN. A phrase with a negation/prohibition
+  marker nearby (our "this is NOT an investment" disclaimers, "Prohibited: …"
+  lists, "unlike …" contrast) is not a violation; a bare promise is flagged. SOFT
+  (warn, does not drop the verdict/pulse). Test invariant 18→23 scenarios (49/49);
+  green/0 warnings on the real repo. `PTD-0095`. Possible extension — see "Idea log".
 - [x] Run-All: a machine-readable status badge in `governance/` (the last
   `run_all --json` verdict saved to an artifact file) — a basis for a future public
   "status traffic light" with no external services (session 32).
@@ -1435,3 +1443,4 @@ To keep self-development transparent, we record the origin of ideas.
 | "Take a copy" of your data as one file (done) / upgrade Next from 15.1.6 to a patched version (security advisory CVE-2025-66478) / show the "take a copy" button even when the list is empty (an honest empty template file) | agent | 90 |
 | "Order of help" screen (done) / Documentation agent: soft check "an in-app mirror screen in platform/app isn't stale vs its normative doc" (priorities↔PRIORITIES, glossary↔GLOSSARY) / link the "Treasury window" screen to "Order of help" (help pools ↔ who comes first) | agent | 91 |
 | "Help and thanks for work" screen (done) / link the "Treasury window" screen to "Help & reward" (help pool / thanks pool ↔ how money is split) / link the "Apply for help" screen to "Help & reward" (where need payment comes from) / mirror screen for PROOF-OF-CONTRIBUTION "How the fund creates honest work" | agent | 93 |
+| Constitutional-prohibitions linter for public texts (done) / extend the linter to text inside `platform/lib/i18n.ts` (the app's visible copy, not just .md/web) / "promise without a caveat" linter — a public text next to a sum/percentage must carry a "this is not income" disclaimer | agent | 98 |

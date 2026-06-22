@@ -135,6 +135,93 @@ KEY_TERMS = [
     {"id": "поставщик (provider)", "ru": "поставщик", "en": "provider"},
 ]
 
+# --- Лексический линтер конституционных запретов в публичных текстах ----------
+# Конституция (ст. 3/6, PRINCIPLES.md «Конституционные запреты») требует: никакой
+# публичный текст не обещает доходность/прибыль, не зовёт в инвестицию/пирамиду и
+# не платит за привлечение людей. Этот мягкий линтер ищет такие ОБЕЩАНИЯ в
+# человеко-видимых текстах (публичные .md + витрина web/*.html) и предупреждает,
+# если нашёл их БЕЗ отрицания рядом (наши же дисклеймеры «это НЕ инвестиция»,
+# списки запретов и т.п. — законны и не должны давать ложную тревогу).
+#
+# Каждый «концепт» — это запрещённое ПОЗИТИВНОЕ обещание. Триггер ищет фразу,
+# затем проверяется окно вокруг неё: если рядом стоит маркер отрицания/запрета
+# (NEG_RE) — это дисклеймер/перечисление запретов, пропускаем. Иначе — мягкое
+# предупреждение (расчёт «обещание это или отрицание» имеет краевые случаи,
+# поэтому проверка не роняет вердикт и пульс).
+PROHIBITION_CONCEPTS = [
+    {
+        "id": "обещание доходности/прибыли (запрет №1/№2)",
+        "re": re.compile(
+            r"(гарант\w+|обеща\w+)[\s,–—/-]+(доход\w*|прибыл\w*|выгод\w*)"
+            r"|(доход\w*|прибыл\w*)[\s,–—/-]+гарант\w+"
+            r"|(guarantee\w*|promis\w*)[\s,–—/-]+(return\w*|profit\w*|income|gain\w*|yield\w*)",
+            re.IGNORECASE,
+        ),
+    },
+    {
+        "id": "пассивный доход (запрет №1)",
+        "re": re.compile(r"пассивн\w+\s+доход\w*|passive\s+income", re.IGNORECASE),
+    },
+    {
+        "id": "финансовая пирамида (запрет №3)",
+        "re": re.compile(r"пирамид\w*|\bpyramid\b", re.IGNORECASE),
+    },
+    {
+        "id": "инвестиционное предложение (НЕ инвестиция — рельс)",
+        "re": re.compile(r"\bинвести\w+|\binvestment\b|\binvest\b", re.IGNORECASE),
+    },
+    {
+        "id": "плата за привлечение людей / рефералы (запрет №4)",
+        "re": re.compile(
+            r"реферальн\w+|referral\b|refer\s+a\s+friend"
+            r"|(приведи|пригласи)\w*\s+друг"
+            r"|(бонус|выплат\w*|плат\w*|вознагражд\w*|заработ\w*)[\s\wа-я]{0,20}"
+            r"за\s+(приглаш\w+|привлеч\w+|реферал\w*)",
+            re.IGNORECASE,
+        ),
+    },
+]
+
+# Маркеры отрицания/запрета. Если такой стоит в окне вокруг найденной фразы —
+# это дисклеймер («НЕ инвестиция»), перечень запретов («запрещается …», «❌ …»)
+# или контраст («в отличие от …»), а не обещание. Тогда фразу пропускаем.
+PROHIBITION_NEG_RE = re.compile(
+    r"(❌|\b(не|нет|ни|без|никогда|нельзя|запрещ\w*|запрет\w*|отказ\w*|вместо|"
+    r"no|not|never|without|don't|doesn't|won't|cannot|can't|prohibit\w*|"
+    r"forbidden|ban\w*|unlike|reject\w*)\b|в\s+отлич|не\s+являет|"
+    r"is\s+not|isn't|are\s+not|aren't|instead\s+of|rather\s+than)",
+    re.IGNORECASE,
+)
+
+# Окно вокруг найденной фразы, в котором ищем маркер отрицания: до 240 символов
+# слева (накрывает заголовок «Запрещается:» над списком) и до 180 справа (маркер
+# нередко стоит после: «… пирамида — буквальные запреты», «referral ban»).
+PROHIBITION_NEG_BACK = 240
+PROHIBITION_NEG_FWD = 180
+
+
+def git_tracked_web_html(root):
+    """Git-отслеживаемые HTML витрины web/ (публичный человеко-видимый текст)."""
+    try:
+        out = subprocess.run(
+            ["git", "-C", root, "ls-files", "web/*.html", "web/**/*.html"],
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, check=True,
+        ).stdout
+        files = sorted({line.strip() for line in out.splitlines() if line.strip()})
+        if files:
+            return files
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    files = []
+    web_dir = os.path.join(root, "web")
+    for dirpath, dirnames, filenames in os.walk(web_dir):
+        dirnames[:] = [d for d in dirnames if d not in (".git", "node_modules")]
+        for name in filenames:
+            if name.endswith(".html"):
+                rel = os.path.relpath(os.path.join(dirpath, name), root)
+                files.append(rel.replace(os.sep, "/"))
+    return sorted(files)
+
 
 def git_tracked_md(root):
     """Возвращает отсортированный список git-отслеживаемых .md (относительные пути)."""
@@ -526,6 +613,40 @@ def check_glossary_no_dead(root, existing, corpus_docs):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_constitutional_prohibitions(root, public_texts):
+    """МЯГКАЯ проверка: публичные тексты не дают запрещённых обещаний.
+
+    Сканирует человеко-видимые тексты (публичные .md + витрина web/*.html) на
+    буквальные конституционные запреты PRINCIPLES.md для публичных текстов:
+    обещание доходности/прибыли, пассивный доход, зов в инвестицию/пирамиду,
+    плата за привлечение людей (рефералы). Найденную фразу пропускаем, если
+    рядом стоит маркер отрицания/запрета (наши дисклеймеры «это НЕ инвестиция»,
+    перечни запретов «Запрещается: …», «❌ …» — законны). Проверка МЯГКАЯ (warn):
+    различение «обещание/отрицание» имеет краевые случаи, поэтому она лишь
+    предупреждает, а не роняет вердикт и пульс (ст. 3/6 — понятность/рельсы).
+    """
+    violations = []
+    for rel in public_texts:
+        text = read_text(root, rel)
+        if rel.endswith(".md"):
+            text = FENCE_RE.sub("", text)  # примеры в ```...``` — не публичная копия
+        for concept in PROHIBITION_CONCEPTS:
+            for m in concept["re"].finditer(text):
+                window = text[max(0, m.start() - PROHIBITION_NEG_BACK):
+                              m.end() + PROHIBITION_NEG_FWD]
+                if PROHIBITION_NEG_RE.search(window):
+                    continue  # рядом отрицание/запрет — это дисклеймер, не обещание
+                line = text[:m.start()].count("\n") + 1
+                phrase = " ".join(m.group(0).split())
+                violations.append({
+                    "record": f"{rel}:{line}",
+                    "problem": (f"возможное запрещённое обещание «{phrase}» "
+                                f"({concept['id']}) без отрицания рядом — публичный "
+                                "текст не должен этого обещать (PRINCIPLES.md)"),
+                })
+    return ("pass" if not violations else "warn"), violations
+
+
 CHECKS = [
     {
         "key": "bilingual-pairs",
@@ -566,6 +687,13 @@ CHECKS = [
         "fn": "nodead",
         "soft": True,
     },
+    {
+        "key": "constitutional-prohibitions",
+        "title": "Публичные тексты не дают запрещённых обещаний (доход/инвестиция/пирамида/рефералы)",
+        "guards": "ст. 3/6 + PRINCIPLES.md «Конституционные запреты» для публичных текстов; МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "prohibitions",
+        "soft": True,
+    },
 ]
 
 
@@ -584,6 +712,9 @@ def run(root):
     # Корпус для «мёртвых статей» — публичные доки минус сами глоссарии.
     corpus_docs = [p for p in public_docs if p not in (GLOSSARY_RU, GLOSSARY_EN)]
     nodead_status, nodead_v = check_glossary_no_dead(root, existing, corpus_docs)
+    # Публичные человеко-видимые тексты = двуязычные .md + витрина web/*.html.
+    public_texts = public_docs + git_tracked_web_html(root)
+    prohib_status, prohib_v = check_constitutional_prohibitions(root, public_texts)
 
     results = {
         "pairs": (pairs_status, pairs_v),
@@ -592,6 +723,7 @@ def run(root):
         "anchors": (anchors_status, anchors_v),
         "coverage": (cov_status, cov_v),
         "nodead": (nodead_status, nodead_v),
+        "prohibitions": (prohib_status, prohib_v),
     }
 
     checks = []

@@ -248,8 +248,10 @@ git-tracked `.md` files (over what is actually published):
 | `bilingual-pairs` | every public doc has an RU↔EN counterpart (pairing rule from the path) | Art. 6 — openness/clarity; "all documentation is bilingual" |
 | `language-switcher` | the top of the doc has a correct `[Русский]·[English]` switcher pointing to the paired file | Art. 6 — availability in both languages |
 | `link-integrity` | every relative link in `.md` resolves to an existing file/directory | Art. 3 — verifiability; a doc with no broken links is actually readable |
+| `anchor-integrity` *(soft)* | a link anchor `FILE.md#section` (and `#section` within the same file) points to a real heading (GitHub-style slug) | Art. 3 — verifiability; links don't rot when sections are renamed |
 | `glossary-coverage` *(soft)* | key technical terms (DAO, escrow, multisig, …) have an entry in the glossary (RU+EN) | Art. 3/6 — clarity/explainability (`PTD-0040`) |
 | `glossary-no-dead` *(soft)* | every glossary entry's term is actually used in at least one normative document (inverse of `glossary-coverage`) | Art. 3/6 — clarity/explainability (`PTD-0040`) |
+| `constitutional-prohibitions` *(soft)* | public texts (`.md` + the `web/*.html` storefront) make no forbidden promises: yield/profit, investment/pyramid, pay-to-recruit (referrals) — our own "this is NOT an investment" disclaimers and prohibition lists do not count as violations | Art. 3/6 + `PRINCIPLES.md` "Constitutional prohibitions" for public texts |
 
 > The `glossary-coverage` and `glossary-no-dead` checks are **soft**: they only warn
 > (so the glossary neither falls behind the documents nor grows stale) and **never

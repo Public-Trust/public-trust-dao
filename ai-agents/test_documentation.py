@@ -355,6 +355,92 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # --- Мягкая проверка constitutional-prohibitions (запрещённые обещания) ----
+    # Логика: запрещённое ОБЕЩАНИЕ без отрицания рядом → warn (вердикт не падает);
+    #         наши дисклеймеры/перечни запретов с отрицанием → pass, без тревоги.
+
+    def prohib_repo(readme_body, en_body=None):
+        """Мини-репо GOOD_FILES, но с подменённым телом README (RU и опц. EN)."""
+        f = dict(GOOD_FILES)
+        f["README.md"] = ("[Русский] · [English](README.en.md)\n\n# Заголовок\n\n"
+                          + readme_body + "\n")
+        if en_body is not None:
+            f["README.en.md"] = ("[Русский](README.md) · [English]\n\n# Title\n\n"
+                                 + en_body + "\n")
+        return f
+
+    # 19. Прямое обещание доходности в публичном тексте → warn, вердикт green.
+    print("\n[мягкая проверка: обещание доходности без отрицания → warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, prohib_repo("Инвестируй и получи гарантированный доход 20% в месяц!"))
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("constitutional-prohibitions == warn для обещания дохода",
+              status_of(report, "constitutional-prohibitions") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+        check("проверка помечена soft", _is_soft(report, "constitutional-prohibitions"))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 20. Плата за привлечение людей (реферал) на английском → warn.
+    print("\n[мягкая проверка: referral-обещание (EN) → warn]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, prohib_repo("Текст.",
+                                   en_body="Join our referral program and earn a bonus."))
+        code, report = run_agent(tmp)
+        check("constitutional-prohibitions == warn для referral",
+              status_of(report, "constitutional-prohibitions") == "warn")
+        check("вердикт остаётся green", report.get("verdict") == "green")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 21. Наш дисклеймер «это НЕ инвестиция, НЕ пирамида» → отрицание рядом → pass.
+    print("\n[мягкая проверка: дисклеймер «НЕ инвестиция/НЕ пирамида» → pass, без ложной тревоги]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, prohib_repo(
+            "Это НЕ инвестиция и НЕ финансовая пирамида. Мы не обещаем доходность.",
+            en_body="This is NOT an investment, NOT a pyramid. We do not promise returns."))
+        code, report = run_agent(tmp)
+        check("constitutional-prohibitions == pass для дисклеймера",
+              status_of(report, "constitutional-prohibitions") == "pass")
+        check("предупреждений нет", report.get("warnings", 0) == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 22. Перечень запретов «Запрещается: обещать доходность …» → запрет рядом → pass.
+    print("\n[мягкая проверка: перечень запретов «Запрещается: …» → pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, prohib_repo(
+            "Запрещается: обещать доходность, строить пирамиду, платить за "
+            "привлечение людей (рефералы)."))
+        code, report = run_agent(tmp)
+        check("constitutional-prohibitions == pass для перечня запретов",
+              status_of(report, "constitutional-prohibitions") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 23. Запрещённое обещание в витрине web/*.html (не только .md) → warn.
+    print("\n[мягкая проверка: запрещённое обещание в web/*.html → warn]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        files = dict(GOOD_FILES)
+        files["web/index.html"] = (
+            "<!doctype html><html><body>"
+            "<p>Гарантированная прибыль каждый месяц — приведи друга!</p>"
+            "</body></html>\n")
+        make_repo(tmp, files)
+        code, report = run_agent(tmp)
+        check("constitutional-prohibitions == warn для web/*.html",
+              status_of(report, "constitutional-prohibitions") == "warn")
+        check("вердикт остаётся green", report.get("verdict") == "green")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 
