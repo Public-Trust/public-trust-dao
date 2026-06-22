@@ -22,6 +22,7 @@ export function SiteHeader() {
     { label: t.navAbout, href: "/about/" },
     { label: t.navPriorities, href: "/priorities/" },
     { label: t.navRewards, href: "/rewards/" },
+    { label: t.navDirectHelp, href: "/direct-help/" },
     { label: t.navSafeguards, href: "/safeguards/" },
     { label: t.navWork, href: "/work/" },
     { label: t.navAccountability, href: "/accountability/" },

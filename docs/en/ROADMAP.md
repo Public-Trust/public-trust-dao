@@ -249,6 +249,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     power" (art. 9); the boundary "a signature is responsibility, not power over money".
     RU↔EN text in `lib/i18n.ts` (`AccountabilityDict`), added to the menu, no new
     dependencies. Rests on constitution art. 2/3/9. `PTD-0093`. TESTNET-ONLY.
+  - [x] Explainer screen "How the fund pays for a need directly" (session 99):
+    `platform/app/direct-help/` — an in-app mirror of the normative
+    `docs/ESCROW-TARGETED-DISBURSEMENT.md` (the "mirror screen" pattern, like
+    priorities↔PRIORITIES, rewards↔REWARDS-MODEL, safeguards↔ANTI-ABUSE,
+    work↔PROOF-OF-CONTRIBUTION, accountability↔ACCOUNTABILITY and glossary↔GLOSSARY): in
+    plain words — the fund's core principle of help "we don't give money — we pay the need,
+    and anyone can verify it"; 5 "main points" (money goes straight to the provider, not into
+    hands / confirmation is built in / it's not surveillance: the payment is open, not the
+    identity / if it falls through the money returns to the fund / long-running help is paid in
+    parts); three ways to pay (temporary hold / verified provider / off-chain with a
+    fingerprint); a table "what is open (the payment) ↔ what stays private (the identity)"; the
+    boundary "payment of a need, NOT an investment; no one moves money alone". RU↔EN text in
+    `lib/i18n.ts` (`EscrowDict`), added to the menu and linked from the "Apply for help" screen,
+    no new dependencies. Rests on constitution art. 4/5/7. `PTD-0096`. TESTNET-ONLY.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
   organs of power — Art. 9; read-only with respect to funds, a finding is a signal,

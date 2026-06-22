@@ -176,6 +176,11 @@ export default function ApplyPage() {
             <div className="field">
               <label htmlFor="spend">{a.spendLabel}</label>
               <p className="field-hint">{a.spendHint}</p>
+              <p className="field-hint">
+                <Link className="screen-card-link" href="/direct-help/">
+                  {a.spendExplain}
+                </Link>
+              </p>
               <textarea
                 id="spend"
                 rows={3}

@@ -61,6 +61,7 @@ export type ApplyDict = {
   needPlaceholder: string;
   spendLabel: string;
   spendHint: string;
+  spendExplain: string;
   spendPlaceholder: string;
   amountLabel: string;
   amountHint: string;
@@ -332,6 +333,29 @@ export type AccountabilityDict = {
   sourceLink: string;
 };
 
+export type EscrowDict = {
+  back: string;
+  title: string;
+  lead: string;
+  mainIdeaTitle: string;
+  mainIdea: string; // главная мысль одной строкой
+  keyTitle: string; // «Главное — простыми словами»
+  key: string[];
+  waysTitle: string;
+  waysHint: string;
+  // Три способа оплатить нужду: заморозка / проверенный поставщик / вне сети.
+  ways: { name: string; text: string }[];
+  disclosureTitle: string;
+  disclosureHint: string;
+  // Что открыто (виден платёж) ↔ что остаётся приватным (личность человека).
+  disclosure: { open: string; closed: string }[];
+  limitTitle: string;
+  limitNote: string; // граница: оплата нужды, не инвестиция; платёж виден, человек — нет
+  sourceTitle: string;
+  sourceNote: string;
+  sourceLink: string;
+};
+
 export type NotFoundDict = {
   code: string;
   title: string;
@@ -407,6 +431,7 @@ export type Dict = {
   navSafeguards: string;
   navWork: string;
   navAccountability: string;
+  navDirectHelp: string;
   screensTitle: string;
   screensLead: string;
   soon: string;
@@ -425,6 +450,7 @@ export type Dict = {
   safeguards: SafeguardsDict;
   work: WorkDict;
   accountability: AccountabilityDict;
+  escrow: EscrowDict;
   notFound: NotFoundDict;
   myData: MyDataDict;
   wallet: WalletDict;
@@ -461,6 +487,7 @@ export const DICT: Record<Lang, Dict> = {
     navSafeguards: "Защита от обмана",
     navWork: "Оплачиваемая работа",
     navAccountability: "Всё под подписью",
+    navDirectHelp: "Оплата напрямую",
     screensTitle: "Что появится в платформе",
     screensLead:
       "Каждый экран делаем сразу рабочим. Пока умные контракты не запущены в тестовой сети, экраны показывают данные из открытого журнала и понятные заготовки — приложение «оживает» уже сейчас.",
@@ -1013,6 +1040,51 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "Этот экран — зеркало нормативного документа фонда «Всё под подписью и прослеживаемо». Принцип опирается на конституцию (статья 3 «открытость и проверяемость», статья 9 «роль ИИ — без власти», статья 2 «никто не владелец»). Несменяемость истории уже работает: открытый журнал решений устроен как цепочка с защитой от подмены. Всё пока на тестовой сети, без реальных денег.",
       sourceLink: "Открыть документ «Всё под подписью и прослеживаемо» →",
     },
+    escrow: {
+      back: "← На главную",
+      title: "Как фонд оплачивает нужду напрямую",
+      lead: "Это главный принцип помощи в фонде. Деньги не выдаются на руки — фонд сам оплачивает нужду напрямую тому, кто оказывает услугу: арендодателю, аптеке, магазину еды. Этот экран простыми словами объясняет, почему так помощь точно доходит до цели, и почему это не слежка за человеком.",
+      mainIdeaTitle: "Главная мысль одной строкой",
+      mainIdea: "Мы не даём деньги — мы оплачиваем нужду. И каждый может это проверить.",
+      keyTitle: "Главное — простыми словами",
+      key: [
+        "Деньги идут прямо тому, кто оказывает услугу. Не на руки человеку, а сразу арендодателю, аптеке, магазину еды. Получатель помощи физически не может увести эти деньги себе на другое.",
+        "Подтверждение встроено само собой. В открытом журнале навсегда видно: кому заплатили, сколько, за что и когда. Не нужно потом вымаливать чеки — это уже видно из самого платежа.",
+        "Это не слежка за человеком. Открыт сам платёж (кому и за что), а не личность человека, его документы или история. Видно, что аренда оплачена, — но не видно, кто именно её получил и почему он в беде.",
+        "Если что-то сорвалось — деньги возвращаются в общий фонд, а не теряются и не оседают у кого-то на руках.",
+        "За длинную помощь платим по частям. За долгую аренду — помесячно, а не всю сумму вперёд. Если ситуация изменилась, можно остановиться на любом шаге.",
+      ],
+      waysTitle: "Три способа оплатить нужду",
+      waysHint: "В зависимости от ситуации фонд оплачивает нужду одним из трёх способов.",
+      ways: [
+        {
+          name: "Оплата с временной заморозкой (основной способ)",
+          text: "Деньги откладываются под конкретный случай и могут уйти только этому поставщику услуги. Пока услуга не подтверждена — деньги заморожены; если сделка сорвалась — возвращаются в фонд.",
+        },
+        {
+          name: "Прямая оплата проверенному поставщику",
+          text: "Если поставщик уже в списке проверенных (например, известная аптека или арендодатель), оплата проходит сразу, без заморозки — это быстрее для разовых платежей.",
+        },
+        {
+          name: "Оплата вне сети с доказательством",
+          text: "Иногда платёж проходит обычным путём (банк, наличные через проверенного партнёра). Тогда поставщик подтверждает получение, счёт или договор остаётся приватным, но его «отпечаток» кладётся в открытый журнал — подделать задним числом нельзя.",
+        },
+      ],
+      disclosureTitle: "Что открыто, а что остаётся приватным",
+      disclosureHint: "Слева — что видно каждому (сам платёж). Справа — что никогда не публикуется (личность человека и его история). Проверяема операция, а не человек.",
+      disclosure: [
+        { open: "Условный номер случая (без имени)", closed: "Имя, контакты, адрес человека" },
+        { open: "Категория нужды и срочность", closed: "Диагноз, детали ситуации" },
+        { open: "Сумма и валюта", closed: "Сканы паспорта и документов (только их «отпечаток»)" },
+        { open: "Кому заплатили (поставщик)", closed: "Сам счёт или договор" },
+        { open: "Дата, статус и «отпечаток» счёта", closed: "Личная переписка и обстоятельства" },
+      ],
+      limitTitle: "Жёсткая граница",
+      limitNote: "Это оплата нужды, общественное благо, а не инвестиция: нигде не обещаем доход или выгоду. Помощь приходит первой тем, кому нужнее, но срочность не отменяет проверку и лимиты. Никто не двигает деньги в одиночку: выплату, возврат и паузу подтверждают несколько независимых людей, а реальные средства — только через общий кошелёк (минимум 3 подписи из 5).",
+      sourceTitle: "Где это записано",
+      sourceNote: "Этот экран — зеркало нормативного документа фонда «Как фонд оплачивает нужду напрямую». Принцип опирается на конституцию (статьи 4, 5, 7), порядок помощи и правила защиты от обмана. Это описание правил для будущих программ-контрактов выплат и для ИИ-помощников «Аудит», «Хранитель», «Справедливость». Всё пока на тестовой сети, без реальных денег.",
+      sourceLink: "Открыть документ «Как фонд оплачивает нужду напрямую» →",
+    },
     notFound: {
       code: "Страница не найдена",
       title: "Такой страницы здесь нет",
@@ -1134,6 +1206,7 @@ export const DICT: Record<Lang, Dict> = {
       needPlaceholder: "Например: после пожара нет где жить, нужно временное жильё на месяц.",
       spendLabel: "На что именно пойдут средства",
       spendHint: "Фонд не выдаёт деньги на руки, а оплачивает нужду напрямую (например, аренду — арендодателю, лекарство — аптеке). Напишите, что нужно оплатить.",
+      spendExplain: "Как фонд оплачивает нужду напрямую →",
       spendPlaceholder: "Например: оплата аренды комнаты за один месяц напрямую арендодателю.",
       amountLabel: "Примерная сумма (необязательно)",
       amountHint: "Если знаете — укажите приблизительно. Все суммы пока в тестовой сети, без реальных денег.",
@@ -1407,6 +1480,7 @@ export const DICT: Record<Lang, Dict> = {
     navSafeguards: "Anti-fraud",
     navWork: "Paid work",
     navAccountability: "Signed & traceable",
+    navDirectHelp: "Direct payment",
     screensTitle: "What the platform will include",
     screensLead:
       "Each screen is built to actually work. Until the smart contracts run on a test network, screens show data from the open record and clear placeholders — the app already comes to life now.",
@@ -1959,6 +2033,51 @@ export const DICT: Record<Lang, Dict> = {
       sourceNote: "This screen mirrors the fund's normative document “Everything is signed and traceable”. The principle rests on the constitution (article 3 “openness and verifiability”, article 9 “the role of AI — without power”, article 2 “no one owns it”). The unchangeability of history already works: the open decision journal is built as a chain protected from tampering. Everything is still on a test network, with no real money.",
       sourceLink: "Open the “Everything is signed and traceable” document →",
     },
+    escrow: {
+      back: "← Back to home",
+      title: "How the fund pays for a need directly",
+      lead: "This is the fund's core principle of help. Money is not handed out — the fund itself pays the need directly to whoever provides the service: the landlord, the pharmacy, the food shop. This screen explains in plain words why help reaches its goal this way, and why it is not surveillance of a person.",
+      mainIdeaTitle: "The main idea in one line",
+      mainIdea: "We don't give money — we pay the need. And anyone can verify it.",
+      keyTitle: "The essentials in plain words",
+      key: [
+        "Money goes straight to whoever provides the service. Not into a person's hands, but directly to the landlord, the pharmacy, the food shop. The recipient of help physically cannot redirect this money to something else.",
+        "Confirmation is built in by itself. The open journal shows forever: who was paid, how much, for what, and when. No need to beg for receipts afterwards — it's already visible from the payment itself.",
+        "This is not surveillance of a person. The payment is open (to whom and for what), not the person's identity, documents, or history. You can see that rent was paid — but not who exactly received it or why they are in trouble.",
+        "If something falls through, the money returns to the shared fund, rather than being lost or settling in someone's hands.",
+        "For long-running help we pay in parts. For long-term rent — month by month, not the whole sum up front. If the situation changes, it can be stopped at any step.",
+      ],
+      waysTitle: "Three ways to pay a need",
+      waysHint: "Depending on the situation, the fund pays the need in one of three ways.",
+      ways: [
+        {
+          name: "Payment with a temporary hold (the main way)",
+          text: "Money is set aside for a specific case and can go only to that service provider. Until the service is confirmed the money is frozen; if the deal falls through, it returns to the fund.",
+        },
+        {
+          name: "Direct payment to a verified provider",
+          text: "If the provider is already on the verified list (for example, a known pharmacy or landlord), the payment goes through at once, without a hold — faster for one-off payments.",
+        },
+        {
+          name: "Off-chain payment with proof",
+          text: "Sometimes a payment goes the usual way (bank, cash via a trusted partner). Then the provider confirms receipt, the invoice or contract stays private, but its fingerprint is placed in the open journal — it can't be forged after the fact.",
+        },
+      ],
+      disclosureTitle: "What is open, and what stays private",
+      disclosureHint: "On the left — what everyone can see (the payment itself). On the right — what is never published (the person's identity and their story). The operation is verifiable, not the person.",
+      disclosure: [
+        { open: "A case reference number (no name)", closed: "Name, contacts, address of the person" },
+        { open: "Category of need and urgency", closed: "Diagnosis, details of the situation" },
+        { open: "Amount and currency", closed: "Scans of passport and documents (only their fingerprint)" },
+        { open: "Who was paid (the provider)", closed: "The invoice or contract itself" },
+        { open: "Date, status, and invoice fingerprint", closed: "Personal correspondence and circumstances" },
+      ],
+      limitTitle: "Hard boundary",
+      limitNote: "This is payment of a need, a public good, not an investment: nowhere do we promise income or profit. Help reaches first those who need it most, but urgency does not cancel checks and limits. No one moves money alone: a payout, a refund, and a pause are confirmed by several independent people, and real funds — only through the shared wallet (at least 3 signatures out of 5).",
+      sourceTitle: "Where this is written down",
+      sourceNote: "This screen mirrors the fund's normative document “How the fund pays for a need directly”. The principle rests on the constitution (articles 4, 5, 7), the order of help, and the rules against fraud. It describes the rules for the future payout contracts and for the AI helpers “Audit”, “Guardian”, and “Fairness”. Everything is still on a test network, with no real money.",
+      sourceLink: "Open the “How the fund pays for a need directly” document →",
+    },
     notFound: {
       code: "Page not found",
       title: "There's no such page here",
@@ -2080,6 +2199,7 @@ export const DICT: Record<Lang, Dict> = {
       needPlaceholder: "For example: after a fire there is nowhere to live, temporary housing is needed for a month.",
       spendLabel: "What exactly the funds will pay for",
       spendHint: "The fund does not hand out cash — it pays the need directly (for example, rent to the landlord, medicine to the pharmacy). Write what needs to be paid.",
+      spendExplain: "How the fund pays a need directly →",
       spendPlaceholder: "For example: one month of room rent paid directly to the landlord.",
       amountLabel: "Approximate amount (optional)",
       amountHint: "If you know it — give a rough figure. All amounts are on a test network for now, with no real money.",
