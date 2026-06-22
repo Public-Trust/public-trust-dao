@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 46,
-  "head_hash": "f0ec7d1eb20f48d73cabc9ff4a9a93efc2c67503a1a8ce70dee8c79a1521877a",
+  "count": 47,
+  "head_hash": "dd2955649fc9e39f88b3d7d52baf6d099f741598d1db50441be0efb1e4539b33",
   "entries": [
     {
       "seq": 0,
@@ -417,6 +417,15 @@
       "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/PROOF-OF-CONTRIBUTION.md (+EN) переписан по образцу REWARDS-MODEL/GOVERNANCE/ANTI-ABUSE/ESCROW — ведущий раздел «Главное простыми словами» («фонд создаёт честную работу вокруг помощи; за работу платят, но не на слово»), жаргон (bounty/milestone, escrow, проблема оракула, soulbound, анти-Сивилла, skin in the game, state machine, Solidity-эскиз) вынесен в «Технический раздел — для разработчиков». Смысл не изменён. INBOX #19 остаётся открытым.",
       "hash": "f0ec7d1eb20f48d73cabc9ff4a9a93efc2c67503a1a8ce70dee8c79a1521877a",
       "file": "records/0045-decision.json"
+    },
+    {
+      "seq": 46,
+      "id": "PTD-0046",
+      "type": "decision",
+      "timestamp": "2026-06-22T11:30:00Z",
+      "summary": "INBOX #19 — продолжение прохода «понятный язык»: docs/PRIORITIES.md (+EN) переписан по образцу — человеческий заголовок и ведущий раздел «Главное простыми словами», машиночитаемый JSON (level/key/label) вынесен в «Технический раздел — для разработчиков». Смысл порядка распределения не изменён. Основной кандидат прохода закрыт.",
+      "hash": "dd2955649fc9e39f88b3d7d52baf6d099f741598d1db50441be0efb1e4539b33",
+      "file": "records/0046-decision.json"
     }
   ]
 }
