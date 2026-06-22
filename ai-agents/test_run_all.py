@@ -24,6 +24,7 @@
 import contextlib
 import importlib.util
 import io
+import json
 import os
 import shutil
 import sys
@@ -249,7 +250,68 @@ def main():
               code == 0 and "python3 ai-agents/structure_guard.py" in out)
         check("guard_warning_lines пуст, когда checks без warn", mod.guard_warning_lines(mod.run_guard()) == [])
 
+        # --- Статус-артефакт (--status-out): машиночитаемый светофор ---
+        print("\n[--status-out: машиночитаемый статус-светофор]")
+        status_path = os.path.join(tmp, "status.json")
+        mod.AGENTS = [
+            {"key": "audit", "script": "green_agent.py", "guards": "g1"},
+            {"key": "guardian", "script": "green_agent.py", "guards": "g2"},
+        ]
+        mod.TESTS = ["pass_test.py"]
+        write(tmp, "structure_guard.py", fake_guard("green", 10, 10, 0, 0))
+
+        # Файл НЕ пишется без флага.
+        if os.path.exists(status_path):
+            os.remove(status_path)
+        run_main(mod, ["--with-tests", "--json"])
+        check("без --status-out файл не создаётся", not os.path.exists(status_path))
+
+        # Зелёный прогон пишет валидный, структурно полный артефакт.
+        code = run_main(mod, ["--with-tests", "--json", "--status-out", status_path])
+        check("--status-out пишет файл, exit не сломан", code == 0 and os.path.exists(status_path))
+        with open(status_path, encoding="utf-8") as fh:
+            st = json.load(fh)
+        check("статус: схема версионирована", st.get("schema_version") == mod.STATUS_SCHEMA_VERSION)
+        check("статус: общий вердикт green", st.get("verdict") == "green")
+        check("статус: счёт агентов сведён", st["agents"] == {"green": 2, "total": 2})
+        check("статус: счёт тестов сведён", st["tests"] == {"green": 1, "total": 1})
+        check("статус: сводка стража с предупреждениями",
+              st["guard"]["verdict"] == "green" and st["guard"]["warnings"] == 0)
+        check("статус: по строке на каждого агента с ключом и вердиктом",
+              [a["key"] for a in st["agent_status"]] == ["audit", "guardian"]
+              and all(a["verdict"] == "green" for a in st["agent_status"]))
+
+        # Артефакт ДЕТЕРМИНИРОВАН: повторный прогон при том же состоянии даёт
+        # побайтово тот же файл (в git «грязнеет» только при смене вердикта/счёта).
+        with open(status_path, "rb") as fh:
+            first = fh.read()
+        run_main(mod, ["--with-tests", "--json", "--status-out", status_path])
+        with open(status_path, "rb") as fh:
+            second = fh.read()
+        check("артефакт детерминирован (нет времени по стенным часам)", first == second)
+
+        # Красный прогон ТОЖЕ пишет артефакт (индикатор честно показывает красный свет).
+        mod.AGENTS = [
+            {"key": "audit", "script": "green_agent.py", "guards": "g1"},
+            {"key": "guardian", "script": "red_agent.py", "guards": "g2"},
+        ]
+        code = run_main(mod, ["--with-tests", "--json", "--status-out", status_path])
+        with open(status_path, encoding="utf-8") as fh:
+            st_red = json.load(fh)
+        check("красный прогон пишет артефакт с verdict=red, exit 1",
+              code == 1 and st_red["verdict"] == "red" and st_red["agents"]["green"] == 1)
+
+        # build_status без стража (None) → guard=None, не падает.
+        rep_no_guard = {"verdict": "green", "agents_green": 1, "agents_total": 1,
+                        "tests_green": 0, "tests_total": 0, "guard_warning_lines": [],
+                        "agents": [{"key": "x", "verdict": "green", "passed": 1, "total": 1}],
+                        "guard": None}
+        check("build_status терпит отсутствие стража (guard=None)",
+              mod.build_status(rep_no_guard)["guard"] is None)
+
         # Hard-«красное» стража валит общий вердикт наравне с агентами.
+        mod.AGENTS = [{"key": "a", "script": "green_agent.py", "guards": ""}]
+        mod.TESTS = ["pass_test.py"]
         write(tmp, "structure_guard.py", fake_guard("red", 5, 10, 0, 1))
         check("страж hard-red валит общий вердикт → exit 1",
               run_main(mod, ["--with-tests", "--json"]) == 1)

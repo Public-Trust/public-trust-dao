@@ -37,7 +37,9 @@ Run-All (мета-агент) — Public Trust DAO (Этап 6, консолид
   • --with-contracts — пробросить в Audit прогон тестов смарт-контрактов (нужен Node/npm);
   • --with-tests     — дополнительно прогнать тест-инварианты агентов (`test_*.py`):
                        доказывают, что «красное реально ловится» (а не «зелёно по умолчанию»);
-  • --json           — машиночитаемый JSON-отчёт вместо человекочитаемого.
+  • --json           — машиночитаемый JSON-отчёт вместо человекочитаемого;
+  • --status-out PATH — записать компактный детерминированный «статус-светофор» в
+                       файл-артефакт (основа публичного индикатора без внешних сервисов).
 
 Код возврата 0, если ВСЁ зелёно, иначе 1. «Красно» = сигнал сообществу, а не действие:
 мета-агент ничего не исправляет и ничем не распоряжается.
@@ -223,6 +225,69 @@ def guard_warning_lines(guard_result):
     return lines
 
 
+# Версия схемы статус-артефакта. Меняется, если формат файла меняется
+# несовместимо, чтобы дашборды/читатели могли подстроиться.
+STATUS_SCHEMA_VERSION = 1
+
+
+def build_status(report):
+    """Собирает КОМПАКТНЫЙ машиночитаемый «статус-светофор» из полного отчёта.
+
+    Намеренно ДЕТЕРМИНИРОВАН: не содержит ни времени по стенным часам, ни путей —
+    при неизменном состоянии репозитория файл-артефакт побайтово тот же, значит
+    в git он «грязнеет» ТОЛЬКО когда меняется сам вердикт/счёт (а не каждый прогон).
+    «Когда» берётся из времени коммита/прогона CI, а не из самого файла.
+
+    Содержит ровно то, что нужно публичному индикатору без внешних сервисов:
+    общий вердикт, счёт агентов/тестов, сводку стража с мягкими предупреждениями
+    (числом И построчно) и по строке на каждого агента — чтобы дашборд мог
+    нарисовать таблицу «агент → зелёно/красно». Это СИГНАЛ, не действие (ст. 9)."""
+    guard = report.get("guard")
+    guard_status = None
+    if guard is not None:
+        guard_status = {
+            "verdict": guard.get("verdict"),
+            "passed": guard.get("passed"),
+            "total": guard.get("total"),
+            "warnings": guard.get("warnings", 0),
+            "warning_lines": report.get("guard_warning_lines", []),
+        }
+    return {
+        "schema_version": STATUS_SCHEMA_VERSION,
+        "source": "ai-agents/run_all.py",
+        "role": "служебный сигнал, не орган власти (Конституция, ст. 9)",
+        "verdict": report.get("verdict"),
+        "agents": {
+            "green": report.get("agents_green"),
+            "total": report.get("agents_total"),
+        },
+        "tests": {
+            "green": report.get("tests_green"),
+            "total": report.get("tests_total"),
+        },
+        "guard": guard_status,
+        "agent_status": [
+            {
+                "key": a.get("key"),
+                "verdict": a.get("verdict"),
+                "passed": a.get("passed"),
+                "total": a.get("total"),
+            }
+            for a in report.get("agents", [])
+        ],
+    }
+
+
+def write_status(path, report):
+    """Пишет статус-артефакт в path (создаёт родительские каталоги). С финальным \\n."""
+    parent = os.path.dirname(os.path.abspath(path))
+    if parent:
+        os.makedirs(parent, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(json.dumps(build_status(report), ensure_ascii=False, indent=2))
+        fh.write("\n")
+
+
 def main(argv):
     parser = argparse.ArgumentParser(
         description="Мета-агент Public Trust DAO: прогнать всех восемь агентов и свести в один вердикт."
@@ -241,6 +306,13 @@ def main(argv):
         "--json",
         action="store_true",
         help="вывести машиночитаемый JSON-отчёт вместо человекочитаемого.",
+    )
+    parser.add_argument(
+        "--status-out",
+        metavar="PATH",
+        default=None,
+        help="записать компактный машиночитаемый статус-светофор в файл PATH "
+             "(детерминированный артефакт для дашборда/публичного индикатора).",
     )
     args = parser.parse_args(argv[1:])
 
@@ -274,6 +346,11 @@ def main(argv):
         "tests": test_results,
         "guard": guard_result,
     }
+
+    # Статус-артефакт пишется при любом вердикте (в т.ч. «красно») — индикатор
+    # должен честно показывать и красный свет, а не только зелёный.
+    if args.status_out:
+        write_status(args.status_out, report)
 
     if args.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))

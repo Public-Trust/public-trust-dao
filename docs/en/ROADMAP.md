@@ -523,11 +523,23 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   "[check] step: problem"; the human-readable guard row prints them as `⚠ [check] …` when
   `guard_warnings>0` (falling back to the guard pointer if no detail), and `--json` gains a
   `guard_warning_lines` key. `test_run_all.py` 21→28, `PTD-0068`.
-- [ ] **Machine-readable project "status light" from `run_all --json`** — persist the last
+- [x] **Machine-readable project "status light" from `run_all --json`** — persist the last
   `run_all` verdict (including `guard_warnings` and `guard_warning_lines`) to an artifact file
   under `governance/`, as the basis for a future public status indicator with no external
   services (related to the long-standing "badge in governance/" idea; now that the warning
   lines are machine-readable, the artifact can include them; sessions 70–71).
+  → Done (session 72): `--status-out PATH` flag + `build_status` helper, deterministic artifact
+  [`governance/status/run_all_status.json`](../../governance/status/) (+ bilingual README),
+  `test_run_all.py` 28→39, `PTD-0069`. Subsumes the long-standing "badge in governance/" idea
+  (below) — this item closes it too.
+- [ ] **Public status light on the site/page from the artifact** — a `web/` page (or section)
+  reads [`governance/status/run_all_status.json`](../../governance/status/) and renders green/red
+  + agent/test scores and soft warnings for a human, with no external services/badges/trackers
+  (continuation of `PTD-0069`, session 72).
+- [ ] **Guard/CI: status artifact not stale vs the current verdict** — a soft check that the
+  committed `governance/status/run_all_status.json` matches a fresh `run_all --status-out`
+  (otherwise the in-repo light is stale); or a CI step regenerates the artifact (determinism
+  allows it) — `PTD-0069`, session 72.
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -560,9 +572,11 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   (README/web/PROMOTION): no "guaranteed returns"/"investment"/"pyramid"/"referrals"
   (the literal prohibitions of `PRINCIPLES.md`) — could become part of Documentation or
   a separate mini-agent (session 29; previously proposed as a Guardian extension).
-- [ ] Run-All: a machine-readable status badge in `governance/` (the last
+- [x] Run-All: a machine-readable status badge in `governance/` (the last
   `run_all --json` verdict saved to an artifact file) — a basis for a future public
   "status traffic light" with no external services (session 32).
+  → Done (session 72) by the same `--status-out` flag and artifact
+  [`governance/status/run_all_status.json`](../../governance/status/), `PTD-0069`.
 - [x] Test invariant for Audit (`test_audit.py`) — the only agent without its own
   invariant; feed a "broken" governance artifact and check Audit goes red (close the
   Stage-6 quality-standard gap; session 32).
@@ -620,6 +634,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0069 (session 72):** P3 (Stage 6 quality) — **machine-readable project "status light"
+  from `run_all`.** Folds the work accumulated over sessions 70–71 (`guard_warnings` and
+  `guard_warning_lines` in `--json`) into a visible operator/public artifact rather than yet
+  another invisible guard micro-check. The `--status-out PATH` flag + `build_status(report)`
+  helper: a compact **deterministic** summary (overall verdict, agent/test scores, guard
+  summary with count and lines of soft warnings, one line per agent). No wall-clock time → in
+  git it only goes "dirty" when the verdict/score changes; `schema_version` versions the format;
+  written on any verdict (incl. `red`). Canonical artifact
+  [`governance/status/run_all_status.json`](../../governance/status/) + bilingual README.
+  Closes both related ideas (this one and the long-standing "badge in `governance/`", session 32).
+  `test_run_all.py` 28→39 (11 new checks: not written without the flag, written and valid, schema
+  versioned, scores folded, determinism — re-run is byte-identical, a red run writes `verdict=red`,
+  `build_status` tolerates `guard=None`). verify=green (70 records), run_all 8/8 tests 11/11
+  guard 10/10, documentation 3/3.
 - **PTD-0068 (session 71):** P3 (Stage 6 quality) — **`run_all` shows not only the COUNT but
   the guard's individual soft-warning LINES.** Follow-up to PTD-0067 (session 70): the new
   helper `guard_warning_lines(guard_result)` collects the `warn`-status checks (severity=soft)
@@ -1157,3 +1185,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Issue/PR templates (done) / GitHub labels in .github/labels / branch autosetup | agent | 37 |
 | Guard: CI calls run_all (done) / guard checks workflow trigger paths (on.push.paths includes ai-agents/**) / Documentation agent: soft "header pointer leads to glossary" check | agent | 60 |
 | Guard: trigger paths include ai-agents/** (done) / guard checks workflow also runs test_run_all.py | agent | 63 |
+| Machine-readable run_all status light (done) / public status light on the site from the artifact / guard: status artifact not stale vs verdict | agent | 72 |

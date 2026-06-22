@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 69,
-  "head_hash": "93fe66a3aee381a392c9a4677d600ffa58af3d0da0c3d4376679c8f7e9f8cde2",
+  "count": 70,
+  "head_hash": "c8675e857dfa211a7c723b8158fb53ab133e6d737b1b525fc313bb155d6b2baa",
   "entries": [
     {
       "seq": 0,
@@ -624,6 +624,15 @@
       "summary": "Мета-агент run_all показывает не только число, но и сами строки мягких предупреждений стража структуры (какая проверка, какой шаг): помощник guard_warning_lines собирает warn-проверки и их violations; человекочитаемая сводка печатает «⚠ [проверка] шаг: проблема», в --json — ключ guard_warning_lines; test_run_all 21→28",
       "hash": "93fe66a3aee381a392c9a4677d600ffa58af3d0da0c3d4376679c8f7e9f8cde2",
       "file": "records/0068-decision.json"
+    },
+    {
+      "seq": 69,
+      "id": "PTD-0069",
+      "type": "decision",
+      "timestamp": "2026-06-22T13:49:55Z",
+      "summary": "Мета-агент run_all получил флаг --status-out: пишет компактный машиночитаемый «статус-светофор» проекта (общий вердикт, счёт агентов/тестов, сводка стража с мягкими предупреждениями, строка на каждого агента) в детерминированный файл-артефакт governance/status/run_all_status.json (+двуязычный README); основа публичного статус-индикатора без внешних сервисов; test_run_all 28→39",
+      "hash": "c8675e857dfa211a7c723b8158fb53ab133e6d737b1b525fc313bb155d6b2baa",
+      "file": "records/0069-decision.json"
     }
   ]
 }

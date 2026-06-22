@@ -399,6 +399,9 @@ python3 ai-agents/run_all.py --with-contracts
 
 # Machine-readable report:
 python3 ai-agents/run_all.py --json
+
+# Write a compact machine-readable "status traffic-light" to a file artifact:
+python3 ai-agents/run_all.py --with-tests --status-out governance/status/run_all_status.json
 ```
 
 Exit code `0` — all green; `1` — at least one agent (or a test invariant under
@@ -419,12 +422,23 @@ guard run, yet does not turn red over them. In `--json` the same lines live unde
 the `guard_warning_lines` key. If the guard is absent from the directory, the line
 is hidden and it does not affect the verdict.
 
+The **`--status-out PATH`** flag additionally writes a compact machine-readable
+**"status traffic-light"** to a file artifact (helper `build_status`): the overall
+verdict, agent/test scores, the guard summary (count and lines of soft warnings)
+and one line per agent. The artifact is **deterministic** — no wall-clock time, so
+in git it only goes "dirty" when the verdict/score changes; the `schema_version`
+field versions the format. The canonical artifact lives at
+[`governance/status/run_all_status.json`](../governance/status/) (with a bilingual
+README) — the basis for a public status indicator with no external services. It is
+written on any verdict, including `red` (the indicator honestly shows a red light too).
+
 The **test invariant** [`test_run_all.py`](test_run_all.py) proves the folding
 works rather than being "green by default": on fake agents (green/red/crashed/
 anomalous), fake tests and a fake guard (soft warnings do not fail, hard "red"
 fails, an absent guard is not applicable; the warning lines themselves are shown
-under the guard line) it checks that red really folds into red and green does not
-fail falsely (28/28). CI runs `test_run_all.py` + `run_all.py
+under the guard line; the status artifact is written deterministically and on a red
+verdict too) it checks that red really folds into red and green does not
+fail falsely (39/39). CI runs `test_run_all.py` + `run_all.py
 --with-tests` — two steps instead of fifteen.
 
 ## Structure-Guard — keeps the directory's quality standards

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "source": "ai-agents/run_all.py",
+  "role": "служебный сигнал, не орган власти (Конституция, ст. 9)",
+  "verdict": "green",
+  "agents": {
+    "green": 8,
+    "total": 8
+  },
+  "tests": {
+    "green": 11,
+    "total": 11
+  },
+  "guard": {
+    "verdict": "green",
+    "passed": 10,
+    "total": 10,
+    "warnings": 0,
+    "warning_lines": []
+  },
+  "agent_status": [
+    {
+      "key": "audit",
+      "verdict": "green",
+      "passed": 4,
+      "total": 4
+    },
+    {
+      "key": "guardian",
+      "verdict": "green",
+      "passed": 4,
+      "total": 4
+    },
+    {
+      "key": "fairness",
+      "verdict": "green",
+      "passed": 5,
+      "total": 5
+    },
+    {
+      "key": "reputation",
+      "verdict": "green",
+      "passed": 5,
+      "total": 5
+    },
+    {
+      "key": "housing",
+      "verdict": "green",
+      "passed": 8,
+      "total": 8
+    },
+    {
+      "key": "documentation",
+      "verdict": "green",
+      "passed": 3,
+      "total": 3
+    },
+    {
+      "key": "governance",
+      "verdict": "green",
+      "passed": 6,
+      "total": 6
+    },
+    {
+      "key": "mediator",
+      "verdict": "green",
+      "passed": 6,
+      "total": 6
+    }
+  ]
+}
