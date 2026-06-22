@@ -18,7 +18,8 @@
 ## How to use
 
 Terms are grouped by meaning: **basics**, **governance and voting**, **money and
-aid**, **transparency and verifiability**, **safety**. Within each group they go
+aid**, **transparency and verifiability**, **safety**, **personhood
+verification**. Within each group they go
 from general to specific. Each term has a short, "for a non-technical person"
 definition and, where relevant, a link to the normative document where it is
 formally fixed.
@@ -249,6 +250,54 @@ Helper programs that automatically check that the project follows its own rules
 fair, whether the "1 person = 1 vote" principle is preserved). **AI serves but
 does not rule:** an agent only raises a signal; people make the decisions
 (Article 9 of the constitution). See [`ai-agents/`](../../ai-agents/).
+
+---
+
+## Personhood verification — a real human behind an account
+
+These words appear in the document
+[«Making sure there's a real living person behind an account — without surveillance»](IDENTITY-VERIFICATION.md).
+Its core idea is simple: the fund needs **one real person = one account** (otherwise
+one trickster grabs a hundred votes and receives aid a hundred times under different
+names), yet the fund **does not collect faces or dossiers** on people and **does not
+surveil** them.
+
+**Protection from manipulation and fake accounts (technically — "Sybil-attack
+resistance").**
+Measures that prevent one person from creating many fake accounts to inflate votes
+or receive aid several times under different names. In this project this is done
+**without surveillance** — see
+[`IDENTITY-VERIFICATION.md`](IDENTITY-VERIFICATION.md).
+
+**Confirmation that you are a living, unique human (proof-of-personhood).**
+A check that there is **one real living person** behind an account — not a bot and
+not the same person's tenth account. Importantly, this verifies the **fact** that
+"the person is real and singular," not a record of **who exactly** that person is.
+Ready-made services for such checks already exist in the world; the fund offers a
+choice of several, including ones where a face is not needed at all.
+
+**Liveness check.**
+A way to make sure that the camera/service is facing **a living person right now**,
+not a photo, a recording, or a mask. The fund receives only a "yes/no" answer; the
+photo or video itself **never reaches** the fund's infrastructure.
+
+**Proof without disclosure (zero-knowledge).**
+A way to prove a statement — for example "I am a unique person" or "I am over 18" —
+**without revealing the data itself** (neither a document, nor a birth date, nor a
+face). Only the result ("yes, eligible") goes into the shared log, not personal
+details.
+
+**One-time "already registered" marker (nullifier).**
+A short technical marker that tells the system "**this person is already here**"
+**without revealing who it is**. It is precisely what lets the rule "one person =
+one account" hold without linking an account to a real identity.
+
+**Vouching by living people (web-of-trust, the fallback without a camera).**
+If a person has no smartphone or internet, or does not want to show their face, they
+can be confirmed by the **vouching of several already-verified participants or
+guardians**. This is a mandatory fallback — without it the fund would cut off
+exactly the most vulnerable (refugees, people without documents). Those who vouch
+put their reputation at stake if they confirm an invented person.
 
 ---
 

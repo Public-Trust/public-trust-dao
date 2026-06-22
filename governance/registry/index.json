@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 50,
-  "head_hash": "02b9070412f4bebfa6deede1946531a8d3d815d3ed0021536b29a7dcf80e7574",
+  "count": 51,
+  "head_hash": "20b6e71bd6816f74991d41812ccf0a723b9376cccbdc94cc39b44bd0ecb5788e",
   "entries": [
     {
       "seq": 0,
@@ -453,6 +453,15 @@
       "summary": "P3 (стандарты качества Этапа 6) — страж структуры расширен проверкой run-all-covers-all: ни один *_agent.py/test_*.py не заводится в обход общего прогона run_all (CI честен). Заодно закрыт пробел: test_run_all.py добавлен в TESTS (мета-агент не прогонял свой тест-инвариант). Тест 17→25, тесты run_all 10→11.",
       "hash": "02b9070412f4bebfa6deede1946531a8d3d815d3ed0021536b29a7dcf80e7574",
       "file": "records/0049-decision.json"
+    },
+    {
+      "seq": 50,
+      "id": "PTD-0050",
+      "type": "decision",
+      "timestamp": "2026-06-22T14:05:00Z",
+      "summary": "P3 (понятный язык) — в глоссарий добавлена группа «Проверка личности»: 6 терминов из IDENTITY-VERIFICATION.md (защита от накруток/Сивиллы, proof-of-personhood, liveness, zero-knowledge, nullifier, поручительство) простым языком, RU↔EN, со ссылками на документ. Закрывает идею сессии 44.",
+      "hash": "20b6e71bd6816f74991d41812ccf0a723b9376cccbdc94cc39b44bd0ecb5788e",
+      "file": "records/0050-glossary-personhood-terms.json"
     }
   ]
 }
