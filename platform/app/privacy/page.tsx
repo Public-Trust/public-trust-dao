@@ -6,6 +6,7 @@ import { useI18n } from "@/components/Providers";
 import {
   clearAll,
   clearOne,
+  exportAll,
   listStored,
   type StoredEntry,
 } from "@/lib/storage";
@@ -94,6 +95,21 @@ export default function MyDataPage() {
     refresh();
   }, [refresh]);
 
+  // Скачать копию данных одним файлом. Всё происходит в браузере: собираем
+  // снимок, делаем из него файл и отдаём через временную ссылку — наружу ничего
+  // не уходит. Объект-URL сразу освобождаем, чтобы не копить в памяти.
+  const downloadAll = useCallback(() => {
+    const blob = new Blob([JSON.stringify(exportAll(), null, 2)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "public-trust-dao-my-data.json";
+    link.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
   const hasEntries = mounted && entries.length > 0;
 
   return (
@@ -161,6 +177,22 @@ export default function MyDataPage() {
           </p>
         )}
       </section>
+
+      {hasEntries && (
+        <section className="panel" aria-labelledby="mydata-export-title">
+          <h2 id="mydata-export-title">{m.exportTitle}</h2>
+          <p className="field-hint">{m.exportHint}</p>
+          <div className="cta-row">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={downloadAll}
+            >
+              {m.exportButton}
+            </button>
+          </div>
+        </section>
+      )}
 
       <section className="explain" aria-labelledby="mydata-wallet-title">
         <h2 id="mydata-wallet-title">{t.wallet.title}</h2>

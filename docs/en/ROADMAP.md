@@ -186,6 +186,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     key words in human terms, grouped by meaning, live search over term and definition,
     a word count; a technical term appears only in parentheses (plain-language rule).
     Added to the menu, RU↔EN, no new dependencies. `PTD-0086`. TESTNET-ONLY.
+  - [x] "Take a copy" — export your data as one file (session 90):
+    the [`platform/app/privacy/`](../../platform/app/privacy/) screen gained a
+    "Download my data as a file" button — a person can take a copy of everything the
+    platform has saved in their browser as a single `public-trust-dao-my-data.json`
+    file (a data-portability right, as in GDPR). It all happens in the browser: the
+    snapshot is built from the same `ptd:`-prefixed records shown on the screen
+    (`exportAll()` in [`lib/storage.ts`](../../platform/lib/storage.ts)) and handed over
+    through a temporary link — zero outbound requests (transparency rail). The button
+    shows only when there is something to export; bilingual RU↔EN, no new dependencies.
+    Side effect: the platform lockfile (`platform/package-lock.json`) is committed for
+    the first time — the supply-chain rail from INBOX #34. Built to green (typecheck OK,
+    `next build` 13/13, export OK). `PTD-0087`. TESTNET-ONLY.
   - [ ] Wire up platform publishing to GitHub Pages during migration from `web/`.
 - [x] **Stage 6 — AI agents (skeleton): COMPLETE (8/8, session 31).** In `ai-agents/`
   all eight constitution-upholding helper modules are set up (service modules, not
@@ -1348,3 +1360,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Public status light on the site (done) / compact status chip on the other pages / chip in the topbar too, not only the footer | agent | 73 |
 | Label catalog .github/labels.yml (done) / optional label sync / guard: label catalog has no duplicates and valid hex colors | agent | 76 |
 | “What the app remembers about you” screen (done) / “erase my data” button right on the Voting and Identity screens linking to “My data” / export all drafts as one file (a backup for the person) | agent | 88 |
+| "Take a copy" of your data as one file (done) / upgrade Next from 15.1.6 to a patched version (security advisory CVE-2025-66478) / show the "take a copy" button even when the list is empty (an honest empty template file) | agent | 90 |

@@ -243,6 +243,11 @@ export type MyDataDict = {
   remove: string;
   removeAll: string;
   removed: string;
+  // «Забрать копию» — выгрузка всех записей одним файлом (резервная копия для
+  // человека, право на портируемость данных).
+  exportTitle: string;
+  exportHint: string;
+  exportButton: string;
 };
 
 export type GlossaryDict = {
@@ -701,6 +706,9 @@ export const DICT: Record<Lang, Dict> = {
       remove: "Стереть",
       removeAll: "Стереть всё",
       removed: "Стёрто",
+      exportTitle: "Забрать копию",
+      exportHint: "Можно скачать всё, что показано выше, одним файлом — себе на память или как резервную копию. Файл сохранится на ваше устройство и никуда не отправляется.",
+      exportButton: "Скачать мои данные файлом",
     },
     wallet: {
       back: "← На главную",
@@ -1418,6 +1426,9 @@ export const DICT: Record<Lang, Dict> = {
       remove: "Erase",
       removeAll: "Erase everything",
       removed: "Erased",
+      exportTitle: "Take a copy",
+      exportHint: "You can download everything shown above as a single file — to keep for yourself or as a backup. The file is saved to your device and is not sent anywhere.",
+      exportButton: "Download my data as a file",
     },
     wallet: {
       back: "← Back to home",
