@@ -141,7 +141,17 @@ Self-development does NOT lift the safety rails — it operates strictly within 
     (`no-key-material`, 64-hex outside hash fields + secret assignment). A test invariant
     [`test_guardian.py`](../../ai-agents/test_guardian.py) (14/14) proves "red is really
     caught, green doesn't false-fail". CI extended. `PTD-0022`.
-  - [ ] Modules 3–8: Fairness / Reputation / Housing / Governance / Mediator /
+  - [x] Module 3/8 (session 26): **Fairness** [`fairness_agent.py`](../../ai-agents/fairness_agent.py)
+    — a read-only fairness-of-distribution check over registry records of type
+    `disbursement` per [`PRIORITIES.md`](PRIORITIES.md)/[`ANTI-ABUSE.md`](ANTI-ABUSE.md):
+    `priority-valid` (level within the 1..10 scale, read directly from PRIORITIES.md),
+    `safeguards` (priority does not switch off limit/review/appeal window),
+    `collective-review` (≥2 independent confirmations), `staged-payments` (staging),
+    `applicant-privacy` (no personal data). Test invariant
+    [`test_fairness.py`](../../ai-agents/test_fairness.py) (17/17). As a side effect a
+    latent Guardian bug was fixed (it false-flagged its own `test_guardian.py`) — the
+    `ai-agents` CI is green again. `PTD-0023`.
+  - [ ] Modules 4–8: Reputation / Housing / Governance / Mediator /
     Documentation — one at a time, "to green".
 
 ### P1 — materials and infrastructure (partly from INBOX)
@@ -221,11 +231,37 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] Extend Guardian with URL-rail checks: no "yield promises"/"investment"/"guarantee"
   in public texts (the literal constitutional prohibitions of PRINCIPLES.md) — a light
   lexical linter for the landing/README (session 25).
+- [ ] A "payment ↔ registry record" invariant for Fairness/Audit: verify every on-chain
+  payment has a `disbursement` record in the registry (and vice versa) — tie the
+  `Disbursement` contract and the registry into one end-to-end check (session 26).
+- [ ] Agent self-test as a CI rule: every new agent must ship a `test_<agent>.py`
+  invariant, and CI runs them all — so no agent is "green by default" (Stage 6 quality
+  standard, proposed session 26).
+- [ ] Fairness: check `category` ↔ `priority_level` consistency (e.g. `housing` should
+  usually not sit below the "housing-loss threat" level) — a soft, non-blocking warning
+  to catch obvious categorization skew (session 26).
 
 ---
 
 ## Done
 
+- **PTD-0023 (session 26):** Stage 6 (AI agents), module 3/8 — **the Fairness agent**.
+  [`fairness_agent.py`](../../ai-agents/fairness_agent.py) is a service read-only agent:
+  it walks the public registry records of type `disbursement` and checks EVERY payment
+  for fairness of distribution and anti-abuse — `priority-valid` (priority level within
+  the 1..10 scale, read DIRECTLY from [`PRIORITIES.md`](PRIORITIES.md)), `safeguards`
+  (priority does not switch off `limit_ok`/`collective_review`/appeal window),
+  `collective-review` (≥2 independent confirmations, not single-person), `staged-payments`
+  (`1<=index<=of`), `applicant-privacy` (no personal data — only the pseudonymous
+  `case_id`). Human-readable and `--json` output; exit 0/1; "red" is a signal. A **test
+  invariant** [`test_fairness.py`](../../ai-agents/test_fairness.py) (17/17) proves "red
+  is caught, green doesn't false-fail" (including an empty registry). **Side effect:** a
+  latent bug from session 25 was found and fixed — Guardian false-flagged its own test
+  invariant (the `private_key: 0x...` fixture string), which made the `ai-agents` CI on
+  `main` effectively red; Guardian now skips text-scanning the agents' test invariants
+  (`ai-agents/test_*.py`), plus a regression scenario. CI
+  [`ai-agents.yml`](../../.github/workflows/ai-agents.yml) extended. `PTD-0023`.
+  TESTNET-ONLY. Next — modules 4–8 (Reputation / Housing / …).
 - **PTD-0022 (session 25):** Stage 6 (AI agents), module 2/8 — **the Guardian agent**.
   [`guardian_agent.py`](../../ai-agents/guardian_agent.py) is a dedicated, explicit
   safety-rails scanner across the WHOLE repo tree (over git-tracked files):
@@ -354,3 +390,4 @@ To keep self-development transparent, we record the origin of ideas.
 | Snapshot proposal templates / one governance validator in CI | agent | 18 |
 | Audit test invariant / Guardian agent / Documentation agent (bilingual) | agent | 24 |
 | Meta-agent "run all" / pre-commit hook / lexical prohibitions linter | agent | 25 |
+| "Payment ↔ registry record" invariant / agent self-test in CI / Reputation agent | agent | 26 |

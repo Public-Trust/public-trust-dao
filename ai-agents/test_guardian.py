@@ -154,6 +154,20 @@ def main():
              lambda t: add_tracked(t, "hardhat.js", "accounts: process.env.PRIVATE_KEY\n"),
              expect_green=True)
 
+    # 9. Тест-инвариант самого агента (ai-agents/test_*.py) — это фабрика фейковых
+    #    фикстур: его текст НЕ сканируется (иначе Guardian ложно краснеет на своём
+    #    же тесте). Та же «отрава» в обычном файле — обязана ловиться (сценарий 6).
+    scenario("отравленная фикстура внутри ai-agents/test_x.py — пропускается",
+             lambda t: add_tracked(t, "ai-agents/test_x.py",
+                                   'add_tracked(t, "c.yml", "private_key: 0x" + "e" * 64)\n'),
+             expect_green=True)
+
+    # 10. Плейсхолдер-многоточие в прозе/документации (`private_key: 0x...`) — НЕ утечка
+    #     (настоящий ключ — 64 hex без точек). Иначе доки, обсуждающие ключи, ложно красят.
+    scenario("плейсхолдер private_key: 0x... в документации — не утечка",
+             lambda t: add_tracked(t, "NOTES.md", "пример строки `private_key: 0x...`\n"),
+             expect_green=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 

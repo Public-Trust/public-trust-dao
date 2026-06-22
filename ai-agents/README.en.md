@@ -37,7 +37,7 @@ This sets hard boundaries for EVERY agent in this directory:
 |-------|---------|--------|
 | **Audit** | Verifies integrity and transparency: registry (hash-chain), IPFS manifest, Safe/Snapshot configs, contract tests. One "green/red" for the governance layer. | ✅ scaffold (`audit_agent.py`) |
 | **Guardian** | Watches the safety rails: no private keys/secrets in the repo, no mainnet/real funds, no TESTNET-first violations. | ✅ scaffold (`guardian_agent.py`) |
-| **Fairness** | Checks fairness of distribution per [`PRIORITIES.md`](../docs/en/PRIORITIES.md): is priority respected, is there bias/discrimination. | ⏳ planned |
+| **Fairness** | Checks fairness of distribution per [`PRIORITIES.md`](../docs/en/PRIORITIES.md): priority respected, limits/collective review/staging/privacy. | ✅ scaffold (`fairness_agent.py`) |
 | **Reputation** | Computes/validates voting weights per [`GOVERNANCE.md`](../docs/en/GOVERNANCE.md) §2–§3: "1 person = 1 vote", soulbound, "uniqueness ≠ power". | ⏳ planned |
 | **Housing** | Domain helper for housing cases (escrow paying the provider directly per [`ESCROW-TARGETED-DISBURSEMENT.md`](../docs/en/ESCROW-TARGETED-DISBURSEMENT.md)). | ⏳ planned |
 | **Governance** | Helps with the proposal lifecycle (format, quorum, timing, ties to the constitution); does not vote itself. | ⏳ planned |
@@ -111,6 +111,39 @@ return "red", while a clean tree with real sha256 hashes stays "green".
 
 CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
 the Guardian test invariant + Guardian itself on every push/PR.
+
+## Fairness agent — what it does and how to run it
+
+`fairness_agent.py` walks the public registry records of type `disbursement`
+(`governance/registry/`) and checks EVERY payment against the norms of fair
+distribution and anti-abuse. The priority scale is read **directly from**
+[`docs/PRIORITIES.md`](../docs/en/PRIORITIES.md) (not hardcoded) — which also proves
+the code and the normative document have not drifted apart.
+
+| Check | What it requires | Protects |
+|-------|------------------|----------|
+| `priority-valid` | priority level is within the 1..10 scale from PRIORITIES.md | Art. 5 — priority by the nature of need, not by identity |
+| `safeguards` | priority does NOT switch off anti-abuse: `limit_ok`/`collective_review`/appeal window | Art. 7 — high priority speeds up but never disables protection (PRIORITIES, rule 2) |
+| `collective-review` | a payment is confirmed by ≥2 independent reviewers | Art. 7 — no single-person approval of a payment (ANTI-ABUSE §3) |
+| `staged-payments` | staging is valid (`1 <= index <= of`) | Art. 7 — splitting reduces risk (ANTI-ABUSE §1) |
+| `applicant-privacy` | the record holds no personal data (name/e-mail/phone/…), only the pseudonymous `case_id` | Art. 5/6 — applicant dignity and privacy |
+
+```bash
+python3 ai-agents/fairness_agent.py          # human-readable report
+python3 ai-agents/fairness_agent.py --json    # machine-readable (for CI/other agents)
+```
+
+Exit code `0` — distribution is fair; `1` — a violation was found (this is a
+**signal** to the community, not an action: the agent fixes nothing and controls nothing).
+
+A **test invariant** [`test_fairness.py`](test_fairness.py) proves Fairness works rather
+than being "green by default": for every violation (priority off the scale, limits/appeal
+window removed, single-person approval, broken staging, personal data/e-mail in the
+record) the agent must return "red", while a valid payment and an empty registry stay
+"green" with no false positives.
+
+CI [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) runs Audit +
+Guardian (+test) + Fairness (+test) on every push/PR.
 
 ## Rails (for all agents in this directory)
 

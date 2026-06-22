@@ -61,8 +61,11 @@ SECRET_ASSIGN_RE = re.compile(
     re.IGNORECASE,
 )
 # Значения, которые НЕ являются утечкой (ссылки на окружение, плейсхолдеры, пусто).
+# Многоточие (`...`/`…`) — явный плейсхолдер в прозе/документации (напр. `0x...`):
+# настоящий приватный ключ — это 64 hex без точек, поэтому такое значение не утечка.
 PLACEHOLDER_RE = re.compile(
-    r"(process\.env|os\.environ|getenv|\$\{|<[^>]*>|null|none|true|false|\"\"|''|\(\s*$|\[)",
+    r"(process\.env|os\.environ|getenv|\$\{|<[^>]*>|null|none|true|false"
+    r"|\"\"|''|\(\s*$|\[|\.\.\.|…)",
     re.IGNORECASE,
 )
 
@@ -88,6 +91,13 @@ ALLOWED_PATH_RE = re.compile(r"\.env\.example$|\.example$", re.IGNORECASE)
 # Расширения, которые сканируем на текстовые секреты (бинарь/большие лок-файлы пропускаем).
 SKIP_SCAN_NAMES = {"package-lock.json"}
 SKIP_SCAN_EXT = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".pdf", ".woff", ".woff2"}
+
+# Тест-инварианты самих агентов (ai-agents/test_*.py) — это «фабрики отравленных
+# фикстур»: они НАМЕРЕННО собирают фейковые секреты (строки вида private_key/64-hex)
+# из сгенерированных значений (`"e" * 64`), чтобы доказать, что сканеры ловят их во
+# ВРЕМЕННЫХ репозиториях. Реальных ключей в этих файлах нет by design, поэтому
+# текстовый скан их пропускает — иначе Guardian ложно краснеет на собственном тесте.
+SKIP_KEYSCAN_RE = re.compile(r"(^|/)ai-agents/test_[A-Za-z0-9_]+\.py$")
 
 
 def tracked_files():
@@ -176,6 +186,8 @@ def check_no_key_material(files):
         ext = os.path.splitext(name)[1].lower()
         if name in SKIP_SCAN_NAMES or ext in SKIP_SCAN_EXT:
             continue
+        if SKIP_KEYSCAN_RE.search("/" + f):
+            continue  # тест-инвариант агента: фабрика фейковых фикстур, не утечка
         full = os.path.join(ROOT, f)
         try:
             with open(full, "r", encoding="utf-8", errors="strict") as fh:
