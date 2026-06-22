@@ -75,6 +75,11 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
      самой витрины записан не как «/<строчные-с-дефисами>/» (заглавные, пробел,
      лишний слэш, без ведущего/хвостового) — он тихо рассинхронит витрину с картой
      MIRROR_DOCS, а mirror-doc-slug смотрит только ключи; PTD-0117)
+  • mirror-doc-set-match → витрина t.learn и ключи MIRROR_DOCS — одно множество . ст. 3/6
+    (МЯГКАЯ: прямая сверка двух множеств слагов — показывает разом, что есть только
+     в витрине и что только в карте; рассинхрон объясняется одной строкой, а не
+     вычитанием отчётов coverage/showcase. Ключ без построенной страницы в сверку
+     со стороны карты не входит — «ещё не сделано», не «разошлось»; PTD-0118)
   • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
      односторонняя связь оставляет человека без обратного пути; PTD-0106)
@@ -1282,6 +1287,55 @@ def check_mirror_doc_learn_slug(root):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_mirror_doc_set_match(root):
+    """МЯГКАЯ: витрина t.learn и ключи карты MIRROR_DOCS — одно и то же множество экранов.
+
+    Прямая сверка двух множеств слагов одной строкой. `mirror-doc-coverage` следит за
+    одной стороной (каждый адрес витрины — ключ карты), `mirror-doc-showcase` — за
+    другой (каждый ПОСТРОЕННЫЙ экран карты показан в витрине). Обе сигналят по
+    отдельным слагам, по своей половине, и чтобы понять «разошлись ли витрина и карта
+    как множества», их отчёты приходится вычитать в голове. Эта проверка отвечает на
+    тот же вопрос напрямую: показывает РАЗОМ, что есть только в витрине и что только в
+    карте, — рассинхрон объясняется одной строкой (warn, не блок — ст. 3/6, PTD-0118).
+
+    Чтобы не кричать на НЕДОстроенную платформу, ключ карты без заведённой страницы в
+    сверку со стороны карты не входит: его пересказ ещё не существует — это «ещё не
+    сделано», а не «разошлось» (тот же приём, что у `mirror-doc-showcase`). Со стороны
+    витрины адрес учитывается всегда: показывать в витрине экран, которого нет среди
+    ключей карты, — уже расхождение. Нет файла i18n.ts или список t.learn не
+    распарсился — сверять нечего → pass.
+    """
+    if not os.path.exists(os.path.join(root, I18N_TS)):
+        return "pass", []
+    learn = parse_i18n_hrefs(read_text(root, I18N_TS), "learn")
+    if not learn:
+        return "pass", []
+    learn_slugs = {href.strip("/") for href in learn}
+    # Со стороны карты в сверку берём только ПОСТРОЕННЫЕ экраны (есть page.tsx);
+    # ключ без страницы — это «ещё не сделано», а не рассинхрон, иначе частично
+    # готовая платформа (или мини-репо в тесте) ложно «разойдётся» с картой.
+    built_map_slugs = {
+        slug for slug in MIRROR_DOCS
+        if os.path.exists(os.path.join(root, f"{PLATFORM_APP}/{slug}/page.tsx"))
+    }
+    only_in_learn = sorted(learn_slugs - set(MIRROR_DOCS))
+    only_in_map = sorted(built_map_slugs - learn_slugs)
+    if not only_in_learn and not only_in_map:
+        return "pass", []
+    parts = []
+    if only_in_learn:
+        parts.append("только в витрине t.learn (нет такого ключа в карте): "
+                     + ", ".join(f"/{s}/" for s in only_in_learn))
+    if only_in_map:
+        parts.append("только в карте MIRROR_DOCS (экран построен, но не в витрине): "
+                     + ", ".join(only_in_map))
+    return "warn", [{
+        "record": f"{I18N_TS} t.learn ↔ MIRROR_DOCS",
+        "problem": ("витрина «Разобраться, как устроен фонд» и карта MIRROR_DOCS "
+                    "описывают разные множества экранов — " + "; ".join(parts)),
+    }]
+
+
 def check_see_also_symmetric(root):
     """МЯГКАЯ: связь «См. также» между экранами-объяснениями взаимна.
 
@@ -1454,6 +1508,13 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "mirror-doc-set-match",
+        "title": "Витрина t.learn и ключи карты MIRROR_DOCS — одно и то же множество экранов",
+        "guards": "ст. 3/6 — прямая сверка двух множеств слагов: рассинхрон витрины и карты объясняется одной строкой, а не вычитанием отчётов coverage/showcase (PTD-0118); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_set_match",
+        "soft": True,
+    },
+    {
         "key": "see-also-symmetric",
         "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
         "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
@@ -1494,6 +1555,7 @@ def run(root):
     mirror_bil_status, mirror_bil_v = check_mirror_doc_bilingual(root)
     mirror_slug_status, mirror_slug_v = check_mirror_doc_slug()
     mirror_lslug_status, mirror_lslug_v = check_mirror_doc_learn_slug(root)
+    mirror_setm_status, mirror_setm_v = check_mirror_doc_set_match(root)
     seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
@@ -1517,6 +1579,7 @@ def run(root):
         "mirror_doc_bilingual": (mirror_bil_status, mirror_bil_v),
         "mirror_doc_slug": (mirror_slug_status, mirror_slug_v),
         "mirror_doc_learn_slug": (mirror_lslug_status, mirror_lslug_v),
+        "mirror_doc_set_match": (mirror_setm_status, mirror_setm_v),
         "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 

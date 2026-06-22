@@ -437,7 +437,7 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
-- [ ] **Documentation agent: a `t.learn` showcase address matches a `MIRROR_DOCS` key**
+- [x] **Documentation agent: a `t.learn` showcase address matches a `MIRROR_DOCS` key**
   — the next step after `mirror-doc-slug` (key is a slug) and `mirror-doc-learn-slug`
   (showcase address is a slug): both sides are now individually valid in form, but
   nothing checks that the set of showcase addresses and the set of map keys are the
@@ -445,6 +445,33 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   `mirror-doc-coverage`/`mirror-doc-showcase` via page existence). A direct soft
   comparison "showcase slugs == map slugs" would explain a desync in one line
   (proposed session 119, extension of `PTD-0117`). A warning, not a block.
+  **Done (session 120):** the `mirror-doc-set-match` check in `documentation_agent.py`
+  — a direct comparison of the two slug sets that shows at once what exists only in
+  the showcase (no such key in the map) and only in the map (screen built but not
+  shown in the showcase); the drift is explained in one line instead of subtracting
+  the coverage/showcase reports by hand. A map key without a built page is left out
+  of the map-side comparison ("not done yet", not "drifted" — same approach as
+  `mirror-doc-showcase`), so a partially-built platform raises no false alarms. SOFT
+  (warns, never turns the verdict red); no `i18n.ts` → stays silent. Green on the
+  real repo (11 showcase addresses = 11 map keys). +11 test checks (188/188),
+  run_all 8/8 + structure guard 11/11. `PTD-0118`.
+
+- [ ] **Documentation agent: every `t.learn` showcase address has a built page** — a
+  soft check that for each `/slug/` address in the "Understand how the fund works"
+  showcase there really is a `platform/app/<slug>/page.tsx` file. Today
+  `mirror-doc-coverage` checks the address is a map key and `mirror-doc-set-match`
+  checks the showcase and map sets coincide, but nothing catches "the address is in
+  the showcase yet the page itself does not exist" — a person clicks from the home
+  page and hits a 404 (`link-integrity` only inspects `.md`). A direct "showcase →
+  page built" check closes that gap (proposed session 120, extension of `PTD-0118`).
+  A warning, not a block.
+- [ ] **Documentation agent: the platform's journal snapshot does not lag the registry**
+  — a soft check that the record count in `platform/lib/journal-data.json` matches the
+  record count in `governance/registry/index.json`. The snapshot ships with the
+  platform and is rebuilt in CI before the build (`scripts/sync_journal.py`), but if a
+  commit is made without rebuilding it, the platform's open journal silently lags the
+  registry. A "snapshot == registry by record count" comparison catches a stale
+  snapshot in one line (proposed session 120). A warning, not a block.
 
 - [x] **Cross-screen "see also" links between the platform's mirror screens** — the
   series of screens (`manifesto`, `constitution`, `governance`, `priorities`, `rewards`,

@@ -13,7 +13,7 @@
 - **Каждую строку можно открыть целиком** — ссылка ведёт на полную запись в [реестре решений](governance/registry/records/).
 - **Лента собирается машинально** из [`governance/registry/index.json`](governance/registry/index.json) — ничего не дописывается от руки.
 
-Всего записей: **118**. Текущий отпечаток журнала: `bcfdf2ccae7cb8cf0fa1ded086609505d7cde9f7979e467df166efc05605272e`.
+Всего записей: **119**. Текущий отпечаток журнала: `56943ce5b3f1605d0b4d092d04c62e67c2ad53504ccc0850827c864b9c134ea9`.
 
 ---
 
@@ -30,6 +30,7 @@
 
 ## 2026-06-22
 
+- **PTD-0118** (решение) — Documentation-агент: новая мягкая проверка mirror-doc-set-match. [Полная запись](governance/registry/records/0118-decision.json)
 - **PTD-0117** (решение) — Documentation-агент: новая мягкая проверка mirror-doc-learn-slug. [Полная запись](governance/registry/records/0117-decision.json)
 - **PTD-0116** (решение) — Витрина web/ ведёт на платформу. [Полная запись](governance/registry/records/0116-decision.json)
 - **PTD-0115** (решение) — Страж (Guardian): убрана ложная тревога проверки no-key-material на русском отпечатке журнала в CHANGELOG. После ввода ленты изменений (PTD-0113) строка CHANGELOG.md «Текущий…. [Полная запись](governance/registry/records/0115-decision.json)

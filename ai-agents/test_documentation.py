@@ -1186,6 +1186,83 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # --- Мягкая проверка mirror-doc-set-match: витрина == ключи карты -----------
+    # Прямая сверка двух множеств слагов: адреса витрины t.learn и ключи MIRROR_DOCS.
+    # Ключ без построенной страницы со стороны карты в сверку не входит («ещё не
+    # сделано»), поэтому частично готовая платформа (как в with_platform) не «разойдётся».
+
+    # 54a. Чистая платформа (витрина = построенные экраны карты) → pass.
+    print("\n[мягкая проверка: витрина совпадает с построенными ключами карты → mirror-doc-set-match pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        st, viol = doc.check_mirror_doc_set_match(tmp)
+        check("mirror-doc-set-match == pass на чистой платформе", st == "pass")
+        check("нарушений нет (set-match)", viol == [])
+        # И в полном прогоне: вердикт green, проверка присутствует и soft, тревог нет.
+        code, report = run_agent(tmp)
+        check("вердикт green / exit=0 (set-match)",
+              report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-set-match присутствует и pass",
+              status_of(report, "mirror-doc-set-match") == "pass")
+        check("mirror-doc-set-match помечена soft",
+              _is_soft(report, "mirror-doc-set-match"))
+        check("предупреждений нет (set-match)", report.get("warnings", 0) == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 54b. В витрине t.learn есть адрес, которого нет среди ключей карты → warn,
+    #      названо «только в витрине».
+    print("\n[мягкая проверка: адрес витрины вне ключей карты → mirror-doc-set-match warn]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({"platform/lib/i18n.ts": (
+            "export const ru = {\n"
+            "  learn: [\n"
+            '    { title: "Манифест", href: "/manifesto/" },\n'
+            '    { title: "Как решаем", href: "/governance/" },\n'
+            '    { title: "Лишний", href: "/rule-42/" },\n'  # нет такого ключа в карте
+            "  ],\n"
+            "};\n"
+        )}))
+        st, viol = doc.check_mirror_doc_set_match(tmp)
+        check("mirror-doc-set-match == warn для адреса вне карты", st == "warn")
+        joined = " ".join(v["problem"] for v in viol)
+        check("назван адрес /rule-42/ как «только в витрине»",
+              "/rule-42/" in joined and "только в витрине" in joined)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 54c. Ключ карты с ПОСТРОЕННОЙ страницей, но без адреса в витрине → warn,
+    #      названо «только в карте». Берём реальный ключ rewards: заводим страницу,
+    #      но в t.learn его НЕ добавляем (изолированно ловит сторону карты).
+    print("\n[мягкая проверка: построенный экран карты не в витрине → mirror-doc-set-match warn]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({
+            "platform/app/rewards/page.tsx": (
+                "// зеркало docs/REWARDS-MODEL.md\n"
+                'export default function P() { return <SeeAlso slug="/rewards/" />; }\n'
+            ),
+        }))
+        st, viol = doc.check_mirror_doc_set_match(tmp)
+        check("mirror-doc-set-match == warn для построенного экрана вне витрины", st == "warn")
+        joined = " ".join(v["problem"] for v in viol)
+        check("назван rewards как «только в карте»",
+              "rewards" in joined and "только в карте" in joined)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 54d. Нет файла i18n.ts → молчим (pass).
+    print("\n[мягкая проверка: нет i18n.ts → mirror-doc-set-match pass (молчит)]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, {"docs/X.md": "# X\n"})
+        st, viol = doc.check_mirror_doc_set_match(tmp)
+        check("mirror-doc-set-match == pass без i18n.ts", st == "pass" and viol == [])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 
