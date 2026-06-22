@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 70,
-  "head_hash": "c8675e857dfa211a7c723b8158fb53ab133e6d737b1b525fc313bb155d6b2baa",
+  "count": 71,
+  "head_hash": "a8b7795d3c627529c2ca200d56bcc3f20369889472a03c84fce17abc88a5b118",
   "entries": [
     {
       "seq": 0,
@@ -633,6 +633,15 @@
       "summary": "Мета-агент run_all получил флаг --status-out: пишет компактный машиночитаемый «статус-светофор» проекта (общий вердикт, счёт агентов/тестов, сводка стража с мягкими предупреждениями, строка на каждого агента) в детерминированный файл-артефакт governance/status/run_all_status.json (+двуязычный README); основа публичного статус-индикатора без внешних сервисов; test_run_all 28→39",
       "hash": "c8675e857dfa211a7c723b8158fb53ab133e6d737b1b525fc313bb155d6b2baa",
       "file": "records/0069-decision.json"
+    },
+    {
+      "seq": 70,
+      "id": "PTD-0070",
+      "type": "decision",
+      "timestamp": "2026-06-22T14:02:01Z",
+      "summary": "Публичный «живой светофор» состояния проекта на странице Прозрачности сайта (web/transparency.html +EN): секция читает тем же origin артефакт status.json (копию governance/status/run_all_status.json, кладёт деплой Pages) и рисует человеку зелёно/красно + счёт агентов/тестов/стража и мягкие предупреждения; общий двуязычный assets/status.js, политика без сторонних запросов сохранена",
+      "hash": "a8b7795d3c627529c2ca200d56bcc3f20369889472a03c84fce17abc88a5b118",
+      "file": "records/0070-decision.json"
     }
   ]
 }

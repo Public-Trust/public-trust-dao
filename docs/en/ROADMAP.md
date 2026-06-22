@@ -532,10 +532,22 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   [`governance/status/run_all_status.json`](../../governance/status/) (+ bilingual README),
   `test_run_all.py` 28→39, `PTD-0069`. Subsumes the long-standing "badge in governance/" idea
   (below) — this item closes it too.
-- [ ] **Public status light on the site/page from the artifact** — a `web/` page (or section)
+- [x] **Public status light on the site/page from the artifact** — a `web/` page (or section)
   reads [`governance/status/run_all_status.json`](../../governance/status/) and renders green/red
   + agent/test scores and soft warnings for a human, with no external services/badges/trackers
   (continuation of `PTD-0069`, session 72).
+  → Done (session 73): a "live status light" section on the Transparency page
+  ([`web/transparency.html`](../../web/transparency.html) +EN) — a `.statuslight` widget reads
+  `./status.json` same-origin and renders green/red + agent/test/guard scores and soft-warning
+  lines; shared bilingual [`web/assets/status.js`](../../web/assets/status.js) (language from
+  `<html lang>`, DOM via `textContent`, `<noscript>` fallback). Single source of truth stays in
+  `governance/status/`: the Pages deploy ([`pages.yml`](../../.github/workflows/pages.yml)) copies
+  the artifact into `web/status.json` on the fly (not committed, in `.gitignore`) and redeploys
+  the site when the status changes. The "zero external requests" policy is preserved. `PTD-0070`.
+- [ ] **Compact status-light chip in the header/footer of the other site pages** — a tiny
+  indicator (green/red dot + "checks are fine") that the same `assets/status.js` reads from
+  `./status.json` and that links to the Transparency section for details, so the status is
+  visible from any page, not only the Transparency page (continuation of `PTD-0070`, session 73).
 - [ ] **Guard/CI: status artifact not stale vs the current verdict** — a soft check that the
   committed `governance/status/run_all_status.json` matches a fresh `run_all --status-out`
   (otherwise the in-repo light is stale); or a CI step regenerates the artifact (determinism
@@ -634,6 +646,19 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0070 (session 73):** P2 (transparency) — **public "live status light" of the project
+  on the site.** The Transparency page ([`web/transparency.html`](../../web/transparency.html)
+  + EN) gained a `#livestatus` section with a `.statuslight` widget: a shared bilingual
+  [`web/assets/status.js`](../../web/assets/status.js) reads `./status.json` same-origin and
+  renders green/red + agent/test/guard scores and soft-warning lines for a human (language from
+  `<html lang>`, DOM via `textContent`, `<noscript>` fallback to the artifact and CI). It makes
+  the work of sessions 70–72 visible to a human. Single source of truth stays in
+  `governance/status/`: the Pages deploy ([`pages.yml`](../../.github/workflows/pages.yml)) copies
+  the artifact into `web/status.json` on the fly (not committed, added to `.gitignore`) and
+  redeploys the site when the status changes. The "zero external requests/badges/trackers" policy
+  is preserved — the request is same-origin only. Serves art. 3 (clarity) and art. 9 (AI is a
+  signal, not authority). verify=green (71 records), run_all 8/8 tests 11/11 guard 10/10,
+  documentation 3/3, `node --check status.js` OK.
 - **PTD-0069 (session 72):** P3 (Stage 6 quality) — **machine-readable project "status light"
   from `run_all`.** Folds the work accumulated over sessions 70–71 (`guard_warnings` and
   `guard_warning_lines` in `--json`) into a visible operator/public artifact rather than yet

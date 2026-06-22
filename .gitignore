@@ -14,3 +14,7 @@ logs/
 # артефакты сборки
 __pycache__/
 *.pyc
+
+# копия статус-артефакта, которую деплой Pages кладёт в web/ на лету
+# (единый источник истины — governance/status/run_all_status.json)
+web/status.json

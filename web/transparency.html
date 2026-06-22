@@ -78,6 +78,36 @@
   </div>
 </section>
 
+<!-- Живой светофор состояния -->
+<section id="livestatus">
+  <div class="wrap">
+    <div class="section-head"><span class="kicker">Прямо сейчас</span>
+      <h2>Состояние проверок проекта</h2>
+      <p class="sub">Этот «светофор» показывает результат последнего полного прогона всех
+        проверок: восемь служебных AI-агентов, их тесты и страж структуры, сведённые в один
+        зелёный/красный сигнал. Источник — машиночитаемый артефакт
+        <code>governance/status/run_all_status.json</code>, который пересобирается из кода и
+        не редактируется вручную. Цвет — лишь подсказка; рядом всегда есть цифры словами.
+        ИИ здесь — служебный сигнал, а не орган власти (Конституция, ст. 9).</p></div>
+
+    <div class="statuslight" id="statuslight" data-state="loading" role="status" aria-live="polite">
+      <div class="head">
+        <span class="lamp" aria-hidden="true"></span>
+        <span class="label" data-role="label">Загрузка состояния…</span>
+      </div>
+      <div class="facts" data-role="metrics"></div>
+      <ul class="warns" data-role="warns" hidden></ul>
+      <p class="src" data-role="src"></p>
+    </div>
+    <noscript>
+      <p class="sub">Чтобы увидеть живой светофор, нужен включённый JavaScript. Без него
+        откройте артефакт напрямую:
+        <a href="https://github.com/Public-Trust/public-trust-dao/blob/main/governance/status/run_all_status.json">run_all_status.json</a>
+        или <a href="https://github.com/Public-Trust/public-trust-dao/actions">статусы CI</a>.</p>
+    </noscript>
+  </div>
+</section>
+
 <!-- Что можно проверить -->
 <section id="artifacts">
   <div class="wrap">
@@ -293,6 +323,9 @@ cd public-trust-dao</code></div>
     items.forEach(function (el) { io.observe(el); });
   })();
 </script>
+
+<!-- Живой светофор состояния: читает ./status.json тем же origin, без внешних запросов. -->
+<script src="assets/status.js" defer></script>
 
 </body>
 </html>

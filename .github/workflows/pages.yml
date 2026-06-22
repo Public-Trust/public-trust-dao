@@ -10,6 +10,7 @@ on:
     branches: [main]
     paths:
       - 'web/**'
+      - 'governance/status/run_all_status.json'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -35,6 +36,13 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      # Кладём канонический статус-артефакт в публикуемую папку, чтобы «живой
+      # светофор» читал его тем же origin. Единый источник истины остаётся в
+      # governance/status/ — копия делается на лету, в репозиторий web/status.json
+      # не коммитится.
+      - name: Copy status artifact into site
+        run: cp governance/status/run_all_status.json web/status.json
 
       - name: Upload site artifact (web/)
         uses: actions/upload-pages-artifact@v3

@@ -78,6 +78,36 @@
   </div>
 </section>
 
+<!-- Live status light -->
+<section id="livestatus">
+  <div class="wrap">
+    <div class="section-head"><span class="kicker">Right now</span>
+      <h2>Project check status</h2>
+      <p class="sub">This “traffic light” shows the result of the last full run of every
+        check: eight service AI agents, their tests and the structure guard, distilled into a
+        single green/red signal. The source is a machine-readable artifact,
+        <code>governance/status/run_all_status.json</code>, which is rebuilt from code and
+        never edited by hand. Colour is only a hint; the numbers are always spelled out next
+        to it. The AI here is a service signal, not an authority (Constitution, art. 9).</p></div>
+
+    <div class="statuslight" id="statuslight" data-state="loading" role="status" aria-live="polite">
+      <div class="head">
+        <span class="lamp" aria-hidden="true"></span>
+        <span class="label" data-role="label">Loading status…</span>
+      </div>
+      <div class="facts" data-role="metrics"></div>
+      <ul class="warns" data-role="warns" hidden></ul>
+      <p class="src" data-role="src"></p>
+    </div>
+    <noscript>
+      <p class="sub">The live light needs JavaScript enabled. Without it, open the artifact
+        directly:
+        <a href="https://github.com/Public-Trust/public-trust-dao/blob/main/governance/status/run_all_status.json">run_all_status.json</a>
+        or the <a href="https://github.com/Public-Trust/public-trust-dao/actions">CI statuses</a>.</p>
+    </noscript>
+  </div>
+</section>
+
 <!-- What you can verify -->
 <section id="artifacts">
   <div class="wrap">
@@ -293,6 +323,9 @@ cd public-trust-dao</code></div>
     items.forEach(function (el) { io.observe(el); });
   })();
 </script>
+
+<!-- Live status light: reads ./status.json same-origin, no external requests. -->
+<script src="assets/status.js" defer></script>
 
 </body>
 </html>
