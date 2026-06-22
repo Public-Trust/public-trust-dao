@@ -429,6 +429,7 @@ that fixes nothing):
 | `trigger-paths-include-agents` | The workflow trigger paths (`on.push.paths` and `on.pull_request.paths`) contain `ai-agents/**` — otherwise editing an agent would not start CI, and coverage is bypassed even earlier, at the trigger level rather than the command. |
 | `ci-has-required-steps` | The workflow [`.github/workflows/ai-agents.yml`](../.github/workflows/ai-agents.yml) contains every command from the single list of required CI steps (`REQUIRED_WORKFLOW_COMMANDS`): currently `run_all.py --with-tests` (runs all agents and their test invariants — without `--with-tests` or if bypassed they would not run) and `test_run_all.py` (proves the fold into one verdict works: red→red). Generalizes the former pinpoint checks `ci-calls-run-all` and `ci-runs-test-run-all`: a new required CI step is one line in the list, with no proliferation of near-identical checks. |
 | `ci-required-cmd-own-step` | Every required command has its OWN dedicated `run:` step. The check above sees a command "anywhere" in the file — including a comment or a step name; this one inspects the `run:` step bodies themselves and requires each command to (a) actually run in at least one step and (b) not share a step with another. Otherwise a failure of one masks the other: in a single `run:` joined by `&&` the second command never runs after the first fails, and one left only in a comment never runs at all. Its own step — its own exit code, its own failure in plain sight. |
+| `ci-step-has-name` *(soft — warns, does not fail CI)* | The `run:` step of a required command has a human-readable `- name:`. An extension of the previous check toward readability: without a name a failed step is shown in the GitHub Actions logs as a bare command (`python3 ai-agents/run_all.py --with-tests`) rather than in plain words ("Run all agents"). This does not break coverage, so the check only **warns** (severity=soft) and does not turn the verdict red — a hint to improve readability for people (Art. 3 "clarity"). |
 
 ```bash
 python3 ai-agents/structure_guard.py          # human-readable report
@@ -439,8 +440,10 @@ The **test invariant** [`test_structure_guard.py`](test_structure_guard.py) prov
 on poisoned temporary directories (an agent without a test; an orphan test; an
 agent with a local copy of `.sol` parsing; an agent/test bypassing `run_all`; a
 dangling `run_all` reference; the workflow missing `run_all --with-tests` or
-`test_run_all.py`; trigger paths missing `ai-agents/**`) that the guard really
-turns red, while a clean directory stays green (49/49). It is included in
+`test_run_all.py`; two commands sharing one `run:` step; a command only in a
+comment; trigger paths missing `ai-agents/**`; a `run:` step without `- name:` —
+softly warns, does not fail) that the guard really turns red (and on the soft
+check only warns), while a clean directory stays green (72/72). It is included in
 `run_all --with-tests`, so adding an agent without a test, a copy of `.sol`
 parsing, an agent/test that bypasses the shared CI run, dropping `ai-agents/**`
 from the workflow triggers, or removing any required workflow command turns it red.

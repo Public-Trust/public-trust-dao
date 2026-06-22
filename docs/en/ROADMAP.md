@@ -469,11 +469,24 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   with another. Catches a command left only in a comment (the old check still "saw" it) and
   two commands in one `run:`. Check count 6→7. `test_structure_guard.py` 59/59, guard green
   7/7, `PTD-0063`.
-- [ ] **Structure-guard: every `run:` step has a human-readable `name:`** — soft follow-up
+- [x] **Structure-guard: every `run:` step has a human-readable `name:`** — soft follow-up
   to `ci-required-cmd-own-step`: warn (do not block) if a required CI step runs without a
   `- name:` — so a failure reads humanly in the GitHub Actions log ("Run all agents") rather
   than as a bare command. Builds on the existing `_workflow_run_steps`/step parser
   (proposed in session 66).
+  → Done (session 67), the guard's first SOFT check `ci-step-has-name`
+  (`severity=soft`: `status=warn`, does not fail the verdict). Introduced shared soft-check
+  infrastructure (`_workflow_run_steps_named`, a `severity` field, a `warnings` counter).
+  Checks 7→8 (1 soft). `test_structure_guard.py` 72/72, guard green 8/8 with no warnings,
+  `PTD-0064`.
+- [ ] **Structure-guard: soft check `ci-step-name-unique`** — follow-up to
+  `ci-step-has-name` (PTD-0064): warn (do not block) if two CI `run:` steps share the same
+  `- name:` — then they are indistinguishable in the GitHub Actions log and a failure reads
+  ambiguously. Builds on the same `_workflow_run_steps_named` (proposed in session 67).
+- [ ] **`run_all`/meta-agent surfaces the guard's soft warnings** — the guard's `warnings`
+  count is currently printed only in its own report; add it so the shared
+  `run_all --with-tests` run also prints the total number of soft warnings (without failing
+  the build) — so the operator summary does not lose them (proposed in session 67).
 - [ ] **Move the Governance agent onto `solidity_scan`** — it currently parses only
   JSON configs; when it needs to cross-check `Governor.sol`/`Timelock.sol` (vote weight
   from `Reputation.votingUnits`, not balance), reuse the shared
@@ -566,6 +579,18 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ## Done
 
+- **PTD-0064 (session 67):** P3 (Stage 6 quality) — **structure-guard: eighth (first SOFT)
+  `ci-step-has-name` check (a `run:` step of a required CI command has a human `- name:`).**
+  Follow-up to `ci-required-cmd-own-step` (PTD-0063) toward readability: without a name a
+  failed step is shown in the GitHub Actions log as a bare command
+  (`python3 ai-agents/run_all.py --with-tests`) rather than humanly ("Run all agents"). It
+  does not break coverage → the check only **warns** (`severity=soft`, `status=warn`) and the
+  verdict stays green. Introduced shared soft-check infrastructure: a `_workflow_run_steps_named`
+  helper (`run:` step bodies with their names; the old `_workflow_run_steps` became a wrapper),
+  a `severity` field in `CHECKS`, a `warnings` counter in the report. Check count 7→8 (1 soft).
+  `test_structure_guard.py` 59→72 (3 new scenarios: both steps unnamed → warn with a green
+  verdict; mixed; named block steps), guard 8/8 with no warnings, run_all 8/8 + tests 11/11,
+  IPFS verify=OK (19), registry 65. Agent README (RU/EN): a new table row marked "soft".
 - **PTD-0063 (session 66):** P3 (Stage 6 quality) — **structure-guard: seventh
   `ci-required-cmd-own-step` check (a dedicated `run:` step per required CI command).**
   Follow-up to `ci-has-required-steps` (PTD-0062): the old check confirmed a command exists

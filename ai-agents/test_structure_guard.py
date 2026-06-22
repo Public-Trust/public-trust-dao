@@ -77,9 +77,11 @@ def _write_workflow(repo_root, run_line="python3 ai-agents/run_all.py --with-tes
         parts.append("  pull_request:\n    paths:\n")
         parts += ['      - "{}"\n'.format(p) for p in pull_request_paths]
     parts.append("jobs:\n  agents:\n    steps:\n")
+    # У шагов есть человеческое `- name:` → мягкая проверка ci-step-has-name
+    # по умолчанию зелёная (отдельные сценарии без имени проверяются ниже).
     if test_line is not None:
-        parts.append("      - run: {}\n".format(test_line))
-    parts.append("      - run: {}\n".format(run_line))
+        parts.append("      - name: тест мета-агента\n        run: {}\n".format(test_line))
+    parts.append("      - name: прогон всех агентов\n        run: {}\n".format(run_line))
     with open(os.path.join(wf_dir, "ai-agents.yml"), "w", encoding="utf-8") as fh:
         fh.write("".join(parts))
 
@@ -110,7 +112,10 @@ with tempfile.TemporaryDirectory() as repo:
     _write_workflow(repo)
     rep = structure_guard.run(d)
     check("вердикт зелёный", rep["verdict"] == "green")
-    check("все 7 проверок прошли", rep["passed"] == rep["total"] == 7)
+    check("все 8 проверок прошли", rep["passed"] == rep["total"] == 8)
+    check("предупреждений нет (у шагов есть имена)", rep["warnings"] == 0)
+    check("у шагов run: есть имена → ci-step-has-name зелёная",
+          _status(rep, "ci-step-has-name") == "pass")
     check("агент с импортом из solidity_scan НЕ краснит sol-проверку",
           _status(rep, "sol-parsing-centralized") == "pass")
     check("run_all покрывает агента и тесты → run-all-covers-all зелёная",
@@ -482,11 +487,84 @@ with tempfile.TemporaryDirectory() as repo:
     check("ci-required-cmd-own-step зелёная (раздельные блоки run: |)",
           _status(rep, "ci-required-cmd-own-step") == "pass")
 
+# --- Мягкая проверка ci-step-has-name: шаг без `- name:` лишь предупреждает --
+# Шаги run: без имени → warn, но вердикт остаётся зелёным (мягкая проверка).
+print("шаги run: без `- name:` (мягкая проверка предупреждает, не валит):")
+NO_NAME_WF = (
+    'on:\n  push:\n    paths:\n      - "ai-agents/**"\n'
+    '  pull_request:\n    paths:\n      - "ai-agents/**"\n'
+    'jobs:\n  agents:\n    steps:\n'
+    '      - run: python3 ai-agents/test_run_all.py\n'
+    '      - run: python3 ai-agents/run_all.py --with-tests\n'
+)
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, NO_NAME_WF)
+    rep = structure_guard.run(d)
+    check("ci-step-has-name предупреждает (status=warn)",
+          _status(rep, "ci-step-has-name") == "warn")
+    check("вердикт ОСТАЁТСЯ зелёным (мягкая проверка не валит CI)",
+          rep["verdict"] == "green")
+    check("ровно одна предупреждающая проверка", rep["warnings"] == 1)
+    items = [v["item"] for c in rep["checks"] if c["key"] == "ci-step-has-name"
+             for v in c["violations"]]
+    check("предупреждение названо обеими командами (оба шага без имени)",
+          len(items) == 2 and "run_all.py --with-tests" in items and "test_run_all.py" in items)
+    # Согласованность: зелёный вердикт ⇒ код возврата 0.
+    check("код возврата 0 при зелёном вердикте с предупреждениями",
+          structure_guard.main(["structure_guard", "--dir", d, "--json"]) == 0)
+
+# Смешанный случай: один шаг с именем, другой без → предупреждение только о безымянном.
+print("один шаг с именем, другой без:")
+MIXED_NAME_WF = (
+    'on:\n  push:\n    paths:\n      - "ai-agents/**"\n'
+    '  pull_request:\n    paths:\n      - "ai-agents/**"\n'
+    'jobs:\n  agents:\n    steps:\n'
+    '      - name: Тест мета-агента\n'
+    '        run: python3 ai-agents/test_run_all.py\n'
+    '      - run: python3 ai-agents/run_all.py --with-tests\n'
+)
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, MIXED_NAME_WF)
+    rep = structure_guard.run(d)
+    check("ci-step-has-name предупреждает (есть безымянный шаг)",
+          _status(rep, "ci-step-has-name") == "warn")
+    check("вердикт зелёный", rep["verdict"] == "green")
+    items = [v["item"] for c in rep["checks"] if c["key"] == "ci-step-has-name"
+             for v in c["violations"]]
+    check("предупреждение только о безымянной команде run_all.py --with-tests",
+          items == ["run_all.py --with-tests"])
+
+# Блочные скаляры с именами → ci-step-has-name зелёная (имя берётся из того же шага).
+print("блочные скаляры с именами → ci-step-has-name зелёная:")
+with tempfile.TemporaryDirectory() as repo:
+    d = os.path.join(repo, "ai-agents")
+    os.makedirs(d)
+    _write(d, "foo_agent.py")
+    _write(d, "test_foo.py")
+    _write(d, "run_all.py", _run_all(["foo_agent.py"], ["test_foo.py"]))
+    _write_raw_workflow(repo, SEP_BLOCKS_WF)  # оба шага с `- name:`
+    rep = structure_guard.run(d)
+    check("ci-step-has-name зелёная (у блочных шагов есть имена)",
+          _status(rep, "ci-step-has-name") == "pass")
+    check("предупреждений нет", rep["warnings"] == 0)
+
 # --- Сторож-регресс: настоящий каталог ai-agents/ сейчас зелёный ----------
 print("настоящий каталог ai-agents/:")
 real = structure_guard.run()
 check("реальный репозиторий: вердикт зелёный", real["verdict"] == "green")
-check("реальный репозиторий: 7/7 проверок прошли", real["passed"] == real["total"] == 7)
+check("реальный репозиторий: 8/8 проверок прошли", real["passed"] == real["total"] == 8)
+check("реальный репозиторий: предупреждений нет (у шагов CI есть имена)",
+      real["warnings"] == 0)
 
 # --- Итог ----------------------------------------------------------------
 print()
