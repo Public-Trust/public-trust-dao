@@ -531,16 +531,33 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   its platform screen (so a reader of the document can reach its plain-language retelling, not
   only the other way around). Extension of the "mirror screen" device; a warning, not a block
   (proposed session 110).
-- [ ] **Documentation agent: every `MIRROR_DOCS` key appears in the `t.learn` showcase** —
+- [x] **Documentation agent: every `MIRROR_DOCS` key appears in the `t.learn` showcase** —
   the soft sibling of `mirror-doc-coverage` in the opposite direction: if a screen is in the
   `MIRROR_DOCS` map but its href is absent from `t.learn` (`lib/i18n.ts`), it is not shown in
   the "Understand how the fund works" showcase — a person can't reach it from the home page.
-  A warning, not a block (extension of `PTD-0109`, proposed session 112).
-- [ ] **Documentation agent: a `MIRROR_DOCS` key points to an existing doc** — a soft check
+  A warning, not a block (extension of `PTD-0109`, proposed session 112). **Done (session
+  113):** the `mirror-doc-showcase` check — for each mirror screen in `MIRROR_DOCS` whose page
+  exists, its href `/slug/` must be in `t.learn`; otherwise the built screen is "hidden" from a
+  person past the home page → a soft warning (verdict green). `PTD-0110`.
+- [x] **Documentation agent: a `MIRROR_DOCS` key points to an existing doc** — a soft check
   that every path value of the `MIRROR_DOCS` map (`docs/X.md`) actually exists in the repo
   (and hasn't "drifted" when a normative document is renamed). The map is hard-coded today —
   a typo/rename would silently void `mirror-doc-link`. A warning, not a block (proposed
-  session 112).
+  session 112). **Done (session 113):** the `mirror-doc-exists` check — for each built mirror
+  screen, the path of its doc from `MIRROR_DOCS` must exist in the repo; `mirror-doc-link`
+  only checks the string on the screen and misses a vanished file, this one catches it. Both
+  checks this session have no dependencies, +6 test scenarios (112/112), both green on the real
+  repo, run_all 8/8. `PTD-0110`. TESTNET-ONLY.
+- [ ] **Documentation agent: a mirror screen has its own (not a shared) normative doc** — a
+  soft check that distinct `MIRROR_DOCS` keys don't point to the SAME `docs/X.md` (barring
+  intentional exceptions): two retelling screens on one document is almost always a map typo
+  that leaves one doc without its mirror. A warning, not a block (extension of `PTD-0110`,
+  proposed session 113).
+- [ ] **Documentation agent: a `MIRROR_DOCS` path points to the RU original, not the EN
+  mirror** — a soft check that map values live under `docs/` (not `docs/en/` and not `*.en.md`):
+  a mirror screen must link to the RU normative source, otherwise the retelling is checked
+  against a translation rather than the norm. A warning, not a block (extension of `PTD-0110`,
+  proposed session 113).
 - [x] **Identity-verification terms in `GLOSSARY.md`** (+RU) — add in plain words:
   "proof-of-personhood", "zero-knowledge / proof without disclosure", "nullifier",
   "liveness", "vouching (web-of-trust)" — each linking to `IDENTITY-VERIFICATION.md`

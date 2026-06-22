@@ -527,6 +527,13 @@ def main():
             "// зеркало docs/GOVERNANCE.md\n"
             'export default function P() { return <SeeAlso slug="/governance/" />; }\n'
         ),
+        # Нормативные документы, на которые ссылаются экраны-зеркала: их РЕАЛЬНОЕ
+        # наличие проверяет mirror-doc-exists (mirror-doc-link сверяет лишь строку).
+        # Двуязычны (иначе упадёт блокирующая bilingual-pairs).
+        "docs/MANIFESTO.md": "[Русский] · [English](en/MANIFESTO.md)\n\n# Манифест\n",
+        "docs/en/MANIFESTO.md": "[Русский](../MANIFESTO.md) · [English]\n\n# Manifesto\n",
+        "docs/GOVERNANCE.md": "[Русский] · [English](en/GOVERNANCE.md)\n\n# Управление\n",
+        "docs/en/GOVERNANCE.md": "[Русский](../GOVERNANCE.md) · [English]\n\n# Governance\n",
     }
 
     def with_platform(extra):
@@ -644,6 +651,10 @@ def main():
               status_of(report, "see-also-present") == "pass")
         check("mirror-doc-link == pass без платформы",
               status_of(report, "mirror-doc-link") == "pass")
+        check("mirror-doc-exists == pass без платформы",
+              status_of(report, "mirror-doc-exists") == "pass")
+        check("mirror-doc-showcase == pass без платформы",
+              status_of(report, "mirror-doc-showcase") == "pass")
         check("предупреждений нет", report.get("warnings", 0) == 0)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -756,6 +767,76 @@ def main():
         code, report = run_agent(tmp)
         check("mirror-doc-coverage == pass (нет i18n → нечего сверять)",
               status_of(report, "mirror-doc-coverage") == "pass")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # --- Мягкие проверки mirror-doc-exists / mirror-doc-showcase ----------------
+    # Логика: mirror-doc-link проверяет лишь, что строка-путь дока ЕСТЬ на экране.
+    # mirror-doc-exists добавляет: этот путь реально существует в репо (документ не
+    # переименовали мимо карты). mirror-doc-showcase (парная к coverage): построенный
+    # экран-зеркало действительно показан в витрине t.learn. Обе — soft (warn).
+
+    # 32d. Корректная платформа: документы на месте, экраны в витрине → обе pass.
+    print("\n[мягкие проверки: документы на месте и экраны в витрине → exists/showcase pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        code, report = run_agent(tmp)
+        check("вердикт green / exit=0", report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-exists == pass", status_of(report, "mirror-doc-exists") == "pass")
+        check("mirror-doc-showcase == pass", status_of(report, "mirror-doc-showcase") == "pass")
+        check("mirror-doc-exists помечена soft", _is_soft(report, "mirror-doc-exists"))
+        check("mirror-doc-showcase помечена soft", _is_soft(report, "mirror-doc-showcase"))
+        check("предупреждений нет", report.get("warnings", 0) == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 32e. Нормативный документ зеркала пропал (переименовали мимо карты) → exists warn.
+    #      Убираем ОБА языка docs/GOVERNANCE.md, чтобы не уронить блокирующую
+    #      bilingual-pairs: страница экрана всё ещё содержит строку "docs/GOVERNANCE.md"
+    #      (mirror-doc-link зелёный), но самого файла уже нет — это и ловит exists.
+    print("\n[мягкая проверка: документ зеркала пропал → mirror-doc-exists warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        broken = with_platform({})
+        broken.pop("docs/GOVERNANCE.md")
+        broken.pop("docs/en/GOVERNANCE.md")
+        make_repo(tmp, broken)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-link == pass (строка пути на экране осталась)",
+              status_of(report, "mirror-doc-link") == "pass")
+        check("mirror-doc-exists == warn для пропавшего документа",
+              status_of(report, "mirror-doc-exists") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 32f. Построенный экран-зеркало (страница + в MIRROR_DOCS + документ есть), но
+    #      его адреса нет в витрине t.learn → mirror-doc-showcase warn (экран спрятан).
+    #      Берём слаг rewards (он в MIRROR_DOCS), заводим страницу и документ, но в
+    #      t.learn его НЕ добавляем — изолированно ловит именно showcase.
+    print("\n[мягкая проверка: экран-зеркало не в витрине t.learn → mirror-doc-showcase warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        hidden = with_platform({
+            "platform/app/rewards/page.tsx": (
+                "// зеркало docs/REWARDS-MODEL.md\n"
+                'export default function P() { return <main>помощь и награда</main>; }\n'
+            ),
+            "docs/REWARDS-MODEL.md": "[Русский] · [English](en/REWARDS-MODEL.md)\n\n# Награда\n",
+            "docs/en/REWARDS-MODEL.md": "[Русский](../REWARDS-MODEL.md) · [English]\n\n# Rewards\n",
+        })
+        make_repo(tmp, hidden)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует)",
+              report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-exists == pass (документ rewards на месте)",
+              status_of(report, "mirror-doc-exists") == "pass")
+        check("mirror-doc-showcase == warn для экрана вне витрины",
+              status_of(report, "mirror-doc-showcase") == "warn")
+        check("счётчик предупреждений > 0", report.get("warnings", 0) > 0)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

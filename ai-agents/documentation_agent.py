@@ -45,6 +45,14 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
   • mirror-doc-coverage → каждый экран из витрины t.learn есть в карте MIRROR_DOCS . ст. 3/6
     (МЯГКАЯ, обратная к mirror-doc-link: предупреждает, если завели новый экран-
      зеркало, но в MIRROR_DOCS внести забыли — его пересказ не сверяется; PTD-0109)
+  • mirror-doc-exists  → путь дока из карты MIRROR_DOCS реально есть в репо ....... ст. 3/6
+    (МЯГКАЯ: предупреждает, если нормативный документ переименовали/перенесли, а
+     путь-значение в карте поправить забыли — ссылка экрана-зеркала молча ведёт в
+     никуда, а mirror-doc-link этого не видит; PTD-0110)
+  • mirror-doc-showcase → заведённый экран-зеркало показан в витрине t.learn ...... ст. 3/6
+    (МЯГКАЯ, парная к mirror-doc-coverage: предупреждает, если экран есть в карте и
+     его страница заведена, но в витрину t.learn он не попал — человек не дойдёт до
+     него с главной; PTD-0110)
   • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
      односторонняя связь оставляет человека без обратного пути; PTD-0106)
@@ -939,6 +947,73 @@ def check_mirror_doc_complete(root):
     return ("pass" if not violations else "warn"), violations
 
 
+def check_mirror_doc_exists(root):
+    """МЯГКАЯ: путь нормативного документа из карты MIRROR_DOCS реально есть в репо.
+
+    `mirror-doc-link` проверяет, что экран-зеркало СОДЕРЖИТ ссылку на путь своего
+    документа (как строку в `page.tsx`). Но если сам нормативный документ
+    переименуют/перенесут, а путь-значение в карте `MIRROR_DOCS` поправить забудут,
+    `mirror-doc-link` останется зелёным (строка-то на экране есть), а ссылка молча
+    поведёт в никуда. Эта проверка ловит разрыв: для каждого экрана-зеркала, чья
+    страница заведена, путь-значение из `MIRROR_DOCS` (`docs/X.md`) должен
+    существовать в репозитории (warn, не блок — ст. 3/6, PTD-0110). Если каталога
+    платформы нет (мини-репозиторий в тесте) — проверять нечего → pass. Экран,
+    которого ещё нет, молча пропускаем (как и mirror-doc-link), чтобы не кричать ложно.
+    """
+    if not os.path.isdir(os.path.join(root, PLATFORM_APP)):
+        return "pass", []
+    violations = []
+    for slug, doc in sorted(MIRROR_DOCS.items()):
+        page = f"{PLATFORM_APP}/{slug}/page.tsx"
+        if not os.path.exists(os.path.join(root, page)):
+            continue
+        if not os.path.exists(os.path.join(root, doc)):
+            violations.append({
+                "record": f"MIRROR_DOCS[{slug}]",
+                "problem": (f"нормативный документ {doc} не найден в репозитории — "
+                            "путь-значение в карте устарел (документ переименовали/"
+                            "перенесли), ссылка экрана-зеркала ведёт в никуда "
+                            "(mirror-doc-link этого не замечает)"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
+def check_mirror_doc_showcase(root):
+    """МЯГКАЯ: заведённый экран-зеркало из MIRROR_DOCS показан в витрине t.learn.
+
+    Парная к `mirror-doc-coverage`, в обратную сторону. Набор экранов-объяснений на
+    главной задаёт витрина «Разобраться, как устроен фонд» (`t.learn` в
+    `lib/i18n.ts`). `mirror-doc-coverage` следит, чтобы каждый экран витрины был в
+    карте `MIRROR_DOCS`. Эта проверка следит за обратным: если экран есть в карте и
+    его страница заведена, но адреса нет в `t.learn`, человек не дойдёт до него с
+    главной — построенный экран «спрятан». Сверяет: для каждого экрана-зеркала, чья
+    страница заведена, адрес `/slug/` есть в `t.learn` (warn, не блок — ст. 3/6,
+    PTD-0110). Если каталога платформы нет, файла `lib/i18n.ts` нет или список не
+    распарсился — проверять нечего → pass.
+    """
+    if not os.path.isdir(os.path.join(root, PLATFORM_APP)):
+        return "pass", []
+    if not os.path.exists(os.path.join(root, I18N_TS)):
+        return "pass", []
+    learn = parse_i18n_hrefs(read_text(root, I18N_TS), "learn")
+    if not learn:
+        return "pass", []
+    violations = []
+    for slug in sorted(MIRROR_DOCS):
+        page = f"{PLATFORM_APP}/{slug}/page.tsx"
+        if not os.path.exists(os.path.join(root, page)):
+            continue
+        href = f"/{slug}/"
+        if href not in learn:
+            violations.append({
+                "record": f"MIRROR_DOCS[{slug}]",
+                "problem": (f"экран-зеркало «{href}» заведён и в карте MIRROR_DOCS, но "
+                            "его нет в витрине «Разобраться, как устроен фонд» (t.learn, "
+                            "lib/i18n.ts) — человек не дойдёт до него с главной"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 def check_see_also_symmetric(root):
     """МЯГКАЯ: связь «См. также» между экранами-объяснениями взаимна.
 
@@ -1055,6 +1130,20 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "mirror-doc-exists",
+        "title": "Путь нормативного документа из карты MIRROR_DOCS реально есть в репозитории",
+        "guards": "ст. 3/6 — переименование документа не оставит ссылку экрана-зеркала висящей в никуда (PTD-0110); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_exists",
+        "soft": True,
+    },
+    {
+        "key": "mirror-doc-showcase",
+        "title": "Заведённый экран-зеркало из MIRROR_DOCS показан в витрине t.learn",
+        "guards": "ст. 3/6 — построенный экран-объяснение не «спрячется» от человека мимо витрины на главной (парная к mirror-doc-coverage, PTD-0110); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_showcase",
+        "soft": True,
+    },
+    {
         "key": "see-also-symmetric",
         "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
         "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
@@ -1087,6 +1176,8 @@ def run(root):
     seealso_p_status, seealso_p_v = check_see_also_present(root)
     mirror_status, mirror_v = check_mirror_doc_link(root)
     mirror_cov_status, mirror_cov_v = check_mirror_doc_complete(root)
+    mirror_exist_status, mirror_exist_v = check_mirror_doc_exists(root)
+    mirror_show_status, mirror_show_v = check_mirror_doc_showcase(root)
     seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
@@ -1102,6 +1193,8 @@ def run(root):
         "seealso_present": (seealso_p_status, seealso_p_v),
         "mirror_doc_link": (mirror_status, mirror_v),
         "mirror_doc_complete": (mirror_cov_status, mirror_cov_v),
+        "mirror_doc_exists": (mirror_exist_status, mirror_exist_v),
+        "mirror_doc_showcase": (mirror_show_status, mirror_show_v),
         "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 
