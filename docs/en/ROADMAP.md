@@ -437,6 +437,35 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
+- [ ] **Cross-screen "see also" links between the platform's mirror screens** — the
+  series of screens (`manifesto`, `constitution`, `governance`, `priorities`, `rewards`,
+  `safeguards`, `work`, `accountability`, `direct-help`, `support`, `glossary`) is closed
+  (session 104, `PTD-0101`); now connect them with human "see also" links inside the text
+  (e.g. from "Support the project" → to "Direct payment" and "How we decide"), so a person
+  can move between explanations without returning to the home page. Pure front-end, no new
+  dependencies (proposed in session 104).
+- [x] **A "Support the project" card on the platform home page** — the `support` screen was
+  in the menu but had no card on the home page (`platform/app/page.tsx`). **Done (session
+  105):** the home page gained a whole section "Understand how the fund works" — a showcase
+  of 11 explainer screens (Manifesto, Constitution, How we decide, Order of help, Help &
+  reward, Direct payment, Anti-fraud, Paid work, Signed & traceable, **Support the
+  project**, Glossary) below the showcase of the six working screens, before the
+  transparency block. Previously the mirror screens were reachable only from the menu — now
+  they are visible from the home page as a separate block, each with a human one-line
+  description and an "Open" link. No money addresses (rail — the address is not published
+  before an audit). Texts RU↔EN (`learnTitle`/`learnLead`/`learn[]` in `lib/i18n.ts`),
+  reused the showcase CSS, no new dependencies. `PTD-0102`. TESTNET-ONLY. Also closes the
+  general visibility of the explainer series.
+- [ ] **Visually separate the explainer block from the working-screens block on the home
+  page** — both home-page sections (six working screens and eleven explainer screens) now
+  use the same visual device (`screen-grid`/`screen-card`), and a person might confuse a
+  "working screen" with an "explanation". Give the explainer section a light distinction —
+  a hint label "these are explanations, not actions" or a different background/border.
+  Pure CSS, no new dependencies (proposed in session 105).
+- [ ] **Documentation agent: every platform mirror screen links to its normative doc** —
+  a soft check that each explainer screen `platform/app/<slug>/` has a link to its source
+  in `docs/` (the mirror has not drifted from the normative document). An extension of the
+  "mirror screen" device; a warning, not a block (proposed in session 105).
 - [ ] **A personhood-verification adapter contract (`PersonhoodVerifier`)** — based on
   `docs/IDENTITY-VERIFICATION.md`: a thin contract that accepts a proof from one of the
   allowed proof-of-personhood methods and calls `Reputation.mint` only when

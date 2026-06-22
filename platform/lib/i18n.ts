@@ -548,6 +548,9 @@ export type Dict = {
   ready: string;
   open: string;
   screens: { title: string; text: string; href?: string; short?: string }[];
+  learnTitle: string;
+  learnLead: string;
+  learn: { title: string; text: string; href: string }[];
   transparencyTitle: string;
   transparencyText: string;
   footerNote: string;
@@ -648,6 +651,66 @@ export const DICT: Record<Lang, Dict> = {
         text: "Подтверждение «живой и один человек» без слежки и без сбора лиц в базу.",
         href: "/identity/",
         short: "Личность",
+      },
+    ],
+    learnTitle: "Разобраться, как устроен фонд",
+    learnLead:
+      "Эти экраны — не действия, а объяснения простыми словами. Каждый — зеркало нормативного документа фонда: можно понять, как всё устроено, не открывая GitHub.",
+    learn: [
+      {
+        title: "Манифест",
+        text: "Зачем существует фонд и во что он верит — простыми словами.",
+        href: "/manifesto/",
+      },
+      {
+        title: "Конституция",
+        text: "Главный закон проекта: что можно, чего нельзя и что нельзя отменить даже голосованием.",
+        href: "/constitution/",
+      },
+      {
+        title: "Как решаем",
+        text: "Как принимаются решения: один человек — один голос, и никто не захватит фонд.",
+        href: "/governance/",
+      },
+      {
+        title: "Порядок помощи",
+        text: "В каком порядке фонд помогает, когда денег на всех не хватает.",
+        href: "/priorities/",
+      },
+      {
+        title: "Помощь и награда",
+        text: "Сначала помощь людям; за труд благодарят в честных рамках, но никогда не за привлечение людей.",
+        href: "/rewards/",
+      },
+      {
+        title: "Оплата напрямую",
+        text: "Почему фонд не выдаёт деньги на руки, а оплачивает нужду напрямую поставщику.",
+        href: "/direct-help/",
+      },
+      {
+        title: "Защита от обмана",
+        text: "Как фонд защищён от воровства и накруток — и почему быть честным выгоднее.",
+        href: "/safeguards/",
+      },
+      {
+        title: "Оплачиваемая работа",
+        text: "Как фонд создаёт честную работу вокруг помощи и проверяет, что она сделана.",
+        href: "/work/",
+      },
+      {
+        title: "Всё под подписью",
+        text: "Почему видно, кто что сделал, и переписать это задним числом нельзя.",
+        href: "/accountability/",
+      },
+      {
+        title: "Поддержать проект",
+        text: "Как можно поддержать фонд — честно, без отдельной кнопки сбора денег.",
+        href: "/support/",
+      },
+      {
+        title: "Словарь",
+        text: "Встретилось непонятное слово? Здесь ключевые слова проекта объяснены по-человечески.",
+        href: "/glossary/",
       },
     ],
     transparencyTitle: "Честно и без слежки",
@@ -1905,6 +1968,66 @@ export const DICT: Record<Lang, Dict> = {
         text: "Confirming 'a real, single person' without surveillance and without collecting faces into a database.",
         href: "/identity/",
         short: "Identity",
+      },
+    ],
+    learnTitle: "Understand how the fund works",
+    learnLead:
+      "These screens are not actions but plain-language explanations. Each one mirrors a normative document of the fund: you can understand how everything works without opening GitHub.",
+    learn: [
+      {
+        title: "Manifesto",
+        text: "Why the fund exists and what it stands for — in plain words.",
+        href: "/manifesto/",
+      },
+      {
+        title: "Constitution",
+        text: "The project's highest law: what's allowed, what's not, and what cannot be undone even by a vote.",
+        href: "/constitution/",
+      },
+      {
+        title: "How we decide",
+        text: "How decisions are made: one person, one vote, and no one captures the fund.",
+        href: "/governance/",
+      },
+      {
+        title: "Order of help",
+        text: "The order in which the fund helps when there isn't enough for everyone.",
+        href: "/priorities/",
+      },
+      {
+        title: "Help & reward",
+        text: "People in need come first; useful work is thanked within fair limits, never for recruiting people.",
+        href: "/rewards/",
+      },
+      {
+        title: "Direct payment",
+        text: "Why the fund doesn't hand out cash but pays the need directly to the provider.",
+        href: "/direct-help/",
+      },
+      {
+        title: "Anti-fraud",
+        text: "How the fund is protected from theft and fakery — and why honesty pays off.",
+        href: "/safeguards/",
+      },
+      {
+        title: "Paid work",
+        text: "How the fund creates honest work around helping, and checks that it is done.",
+        href: "/work/",
+      },
+      {
+        title: "Signed & traceable",
+        text: "Why it is visible who did what, and it cannot be rewritten after the fact.",
+        href: "/accountability/",
+      },
+      {
+        title: "Support the project",
+        text: "How you can support the fund — honestly, with no separate donation button.",
+        href: "/support/",
+      },
+      {
+        title: "Glossary",
+        text: "Came across a word you don't know? Key project words are explained in plain language here.",
+        href: "/glossary/",
       },
     ],
     transparencyTitle: "Honest and without surveillance",

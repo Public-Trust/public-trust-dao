@@ -57,6 +57,24 @@ export default function Home() {
         </ul>
       </section>
 
+      <section className="screens" aria-labelledby="learn-title">
+        <h2 id="learn-title">{t.learnTitle}</h2>
+        <p className="lead">{t.learnLead}</p>
+        <ul className="screen-grid">
+          {t.learn.map((item) => (
+            <li key={item.href} className="screen-card screen-card--ready">
+              <div className="screen-card-head">
+                <h3>{item.title}</h3>
+              </div>
+              <p>{item.text}</p>
+              <Link className="screen-card-link" href={item.href}>
+                {t.open} →
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="transparency" aria-labelledby="transparency-title">
         <h2 id="transparency-title">{t.transparencyTitle}</h2>
         <p>{t.transparencyText}</p>
