@@ -1,8 +1,8 @@
 {
   "registry": "Public Trust DAO — публичный реестр решений",
   "spec": "hash-chain append-only; см. governance/registry/README.md",
-  "count": 74,
-  "head_hash": "101cf800e2e7c3eefbe7bbb80046ef90ace589b07ed1775d2fb46c6c1856ffd0",
+  "count": 75,
+  "head_hash": "420209ca40511544520e6506f2ef4e9e5bf5e41673fb910cd956ad7fcf8a7d35",
   "entries": [
     {
       "seq": 0,
@@ -669,6 +669,15 @@
       "summary": "Единый каталог меток issue/PR .github/labels.yml + проверка стража issue-form-labels-defined: метки форм обращений (bug/idea/governance/safety) описаны в открытом источнике правды, цвета/описания воспроизводимы, не заводятся вручную",
       "hash": "101cf800e2e7c3eefbe7bbb80046ef90ace589b07ed1775d2fb46c6c1856ffd0",
       "file": "records/0073-decision.json"
+    },
+    {
+      "seq": 74,
+      "id": "PTD-0074",
+      "type": "decision",
+      "timestamp": "2026-06-22T17:00:00Z",
+      "summary": "Опциональный рабочий процесс синхронизации меток .github/workflows/labels.yml: заготовка «до кнопки» приводит метки реального репозитория в соответствие с каталогом .github/labels.yml; запускает только оператор вручную (workflow_dispatch), по умолчанию предпросмотр без изменений",
+      "hash": "420209ca40511544520e6506f2ef4e9e5bf5e41673fb910cd956ad7fcf8a7d35",
+      "file": "records/0074-decision.json"
     }
   ]
 }

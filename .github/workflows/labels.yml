@@ -1,0 +1,53 @@
+name: Синхронизация меток репозитория
+
+# ЧТО ЭТО (простыми словами). Заготовка «до кнопки»: этот рабочий процесс
+# приводит «ярлычки» (метки) реального GitHub-репозитория в соответствие с
+# открытым каталогом `.github/labels.yml` — чтобы цвета и описания меток были
+# ровно такими, как записано в файле-источнике правды, а не заводились вручную.
+#
+# ПОЧЕМУ ТОЛЬКО ВРУЧНУЮ. Применение меток к реальному репозиторию — это внешнее
+# действие от лица проекта. По рельсам BUILDER.md такие действия выполняет
+# ОПЕРАТОР, а не агент. Поэтому процесс НЕ запускается сам по push: его
+# запускает человек кнопкой «Run workflow» (триггер только `workflow_dispatch`).
+#
+# БЕЗОПАСНО ПО УМОЛЧАНИЮ. По умолчанию режим «предпросмотр» (`dry_run = true`):
+# процесс лишь покажет в логе, что бы изменилось, и НИЧЕГО не меняет. Чтобы
+# реально применить метки, оператор запускает с `dry_run = false`. Чужие метки
+# (не из каталога) НЕ удаляются, пока оператор явно не включит `delete_others`.
+#
+# WHAT THIS IS (plain words). A ready-to-press helper: it brings the real GitHub
+# repository's labels in line with the open catalogue `.github/labels.yml`, so
+# colours and descriptions match the source-of-truth file instead of being set
+# by hand. Applying labels to the real repo is an outward action on behalf of the
+# project, so — per the BUILDER.md rails — only the OPERATOR runs it (manual
+# `workflow_dispatch`, never on push). It previews by default (`dry_run = true`)
+# and changes nothing until the operator runs it with `dry_run = false`.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Предпросмотр без изменений (true) / реально применить метки (false) · Preview only (true) / actually apply (false)"
+        type: boolean
+        default: true
+      delete_others:
+        description: "Удалить метки, которых нет в каталоге (осторожно) · Delete labels not in the catalogue (use with care)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Синхронизировать метки по каталогу .github/labels.yml
+        uses: EndBug/label-sync@v2
+        with:
+          config-file: .github/labels.yml
+          delete-other-labels: ${{ inputs.delete_others }}
+          dry-run: ${{ inputs.dry_run }}
+          token: ${{ secrets.GITHUB_TOKEN }}

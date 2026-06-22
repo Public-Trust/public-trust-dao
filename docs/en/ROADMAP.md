@@ -298,13 +298,23 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   action). The structure guard's tenth check `issue-form-labels-defined` (hard) goes
   red if a form references a label missing from the catalogue; `test_structure_guard.py`
   98/98. `PTD-0073`.
-- [ ] **Optional label sync** — a ready-to-use workflow/instruction that brings the
+- [x] **Optional label sync** — a ready-to-use workflow/instruction that brings the
   real repo's labels in line with `.github/labels.yml` (e.g. `EndBug/label-sync`).
   Enabling and applying it to the real repo is the operator's call (an outward action);
   the agent prepares it "ready to push" (session 76).
+  **Done (session 77):** `.github/workflows/labels.yml` — a label-sync workflow using
+  `EndBug/label-sync@v2` over the `.github/labels.yml` config. Trigger is manual ONLY
+  (`workflow_dispatch`, no push) — the outward action stays with the operator; it
+  previews by default (`dry_run=true`, changes nothing), deleting non-catalog labels is
+  off (`delete_others=false`). The catalog's "how to apply" note now links the workflow.
+  Closes the catalog→guard→sync loop. `PTD-0074`.
 - [ ] **Guard: label catalog has no duplicates and valid hex colors** — a soft check
   of `.github/labels.yml`: label names are unique, `color` is exactly 6 hex chars
   without `#`, each label has a description (proposed session 76, extends `issue-form-labels-defined`).
+- [ ] **Guard: the label-sync workflow stays manual** — a soft check that
+  `.github/workflows/labels.yml` has a `workflow_dispatch` trigger and NO `push`
+  trigger (the outward action must stay with the operator; the rail must not "drift"
+  on future edits). Proposed session 77, extends `PTD-0074`.
 - [x] **Glossary link in the header of normative docs** — add a link to
   [`GLOSSARY.md`](GLOSSARY.md) to each doc's header, so an unfamiliar term is one
   click away from any document (proposed in session 36). → Done (session 57): a
