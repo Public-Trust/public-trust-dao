@@ -80,6 +80,10 @@ Documentation AI-агент — Public Trust DAO (Этап 6, модуль 6/8).
      в витрине и что только в карте; рассинхрон объясняется одной строкой, а не
      вычитанием отчётов coverage/showcase. Ключ без построенной страницы в сверку
      со стороны карты не входит — «ещё не сделано», не «разошлось»; PTD-0118)
+  • mirror-doc-learn-built → у каждого адреса витрины t.learn построена страница . ст. 3/6
+    (МЯГКАЯ: предупреждает, если адрес /slug/ показан в витрине на главной, а самой
+     страницы platform/app/<slug>/page.tsx ещё нет — человек кликнет и упрётся в 404;
+     link-integrity смотрит только .md и этого не ловит; PTD-0118)
   • see-also-symmetric → связь «См. также» между объяснениями взаимна .......... ст. 3/6
     (МЯГКАЯ: предупреждает, если экран A ведёт на B, а B не ведёт обратно на A —
      односторонняя связь оставляет человека без обратного пути; PTD-0106)
@@ -1336,6 +1340,43 @@ def check_mirror_doc_set_match(root):
     }]
 
 
+def check_mirror_doc_learn_built(root):
+    """МЯГКАЯ: у каждого адреса витрины t.learn реально построена страница экрана.
+
+    Витрина «Разобраться, как устроен фонд» (`t.learn` в `lib/i18n.ts`) показывает
+    на главной список адресов `/slug/`. Человек кликает по такому адресу и ждёт
+    страницу-объяснение. Но соседние проверки следят за другим: `mirror-doc-coverage`
+    проверяет, что адрес витрины — ключ карты `MIRROR_DOCS`; `mirror-doc-set-match` —
+    что множества витрины и карты совпадают; `link-integrity` смотрит только ссылки в
+    `.md`. НИКТО не ловит случай «адрес в витрине есть, а самого экрана
+    (`platform/app/<slug>/page.tsx`) ещё нет» — человек кликнет с главной и упрётся в
+    404. Эта проверка закрывает пробел напрямую: для каждого адреса из `t.learn`
+    файл `platform/app/<slug>/page.tsx` должен существовать (warn, не блок — ст. 3/6,
+    PTD-0118). Нет файла i18n.ts, список t.learn пуст или каталога платформы нет
+    (мини-репозиторий в тесте) — проверять нечего → pass.
+    """
+    if not os.path.exists(os.path.join(root, I18N_TS)):
+        return "pass", []
+    if not os.path.isdir(os.path.join(root, PLATFORM_APP)):
+        return "pass", []
+    learn = parse_i18n_hrefs(read_text(root, I18N_TS), "learn")
+    if not learn:
+        return "pass", []
+    violations = []
+    for href in sorted(learn):
+        slug = href.strip("/")
+        page = f"{PLATFORM_APP}/{slug}/page.tsx"
+        if not os.path.exists(os.path.join(root, page)):
+            violations.append({
+                "record": f"{I18N_TS} → t.learn «{href}»",
+                "problem": (f"адрес «{href}» показан в витрине «Разобраться, как устроен "
+                            f"фонд», но страница экрана {page} не построена — человек "
+                            "кликнет с главной и упрётся в 404 (link-integrity смотрит "
+                            "только .md и этого не замечает)"),
+            })
+    return ("pass" if not violations else "warn"), violations
+
+
 def check_see_also_symmetric(root):
     """МЯГКАЯ: связь «См. также» между экранами-объяснениями взаимна.
 
@@ -1515,6 +1556,13 @@ CHECKS = [
         "soft": True,
     },
     {
+        "key": "mirror-doc-learn-built",
+        "title": "У каждого адреса витрины t.learn реально построена страница экрана (page.tsx)",
+        "guards": "ст. 3/6 — адрес из витрины на главной ведёт на существующую страницу, а не в 404 (link-integrity смотрит только .md, PTD-0118); МЯГКАЯ — предупреждает, не блокирует",
+        "fn": "mirror_doc_learn_built",
+        "soft": True,
+    },
+    {
         "key": "see-also-symmetric",
         "title": "Связь «См. также» между экранами-объяснениями взаимна (A→B ⇒ B→A)",
         "guards": "ст. 3/6 — у человека есть обратный путь между объяснениями, нет тупиков односторонних ссылок (PTD-0106); МЯГКАЯ — предупреждает, не блокирует",
@@ -1556,6 +1604,7 @@ def run(root):
     mirror_slug_status, mirror_slug_v = check_mirror_doc_slug()
     mirror_lslug_status, mirror_lslug_v = check_mirror_doc_learn_slug(root)
     mirror_setm_status, mirror_setm_v = check_mirror_doc_set_match(root)
+    mirror_lbuilt_status, mirror_lbuilt_v = check_mirror_doc_learn_built(root)
     seealso_sym_status, seealso_sym_v = check_see_also_symmetric(root)
 
     results = {
@@ -1580,6 +1629,7 @@ def run(root):
         "mirror_doc_slug": (mirror_slug_status, mirror_slug_v),
         "mirror_doc_learn_slug": (mirror_lslug_status, mirror_lslug_v),
         "mirror_doc_set_match": (mirror_setm_status, mirror_setm_v),
+        "mirror_doc_learn_built": (mirror_lbuilt_status, mirror_lbuilt_v),
         "seealso_symmetric": (seealso_sym_status, seealso_sym_v),
     }
 

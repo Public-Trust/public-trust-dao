@@ -1263,6 +1263,80 @@ def main():
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # --- Мягкая проверка mirror-doc-learn-built: адрес витрины → страница есть ---
+    # Для каждого адреса /slug/ из витрины t.learn должна существовать построенная
+    # страница platform/app/<slug>/page.tsx — иначе клик с главной упрётся в 404.
+
+    # 55a. Чистая платформа (оба адреса витрины имеют страницы) → pass, вердикт green.
+    print("\n[мягкая проверка: у каждого адреса витрины есть страница → mirror-doc-learn-built pass]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({}))
+        st, viol = doc.check_mirror_doc_learn_built(tmp)
+        check("mirror-doc-learn-built == pass на чистой платформе", st == "pass")
+        check("нарушений нет (learn-built)", viol == [])
+        code, report = run_agent(tmp)
+        check("вердикт green / exit=0 (learn-built)",
+              report.get("verdict") == "green" and code == 0)
+        check("mirror-doc-learn-built присутствует и pass",
+              status_of(report, "mirror-doc-learn-built") == "pass")
+        check("mirror-doc-learn-built помечена soft",
+              _is_soft(report, "mirror-doc-learn-built"))
+        check("предупреждений нет (learn-built)", report.get("warnings", 0) == 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 55b. В витрине есть адрес, у которого нет построенной страницы → warn.
+    #      manifesto/governance построены (PLATFORM_GOOD), а /rule-42/ — нет.
+    print("\n[мягкая проверка: адрес витрины без страницы → mirror-doc-learn-built warn, вердикт green]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, with_platform({"platform/lib/i18n.ts": (
+            "export const ru = {\n"
+            "  learn: [\n"
+            '    { title: "Манифест", href: "/manifesto/" },\n'
+            '    { title: "Как решаем", href: "/governance/" },\n'
+            '    { title: "Без страницы", href: "/rule-42/" },\n'  # страницы нет
+            "  ],\n"
+            "};\n"
+        )}))
+        st, viol = doc.check_mirror_doc_learn_built(tmp)
+        check("mirror-doc-learn-built == warn для адреса без страницы", st == "warn")
+        joined = " ".join(v["problem"] for v in viol)
+        check("назван адрес /rule-42/ и путь page.tsx",
+              "/rule-42/" in joined and "platform/app/rule-42/page.tsx" in joined)
+        code, report = run_agent(tmp)
+        check("вердикт остаётся green / exit=0 (soft не блокирует, learn-built)",
+              report.get("verdict") == "green" and code == 0)
+        check("счётчик предупреждений > 0 (learn-built)", report.get("warnings", 0) > 0)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 55c. Нет каталога платформы → молчим (pass), чтобы не кричать на мини-репо.
+    print("\n[мягкая проверка: нет каталога платформы → mirror-doc-learn-built pass (молчит)]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, {"platform/lib/i18n.ts": (
+            "export const ru = {\n"
+            "  learn: [ { title: \"Манифест\", href: \"/manifesto/\" } ],\n"
+            "};\n"
+        )})
+        st, viol = doc.check_mirror_doc_learn_built(tmp)
+        check("mirror-doc-learn-built == pass без каталога платформы",
+              st == "pass" and viol == [])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 55d. Нет файла i18n.ts → молчим (pass).
+    print("\n[мягкая проверка: нет i18n.ts → mirror-doc-learn-built pass (молчит)]")
+    tmp = tempfile.mkdtemp(prefix="doc-test-")
+    try:
+        make_repo(tmp, {"docs/X.md": "# X\n"})
+        st, viol = doc.check_mirror_doc_learn_built(tmp)
+        check("mirror-doc-learn-built == pass без i18n.ts", st == "pass" and viol == [])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     print(f"\nИТОГ: {PASSED} прошли, {FAILED} провалились")
     return 0 if FAILED == 0 else 1
 

@@ -1,0 +1,17 @@
+{
+  "seq": 119,
+  "id": "PTD-0119",
+  "type": "decision",
+  "timestamp": "2026-06-22T20:43:50Z",
+  "actor": "builder-agent",
+  "summary": "Documentation-агент: новая мягкая проверка mirror-doc-learn-built — у каждого адреса витрины «Разобраться, как устроен фонд» (t.learn в platform/lib/i18n.ts) реально построена страница экрана platform/app/<slug>/page.tsx. Закрывает пробел между соседними проверками: mirror-doc-coverage следит, что адрес витрины — ключ карты MIRROR_DOCS, mirror-doc-set-match — что множества витрины и карты совпадают, а link-integrity смотрит только ссылки в .md; НИКТО не ловил случай «адрес в витрине есть, а самого экрана ещё нет» — человек кликнул бы с главной и упёрся в 404. Эта проверка ловит разрыв напрямую: для каждого адреса из t.learn файл page.tsx должен существовать (развитие PTD-0118). МЯГКАЯ (warn, вердикт green не роняет); нет файла i18n.ts или каталога платформы → молчит (мини-репо в тесте). На реальном репозитории зелёная (у всех 11 адресов витрины страница построена). +12 тест-проверок (200/200), run_all 8/8 + страж 11/11. ст. 3/6 — проверяемость/понятность. TESTNET-ONLY.",
+  "refs": [
+    "ai-agents/documentation_agent.py",
+    "ai-agents/test_documentation.py",
+    "ai-agents/README.md",
+    "ai-agents/README.en.md"
+  ],
+  "payload": {},
+  "prev_hash": "56943ce5b3f1605d0b4d092d04c62e67c2ad53504ccc0850827c864b9c134ea9",
+  "hash": "d765c639e6efd2ba39f32a7a1262881a627993fd7b460159ffc3d8581feee63f"
+}

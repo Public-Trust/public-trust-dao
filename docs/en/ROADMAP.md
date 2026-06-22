@@ -437,6 +437,20 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 
 ### P3 — idea bank (raw, up for discussion)
 
+- [ ] **Documentation agent: every platform explanation screen has both a `page.tsx`
+  and a header-menu entry** — `mirror-doc-learn-built` (PTD-0119) catches "a showcase
+  address with no page". The mirror gap from the other side: a screen may be built and
+  in the `MIRROR_DOCS` map yet missing from the persistent header menu
+  (`SiteHeader`/`t.learn`) — a person would find it only by a direct link. A soft "built
+  page → has a menu entry" check closes the second half of the navigation gap (proposed
+  session 121, extension of `PTD-0119`). A warning, not a block.
+- [ ] **Documentation agent: every `t.screens` working-screen address is built too** —
+  `mirror-doc-learn-built` checks the `t.learn` explanation showcase. The platform also
+  has a second address list — the working screens `t.screens` (apply/vote/treasury, etc.).
+  Same 404 risk: the address is in the list but `platform/app/<slug>/page.tsx` is missing.
+  An analogous soft check for `t.screens` closes the symmetric gap (proposed session 121).
+  A warning, not a block.
+
 - [x] **Documentation agent: a `t.learn` showcase address matches a `MIRROR_DOCS` key**
   — the next step after `mirror-doc-slug` (key is a slug) and `mirror-doc-learn-slug`
   (showcase address is a slug): both sides are now individually valid in form, but
@@ -456,7 +470,7 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   real repo (11 showcase addresses = 11 map keys). +11 test checks (188/188),
   run_all 8/8 + structure guard 11/11. `PTD-0118`.
 
-- [ ] **Documentation agent: every `t.learn` showcase address has a built page** — a
+- [x] **Documentation agent: every `t.learn` showcase address has a built page** — a
   soft check that for each `/slug/` address in the "Understand how the fund works"
   showcase there really is a `platform/app/<slug>/page.tsx` file. Today
   `mirror-doc-coverage` checks the address is a map key and `mirror-doc-set-match`
@@ -464,7 +478,11 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   the showcase yet the page itself does not exist" — a person clicks from the home
   page and hits a 404 (`link-integrity` only inspects `.md`). A direct "showcase →
   page built" check closes that gap (proposed session 120, extension of `PTD-0118`).
-  A warning, not a block.
+  A warning, not a block. **Done (session 121):** the `mirror-doc-learn-built` check
+  in `documentation_agent.py` — for each `t.learn` address the file
+  `platform/app/<slug>/page.tsx` must exist; no `i18n.ts`/platform directory → stays
+  silent. Green on the real repo (all 11 showcase addresses are built). +12 test
+  assertions (200/200), run_all 8/8 + guard 11/11. `PTD-0119`.
 - [ ] **Documentation agent: the platform's journal snapshot does not lag the registry**
   — a soft check that the record count in `platform/lib/journal-data.json` matches the
   record count in `governance/registry/index.json`. The snapshot ships with the

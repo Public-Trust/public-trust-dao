@@ -14,7 +14,7 @@ This is the project's history as one list: what was decided and done, and when. 
 - **The feed is generated mechanically** from [`governance/registry/index.json`](governance/registry/index.json) — nothing is written by hand.
 - **Entry text is verbatim from the registry,** which is kept in Russian as the source language; so the wording of each line below mirrors the canonical Russian record.
 
-Total entries: **119**. Current record fingerprint: `56943ce5b3f1605d0b4d092d04c62e67c2ad53504ccc0850827c864b9c134ea9`.
+Total entries: **120**. Current record fingerprint: `d765c639e6efd2ba39f32a7a1262881a627993fd7b460159ffc3d8581feee63f`.
 
 ---
 
@@ -31,6 +31,7 @@ Total entries: **119**. Current record fingerprint: `56943ce5b3f1605d0b4d092d04c
 
 ## 2026-06-22
 
+- **PTD-0119** (decision) — Documentation-агент: новая мягкая проверка mirror-doc-learn-built. [Full entry](governance/registry/records/0119-decision.json)
 - **PTD-0118** (decision) — Documentation-агент: новая мягкая проверка mirror-doc-set-match. [Full entry](governance/registry/records/0118-decision.json)
 - **PTD-0117** (decision) — Documentation-агент: новая мягкая проверка mirror-doc-learn-slug. [Full entry](governance/registry/records/0117-decision.json)
 - **PTD-0116** (decision) — Витрина web/ ведёт на платформу. [Full entry](governance/registry/records/0116-decision.json)
