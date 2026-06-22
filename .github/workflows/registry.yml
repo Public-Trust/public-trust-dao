@@ -7,11 +7,17 @@ on:
     paths:
       - "governance/registry/**"
       - "scripts/registry.py"
+      - "scripts/gen_changelog.py"
+      - "CHANGELOG.md"
+      - "CHANGELOG.en.md"
       - ".github/workflows/registry.yml"
   pull_request:
     paths:
       - "governance/registry/**"
       - "scripts/registry.py"
+      - "scripts/gen_changelog.py"
+      - "CHANGELOG.md"
+      - "CHANGELOG.en.md"
   workflow_dispatch:
 
 permissions:
@@ -27,3 +33,5 @@ jobs:
           python-version: "3.x"
       - name: Проверить целостность реестра (verify)
         run: python3 scripts/registry.py verify
+      - name: Лента изменений свежая (собрана из реестра)
+        run: python3 scripts/gen_changelog.py --check

@@ -54,6 +54,7 @@ mirror this logic, plus the normative base and the autonomy loop.
 | `PROGRESS.md` | Progress log + "next step" + "needed from operator". Memory across sessions. |
 | `DECISIONS.md` | Significant decisions and their reasons (briefly). |
 | `REPO-STRUCTURE.md` / `REPO-STRUCTURE.en.md` | This document — the repository map. RU + EN. |
+| `CHANGELOG.md` / `CHANGELOG.en.md` | A plain-language change feed by date. Built mechanically from the decision registry (`scripts/gen_changelog.py`) — do not edit by hand. RU + EN. |
 | `LICENSE` | Code license — AGPL-3.0. |
 | `LICENSE-DOCS` | Document license — CC-BY-SA-4.0. |
 | `.gitignore` | Exclusions: secrets, pulse logs/state, build artifacts. |

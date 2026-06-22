@@ -688,7 +688,13 @@ Self-development does NOT lift the safety rails — it operates strictly within 
 - [ ] Treasury dashboard (read-only) — public state of the test treasury from the registry.
 - [ ] Aid request templates (anonymous, no personal data) — form + schema.
 - [ ] "Explain like I'm five" — short explainers for each normative doc.
-- [ ] Automated changelog from the decision registry (generate `CHANGELOG.md`).
+- [x] Automated changelog from the decision registry (generate `CHANGELOG.md`).
+  → Done (session 116): `scripts/gen_changelog.py` (standard library only) builds a
+  plain-language change feed by date from `governance/registry/index.json` →
+  [`CHANGELOG.md`](../../CHANGELOG.md) + [`CHANGELOG.en.md`](../../CHANGELOG.en.md)
+  (RU↔EN, language switcher, plain-words lead section, every line links to the full
+  registry entry). Deterministic + `--check` mode in CI (`registry.yml`): if the
+  registry changed, the feed must be rebuilt or the build goes red. `PTD-0113`. TESTNET-ONLY.
 - [ ] Reputation model for guardians/reviewers (anti-collusion) — draft spec.
 - [ ] Turn the landing copy from [`PROMOTION.md`](PROMOTION.md) into a real
   human-oriented page in `web/` (simpler than the normative site; same "no external
@@ -1050,6 +1056,16 @@ Self-development does NOT lift the safety rails — it operates strictly within 
   `RELATED` points to it (or it is intentionally reachable only from the menu, like the
   glossary). Complements `see-also-symmetric`: that one catches one-way links, this one catches
   screens you can't reach by cross-navigation at all (extends `PTD-0108`, proposed session 111).
+
+- [ ] **Platform: a "Changelog" screen** — a mirror of the root
+  [`CHANGELOG.md`](../../CHANGELOG.md) inside the app (the "mirror screen" technique, like
+  journal↔registry): show people the project history by date right in the platform, reading the
+  snapshot from the registry (the same `scripts/sync_journal.py`/`journal-data.json`, no new
+  outbound requests). Front-end only, RU↔EN (proposed session 116).
+- [ ] **Link to the changelog from the showcase site's "Transparency" page** — add a link to
+  `CHANGELOG.md` on [`web/transparency.html`](../../web/transparency.html) (+EN) so "what changed
+  and when" is reachable not only from the README but also from the transparency page (zero
+  external requests, proposed session 116).
 
 ---
 
