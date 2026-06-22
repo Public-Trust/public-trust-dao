@@ -16,6 +16,7 @@ set -a; [ -f .env ] && . ./.env; set +a
 export GH_TOKEN="${GITHUB_TOKEN:-${GH_TOKEN:-}}"
 export PATH="/root/.local/bin:$PATH"
 export HOME="${HOME:-/root}"
+export IS_SANDBOX="${IS_SANDBOX:-1}"   # claude разрешает bypassPermissions под root только при этом флаге
 
 # git auth через env (токен НЕ пишется в .git/config, читается из GH_TOKEN при push)
 git config credential.helper '!f() { echo "username=x-access-token"; echo "password=${GH_TOKEN}"; }; f' 2>/dev/null || true
@@ -26,7 +27,7 @@ mkdir -p logs
 NFILE="logs/session.count"
 [ -f "$NFILE" ] || echo 0 > "$NFILE"
 
-SLEEP_BETWEEN="${PTD_SLEEP:-120}"
+SLEEP_BETWEEN="${PTD_SLEEP:-10}"
 SESSION_TIMEOUT="${PTD_TIMEOUT:-1800}"
 
 echo "[loop] старт пульса $(date -u +%FT%TZ)"

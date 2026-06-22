@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://public-trust.github.io/public-trust-dao/schema/record.schema.json",
+  "title": "Public Trust DAO — запись публичного реестра",
+  "description": "Конверт одной записи append-only hash-chain реестра решений. Хеш считается по канонической форме записи БЕЗ поля hash (см. governance/registry/README.md).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["seq", "id", "type", "timestamp", "actor", "summary", "refs", "payload", "prev_hash", "hash"],
+  "properties": {
+    "seq": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Монотонный непрерывный номер с нуля."
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^PTD-[0-9A-Za-z-]+$",
+      "description": "Стабильный идентификатор записи, напр. PTD-0001."
+    },
+    "type": {
+      "type": "string",
+      "enum": ["genesis", "decision", "disbursement", "governance", "audit", "appeal", "reputation", "note"],
+      "description": "Тип записи."
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+      "description": "Момент в UTC, ISO-8601 (...Z)."
+    },
+    "actor": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Кто инициировал запись (роль/агент/хранитель). Не персональные данные заявителей."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Человекочитаемое краткое описание."
+    },
+    "refs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Ссылки: статьи конституции, Snapshot-пропозалы, tx-хеши, IPFS CID, и т.п."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Тип-специфичные данные. Схемы по типам — рядом в этой папке."
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 предыдущей записи; для genesis — 64 нуля."
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 канонической формы этой записи без поля hash."
+    }
+  }
+}
